@@ -555,6 +555,6 @@ function markDelivered() {
 }
 </script>
 
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();});</script>
 </body>
 </html>
