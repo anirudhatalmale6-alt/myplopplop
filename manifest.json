@@ -1,0 +1,27 @@
+{
+  "name": "MyPlopPlop - Delivery Haiti",
+  "short_name": "MyPlopPlop",
+  "description": "Livrezon rapid nan tout Ayiti - Food, grocery, pharmacy delivery",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0D1117",
+  "theme_color": "#E63946",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "ht",
+  "categories": ["food", "shopping", "lifestyle"],
+  "icons": [
+    {
+      "src": "/assets/img/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/img/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
