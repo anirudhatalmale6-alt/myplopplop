@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Become a Driver — MyPlopPlop</title>
+<meta name="description" content="Sign up as a moto or car partner and start earning with deliveries on your own schedule. Join 500+ active partners on MyPlopPlop.">
+<meta property="og:title" content="Drive with MyPlopPlop — Earn on Your Schedule">
+<meta property="og:description" content="Sign up as a moto or car delivery partner. Flexible hours, competitive pay, fast onboarding.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/layout.css">
+<style>
+/* ===== DRIVER HERO ===== */
+.driver-hero {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 60%, #001a5e 100%);
+    color: var(--white);
+    padding: var(--space-3xl) var(--content-padding) var(--space-2xl);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.driver-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(210,16,52,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.driver-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40%;
+    left: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.driver-hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+}
+.driver-hero h1 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: var(--space-md);
+    color: var(--white);
+}
+.driver-hero .subtitle {
+    font-size: var(--text-lg);
+    opacity: 0.9;
+    margin-bottom: var(--space-xl);
+    line-height: 1.6;
+}
+.hero-btns {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-2xl);
+}
+.hero-btn-red {
+    background: var(--primary-red);
+    color: var(--white);
+    padding: 14px 32px;
+    border-radius: var(--radius-xl);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    box-shadow: 0 4px 16px rgba(210,16,52,0.4);
+    transition: all var(--transition-fast);
+    text-decoration: none;
+}
+.hero-btn-red:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(210,16,52,0.5); }
+.hero-btn-outline {
+    background: transparent;
+    color: var(--white);
+    padding: 14px 32px;
+    border-radius: var(--radius-xl);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-base);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    border: 2px solid rgba(255,255,255,0.5);
+    transition: all var(--transition-fast);
+    text-decoration: none;
+}
+.hero-btn-outline:hover { background: rgba(255,255,255,0.1); border-color: var(--white); transform: translateY(-2px); }
+
+/* Hero vehicle visual */
+.hero-vehicles {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-2xl);
+}
+.vehicle-card-hero {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl) var(--space-2xl);
+    text-align: center;
+}
+.vehicle-card-hero .v-icon {
+    font-size: 48px;
+    margin-bottom: var(--space-sm);
+    display: block;
+}
+.vehicle-card-hero .v-label {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    opacity: 0.9;
+}
+.hero-brand-sep {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: var(--text-lg);
+    color: var(--primary-red);
+    padding: 0 var(--space-sm);
+}
+
+/* Trust stats */
+.trust-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-xl);
+    flex-wrap: wrap;
+}
+.trust-stat {
+    text-align: center;
+}
+.trust-stat .stat-num {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-2xl);
+    color: var(--white);
+    display: block;
+}
+.trust-stat .stat-label {
+    font-size: var(--text-sm);
+    opacity: 0.8;
+}
+
+/* ===== CHOOSE VEHICLE SECTION ===== */
+.choose-vehicle-section {
+    background: var(--bg-light);
+    padding: var(--space-3xl) var(--content-padding);
+}
+.choose-vehicle-section .section-heading {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+.choose-vehicle-section .section-heading h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--text-dark);
+}
+.vehicle-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-xl);
+    max-width: 800px;
+    margin: 0 auto;
+}
+.vehicle-card {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: var(--space-2xl) var(--space-xl);
+    text-align: center;
+    box-shadow: var(--shadow-card);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+.vehicle-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-blue);
+}
+.vehicle-card .v-icon {
+    font-size: 64px;
+    margin-bottom: var(--space-md);
+    display: block;
+}
+.vehicle-card h3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: var(--space-md);
+}
+.vehicle-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-lg) 0;
+    text-align: left;
+}
+.vehicle-card ul li {
+    padding: 6px 0;
+    font-size: var(--text-sm);
+    color: var(--gray-600);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+.vehicle-card ul li::before {
+    content: '✓';
+    color: var(--success);
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* ===== HOW IT WORKS ===== */
+.hiw-section {
+    background: var(--white);
+    padding: var(--space-3xl) var(--content-padding);
+}
+.hiw-section .section-heading {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+}
+.hiw-section .section-heading h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--text-dark);
+}
+.hiw-steps {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+}
+.hiw-step {
+    flex: 1;
+    text-align: center;
+    padding: 0 var(--space-md);
+    position: relative;
+}
+.hiw-step-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--primary-blue-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin: 0 auto var(--space-md);
+    position: relative;
+    z-index: 1;
+}
+.hiw-step h4 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-base);
+    margin-bottom: var(--space-sm);
+    color: var(--text-dark);
+}
+.hiw-step p {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+/* Progress line */
+.hiw-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 36px;
+    left: calc(50% + 36px);
+    width: calc(100% - 72px);
+    height: 3px;
+    background: var(--gray-200);
+    z-index: 0;
+}
+.hiw-step-num {
+    position: absolute;
+    top: -8px;
+    right: calc(50% - 44px);
+    width: 24px;
+    height: 24px;
+    background: var(--primary-blue);
+    color: var(--white);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+/* ===== REQUIREMENTS ===== */
+.requirements-section {
+    background: var(--bg-light);
+    padding: var(--space-3xl) var(--content-padding);
+}
+.requirements-section .section-heading {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+.requirements-section .section-heading h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--text-dark);
+}
+.requirements-card {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: var(--shadow-card);
+}
+.req-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--gray-100);
+}
+.req-item:last-child { border-bottom: none; }
+.req-check {
+    width: 32px;
+    height: 32px;
+    background: var(--success-light);
+    color: var(--success);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+.req-item span {
+    font-size: var(--text-sm);
+    color: var(--gray-700);
+}
+.req-note {
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    background: var(--info-light);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--primary-blue);
+    text-align: center;
+    line-height: 1.5;
+}
+
+/* ===== WHY DRIVE ===== */
+.why-section {
+    background: var(--white);
+    padding: var(--space-3xl) var(--content-padding);
+}
+.why-section .section-heading {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+.why-section .section-heading h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--text-dark);
+}
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+    max-width: 800px;
+    margin: 0 auto;
+}
+.benefit-card {
+    background: var(--bg-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    transition: all var(--transition-fast);
+}
+.benefit-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+.benefit-icon {
+    font-size: 32px;
+    margin-bottom: var(--space-sm);
+    display: block;
+}
+.benefit-card h4 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-base);
+    color: var(--text-dark);
+    margin-bottom: var(--space-xs);
+}
+.benefit-card p {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* ===== SIGNUP FORM ===== */
+.signup-section {
+    background: var(--bg-light);
+    padding: var(--space-3xl) var(--content-padding);
+}
+.signup-section .section-heading {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+.signup-section .section-heading h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--text-dark);
+}
+.signup-card {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    max-width: 520px;
+    margin: 0 auto;
+    box-shadow: var(--shadow-md);
+}
+.vehicle-toggle {
+    display: flex;
+    background: var(--gray-100);
+    border-radius: var(--radius-full);
+    padding: 4px;
+    margin-bottom: var(--space-xl);
+}
+.vehicle-toggle-btn {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    color: var(--gray-500);
+    background: transparent;
+    border: none;
+}
+.vehicle-toggle-btn.active {
+    background: var(--white);
+    color: var(--text-dark);
+    box-shadow: var(--shadow-sm);
+}
+.phone-input-wrap {
+    display: flex;
+    gap: 0;
+}
+.phone-prefix {
+    padding: 12px 14px;
+    background: var(--gray-50);
+    border: 1.5px solid var(--gray-200);
+    border-right: none;
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+    font-size: var(--text-base);
+    color: var(--gray-600);
+    font-weight: 500;
+    white-space: nowrap;
+}
+.phone-input-wrap .input {
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+.password-wrap {
+    position: relative;
+}
+.password-wrap .input { padding-right: 48px; }
+.password-toggle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--gray-400);
+    cursor: pointer;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    padding: 4px;
+}
+.password-toggle:hover { color: var(--gray-600); }
+.checkbox-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+}
+.checkbox-wrap input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: var(--primary-red);
+    flex-shrink: 0;
+}
+.checkbox-wrap label {
+    font-size: var(--text-sm);
+    color: var(--gray-600);
+    line-height: 1.4;
+}
+.checkbox-wrap label a {
+    color: var(--primary-blue);
+    text-decoration: underline;
+}
+.signup-footer {
+    text-align: center;
+    margin-top: var(--space-md);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+.signup-footer a {
+    color: var(--primary-blue);
+    font-weight: 500;
+}
+
+/* ===== FAQ ===== */
+.faq-section {
+    background: var(--white);
+    padding: var(--space-3xl) var(--content-padding);
+}
+.faq-section .section-heading {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+.faq-section .section-heading h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--text-dark);
+}
+.faq-list {
+    max-width: 700px;
+    margin: 0 auto;
+}
+.faq-item {
+    border-bottom: 1px solid var(--gray-200);
+}
+.faq-question {
+    width: 100%;
+    padding: var(--space-lg) 0;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-base);
+    color: var(--text-dark);
+    transition: color var(--transition-fast);
+}
+.faq-question:hover { color: var(--primary-blue); }
+.faq-arrow {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    transition: transform var(--transition-fast);
+    color: var(--gray-400);
+}
+.faq-item.open .faq-arrow {
+    transform: rotate(180deg);
+    color: var(--primary-blue);
+}
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-normal), padding var(--transition-normal);
+}
+.faq-item.open .faq-answer {
+    max-height: 200px;
+}
+.faq-answer p {
+    padding: 0 0 var(--space-lg) 0;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+/* ===== FINAL CTA ===== */
+.final-cta {
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 50%, #8a0a1e 100%);
+    color: var(--white);
+    padding: var(--space-3xl) var(--content-padding);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.final-cta::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.final-cta-content {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+}
+.final-cta h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: var(--space-sm);
+}
+.final-cta .sub {
+    font-size: var(--text-lg);
+    opacity: 0.9;
+    margin-bottom: var(--space-xl);
+}
+.final-cta-btns {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.final-cta-btn {
+    background: var(--white);
+    color: var(--primary-red);
+    padding: 14px 28px;
+    border-radius: var(--radius-xl);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+.final-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+.final-cta-btn.blue {
+    color: var(--primary-blue);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+    .driver-hero h1 { font-size: 1.6rem; }
+    .hero-btns { flex-direction: column; align-items: center; }
+    .hero-btn-red, .hero-btn-outline { width: 100%; max-width: 280px; justify-content: center; }
+    .hero-vehicles { flex-direction: row; gap: var(--space-md); }
+    .vehicle-card-hero { padding: var(--space-lg) var(--space-xl); }
+    .vehicle-card-hero .v-icon { font-size: 36px; }
+    .vehicle-cards { grid-template-columns: 1fr; }
+    .hiw-steps { flex-direction: column; gap: var(--space-xl); }
+    .hiw-step:not(:last-child)::after { display: none; }
+    .benefits-grid { grid-template-columns: 1fr; }
+    .trust-stats { gap: var(--space-lg); }
+    .final-cta h2 { font-size: var(--text-2xl); }
+    .final-cta-btns { flex-direction: column; align-items: center; }
+    .final-cta-btn { width: 100%; max-width: 280px; justify-content: center; }
+}
+@media (min-width: 768px) {
+    .driver-hero { padding: var(--space-3xl) var(--content-padding); }
+    .driver-hero h1 { font-size: 2.5rem; }
+    .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+    .benefits-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    background: var(--gray-900);
+    color: var(--gray-400);
+    padding: var(--space-2xl) var(--content-padding) var(--space-lg);
+}
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+}
+.footer-brand h3 {
+    font-family: var(--font-heading);
+    color: var(--white);
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-sm);
+}
+.footer-brand h3 span { color: var(--primary-red); }
+.footer-brand p { font-size: var(--text-sm); line-height: 1.6; }
+.footer-col h5 {
+    color: var(--white);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-md);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.footer-col a {
+    display: block;
+    font-size: var(--text-sm);
+    padding: 4px 0;
+    transition: color var(--transition-fast);
+}
+.footer-col a:hover { color: var(--white); }
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: var(--text-xs);
+}
+@media (min-width: 768px) {
+    .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="flex items-center gap-sm">
+        <span>📍 Port-au-Prince</span>
+        <span style="opacity:0.5">|</span>
+        <a href="#">Change location</a>
+    </div>
+    <div class="flex items-center gap-md">
+        <a href="#">EN</a>
+        <a href="#" style="font-weight:700">KR</a>
+        <a href="#">FR</a>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="header" style="top: 28px;">
+    <div class="header-inner">
+        <a href="index.html" class="header-logo">
+            <img src="assets/img/logo.png" alt="MyPlopPlop" style="height:40px;">
+        </a>
+
+        <div class="header-actions">
+            <a href="shop.html" class="header-icon" title="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </a>
+            <a href="cart.html" class="header-icon" title="Cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                <span class="header-badge">2</span>
+            </a>
+            <a href="login.html" class="header-icon" title="Account">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN -->
+<main class="main" style="margin-top: calc(var(--header-height) + 28px);">
+
+<!-- SECTION 1: HERO -->
+<section class="driver-hero">
+    <div class="driver-hero-content">
+        <h1>Drive with MyPlopPlop</h1>
+        <p class="subtitle">Sign up as a moto or car partner and start earning with deliveries on your own schedule.</p>
+
+        <div class="hero-btns">
+            <a href="#signup" class="hero-btn-red">Sign Up Now</a>
+            <a href="#how-it-works" class="hero-btn-outline">Learn How It Works</a>
+        </div>
+
+        <div class="hero-vehicles">
+            <div class="vehicle-card-hero">
+                <span class="v-icon">🏍️</span>
+                <span class="v-label">Moto Partner</span>
+            </div>
+            <span class="hero-brand-sep">x</span>
+            <div class="vehicle-card-hero">
+                <span class="v-icon">🚗</span>
+                <span class="v-label">Car Partner</span>
+            </div>
+        </div>
+
+        <div class="trust-stats">
+            <div class="trust-stat">
+                <span class="stat-num">500+</span>
+                <span class="stat-label">Active Partners</span>
+            </div>
+            <div class="trust-stat">
+                <span class="stat-num">150+ HTG</span>
+                <span class="stat-label">avg/delivery</span>
+            </div>
+            <div class="trust-stat">
+                <span class="stat-num">24/7</span>
+                <span class="stat-label">Flexible Hours</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 2: CHOOSE YOUR VEHICLE -->
+<section class="choose-vehicle-section" id="choose-vehicle">
+    <div class="section-heading">
+        <h2>Choose Your Vehicle</h2>
+    </div>
+    <div class="vehicle-cards">
+        <div class="vehicle-card">
+            <span class="v-icon">🏍️</span>
+            <h3>Moto Partner</h3>
+            <ul>
+                <li>Fast local deliveries</li>
+                <li>Flexible hours</li>
+                <li>Ideal for city routes</li>
+                <li>Lower fuel costs</li>
+            </ul>
+            <a href="driver-onboarding.html?vehicle=moto" class="btn btn-red btn-lg btn-full btn-round">Continue as Moto Partner</a>
+        </div>
+        <div class="vehicle-card">
+            <span class="v-icon">🚗</span>
+            <h3>Car Partner</h3>
+            <ul>
+                <li>Larger deliveries</li>
+                <li>Future-ready for passenger &amp; delivery services</li>
+                <li>Flexible earning opportunities</li>
+                <li>Comfortable rides</li>
+            </ul>
+            <a href="driver-onboarding.html?vehicle=car" class="btn btn-blue btn-lg btn-full btn-round">Continue as Car Partner</a>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 3: HOW IT WORKS -->
+<section class="hiw-section" id="how-it-works">
+    <div class="section-heading">
+        <h2>How It Works</h2>
+    </div>
+    <div class="hiw-steps">
+        <div class="hiw-step">
+            <div class="hiw-step-icon">📝</div>
+            <div class="hiw-step-num">1</div>
+            <h4>Create Account</h4>
+            <p>Sign up with your phone number and basic info. Takes less than 2 minutes.</p>
+        </div>
+        <div class="hiw-step">
+            <div class="hiw-step-icon">📄</div>
+            <div class="hiw-step-num">2</div>
+            <h4>Upload Documents</h4>
+            <p>Submit your ID, license, and vehicle documents. We verify everything quickly.</p>
+        </div>
+        <div class="hiw-step">
+            <div class="hiw-step-icon">✅</div>
+            <div class="hiw-step-num">3</div>
+            <h4>Get Approved &amp; Start Earning</h4>
+            <p>Once approved, go online and start accepting deliveries right away.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 4: WHAT YOU NEED -->
+<section class="requirements-section">
+    <div class="section-heading">
+        <h2>What You Need</h2>
+    </div>
+    <div class="requirements-card">
+        <div class="req-item">
+            <div class="req-check">✓</div>
+            <span>Valid government ID (NIF or passport)</span>
+        </div>
+        <div class="req-item">
+            <div class="req-check">✓</div>
+            <span>Valid driver's license</span>
+        </div>
+        <div class="req-item">
+            <div class="req-check">✓</div>
+            <span>Vehicle registration documents</span>
+        </div>
+        <div class="req-item">
+            <div class="req-check">✓</div>
+            <span>Vehicle information (make, model, year, plate)</span>
+        </div>
+        <div class="req-item">
+            <div class="req-check">✓</div>
+            <span>Phone number with internet access</span>
+        </div>
+        <div class="req-item">
+            <div class="req-check">✓</div>
+            <span>Recent profile photo</span>
+        </div>
+        <div class="req-note">
+            Don't have all documents ready? Start the application and upload them later.
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 5: WHY DRIVE WITH MYPLOPPLOP -->
+<section class="why-section">
+    <div class="section-heading">
+        <h2>Why Drive with MyPlopPlop</h2>
+    </div>
+    <div class="benefits-grid">
+        <div class="benefit-card">
+            <span class="benefit-icon">🕐</span>
+            <h4>Flexible Schedule</h4>
+            <p>Work when you want. No minimum hours.</p>
+        </div>
+        <div class="benefit-card">
+            <span class="benefit-icon">💰</span>
+            <h4>Earn Good Money</h4>
+            <p>Competitive delivery fees + tips. Earn 150+ HTG per delivery.</p>
+        </div>
+        <div class="benefit-card">
+            <span class="benefit-icon">⚡</span>
+            <h4>Simple Onboarding</h4>
+            <p>Sign up in minutes. Get approved fast.</p>
+        </div>
+        <div class="benefit-card">
+            <span class="benefit-icon">💳</span>
+            <h4>San Cash Payouts</h4>
+            <p>Get paid directly to your San Cash wallet. Withdraw anytime.</p>
+        </div>
+        <div class="benefit-card">
+            <span class="benefit-icon">📈</span>
+            <h4>Growth Opportunities</h4>
+            <p>As the platform grows, so do your earning opportunities.</p>
+        </div>
+        <div class="benefit-card">
+            <span class="benefit-icon">🤝</span>
+            <h4>Support &amp; Community</h4>
+            <p>24/7 partner support. Join a growing community of drivers.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 6: SIGNUP FORM -->
+<section class="signup-section" id="signup">
+    <div class="section-heading">
+        <h2>Start Your Application</h2>
+    </div>
+    <div class="signup-card">
+        <div class="vehicle-toggle" id="vehicleToggle">
+            <button class="vehicle-toggle-btn active" data-vehicle="moto" type="button">🏍️ Moto</button>
+            <button class="vehicle-toggle-btn" data-vehicle="car" type="button">🚗 Car</button>
+        </div>
+
+        <form id="driverSignupForm" novalidate>
+            <input type="hidden" name="vehicle_type" id="vehicleType" value="moto">
+
+            <div class="input-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" class="input" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="input-group">
+                <label for="phone">Phone Number</label>
+                <div class="phone-input-wrap">
+                    <span class="phone-prefix">+509</span>
+                    <input type="tel" id="phone" class="input" placeholder="XXXX XXXX" required>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" class="input" placeholder="you@example.com" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <div class="password-wrap">
+                    <input type="password" id="password" class="input" placeholder="Create a password" required>
+                    <button type="button" class="password-toggle" id="pwToggle">Show</button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="city">City / Service Zone</label>
+                <select id="city" class="input" required>
+                    <option value="" disabled selected>Select your city</option>
+                    <option value="port-au-prince">Port-au-Prince</option>
+                    <option value="petion-ville">Pétion-Ville</option>
+                    <option value="delmas">Delmas</option>
+                    <option value="cap-haitien">Cap-Haïtien</option>
+                    <option value="les-cayes">Les Cayes</option>
+                    <option value="jacmel">Jacmel</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="checkbox-wrap">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">I agree to the <a href="#">Partner Terms and Conditions</a></label>
+            </div>
+
+            <button type="submit" class="btn btn-red btn-lg btn-full btn-round">Continue Application →</button>
+        </form>
+
+        <div class="signup-footer">
+            Already applied? <a href="#">Check your application status</a>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 7: FAQ -->
+<section class="faq-section" id="faq">
+    <div class="section-heading">
+        <h2>Frequently Asked Questions</h2>
+    </div>
+    <div class="faq-list">
+        <div class="faq-item">
+            <button class="faq-question" type="button">
+                <span>How do I get paid?</span>
+                <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <p>You earn per delivery. Payments go to your San Cash wallet after each completed delivery. You can withdraw to MonCash, Natcom, or your bank account anytime.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question" type="button">
+                <span>What documents do I need?</span>
+                <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <p>You need a valid government ID, driver's license, vehicle registration, and a profile photo. You can start the application and upload documents later.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question" type="button">
+                <span>How long does approval take?</span>
+                <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <p>Most applications are reviewed within 24-48 hours. Make sure all your documents are clear and valid to speed up the process.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question" type="button">
+                <span>Can I work with a moto or a car?</span>
+                <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <p>Yes! MyPlopPlop accepts both motorcycle and car partners. Choose the vehicle type that works best for you.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question" type="button">
+                <span>Will ridesharing be added later?</span>
+                <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <p>Yes. MyPlopPlop is building toward a full mobility platform. Partners who join now will have priority access to future ridesharing services.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 8: FINAL CTA -->
+<section class="final-cta">
+    <div class="final-cta-content">
+        <h2>Start Driving with MyPlopPlop Today</h2>
+        <p class="sub">Join hundreds of partners earning on their own schedule</p>
+        <div class="final-cta-btns">
+            <a href="#signup" class="final-cta-btn" onclick="setVehicle('moto')">Apply as Moto Partner 🏍️</a>
+            <a href="#signup" class="final-cta-btn blue" onclick="setVehicle('car')">Apply as Car Partner 🚗</a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <img src="assets/img/logo.png" alt="MyPlopPlop" style="height:50px;margin-bottom:8px;">
+                <p>Everything Haiti needs, delivered fast. From restaurants to hardware stores, we connect you with the best merchants across Haiti.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Shop</h5>
+                <a href="shop.html">All Stores</a>
+                <a href="category.html?cat=restaurants">Restaurants</a>
+                <a href="category.html?cat=supermarkets">Supermarkets</a>
+                <a href="category.html?cat=pharmacies">Pharmacies</a>
+            </div>
+            <div class="footer-col">
+                <h5>Account</h5>
+                <a href="orders.html">My Orders</a>
+                <a href="wallet.html">San Cash</a>
+                <a href="recipients.html">Recipients</a>
+                <a href="help.html">Help Center</a>
+            </div>
+            <div class="footer-col">
+                <h5>Partners</h5>
+                <a href="merchant/dashboard.html">Merchants</a>
+                <a href="driver.html">Drivers</a>
+                <a href="#">About Us</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 MyPlopPlop. All rights reserved.</span>
+            <span>Powered by <a href="https://48hoursready.com" style="color:var(--white);font-weight:600;">48HoursReady.com</a></span>
+        </div>
+    </div>
+</footer>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+    </a>
+    <a href="shop.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span>Search</span>
+    </a>
+    <a href="cart.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        <span class="nav-badge">2</span>
+        <span>Cart</span>
+    </a>
+    <a href="orders.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Orders</span>
+    </a>
+    <a href="login.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Account</span>
+    </a>
+</nav>
+
+<script>
+// Vehicle toggle
+const toggleBtns = document.querySelectorAll('.vehicle-toggle-btn');
+const vehicleInput = document.getElementById('vehicleType');
+
+toggleBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        toggleBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        vehicleInput.value = btn.dataset.vehicle;
+    });
+});
+
+// Set vehicle from URL hash or final CTA
+function setVehicle(type) {
+    toggleBtns.forEach(b => {
+        b.classList.toggle('active', b.dataset.vehicle === type);
+    });
+    vehicleInput.value = type;
+}
+
+// Check URL hash on load
+if (window.location.hash) {
+    const hash = window.location.hash.substring(1);
+    if (hash === 'moto' || hash === 'car') {
+        setVehicle(hash);
+    }
+}
+
+// Password show/hide
+const pwToggle = document.getElementById('pwToggle');
+const pwInput = document.getElementById('password');
+pwToggle.addEventListener('click', () => {
+    const isPassword = pwInput.type === 'password';
+    pwInput.type = isPassword ? 'text' : 'password';
+    pwToggle.textContent = isPassword ? 'Hide' : 'Show';
+});
+
+// Form submit
+document.getElementById('driverSignupForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const vehicle = vehicleInput.value;
+    window.location.href = 'driver-onboarding.html?vehicle=' + vehicle;
+});
+
+// FAQ accordion
+document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const isOpen = item.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        // Toggle current
+        if (!isOpen) item.classList.add('open');
+    });
+});
+</script>
+
+</body>
+</html>
