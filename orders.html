@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>My Orders — MyPlopPlop</title>
+<meta name="description" content="View and manage your MyPlopPlop orders.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/layout.css">
+<style>
+/* ===== PAGE HEADER ===== */
+.orders-header {
+    background: var(--white);
+    padding: var(--space-lg) var(--content-padding) 0;
+    border-bottom: none;
+}
+.orders-header h1 {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+}
+.orders-header .subtitle {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-top: var(--space-xs);
+}
+
+/* ===== FILTER TABS ===== */
+.order-tabs {
+    display: flex;
+    gap: 0;
+    background: var(--white);
+    padding: 0 var(--content-padding);
+    border-bottom: 2px solid var(--gray-200);
+    position: sticky;
+    top: calc(var(--header-height) + 28px);
+    z-index: 100;
+}
+.order-tab {
+    padding: 14px 20px;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text-muted);
+    white-space: nowrap;
+    position: relative;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+    background: none;
+    border: none;
+    font-family: var(--font-body);
+}
+.order-tab:hover { color: var(--text-dark); }
+.order-tab.active {
+    color: var(--primary-red);
+    font-weight: 600;
+}
+.order-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary-red);
+}
+.order-tab .tab-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: var(--gray-100);
+    color: var(--gray-600);
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    margin-left: 6px;
+}
+.order-tab.active .tab-count {
+    background: var(--primary-red-light);
+    color: var(--primary-red);
+}
+
+/* ===== ORDER LIST ===== */
+.orders-list {
+    padding: var(--space-md) var(--content-padding);
+    padding-bottom: calc(var(--space-md) + var(--bottom-nav-height));
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+/* ===== ORDER CARD ===== */
+.order-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+.order-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--gray-100);
+}
+.order-card-id {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-sm);
+}
+.order-card-date {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+.order-card-body {
+    padding: var(--space-md);
+}
+.order-card-store {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+.order-store-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background: var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+.order-store-name {
+    font-weight: 600;
+    font-size: var(--text-base);
+}
+.order-store-items {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+.order-card-items {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-sm);
+    line-height: 1.5;
+}
+.order-card-items span {
+    display: inline;
+}
+
+/* ===== PROGRESS INDICATOR ===== */
+.order-progress {
+    margin: var(--space-sm) 0;
+}
+.order-progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--gray-200);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+.order-progress-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    background: var(--primary-blue);
+    transition: width var(--transition-slow);
+}
+.order-progress-label {
+    font-size: var(--text-xs);
+    color: var(--primary-blue);
+    font-weight: 500;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.progress-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--primary-blue);
+    animation: blink 1.2s ease-in-out infinite;
+}
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* ===== ORDER CARD FOOTER ===== */
+.order-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md);
+    border-top: 1px solid var(--gray-100);
+    background: var(--gray-50);
+}
+.order-card-total {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+}
+
+/* ===== STATUS BADGES ===== */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+}
+.status-badge.placed,
+.status-badge.confirmed {
+    background: var(--info-light);
+    color: var(--info);
+}
+.status-badge.preparing,
+.status-badge.assigned {
+    background: var(--warning-light);
+    color: var(--warning);
+}
+.status-badge.picked_up,
+.status-badge.on_the_way {
+    background: var(--primary-blue-light);
+    color: var(--primary-blue);
+}
+.status-badge.delivered {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+/* ===== EMPTY STATE ===== */
+.orders-empty {
+    text-align: center;
+    padding: var(--space-3xl) var(--space-lg);
+}
+.orders-empty svg {
+    margin: 0 auto var(--space-md);
+    color: var(--gray-300);
+}
+.orders-empty h3 {
+    margin-bottom: var(--space-sm);
+    font-size: var(--text-xl);
+}
+.orders-empty p {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-lg);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 768px) {
+    .orders-list {
+        max-width: 700px;
+        margin: 0 auto;
+        padding-bottom: var(--space-lg);
+    }
+    .order-tabs {
+        max-width: 700px;
+        margin: 0 auto;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .orders-header {
+        max-width: 700px;
+        margin: 0 auto;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="flex items-center gap-sm">
+        <span>📍 Port-au-Prince</span>
+        <span style="opacity:0.5">|</span>
+        <a href="#">Change location</a>
+    </div>
+    <div class="flex items-center gap-md">
+        <a href="#">EN</a>
+        <a href="#" style="font-weight:700">KR</a>
+        <a href="#">FR</a>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="header" style="top: 28px;">
+    <div class="header-inner">
+        <a href="index.html" class="header-logo">
+            <span style="font-size:24px;">🛵</span>
+            <span>My<span style="color:var(--primary-blue)">Plop</span>Plop</span>
+        </a>
+
+        <div class="header-actions">
+            <a href="shop.html" class="header-icon" title="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </a>
+            <a href="cart.html" class="header-icon" title="Cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                <span class="header-badge">2</span>
+            </a>
+            <a href="login.html" class="header-icon" title="Account">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN -->
+<main class="main" style="margin-top: calc(var(--header-height) + 28px);">
+
+<!-- Page Header -->
+<div class="orders-header">
+    <h1>My Orders</h1>
+    <p class="subtitle">Track active deliveries and view past orders</p>
+</div>
+
+<!-- Filter Tabs -->
+<div class="order-tabs" id="orderTabs">
+    <button class="order-tab active" data-filter="active">Active <span class="tab-count" id="activeCount">0</span></button>
+    <button class="order-tab" data-filter="completed">Completed <span class="tab-count" id="completedCount">0</span></button>
+    <button class="order-tab" data-filter="all">All <span class="tab-count" id="allCount">0</span></button>
+</div>
+
+<!-- Order List -->
+<div class="orders-list" id="ordersList"></div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>My<span>Plop</span>Plop</h3>
+                <p>Everything Haiti needs, delivered fast. From restaurants to hardware stores, we connect you with the best merchants across Haiti.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Shop</h5>
+                <a href="shop.html">All Stores</a>
+                <a href="category.html?cat=restaurants">Restaurants</a>
+                <a href="category.html?cat=supermarkets">Supermarkets</a>
+                <a href="category.html?cat=pharmacies">Pharmacies</a>
+            </div>
+            <div class="footer-col">
+                <h5>Account</h5>
+                <a href="orders.html">My Orders</a>
+                <a href="wallet.html">San Cash</a>
+                <a href="recipients.html">Recipients</a>
+                <a href="help.html">Help Center</a>
+            </div>
+            <div class="footer-col">
+                <h5>Partners</h5>
+                <a href="merchant/dashboard.html">Merchants</a>
+                <a href="rider/dashboard.html">Riders</a>
+                <a href="#">About Us</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 MyPlopPlop. All rights reserved.</span>
+            <span>Powered by <a href="https://48hoursready.com" style="color:var(--white);font-weight:600;">48HoursReady.com</a></span>
+        </div>
+    </div>
+</footer>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+    </a>
+    <a href="shop.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span>Search</span>
+    </a>
+    <a href="cart.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        <span class="nav-badge">2</span>
+        <span>Cart</span>
+    </a>
+    <a href="orders.html" class="bottom-nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Orders</span>
+    </a>
+    <a href="login.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Account</span>
+    </a>
+</nav>
+
+<script src="js/mock-data.js"></script>
+<script>
+(function() {
+    const orders = MOCK.SAMPLE_ORDERS;
+    const statusKeys = MOCK.ORDER_STATUSES.map(s => s.key);
+    const completedStatuses = ['delivered'];
+    const activeStatuses = statusKeys.filter(k => k !== 'delivered');
+
+    // Store icon mapping
+    const storeIcons = {
+        'Lakay Kreyòl': '🍽️',
+        'Ti Malice Kitchen': '🍽️',
+        'Caribbean Supermarket': '🛒',
+        'Pharma Plus Haiti': '💊',
+        'FèBlan Hardware': '🔧',
+        'Gwo Komès Haiti': '📦',
+        'Ayiti Style': '🏬'
+    };
+
+    // Counts
+    const activeOrders = orders.filter(o => activeStatuses.includes(o.status));
+    const completedOrders = orders.filter(o => completedStatuses.includes(o.status));
+
+    document.getElementById('activeCount').textContent = activeOrders.length;
+    document.getElementById('completedCount').textContent = completedOrders.length;
+    document.getElementById('allCount').textContent = orders.length;
+
+    // Get status label
+    function getStatusLabel(key) {
+        const s = MOCK.ORDER_STATUSES.find(st => st.key === key);
+        return s ? s.label : key;
+    }
+
+    // Get progress percentage
+    function getProgress(status) {
+        const idx = statusKeys.indexOf(status);
+        if (idx < 0) return 0;
+        return Math.round(((idx + 1) / statusKeys.length) * 100);
+    }
+
+    // Format date
+    function formatDate(dateStr) {
+        const d = new Date(dateStr + 'T12:00:00');
+        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    // Render order card
+    function renderCard(order) {
+        const isActive = activeStatuses.includes(order.status);
+        const itemCount = order.items.reduce((sum, i) => sum + i.qty, 0);
+        const itemNames = order.items.map(i => i.name).join(', ');
+        const icon = storeIcons[order.store] || '🏪';
+        const progress = getProgress(order.status);
+        const statusLabel = getStatusLabel(order.status);
+
+        let progressHtml = '';
+        if (isActive) {
+            progressHtml = `
+                <div class="order-progress">
+                    <div class="order-progress-bar">
+                        <div class="order-progress-fill" style="width:${progress}%"></div>
+                    </div>
+                    <div class="order-progress-label">
+                        <span class="progress-dot"></span>
+                        ${statusLabel}
+                    </div>
+                </div>
+            `;
+        }
+
+        const actionBtn = isActive
+            ? `<a href="tracking.html?id=${order.id}" class="btn btn-blue btn-sm">Track</a>`
+            : `<button class="btn btn-outline btn-sm" onclick="alert('Reorder from ${order.store} coming soon!')">Reorder</button>`;
+
+        return `
+            <div class="order-card" data-status="${order.status}">
+                <div class="order-card-header">
+                    <span class="order-card-id">${order.id}</span>
+                    <span class="order-card-date">${formatDate(order.date)}</span>
+                </div>
+                <div class="order-card-body">
+                    <div class="order-card-store">
+                        <div class="order-store-icon">${icon}</div>
+                        <div>
+                            <div class="order-store-name">${order.store}</div>
+                            <div class="order-store-items">${itemCount} item${itemCount > 1 ? 's' : ''}</div>
+                        </div>
+                        <div style="margin-left:auto;">
+                            <span class="status-badge ${order.status}">${statusLabel}</span>
+                        </div>
+                    </div>
+                    <div class="order-card-items">
+                        ${itemNames}
+                    </div>
+                    ${progressHtml}
+                </div>
+                <div class="order-card-footer">
+                    <span class="order-card-total">${MOCK.formatHTG(order.total)}</span>
+                    ${actionBtn}
+                </div>
+            </div>
+        `;
+    }
+
+    // Empty state HTML
+    function emptyState(message) {
+        return `
+            <div class="orders-empty">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="9" y1="15" x2="15" y2="15"/>
+                </svg>
+                <h3>No Orders Yet</h3>
+                <p>${message}</p>
+                <a href="shop.html" class="btn btn-red">Start Shopping</a>
+            </div>
+        `;
+    }
+
+    // Render list
+    function renderOrders(filter) {
+        const list = document.getElementById('ordersList');
+        let filtered;
+
+        if (filter === 'active') {
+            filtered = orders.filter(o => activeStatuses.includes(o.status));
+        } else if (filter === 'completed') {
+            filtered = orders.filter(o => completedStatuses.includes(o.status));
+        } else {
+            filtered = orders;
+        }
+
+        if (filtered.length === 0) {
+            const messages = {
+                active: 'You have no active orders right now. Browse stores and place your first order!',
+                completed: 'No completed orders yet. Your delivered orders will appear here.',
+                all: 'You haven\'t placed any orders yet. Start exploring stores!'
+            };
+            list.innerHTML = emptyState(messages[filter] || messages.all);
+            return;
+        }
+
+        // Sort: active orders first (most recent status), then by date descending
+        filtered.sort((a, b) => {
+            const aActive = activeStatuses.includes(a.status) ? 1 : 0;
+            const bActive = activeStatuses.includes(b.status) ? 1 : 0;
+            if (aActive !== bActive) return bActive - aActive;
+            return new Date(b.date) - new Date(a.date);
+        });
+
+        list.innerHTML = filtered.map(renderCard).join('');
+    }
+
+    // Tab switching
+    const tabs = document.querySelectorAll('.order-tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            tabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            renderOrders(this.dataset.filter);
+        });
+    });
+
+    // Initial render
+    renderOrders('active');
+})();
+</script>
+
+</body>
+</html>

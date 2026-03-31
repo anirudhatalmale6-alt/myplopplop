@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Help Center — MyPlopPlop</title>
+<meta name="description" content="Get help with orders, payments, deliveries and more on MyPlopPlop. Frequently asked questions and support.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/layout.css">
+<style>
+/* ===== HELP HERO ===== */
+.help-hero {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 60%, var(--primary-red) 100%);
+    color: var(--white);
+    padding: var(--space-2xl) var(--content-padding) var(--space-xl);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.help-hero::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(210,16,52,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.help-hero h1 {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    margin-bottom: var(--space-sm);
+    color: var(--white);
+    position: relative;
+    z-index: 1;
+}
+.help-hero p {
+    font-size: var(--text-sm);
+    opacity: 0.9;
+    margin-bottom: var(--space-lg);
+    position: relative;
+    z-index: 1;
+}
+.help-search {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: 6px 6px 6px 16px;
+    box-shadow: var(--shadow-xl);
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+.help-search input {
+    flex: 1;
+    border: none;
+    background: none;
+    font-size: var(--text-sm);
+    color: var(--text-dark);
+    padding: 8px 0;
+}
+.help-search input::placeholder { color: var(--gray-400); }
+.help-search .search-icon {
+    color: var(--gray-400);
+    flex-shrink: 0;
+}
+
+/* ===== QUICK HELP CATEGORIES ===== */
+.help-categories {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+    padding: 0 var(--content-padding);
+    margin-top: calc(-1 * var(--space-lg));
+    position: relative;
+    z-index: 2;
+}
+.help-cat-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg) var(--space-md);
+    text-align: center;
+    box-shadow: var(--shadow-card);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+}
+.help-cat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+.help-cat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin: 0 auto var(--space-sm);
+}
+.help-cat-card h4 {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-dark);
+    line-height: 1.3;
+}
+.help-cat-card p {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* ===== FAQ SECTION ===== */
+.faq-section {
+    padding: var(--space-xl) var(--content-padding);
+}
+.faq-section h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    margin-bottom: var(--space-lg);
+    color: var(--text-dark);
+}
+
+/* Accordion */
+.faq-item {
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-sm);
+    overflow: hidden;
+    transition: border-color var(--transition-fast);
+}
+.faq-item.open {
+    border-color: var(--primary-blue);
+}
+.faq-question {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: var(--white);
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-dark);
+    transition: background var(--transition-fast);
+}
+.faq-question:hover {
+    background: var(--gray-50);
+}
+.faq-item.open .faq-question {
+    background: var(--primary-blue-light);
+    color: var(--primary-blue);
+}
+.faq-arrow {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    transition: transform var(--transition-fast);
+    color: var(--gray-400);
+}
+.faq-item.open .faq-arrow {
+    transform: rotate(180deg);
+    color: var(--primary-blue);
+}
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-normal);
+}
+.faq-answer-inner {
+    padding: 0 var(--space-md) var(--space-md);
+    font-size: var(--text-sm);
+    color: var(--gray-600);
+    line-height: 1.7;
+}
+
+/* ===== CONTACT SECTION ===== */
+.contact-section {
+    padding: var(--space-xl) var(--content-padding) var(--space-2xl);
+    text-align: center;
+}
+.contact-section h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+}
+.contact-section p {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-lg);
+}
+.contact-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    max-width: 360px;
+    margin: 0 auto;
+}
+.contact-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: 14px 24px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border: none;
+    text-decoration: none;
+}
+.contact-btn-whatsapp {
+    background: #25D366;
+    color: var(--white);
+}
+.contact-btn-whatsapp:hover { background: #1DA851; transform: translateY(-1px); }
+.contact-btn-email {
+    background: var(--white);
+    color: var(--text-dark);
+    border: 1.5px solid var(--gray-200);
+}
+.contact-btn-email:hover { border-color: var(--gray-400); background: var(--gray-50); }
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 768px) {
+    .help-hero h1 { font-size: var(--text-3xl); }
+    .help-categories { grid-template-columns: repeat(4, 1fr); }
+    .faq-section { max-width: 700px; margin: 0 auto; padding-left: var(--content-padding); padding-right: var(--content-padding); }
+    .contact-section { max-width: 700px; margin: 0 auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="flex items-center gap-sm">
+        <span>📍 Port-au-Prince</span>
+        <span style="opacity:0.5">|</span>
+        <a href="#">Change location</a>
+    </div>
+    <div class="flex items-center gap-md">
+        <a href="#">EN</a>
+        <a href="#" style="font-weight:700">KR</a>
+        <a href="#">FR</a>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="header" style="top: 28px;">
+    <div class="header-inner">
+        <a href="index.html" class="header-logo">
+            <span style="font-size:24px;">🛵</span>
+            <span>My<span style="color:var(--primary-blue)">Plop</span>Plop</span>
+        </a>
+
+        <div class="header-actions">
+            <a href="shop.html" class="header-icon" title="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </a>
+            <a href="cart.html" class="header-icon" title="Cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                <span class="header-badge">2</span>
+            </a>
+            <a href="login.html" class="header-icon" title="Account">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN -->
+<main class="main" style="margin-top: calc(var(--header-height) + 28px);">
+
+<!-- HELP HERO -->
+<section class="help-hero">
+    <h1>How can we help?</h1>
+    <p>Search our help center or browse common topics below</p>
+    <div class="help-search">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="Search for help..." id="helpSearchInput">
+    </div>
+</section>
+
+<!-- QUICK HELP CATEGORIES -->
+<div class="help-categories">
+    <a href="#faq" class="help-cat-card" data-filter="orders">
+        <div class="help-cat-icon" style="background:var(--primary-red-light);">📦</div>
+        <h4>Orders &amp; Delivery</h4>
+        <p>Track, cancel, issues</p>
+    </a>
+    <a href="#faq" class="help-cat-card" data-filter="payments">
+        <div class="help-cat-icon" style="background:var(--success-light);">💳</div>
+        <h4>Payments &amp; Wallet</h4>
+        <p>Pay, refunds, San Cash</p>
+    </a>
+    <a href="#faq" class="help-cat-card" data-filter="account">
+        <div class="help-cat-icon" style="background:var(--primary-blue-light);">👤</div>
+        <h4>Account &amp; Profile</h4>
+        <p>Login, settings, PIN</p>
+    </a>
+    <a href="#faq" class="help-cat-card" data-filter="partners">
+        <div class="help-cat-icon" style="background:var(--warning-light);">🏪</div>
+        <h4>Merchant &amp; Rider</h4>
+        <p>Join, earnings, support</p>
+    </a>
+</div>
+
+<!-- FAQ SECTION -->
+<section class="faq-section" id="faq">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item" data-tags="orders">
+        <button class="faq-question">
+            <span>How do I place an order?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+            <div class="faq-answer-inner">
+                It's easy! Browse stores by category or use the search bar to find what you need. Add items to your cart, choose a delivery address, select your payment method (San Cash wallet, credit/debit card, or cash on delivery), and confirm your order. You'll receive real-time updates as your order is prepared and delivered.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item" data-tags="payments">
+        <button class="faq-question">
+            <span>What payment methods are accepted?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+            <div class="faq-answer-inner">
+                MyPlopPlop accepts multiple payment methods for your convenience: <strong>San Cash wallet</strong> (our built-in digital wallet), <strong>credit and debit cards</strong> (Visa, Mastercard), <strong>mobile money</strong> (MonCash, Natcom), and <strong>cash on delivery</strong> for local orders. Diaspora customers can pay with international cards.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item" data-tags="payments">
+        <button class="faq-question">
+            <span>How does San Cash wallet work?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+            <div class="faq-answer-inner">
+                San Cash is MyPlopPlop's built-in digital wallet. You can top it up using a credit/debit card, mobile money, or bank transfer. Once loaded, use it for fast one-tap checkout on any order. San Cash also supports receiving funds from family abroad, earning cashback on orders, and transferring balance to other MyPlopPlop users.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item" data-tags="orders">
+        <button class="faq-question">
+            <span>Can I order for someone else in Haiti?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+            <div class="faq-answer-inner">
+                Absolutely! This is one of MyPlopPlop's most popular features. If you're in the diaspora (USA, Canada, France, etc.), you can order groceries, medicine, food, and more for your family and friends in Haiti. Simply add their delivery address and phone number as a recipient. You pay from abroad, and they receive the delivery at their door. You can save multiple recipients for easy reordering.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item" data-tags="partners">
+        <button class="faq-question">
+            <span>How do I become a merchant?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+            <div class="faq-answer-inner">
+                Joining as a merchant is simple. Sign up for a merchant account, provide your business details (name, location, category), upload your menu or product catalog, and submit for verification. Once approved (usually within 24-48 hours), your store will be live on MyPlopPlop. You'll get access to a merchant dashboard to manage orders, products, and earnings.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item" data-tags="partners">
+        <button class="faq-question">
+            <span>How do I become a delivery rider?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+            <div class="faq-answer-inner">
+                To become a MyPlopPlop rider, sign up with a rider account and provide: a valid ID, proof of vehicle (motorcycle or car), and a phone number. After a brief verification process, you can start accepting delivery requests. You'll earn per delivery plus tips, and you can cash out your earnings daily to your San Cash wallet or mobile money account.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item" data-tags="orders">
+        <button class="faq-question">
+            <span>What is the delivery fee?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+            <div class="faq-answer-inner">
+                Delivery fees vary based on distance and merchant. Typically, fees range from <strong>HTG 50 to HTG 250</strong> depending on how far the delivery location is from the store. Many merchants offer <strong>free delivery</strong> on orders above a certain amount. New customers also get free delivery on their first order using the code <strong>WELCOME</strong>.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item" data-tags="orders">
+        <button class="faq-question">
+            <span>How do I track my order?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+            <div class="faq-answer-inner">
+                Once your order is confirmed, you can track it in real time from the <strong>Orders</strong> tab. You'll see each step: order received, merchant preparing, rider picked up, and out for delivery. You'll also receive SMS notifications at each stage. The live map shows your rider's location so you always know when to expect your delivery.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item" data-tags="payments">
+        <button class="faq-question">
+            <span>How do I get a refund?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+            <div class="faq-answer-inner">
+                If there's an issue with your order (wrong items, missing items, quality problems), you can request a refund directly from the order details page within 24 hours of delivery. Go to <strong>Orders > Select Order > Report Issue</strong>. Our support team reviews each request and typically processes refunds within 1-2 business days. Refunds are credited to your San Cash wallet or original payment method.
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-item" data-tags="account">
+        <button class="faq-question">
+            <span>How do I contact support?</span>
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+            <div class="faq-answer-inner">
+                You can reach our support team through multiple channels: <strong>WhatsApp</strong> (fastest, available 7am-10pm daily), <strong>email</strong> at support@myplopplop.com, or through the in-app chat. For order-specific issues, use the "Report Issue" button on the order details page for the fastest resolution. Our average response time is under 15 minutes during business hours.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section class="contact-section">
+    <h2>Still need help?</h2>
+    <p>Our support team is here for you. Reach out and we'll get back to you as soon as possible.</p>
+    <div class="contact-buttons">
+        <a href="https://wa.me/50900000000" class="contact-btn contact-btn-whatsapp">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Chat on WhatsApp
+        </a>
+        <a href="mailto:support@myplopplop.com" class="contact-btn contact-btn-email">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Email support@myplopplop.com
+        </a>
+    </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>My<span>Plop</span>Plop</h3>
+                <p>Everything Haiti needs, delivered fast. From restaurants to hardware stores, we connect you with the best merchants across Haiti.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Shop</h5>
+                <a href="shop.html">All Stores</a>
+                <a href="category.html?cat=restaurants">Restaurants</a>
+                <a href="category.html?cat=supermarkets">Supermarkets</a>
+                <a href="category.html?cat=pharmacies">Pharmacies</a>
+            </div>
+            <div class="footer-col">
+                <h5>Account</h5>
+                <a href="orders.html">My Orders</a>
+                <a href="wallet.html">San Cash</a>
+                <a href="recipients.html">Recipients</a>
+                <a href="help.html">Help Center</a>
+            </div>
+            <div class="footer-col">
+                <h5>Partners</h5>
+                <a href="merchant/dashboard.html">Merchants</a>
+                <a href="rider/dashboard.html">Riders</a>
+                <a href="#">About Us</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 MyPlopPlop. All rights reserved.</span>
+            <span>Powered by <a href="https://48hoursready.com" style="color:var(--white);font-weight:600;">48HoursReady.com</a></span>
+        </div>
+    </div>
+</footer>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+    </a>
+    <a href="shop.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span>Search</span>
+    </a>
+    <a href="cart.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        <span class="nav-badge">2</span>
+        <span>Cart</span>
+    </a>
+    <a href="orders.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Orders</span>
+    </a>
+    <a href="login.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Account</span>
+    </a>
+</nav>
+
+<script>
+// FAQ Accordion
+document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const answer = item.querySelector('.faq-answer');
+        const isOpen = item.classList.contains('open');
+
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(i => {
+            i.classList.remove('open');
+            i.querySelector('.faq-answer').style.maxHeight = null;
+        });
+
+        // Open clicked (if it was closed)
+        if (!isOpen) {
+            item.classList.add('open');
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+        }
+    });
+});
+
+// Category card filter
+document.querySelectorAll('.help-cat-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+        e.preventDefault();
+        const filter = card.dataset.filter;
+        const faqSection = document.getElementById('faq');
+
+        // Scroll to FAQ
+        faqSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Close all first
+        document.querySelectorAll('.faq-item').forEach(i => {
+            i.classList.remove('open');
+            i.querySelector('.faq-answer').style.maxHeight = null;
+            i.style.display = '';
+        });
+
+        // Show only matching, or all if no match
+        const items = document.querySelectorAll('.faq-item');
+        let hasMatch = false;
+        items.forEach(item => {
+            const tags = item.dataset.tags || '';
+            if (filter && !tags.includes(filter)) {
+                item.style.display = 'none';
+            } else {
+                item.style.display = '';
+                hasMatch = true;
+            }
+        });
+
+        // If no match, show all
+        if (!hasMatch) {
+            items.forEach(item => item.style.display = '');
+        }
+    });
+});
+
+// Search filter
+const searchInput = document.getElementById('helpSearchInput');
+searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase().trim();
+    document.querySelectorAll('.faq-item').forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+});
+</script>
+
+</body>
+</html>

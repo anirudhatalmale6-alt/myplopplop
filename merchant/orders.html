@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Orders — Merchant | MyPlopPlop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/layout.css">
+<style>
+/* ===== Page Content ===== */
+.page-content {
+    padding: var(--space-md) var(--content-padding);
+    padding-bottom: calc(var(--bottom-nav-height) + var(--space-lg));
+}
+
+/* ===== Sound Indicator ===== */
+.sound-indicator {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--primary-red-light);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-md);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--primary-red);
+}
+.sound-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+}
+.sound-bar {
+    width: 3px;
+    background: var(--primary-red);
+    border-radius: 2px;
+    animation: soundWave 1s ease-in-out infinite alternate;
+}
+.sound-bar:nth-child(1) { height: 6px; animation-delay: 0s; }
+.sound-bar:nth-child(2) { height: 10px; animation-delay: 0.2s; }
+.sound-bar:nth-child(3) { height: 14px; animation-delay: 0.4s; }
+.sound-bar:nth-child(4) { height: 8px; animation-delay: 0.6s; }
+@keyframes soundWave {
+    from { transform: scaleY(0.4); }
+    to { transform: scaleY(1); }
+}
+
+/* ===== Filter Tabs ===== */
+.filter-tabs {
+    display: flex;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: var(--space-xs);
+}
+.filter-tabs::-webkit-scrollbar { display: none; }
+.filter-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--gray-600);
+    background: var(--gray-100);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border: none;
+}
+.filter-tab:hover { background: var(--gray-200); }
+.filter-tab.active {
+    background: var(--primary-red);
+    color: var(--white);
+}
+.filter-tab .count {
+    font-size: 11px;
+    font-weight: 700;
+    background: rgba(255,255,255,0.25);
+    padding: 1px 6px;
+    border-radius: var(--radius-full);
+}
+.filter-tab.active .count {
+    background: rgba(255,255,255,0.3);
+}
+
+/* ===== Order Card ===== */
+.order-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+    transition: box-shadow var(--transition-fast);
+}
+.order-card:hover { box-shadow: var(--shadow-sm); }
+.order-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+}
+.order-card-id {
+    font-weight: 700;
+    font-size: var(--text-base);
+    color: var(--text-dark);
+}
+.order-card-customer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+.customer-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background: var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+.customer-name {
+    font-weight: 600;
+    font-size: var(--text-sm);
+}
+.customer-phone {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+.order-items-list {
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    padding: var(--space-sm) var(--space-md);
+    margin-bottom: var(--space-md);
+}
+.order-item-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: var(--text-sm);
+}
+.order-item-row + .order-item-row {
+    border-top: 1px solid var(--gray-200);
+}
+.order-item-qty {
+    color: var(--primary-red);
+    font-weight: 700;
+    margin-right: 6px;
+}
+.order-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--gray-100);
+}
+.order-total-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+.order-total-value {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-lg);
+    color: var(--text-dark);
+}
+.order-time-placed {
+    font-size: var(--text-xs);
+    color: var(--gray-400);
+    margin-bottom: var(--space-sm);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.order-actions {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+}
+.order-actions .btn { flex: 1; }
+
+/* ===== Status Badges ===== */
+.badge-new { background: var(--primary-red-light); color: var(--primary-red); }
+.badge-preparing { background: var(--warning-light); color: var(--warning); }
+.badge-ready { background: var(--info-light); color: var(--info); }
+.badge-delivered { background: var(--success-light); color: var(--success); }
+
+/* ===== New order pulse ===== */
+.order-card.is-new {
+    border-color: var(--primary-red);
+    border-width: 2px;
+    animation: newOrderPulse 2s ease-in-out 3;
+}
+@keyframes newOrderPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(210,16,52,0); }
+    50% { box-shadow: 0 0 0 6px rgba(210,16,52,0.15); }
+}
+
+/* ===== Merchant Bottom Nav ===== */
+.merchant-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--bottom-nav-height);
+    background: var(--white);
+    border-top: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 1000;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.merchant-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 12px;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--gray-400);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    position: relative;
+}
+.merchant-nav-item svg { width: 24px; height: 24px; }
+.merchant-nav-item.active { color: var(--primary-red); }
+.merchant-nav-item .nav-badge {
+    position: absolute;
+    top: 0;
+    right: 4px;
+    width: 16px;
+    height: 16px;
+    background: var(--primary-red);
+    color: var(--white);
+    font-size: 9px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===== Desktop ===== */
+@media (min-width: 1024px) {
+    .merchant-nav { display: none; }
+    .page-content { padding-bottom: var(--space-lg); }
+    .dashboard-content { max-width: 900px; }
+    .orders-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-md);
+    }
+    .orders-grid .order-card { margin-bottom: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div style="display:flex;align-items:center;gap:var(--space-sm);">
+        <span>Merchant Portal</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:var(--space-md);">
+        <a href="../index.html">View Storefront</a>
+        <a href="#">EN</a>
+        <a href="#" style="font-weight:700">KR</a>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="header" style="top: 28px;">
+    <div class="header-inner">
+        <a href="../index.html" class="header-logo">
+            <span style="font-size:24px;">🛵</span>
+            <span>My<span style="color:var(--primary-blue)">Plop</span>Plop</span>
+        </a>
+        <div class="header-actions">
+            <a href="#" class="header-icon" title="Notifications">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <span class="header-badge">3</span>
+            </a>
+            <a href="settings.html" class="header-icon" title="Settings">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN -->
+<main class="main" style="margin-top: calc(var(--header-height) + 28px);">
+    <div class="dashboard-layout">
+
+        <!-- SIDEBAR (Desktop) -->
+        <aside class="sidebar">
+            <div style="padding: 0 var(--space-lg) var(--space-lg);">
+                <div style="display:flex;align-items:center;gap:var(--space-sm);">
+                    <div style="width:40px;height:40px;border-radius:var(--radius-md);background:linear-gradient(135deg,var(--primary-red-light),var(--primary-blue-light));display:flex;align-items:center;justify-content:center;font-size:20px;">🍽️</div>
+                    <div>
+                        <div style="font-weight:700;font-size:var(--text-base);">Lakay Kreyol</div>
+                        <div style="font-size:var(--text-xs);color:var(--success);font-weight:500;">Open Now</div>
+                    </div>
+                </div>
+            </div>
+            <a href="dashboard.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                Dashboard
+            </a>
+            <a href="orders.html" class="sidebar-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                Orders
+                <span style="margin-left:auto;background:var(--primary-red);color:var(--white);font-size:10px;padding:2px 7px;border-radius:var(--radius-full);font-weight:700;">3</span>
+            </a>
+            <a href="products.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                Products
+            </a>
+            <a href="wallet.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                Wallet
+            </a>
+            <a href="settings.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09"/></svg>
+                Settings
+            </a>
+        </aside>
+
+        <!-- CONTENT -->
+        <div class="dashboard-content">
+            <div class="page-content">
+
+                <!-- Page Title -->
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-md);">
+                    <h1 style="font-family:var(--font-heading);font-size:var(--text-2xl);font-weight:700;">Orders</h1>
+                </div>
+
+                <!-- Sound notification indicator -->
+                <div class="sound-indicator">
+                    <div class="sound-bars">
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                        <div class="sound-bar"></div>
+                    </div>
+                    Sound alerts ON for new orders
+                </div>
+
+                <!-- Filter Tabs -->
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="filterOrders('new')">New <span class="count">2</span></button>
+                    <button class="filter-tab" onclick="filterOrders('preparing')">Preparing <span class="count">1</span></button>
+                    <button class="filter-tab" onclick="filterOrders('ready')">Ready <span class="count">1</span></button>
+                    <button class="filter-tab" onclick="filterOrders('all')">All</button>
+                </div>
+
+                <!-- Orders List -->
+                <div class="orders-grid">
+
+                    <!-- NEW ORDER 1 -->
+                    <div class="order-card is-new" data-status="new">
+                        <div class="order-card-header">
+                            <span class="order-card-id">#PP-1047</span>
+                            <span class="badge badge-new">New</span>
+                        </div>
+                        <div class="order-card-customer">
+                            <div class="customer-avatar">JP</div>
+                            <div>
+                                <div class="customer-name">Jean-Pierre M.</div>
+                                <div class="customer-phone">+509 3456-7890</div>
+                            </div>
+                        </div>
+                        <div class="order-time-placed">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            2 minutes ago
+                        </div>
+                        <div class="order-items-list">
+                            <div class="order-item-row">
+                                <span><span class="order-item-qty">2x</span> Griot ak Bannann</span>
+                                <span>1,700 HTG</span>
+                            </div>
+                            <div class="order-item-row">
+                                <span><span class="order-item-qty">1x</span> Diri Kole ak Pwa</span>
+                                <span>600 HTG</span>
+                            </div>
+                        </div>
+                        <div class="order-card-footer">
+                            <div>
+                                <div class="order-total-label">Total</div>
+                                <div class="order-total-value">2,300 HTG</div>
+                            </div>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn btn-white btn-sm" onclick="declineOrder(this)">Decline</button>
+                            <button class="btn btn-red btn-sm" onclick="acceptOrder(this)">Accept</button>
+                        </div>
+                    </div>
+
+                    <!-- NEW ORDER 2 -->
+                    <div class="order-card is-new" data-status="new">
+                        <div class="order-card-header">
+                            <span class="order-card-id">#PP-1046</span>
+                            <span class="badge badge-new">New</span>
+                        </div>
+                        <div class="order-card-customer">
+                            <div class="customer-avatar">MC</div>
+                            <div>
+                                <div class="customer-name">Marie C.</div>
+                                <div class="customer-phone">+509 4567-1234</div>
+                            </div>
+                        </div>
+                        <div class="order-time-placed">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            8 minutes ago
+                        </div>
+                        <div class="order-items-list">
+                            <div class="order-item-row">
+                                <span><span class="order-item-qty">1x</span> Tasso Kabrit</span>
+                                <span>950 HTG</span>
+                            </div>
+                            <div class="order-item-row">
+                                <span><span class="order-item-qty">2x</span> Juice Grenadine</span>
+                                <span>300 HTG</span>
+                            </div>
+                        </div>
+                        <div class="order-card-footer">
+                            <div>
+                                <div class="order-total-label">Total</div>
+                                <div class="order-total-value">1,250 HTG</div>
+                            </div>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn btn-white btn-sm" onclick="declineOrder(this)">Decline</button>
+                            <button class="btn btn-red btn-sm" onclick="acceptOrder(this)">Accept</button>
+                        </div>
+                    </div>
+
+                    <!-- PREPARING -->
+                    <div class="order-card" data-status="preparing">
+                        <div class="order-card-header">
+                            <span class="order-card-id">#PP-1045</span>
+                            <span class="badge badge-preparing">Preparing</span>
+                        </div>
+                        <div class="order-card-customer">
+                            <div class="customer-avatar">RL</div>
+                            <div>
+                                <div class="customer-name">Robert L.</div>
+                                <div class="customer-phone">+509 3876-5432</div>
+                            </div>
+                        </div>
+                        <div class="order-time-placed">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            15 minutes ago
+                        </div>
+                        <div class="order-items-list">
+                            <div class="order-item-row">
+                                <span><span class="order-item-qty">3x</span> Legim</span>
+                                <span>1,800 HTG</span>
+                            </div>
+                            <div class="order-item-row">
+                                <span><span class="order-item-qty">1x</span> Bannann Peze</span>
+                                <span>200 HTG</span>
+                            </div>
+                        </div>
+                        <div class="order-card-footer">
+                            <div>
+                                <div class="order-total-label">Total</div>
+                                <div class="order-total-value">2,000 HTG</div>
+                            </div>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn btn-blue btn-sm btn-full" onclick="markReady(this)">Mark Ready</button>
+                        </div>
+                    </div>
+
+                    <!-- READY -->
+                    <div class="order-card" data-status="ready">
+                        <div class="order-card-header">
+                            <span class="order-card-id">#PP-1044</span>
+                            <span class="badge badge-ready">Ready</span>
+                        </div>
+                        <div class="order-card-customer">
+                            <div class="customer-avatar">SD</div>
+                            <div>
+                                <div class="customer-name">Sophie D.</div>
+                                <div class="customer-phone">+509 4321-8765</div>
+                            </div>
+                        </div>
+                        <div class="order-time-placed">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            28 minutes ago
+                        </div>
+                        <div class="order-items-list">
+                            <div class="order-item-row">
+                                <span><span class="order-item-qty">1x</span> Soup Joumou</span>
+                                <span>750 HTG</span>
+                            </div>
+                            <div class="order-item-row">
+                                <span><span class="order-item-qty">2x</span> Akra</span>
+                                <span>500 HTG</span>
+                            </div>
+                        </div>
+                        <div class="order-card-footer">
+                            <div>
+                                <div class="order-total-label">Total</div>
+                                <div class="order-total-value">1,250 HTG</div>
+                            </div>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn btn-white btn-sm btn-full" disabled>Awaiting Pickup</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- MERCHANT BOTTOM NAV (Mobile) -->
+<nav class="merchant-nav">
+    <a href="dashboard.html" class="merchant-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span>Dashboard</span>
+    </a>
+    <a href="orders.html" class="merchant-nav-item active">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8" fill="none" stroke="white" stroke-width="2"/></svg>
+        <span class="nav-badge">3</span>
+        <span>Orders</span>
+    </a>
+    <a href="products.html" class="merchant-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span>Products</span>
+    </a>
+    <a href="wallet.html" class="merchant-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <span>Wallet</span>
+    </a>
+    <a href="settings.html" class="merchant-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09"/></svg>
+        <span>Settings</span>
+    </a>
+</nav>
+
+<script>
+function filterOrders(status) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    event.target.closest('.filter-tab').classList.add('active');
+    document.querySelectorAll('.order-card').forEach(card => {
+        if (status === 'all' || card.dataset.status === status) {
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+function acceptOrder(btn) {
+    const card = btn.closest('.order-card');
+    card.classList.remove('is-new');
+    card.dataset.status = 'preparing';
+    card.querySelector('.badge').textContent = 'Preparing';
+    card.querySelector('.badge').className = 'badge badge-preparing';
+    card.querySelector('.order-actions').innerHTML = '<button class="btn btn-blue btn-sm btn-full" onclick="markReady(this)">Mark Ready</button>';
+}
+
+function declineOrder(btn) {
+    const card = btn.closest('.order-card');
+    card.style.opacity = '0.5';
+    card.querySelector('.order-actions').innerHTML = '<span style="font-size:var(--text-xs);color:var(--error);font-weight:600;">Order Declined</span>';
+}
+
+function markReady(btn) {
+    const card = btn.closest('.order-card');
+    card.dataset.status = 'ready';
+    card.querySelector('.badge').textContent = 'Ready';
+    card.querySelector('.badge').className = 'badge badge-ready';
+    card.querySelector('.order-actions').innerHTML = '<button class="btn btn-white btn-sm btn-full" disabled>Awaiting Pickup</button>';
+}
+</script>
+
+</body>
+</html>

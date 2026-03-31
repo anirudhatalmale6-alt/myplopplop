@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Admin Dashboard - MyPlopPlop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/layout.css">
+<style>
+/* ===== Admin Inline Styles ===== */
+.admin-header {
+    background: var(--primary-blue);
+}
+.admin-header .header-inner {
+    max-width: var(--max-width);
+}
+.admin-header .header-logo span {
+    color: var(--white);
+}
+.admin-header .header-icon {
+    color: rgba(255,255,255,0.8);
+}
+.admin-header .header-icon:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--white);
+}
+.admin-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Page content */
+.admin-page {
+    padding: var(--space-md) var(--content-padding);
+    padding-bottom: calc(var(--bottom-nav-height) + var(--space-lg));
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+.page-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: var(--space-xs);
+}
+.page-subtitle {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-lg);
+}
+
+/* Stat cards - special accent borders */
+.stat-card {
+    position: relative;
+    overflow: hidden;
+}
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+}
+.stat-card.accent-blue::before { background: var(--primary-blue); }
+.stat-card.accent-red::before { background: var(--primary-red); }
+.stat-card.accent-green::before { background: var(--success); }
+.stat-card.accent-yellow::before { background: var(--warning); }
+.stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: var(--space-sm);
+}
+
+/* Failed orders indicator */
+.stat-alert {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: var(--error-light);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--error);
+    margin-bottom: var(--space-md);
+}
+.stat-alert .alert-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--error);
+    animation: pulse-dot 1.5s infinite;
+}
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+.stat-alert .alert-text {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--error);
+}
+.stat-alert .alert-count {
+    margin-left: auto;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-xl);
+    color: var(--error);
+}
+
+/* Wallet volume */
+.wallet-stat {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: var(--primary-blue-light);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-lg);
+}
+.wallet-stat .wallet-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--primary-blue);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+.wallet-stat .wallet-info .wallet-label {
+    font-size: var(--text-xs);
+    color: var(--primary-blue);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.wallet-stat .wallet-info .wallet-amount {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-xl);
+    color: var(--primary-blue-dark);
+}
+
+/* Recent orders table */
+.orders-section {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    margin-bottom: var(--space-lg);
+}
+.orders-section .section-header {
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--gray-200);
+}
+.order-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: var(--space-sm) var(--space-md);
+    align-items: center;
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--gray-100);
+    transition: background var(--transition-fast);
+    cursor: pointer;
+}
+.order-row:hover { background: var(--gray-50); }
+.order-row:last-child { border-bottom: none; }
+.order-id {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--primary-blue);
+}
+.order-info {
+    min-width: 0;
+}
+.order-customer {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.order-merchant {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+.order-amount {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    white-space: nowrap;
+}
+.order-meta {
+    text-align: right;
+}
+.order-time {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* Quick links */
+.quick-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+}
+.quick-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-lg) var(--space-md);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    text-align: center;
+}
+.quick-link:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.quick-link .ql-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+.quick-link .ql-label {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* Admin bottom nav */
+.admin-bottom-nav .bottom-nav-item.active {
+    color: var(--primary-blue);
+}
+
+/* Desktop sidebar active color for admin */
+@media (min-width: 1024px) {
+    .admin-page {
+        padding-bottom: var(--space-lg);
+    }
+    .admin-sidebar .sidebar-item.active {
+        background: var(--primary-blue-light);
+        color: var(--primary-blue);
+        border-right-color: var(--primary-blue);
+    }
+}
+
+@media (max-width: 600px) {
+    .quick-links { grid-template-columns: 1fr; }
+    .order-row {
+        grid-template-columns: 1fr auto;
+    }
+    .order-id { grid-column: 1 / -1; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header admin-header">
+    <div class="header-inner">
+        <div class="header-logo">
+            <span style="font-size:24px;">🛵</span>
+            <div>
+                <span>My<span style="color:rgba(255,255,255,0.7)">Plop</span>Plop</span>
+                <div class="admin-title">Admin</div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <a href="#" class="header-icon" title="Notifications">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <span class="header-badge">5</span>
+            </a>
+            <a href="#" class="header-icon" title="Admin Profile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+    <div class="dashboard-layout">
+
+        <!-- Desktop Sidebar -->
+        <aside class="sidebar admin-sidebar">
+            <a href="dashboard.html" class="sidebar-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                Dashboard
+            </a>
+            <a href="orders.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                Orders
+            </a>
+            <a href="merchants.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Merchants
+            </a>
+            <a href="riders.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                Riders
+            </a>
+            <div class="divider" style="margin: var(--space-sm) var(--space-lg);"></div>
+            <a href="settings.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                Settings
+            </a>
+            <a href="../index.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                Back to Site
+            </a>
+        </aside>
+
+        <!-- Content -->
+        <div class="dashboard-content">
+            <div class="admin-page">
+                <h1 class="page-title">Dashboard</h1>
+                <p class="page-subtitle">Welcome back, Admin. Here is your platform overview.</p>
+
+                <!-- Stat Cards -->
+                <div class="stat-grid" style="margin-bottom: var(--space-md);">
+                    <div class="stat-card accent-blue">
+                        <div class="stat-icon" style="background: var(--primary-blue-light);">📦</div>
+                        <div class="stat-label">Total Orders</div>
+                        <div class="stat-value">156</div>
+                        <div class="stat-change up">+12% this week</div>
+                    </div>
+                    <div class="stat-card accent-green">
+                        <div class="stat-icon" style="background: var(--success-light);">💰</div>
+                        <div class="stat-label">GMV</div>
+                        <div class="stat-value">485K <span style="font-size:var(--text-sm);font-weight:500;">HTG</span></div>
+                        <div class="stat-change up">+8% this week</div>
+                    </div>
+                    <div class="stat-card accent-yellow">
+                        <div class="stat-icon" style="background: var(--warning-light);">🏪</div>
+                        <div class="stat-label">Active Merchants</div>
+                        <div class="stat-value">24</div>
+                        <div class="stat-change up">+2 new</div>
+                    </div>
+                    <div class="stat-card accent-red">
+                        <div class="stat-icon" style="background: var(--primary-red-light);">🏍️</div>
+                        <div class="stat-label">Active Riders</div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-change down">-1 from last week</div>
+                    </div>
+                </div>
+
+                <!-- Failed Orders Alert -->
+                <div class="stat-alert">
+                    <div class="alert-dot"></div>
+                    <span class="alert-text">Failed Orders (last 24h)</span>
+                    <span class="alert-count">3</span>
+                </div>
+
+                <!-- Wallet Volume -->
+                <div class="wallet-stat">
+                    <div class="wallet-icon">💳</div>
+                    <div class="wallet-info">
+                        <div class="wallet-label">San Cash Wallet Volume (30d)</div>
+                        <div class="wallet-amount">1,245,000 HTG</div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="orders-section">
+                    <div class="section-header">
+                        <h3 class="section-title" style="font-size: var(--text-lg);">Recent Orders</h3>
+                        <a href="orders.html" class="section-link">View all</a>
+                    </div>
+                    <div class="order-row">
+                        <span class="order-id">#1056</span>
+                        <div class="order-info">
+                            <div class="order-customer">Jean-Pierre M.</div>
+                            <div class="order-merchant">Epi d'Or Bakery</div>
+                        </div>
+                        <span class="order-amount">2,450 HTG</span>
+                        <div class="order-meta">
+                            <span class="badge badge-green">Delivered</span>
+                            <div class="order-time">12 min ago</div>
+                        </div>
+                    </div>
+                    <div class="order-row">
+                        <span class="order-id">#1055</span>
+                        <div class="order-info">
+                            <div class="order-customer">Marie C.</div>
+                            <div class="order-merchant">Caribbean Supermarket</div>
+                        </div>
+                        <span class="order-amount">5,800 HTG</span>
+                        <div class="order-meta">
+                            <span class="badge badge-blue">In Transit</span>
+                            <div class="order-time">25 min ago</div>
+                        </div>
+                    </div>
+                    <div class="order-row">
+                        <span class="order-id">#1054</span>
+                        <div class="order-info">
+                            <div class="order-customer">Jacques D.</div>
+                            <div class="order-merchant">Pharma Plus</div>
+                        </div>
+                        <span class="order-amount">1,200 HTG</span>
+                        <div class="order-meta">
+                            <span class="badge badge-yellow">Preparing</span>
+                            <div class="order-time">38 min ago</div>
+                        </div>
+                    </div>
+                    <div class="order-row">
+                        <span class="order-id">#1053</span>
+                        <div class="order-info">
+                            <div class="order-customer">Sophie L.</div>
+                            <div class="order-merchant">Le Grill Restaurant</div>
+                        </div>
+                        <span class="order-amount">3,200 HTG</span>
+                        <div class="order-meta">
+                            <span class="badge badge-green">Delivered</span>
+                            <div class="order-time">1h ago</div>
+                        </div>
+                    </div>
+                    <div class="order-row">
+                        <span class="order-id">#1052</span>
+                        <div class="order-info">
+                            <div class="order-customer">Pierre R.</div>
+                            <div class="order-merchant">QuincPro Hardware</div>
+                        </div>
+                        <span class="order-amount">8,500 HTG</span>
+                        <div class="order-meta">
+                            <span class="badge badge-red">Failed</span>
+                            <div class="order-time">2h ago</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <h3 class="section-title" style="font-size: var(--text-lg); margin-bottom: var(--space-md);">Quick Actions</h3>
+                <div class="quick-links">
+                    <a href="merchants.html" class="quick-link">
+                        <div class="ql-icon" style="background: var(--warning-light);">🏪</div>
+                        <span class="ql-label">Manage Merchants</span>
+                    </a>
+                    <a href="riders.html" class="quick-link">
+                        <div class="ql-icon" style="background: var(--success-light);">🏍️</div>
+                        <span class="ql-label">Manage Riders</span>
+                    </a>
+                    <a href="#" class="quick-link">
+                        <div class="ql-icon" style="background: var(--primary-blue-light);">📊</div>
+                        <span class="ql-label">View Reports</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- ADMIN BOTTOM NAV (Mobile) -->
+<nav class="bottom-nav admin-bottom-nav">
+    <a href="dashboard.html" class="bottom-nav-item active">
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        <span>Dashboard</span>
+    </a>
+    <a href="orders.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Orders</span>
+    </a>
+    <a href="merchants.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Merchants</span>
+    </a>
+    <a href="riders.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        <span>Riders</span>
+    </a>
+    <a href="settings.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+        <span>More</span>
+    </a>
+</nav>
+
+</body>
+</html>

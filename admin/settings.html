@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Settings - MyPlopPlop Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/layout.css">
+<style>
+.admin-header { background: var(--primary-blue); }
+.admin-header .header-inner { max-width: var(--max-width); }
+.admin-header .header-logo span { color: var(--white); }
+.admin-header .header-icon { color: rgba(255,255,255,0.8); }
+.admin-header .header-icon:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+.admin-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.admin-page {
+    padding: var(--space-md) var(--content-padding);
+    padding-bottom: calc(var(--bottom-nav-height) + var(--space-lg));
+    max-width: 700px;
+    margin: 0 auto;
+}
+.page-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: var(--space-lg);
+}
+
+/* Settings sections */
+.settings-section {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+}
+.settings-section-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.settings-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--gray-100);
+}
+.settings-row:last-child { border-bottom: none; }
+
+.settings-label {
+    flex: 1;
+    min-width: 0;
+}
+.settings-label-title {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-dark);
+}
+.settings-label-desc {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: 2px;
+    line-height: 1.4;
+}
+
+.settings-control {
+    flex-shrink: 0;
+    width: 180px;
+}
+.settings-control .input {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: var(--text-sm);
+}
+.settings-control select {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: var(--text-sm);
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    background: var(--white);
+    color: var(--text-dark);
+    cursor: pointer;
+}
+.settings-control select:focus {
+    border-color: var(--primary-blue);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 32, 159, 0.1);
+}
+
+/* Input with suffix */
+.input-suffix {
+    position: relative;
+}
+.input-suffix .input {
+    padding-right: 40px;
+}
+.input-suffix .suffix {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Toggle row */
+.toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--gray-100);
+}
+.toggle-row:last-child { border-bottom: none; }
+.toggle-row .settings-label { flex: 1; }
+
+/* Save button area */
+.settings-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+}
+
+.admin-bottom-nav .bottom-nav-item.active { color: var(--primary-blue); }
+
+@media (max-width: 600px) {
+    .settings-row {
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+    .settings-control { width: 100%; }
+}
+
+@media (min-width: 1024px) {
+    .admin-page { padding-bottom: var(--space-lg); max-width: none; }
+    .settings-wrapper { max-width: 700px; }
+    .admin-sidebar .sidebar-item.active {
+        background: var(--primary-blue-light);
+        color: var(--primary-blue);
+        border-right-color: var(--primary-blue);
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header admin-header">
+    <div class="header-inner">
+        <div class="header-logo">
+            <span style="font-size:24px;">🛵</span>
+            <div>
+                <span>My<span style="color:rgba(255,255,255,0.7)">Plop</span>Plop</span>
+                <div class="admin-title">Admin</div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <a href="#" class="header-icon" title="Notifications">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <span class="header-badge">5</span>
+            </a>
+            <a href="#" class="header-icon" title="Admin Profile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+    <div class="dashboard-layout">
+
+        <!-- Desktop Sidebar -->
+        <aside class="sidebar admin-sidebar">
+            <a href="dashboard.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                Dashboard
+            </a>
+            <a href="orders.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                Orders
+            </a>
+            <a href="merchants.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Merchants
+            </a>
+            <a href="riders.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                Riders
+            </a>
+            <div class="divider" style="margin: var(--space-sm) var(--space-lg);"></div>
+            <a href="settings.html" class="sidebar-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                Settings
+            </a>
+            <a href="../index.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                Back to Site
+            </a>
+        </aside>
+
+        <!-- Content -->
+        <div class="dashboard-content">
+            <div class="admin-page">
+                <div class="settings-wrapper">
+                    <h1 class="page-title">Platform Settings</h1>
+
+                    <!-- Platform Settings -->
+                    <div class="settings-section">
+                        <h2 class="settings-section-title">General</h2>
+
+                        <div class="settings-row">
+                            <div class="settings-label">
+                                <div class="settings-label-title">Platform Name</div>
+                                <div class="settings-label-desc">The name displayed across the platform.</div>
+                            </div>
+                            <div class="settings-control">
+                                <input type="text" class="input" value="MyPlopPlop">
+                            </div>
+                        </div>
+
+                        <div class="settings-row">
+                            <div class="settings-label">
+                                <div class="settings-label-title">Commission Rate</div>
+                                <div class="settings-label-desc">Percentage taken from each merchant sale.</div>
+                            </div>
+                            <div class="settings-control">
+                                <div class="input-suffix">
+                                    <input type="number" class="input" value="15" min="0" max="100">
+                                    <span class="suffix">%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-row">
+                            <div class="settings-label">
+                                <div class="settings-label-title">Delivery Base Fee</div>
+                                <div class="settings-label-desc">Base delivery charge applied to every order.</div>
+                            </div>
+                            <div class="settings-control">
+                                <div class="input-suffix">
+                                    <input type="number" class="input" value="150" min="0">
+                                    <span class="suffix">HTG</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-row">
+                            <div class="settings-label">
+                                <div class="settings-label-title">Service Fee</div>
+                                <div class="settings-label-desc">Platform service fee charged to customers.</div>
+                            </div>
+                            <div class="settings-control">
+                                <div class="input-suffix">
+                                    <input type="number" class="input" value="5" min="0" max="100">
+                                    <span class="suffix">%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-row">
+                            <div class="settings-label">
+                                <div class="settings-label-title">Minimum Order Amount</div>
+                                <div class="settings-label-desc">Orders below this value will not be accepted.</div>
+                            </div>
+                            <div class="settings-control">
+                                <div class="input-suffix">
+                                    <input type="number" class="input" value="500" min="0">
+                                    <span class="suffix">HTG</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Settings -->
+                    <div class="settings-section">
+                        <h2 class="settings-section-title">Payment</h2>
+
+                        <div class="settings-row">
+                            <div class="settings-label">
+                                <div class="settings-label-title">Default Currency</div>
+                                <div class="settings-label-desc">Primary currency for all transactions.</div>
+                            </div>
+                            <div class="settings-control">
+                                <select>
+                                    <option selected>HTG (Gourde)</option>
+                                    <option>USD (Dollar)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="settings-row">
+                            <div class="settings-label">
+                                <div class="settings-label-title">Payment Gateway</div>
+                                <div class="settings-label-desc">Active payment processor for card transactions.</div>
+                            </div>
+                            <div class="settings-control">
+                                <select>
+                                    <option selected>Stripe</option>
+                                    <option>PayPal</option>
+                                    <option>MonCash</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="toggle-row">
+                            <div class="settings-label">
+                                <div class="settings-label-title">San Cash Wallet</div>
+                                <div class="settings-label-desc">Enable the in-app wallet for payments.</div>
+                            </div>
+                            <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                        </div>
+
+                        <div class="toggle-row">
+                            <div class="settings-label">
+                                <div class="settings-label-title">Cash on Delivery</div>
+                                <div class="settings-label-desc">Allow customers to pay in cash upon delivery.</div>
+                            </div>
+                            <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                        </div>
+
+                        <div class="settings-row">
+                            <div class="settings-label">
+                                <div class="settings-label-title">Rider Payout Schedule</div>
+                                <div class="settings-label-desc">How often riders receive their earnings.</div>
+                            </div>
+                            <div class="settings-control">
+                                <select>
+                                    <option>Daily</option>
+                                    <option selected>Weekly</option>
+                                    <option>Bi-weekly</option>
+                                    <option>Monthly</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notification Settings -->
+                    <div class="settings-section">
+                        <h2 class="settings-section-title">Notifications</h2>
+
+                        <div class="toggle-row">
+                            <div class="settings-label">
+                                <div class="settings-label-title">New Order Alerts</div>
+                                <div class="settings-label-desc">Notify admin when a new order is placed.</div>
+                            </div>
+                            <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                        </div>
+
+                        <div class="toggle-row">
+                            <div class="settings-label">
+                                <div class="settings-label-title">Failed Order Alerts</div>
+                                <div class="settings-label-desc">Immediate notification for failed or cancelled orders.</div>
+                            </div>
+                            <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                        </div>
+
+                        <div class="toggle-row">
+                            <div class="settings-label">
+                                <div class="settings-label-title">New Merchant Applications</div>
+                                <div class="settings-label-desc">Get notified when a merchant applies to join.</div>
+                            </div>
+                            <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                        </div>
+
+                        <div class="toggle-row">
+                            <div class="settings-label">
+                                <div class="settings-label-title">Low Rider Availability</div>
+                                <div class="settings-label-desc">Alert when online riders drop below 3 in an area.</div>
+                            </div>
+                            <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                        </div>
+
+                        <div class="toggle-row">
+                            <div class="settings-label">
+                                <div class="settings-label-title">Daily Summary Email</div>
+                                <div class="settings-label-desc">Receive a daily overview of orders, revenue, and activity.</div>
+                            </div>
+                            <div class="toggle" onclick="this.classList.toggle('active')"></div>
+                        </div>
+                    </div>
+
+                    <!-- Save -->
+                    <div class="settings-actions">
+                        <button class="btn btn-white">Cancel</button>
+                        <button class="btn btn-blue">Save Changes</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- ADMIN BOTTOM NAV -->
+<nav class="bottom-nav admin-bottom-nav">
+    <a href="dashboard.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        <span>Dashboard</span>
+    </a>
+    <a href="orders.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Orders</span>
+    </a>
+    <a href="merchants.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Merchants</span>
+    </a>
+    <a href="riders.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        <span>Riders</span>
+    </a>
+    <a href="settings.html" class="bottom-nav-item active">
+        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+        <span>More</span>
+    </a>
+</nav>
+
+</body>
+</html>

@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Shopping Cart — MyPlopPlop</title>
+<meta name="description" content="Review your cart and proceed to checkout on MyPlopPlop.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/layout.css">
+<style>
+/* ===== CART PAGE ===== */
+.cart-page {
+    padding: var(--space-md) var(--content-padding) calc(var(--bottom-nav-height) + 100px);
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.cart-page-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    margin-bottom: var(--space-xs);
+}
+
+.cart-count {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-lg);
+}
+
+/* Store Group */
+.store-group {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    margin-bottom: var(--space-md);
+    overflow: hidden;
+}
+
+.store-group-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--gray-100);
+    background: var(--gray-50);
+}
+
+.store-group-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    background: var(--primary-red-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.store-group-name {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-base);
+    flex: 1;
+}
+
+.store-group-delivery {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* Cart Item */
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--gray-100);
+    position: relative;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item-img {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.cart-item-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.cart-item-name {
+    font-weight: 600;
+    font-size: var(--text-sm);
+    margin-bottom: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cart-item-price {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-sm);
+    color: var(--primary-red);
+}
+
+.cart-item-total {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.cart-item-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-sm);
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: var(--gray-400);
+    cursor: pointer;
+    padding: 4px;
+    transition: color var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-btn:hover {
+    color: var(--error);
+}
+
+/* Promo Code */
+.promo-section {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+
+.promo-section h4 {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+}
+
+.promo-input-row {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.promo-input-row input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    background: var(--white);
+    color: var(--text-dark);
+    transition: border-color var(--transition-fast);
+}
+
+.promo-input-row input:focus {
+    border-color: var(--primary-blue);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 32, 159, 0.1);
+}
+
+.promo-input-row input::placeholder {
+    color: var(--gray-400);
+}
+
+/* Order Summary */
+.order-summary {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+
+.order-summary h4 {
+    font-size: var(--text-base);
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm) 0;
+    font-size: var(--text-sm);
+}
+
+.summary-row.total {
+    border-top: 2px solid var(--gray-200);
+    margin-top: var(--space-sm);
+    padding-top: var(--space-md);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-lg);
+}
+
+.summary-label {
+    color: var(--text-muted);
+}
+
+.summary-value {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.summary-row.total .summary-label {
+    color: var(--text-dark);
+}
+
+.summary-row.total .summary-value {
+    color: var(--primary-red);
+    font-size: var(--text-xl);
+}
+
+.free-tag {
+    color: var(--success);
+    font-weight: 600;
+}
+
+/* Fixed Bottom Bar */
+.cart-bottom-bar {
+    position: fixed;
+    bottom: var(--bottom-nav-height);
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-top: 1px solid var(--gray-200);
+    padding: var(--space-md) var(--content-padding);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 999;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+}
+
+.cart-bottom-total {
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-bottom-total .label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+.cart-bottom-total .amount {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-xl);
+    color: var(--text-dark);
+}
+
+/* Empty Cart */
+.empty-cart {
+    text-align: center;
+    padding: var(--space-3xl) var(--space-lg);
+}
+
+.empty-cart-icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto var(--space-lg);
+    background: var(--gray-100);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+}
+
+.empty-cart h3 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-sm);
+}
+
+.empty-cart p {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-lg);
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 768px) {
+    .cart-page {
+        padding-bottom: var(--space-3xl);
+    }
+
+    .cart-layout {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: var(--space-lg);
+        align-items: flex-start;
+    }
+
+    .cart-sidebar {
+        position: sticky;
+        top: calc(var(--header-height) + 28px + var(--space-md));
+    }
+
+    .cart-bottom-bar {
+        display: none;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="flex items-center gap-sm">
+        <span>📍 Port-au-Prince</span>
+        <span style="opacity:0.5">|</span>
+        <a href="#">Change location</a>
+    </div>
+    <div class="flex items-center gap-md">
+        <a href="#">EN</a>
+        <a href="#" style="font-weight:700">KR</a>
+        <a href="#">FR</a>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="header" style="top: 28px;">
+    <div class="header-inner">
+        <a href="index.html" class="header-logo">
+            <span style="font-size:24px;">🛵</span>
+            <span>My<span style="color:var(--primary-blue)">Plop</span>Plop</span>
+        </a>
+
+        <div class="header-actions">
+            <a href="shop.html" class="header-icon" title="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </a>
+            <a href="cart.html" class="header-icon" title="Cart" style="color:var(--primary-red);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                <span class="header-badge" id="headerCartBadge">0</span>
+            </a>
+            <a href="login.html" class="header-icon" title="Account">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN -->
+<main class="main" style="margin-top: calc(var(--header-height) + 28px);">
+    <div class="cart-page">
+
+        <!-- Empty Cart State (hidden by default) -->
+        <div class="empty-cart" id="emptyCart" style="display:none;">
+            <div class="empty-cart-icon">🛒</div>
+            <h3>Your Cart is Empty</h3>
+            <p>Looks like you haven't added anything yet. Browse our stores and find what you need!</p>
+            <a href="shop.html" class="btn btn-red btn-lg btn-round">Start Shopping</a>
+        </div>
+
+        <!-- Cart Content (shown when items exist) -->
+        <div id="cartContent" style="display:none;">
+            <h1 class="cart-page-title">Shopping Cart</h1>
+            <p class="cart-count" id="cartCountText">0 items</p>
+
+            <div class="cart-layout">
+                <!-- Left: Cart Items -->
+                <div class="cart-items-col">
+                    <div id="cartItemsContainer"></div>
+
+                    <!-- Promo Code -->
+                    <div class="promo-section">
+                        <h4>🎫 Promo Code</h4>
+                        <div class="promo-input-row">
+                            <input type="text" id="promoInput" placeholder="Enter promo code (e.g. WELCOME)">
+                            <button class="btn btn-blue btn-sm" id="applyPromoBtn">Apply</button>
+                        </div>
+                        <p id="promoMessage" style="display:none; font-size:var(--text-xs); margin-top:var(--space-sm);"></p>
+                    </div>
+                </div>
+
+                <!-- Right: Order Summary -->
+                <div class="cart-sidebar">
+                    <div class="order-summary">
+                        <h4>Order Summary</h4>
+                        <div class="summary-row">
+                            <span class="summary-label">Subtotal</span>
+                            <span class="summary-value" id="summarySubtotal">0 HTG</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Delivery Fee</span>
+                            <span class="summary-value" id="summaryDelivery">0 HTG</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Service Fee (5%)</span>
+                            <span class="summary-value" id="summaryService">0 HTG</span>
+                        </div>
+                        <div class="summary-row" id="promoDiscountRow" style="display:none;">
+                            <span class="summary-label" style="color:var(--success);">Promo Discount</span>
+                            <span class="summary-value" style="color:var(--success);" id="summaryDiscount">-0 HTG</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span class="summary-label">Total</span>
+                            <span class="summary-value" id="summaryTotal">0 HTG</span>
+                        </div>
+                        <a href="checkout.html" class="btn btn-red btn-full btn-lg" style="margin-top:var(--space-md); border-radius:var(--radius-xl);" id="desktopCheckoutBtn">
+                            Proceed to Checkout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<!-- Fixed Bottom Bar (mobile) -->
+<div class="cart-bottom-bar" id="cartBottomBar" style="display:none;">
+    <div class="cart-bottom-total">
+        <span class="label">Total</span>
+        <span class="amount" id="bottomTotal">0 HTG</span>
+    </div>
+    <a href="checkout.html" class="btn btn-red btn-lg btn-round" id="mobileCheckoutBtn">Proceed to Checkout</a>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>My<span>Plop</span>Plop</h3>
+                <p>Everything Haiti needs, delivered fast. From restaurants to hardware stores, we connect you with the best merchants across Haiti.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Shop</h5>
+                <a href="shop.html">All Stores</a>
+                <a href="category.html?cat=restaurants">Restaurants</a>
+                <a href="category.html?cat=supermarkets">Supermarkets</a>
+                <a href="category.html?cat=pharmacies">Pharmacies</a>
+            </div>
+            <div class="footer-col">
+                <h5>Account</h5>
+                <a href="orders.html">My Orders</a>
+                <a href="wallet.html">San Cash</a>
+                <a href="recipients.html">Recipients</a>
+                <a href="help.html">Help Center</a>
+            </div>
+            <div class="footer-col">
+                <h5>Partners</h5>
+                <a href="merchant/dashboard.html">Merchants</a>
+                <a href="rider/dashboard.html">Riders</a>
+                <a href="#">About Us</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 MyPlopPlop. All rights reserved.</span>
+            <span>Powered by <a href="https://48hoursready.com" style="color:var(--white);font-weight:600;">48HoursReady.com</a></span>
+        </div>
+    </div>
+</footer>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+    </a>
+    <a href="shop.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span>Search</span>
+    </a>
+    <a href="cart.html" class="bottom-nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        <span class="nav-badge" id="navCartBadge">0</span>
+        <span>Cart</span>
+    </a>
+    <a href="orders.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Orders</span>
+    </a>
+    <a href="login.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Account</span>
+    </a>
+</nav>
+
+<script src="js/mock-data.js"></script>
+<script>
+(function() {
+    const CART_KEY = 'myplopplop_cart';
+    let promoApplied = false;
+    let promoDiscount = 0;
+
+    // Load cart from localStorage
+    function getCart() {
+        try {
+            return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+        } catch(e) {
+            return [];
+        }
+    }
+
+    function saveCart(cart) {
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    }
+
+    // Seed demo cart if empty
+    function seedDemoCart() {
+        const cart = getCart();
+        if (cart.length === 0) {
+            const demo = [
+                { storeId: 'resto-1', storeName: 'Lakay Kreyòl', productId: 'p1', name: 'Griot ak Bannann', price: 350, qty: 2 },
+                { storeId: 'resto-1', storeName: 'Lakay Kreyòl', productId: 'p5', name: 'Akasan', price: 100, qty: 1 },
+                { storeId: 'super-1', storeName: 'Caribbean Supermarket', productId: 'p16', name: 'Café Haïtien (Rebo)', price: 180, qty: 3 }
+            ];
+            saveCart(demo);
+        }
+    }
+
+    // Get store icon from mock data
+    function getStoreIcon(storeId) {
+        const store = MOCK.STORES.find(s => s.id === storeId);
+        if (store) {
+            const cat = MOCK.CATEGORIES.find(c => c.id === store.category);
+            return cat ? cat.icon : '🏪';
+        }
+        return '🏪';
+    }
+
+    // Get delivery fee from mock data
+    function getDeliveryFee(storeId) {
+        const store = MOCK.STORES.find(s => s.id === storeId);
+        return store ? store.deliveryFee : 100;
+    }
+
+    // Group cart items by store
+    function groupByStore(cart) {
+        const groups = {};
+        cart.forEach(item => {
+            if (!groups[item.storeId]) {
+                groups[item.storeId] = {
+                    storeId: item.storeId,
+                    storeName: item.storeName,
+                    items: []
+                };
+            }
+            groups[item.storeId].items.push(item);
+        });
+        return Object.values(groups);
+    }
+
+    // Update quantity
+    function updateQty(productId, delta) {
+        let cart = getCart();
+        const idx = cart.findIndex(item => item.productId === productId);
+        if (idx !== -1) {
+            cart[idx].qty += delta;
+            if (cart[idx].qty <= 0) {
+                cart.splice(idx, 1);
+            }
+            saveCart(cart);
+            renderCart();
+        }
+    }
+
+    // Remove item
+    function removeItem(productId) {
+        let cart = getCart();
+        cart = cart.filter(item => item.productId !== productId);
+        saveCart(cart);
+        renderCart();
+    }
+
+    // Render the cart
+    function renderCart() {
+        const cart = getCart();
+        const emptyEl = document.getElementById('emptyCart');
+        const contentEl = document.getElementById('cartContent');
+        const bottomBar = document.getElementById('cartBottomBar');
+        const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+
+        // Update badges
+        document.getElementById('headerCartBadge').textContent = totalItems;
+        document.getElementById('navCartBadge').textContent = totalItems;
+
+        if (cart.length === 0) {
+            emptyEl.style.display = 'block';
+            contentEl.style.display = 'none';
+            bottomBar.style.display = 'none';
+            return;
+        }
+
+        emptyEl.style.display = 'none';
+        contentEl.style.display = 'block';
+        bottomBar.style.display = 'flex';
+
+        document.getElementById('cartCountText').textContent = totalItems + ' item' + (totalItems !== 1 ? 's' : '');
+
+        const groups = groupByStore(cart);
+        const container = document.getElementById('cartItemsContainer');
+        container.innerHTML = '';
+
+        let subtotal = 0;
+        let totalDeliveryFee = 0;
+
+        groups.forEach(group => {
+            const storeIcon = getStoreIcon(group.storeId);
+            const deliveryFee = getDeliveryFee(group.storeId);
+            totalDeliveryFee += deliveryFee;
+
+            let groupHTML = `
+                <div class="store-group">
+                    <div class="store-group-header">
+                        <div class="store-group-icon">${storeIcon}</div>
+                        <span class="store-group-name">${group.storeName}</span>
+                        <span class="store-group-delivery">${deliveryFee === 0 ? '<span class="free-tag">Free delivery</span>' : MOCK.formatHTG(deliveryFee) + ' delivery'}</span>
+                    </div>
+            `;
+
+            group.items.forEach(item => {
+                const lineTotal = item.price * item.qty;
+                subtotal += lineTotal;
+
+                groupHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-img">${storeIcon}</div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">${MOCK.formatHTG(item.price)}</div>
+                            <div class="cart-item-total">Line total: ${MOCK.formatHTG(lineTotal)}</div>
+                        </div>
+                        <div class="cart-item-actions">
+                            <button class="remove-btn" onclick="window.cartRemove('${item.productId}')" title="Remove">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            </button>
+                            <div class="qty-control">
+                                <button class="qty-btn" onclick="window.cartUpdateQty('${item.productId}', -1)">−</button>
+                                <span class="qty-value">${item.qty}</span>
+                                <button class="qty-btn" onclick="window.cartUpdateQty('${item.productId}', 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            groupHTML += '</div>';
+            container.innerHTML += groupHTML;
+        });
+
+        // Calculate fees
+        const serviceFee = Math.round(subtotal * 0.05);
+        let total = subtotal + totalDeliveryFee + serviceFee;
+
+        // Apply promo discount
+        if (promoApplied) {
+            promoDiscount = totalDeliveryFee;
+            total -= promoDiscount;
+            document.getElementById('promoDiscountRow').style.display = 'flex';
+            document.getElementById('summaryDiscount').textContent = '-' + MOCK.formatHTG(promoDiscount);
+        } else {
+            document.getElementById('promoDiscountRow').style.display = 'none';
+        }
+
+        // Update summary
+        document.getElementById('summarySubtotal').textContent = MOCK.formatHTG(subtotal);
+        document.getElementById('summaryDelivery').textContent = totalDeliveryFee === 0 ? '<span class="free-tag">Free</span>' : MOCK.formatHTG(totalDeliveryFee);
+        document.getElementById('summaryService').textContent = MOCK.formatHTG(serviceFee);
+        document.getElementById('summaryTotal').textContent = MOCK.formatHTG(total);
+        document.getElementById('bottomTotal').textContent = MOCK.formatHTG(total);
+
+        // Store summary for checkout
+        localStorage.setItem('myplopplop_order_summary', JSON.stringify({
+            subtotal, deliveryFee: totalDeliveryFee, serviceFee, promoDiscount: promoApplied ? promoDiscount : 0, total
+        }));
+    }
+
+    // Expose functions to global scope for onclick handlers
+    window.cartUpdateQty = updateQty;
+    window.cartRemove = removeItem;
+
+    // Promo code handler
+    document.getElementById('applyPromoBtn').addEventListener('click', function() {
+        const code = document.getElementById('promoInput').value.trim().toUpperCase();
+        const msg = document.getElementById('promoMessage');
+
+        if (code === 'WELCOME') {
+            promoApplied = true;
+            msg.style.display = 'block';
+            msg.style.color = 'var(--success)';
+            msg.textContent = 'Promo applied! Free delivery on this order.';
+            this.disabled = true;
+            this.textContent = 'Applied';
+            renderCart();
+        } else if (code === '') {
+            msg.style.display = 'block';
+            msg.style.color = 'var(--error)';
+            msg.textContent = 'Please enter a promo code.';
+        } else {
+            msg.style.display = 'block';
+            msg.style.color = 'var(--error)';
+            msg.textContent = 'Invalid promo code. Try WELCOME for free delivery.';
+        }
+    });
+
+    // Initialize
+    seedDemoCart();
+    renderCart();
+})();
+</script>
+
+</body>
+</html>

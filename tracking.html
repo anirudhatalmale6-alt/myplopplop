@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Track Order — MyPlopPlop</title>
+<meta name="description" content="Track your MyPlopPlop delivery in real time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/layout.css">
+<style>
+/* ===== ETA BANNER ===== */
+.eta-banner {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 100%);
+    color: var(--white);
+    padding: var(--space-lg) var(--content-padding);
+    text-align: center;
+}
+.eta-label {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
+    margin-bottom: var(--space-xs);
+}
+.eta-time {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: 800;
+}
+.eta-sub {
+    font-size: var(--text-sm);
+    opacity: 0.8;
+    margin-top: var(--space-xs);
+}
+
+/* ===== STATUS DISPLAY ===== */
+.current-status {
+    padding: var(--space-md) var(--content-padding);
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+.status-pulse {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--success);
+    position: relative;
+}
+.status-pulse::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid var(--success);
+    animation: pulse-ring 1.5s ease-out infinite;
+}
+@keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(1.6); opacity: 0; }
+}
+.status-text {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-base);
+}
+.status-id {
+    margin-left: auto;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* ===== VERTICAL STEPPER ===== */
+.v-stepper {
+    padding: var(--space-lg) var(--content-padding);
+    background: var(--white);
+    margin-top: var(--space-sm);
+    border-radius: var(--radius-lg);
+    margin-left: var(--content-padding);
+    margin-right: var(--content-padding);
+    box-shadow: var(--shadow-card);
+}
+.v-stepper-title {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-base);
+    margin-bottom: var(--space-md);
+}
+.v-step {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    position: relative;
+    padding-bottom: var(--space-lg);
+}
+.v-step:last-child { padding-bottom: 0; }
+.v-step-track {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    position: relative;
+}
+.v-step-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: var(--white);
+    z-index: 1;
+    transition: all var(--transition-normal);
+}
+.v-step.done .v-step-dot {
+    background: var(--success);
+}
+.v-step.active .v-step-dot {
+    background: var(--primary-blue);
+    box-shadow: 0 0 0 4px rgba(0,32,159,0.2);
+    animation: dot-pulse 2s ease-in-out infinite;
+}
+@keyframes dot-pulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(0,32,159,0.2); }
+    50% { box-shadow: 0 0 0 8px rgba(0,32,159,0.1); }
+}
+.v-step-line {
+    width: 2px;
+    flex: 1;
+    min-height: 24px;
+    background: var(--gray-200);
+    margin-top: 4px;
+}
+.v-step.done .v-step-line { background: var(--success); }
+.v-step:last-child .v-step-line { display: none; }
+.v-step-content {
+    padding-top: 3px;
+    flex: 1;
+}
+.v-step-label {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--gray-400);
+}
+.v-step.done .v-step-label { color: var(--text-dark); }
+.v-step.active .v-step-label { color: var(--primary-blue); font-weight: 600; }
+.v-step-time {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* ===== MAP PLACEHOLDER ===== */
+.map-placeholder {
+    margin: var(--space-md) var(--content-padding);
+    background: var(--gray-100);
+    border-radius: var(--radius-lg);
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    color: var(--gray-400);
+    border: 2px dashed var(--gray-300);
+}
+.map-placeholder svg {
+    width: 40px;
+    height: 40px;
+}
+.map-placeholder span {
+    font-size: var(--text-sm);
+    font-weight: 500;
+}
+
+/* ===== RIDER CARD ===== */
+.rider-card {
+    margin: var(--space-md) var(--content-padding);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+.rider-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-blue-light), var(--primary-red-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+.rider-info { flex: 1; }
+.rider-name {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-base);
+}
+.rider-role {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+.rider-actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+.rider-action-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    cursor: pointer;
+}
+.rider-action-btn.phone {
+    background: var(--success-light);
+    color: var(--success);
+}
+.rider-action-btn.phone:hover { background: var(--success); color: var(--white); }
+.rider-action-btn.message {
+    background: var(--primary-blue-light);
+    color: var(--primary-blue);
+}
+.rider-action-btn.message:hover { background: var(--primary-blue); color: var(--white); }
+.rider-action-btn svg { width: 20px; height: 20px; }
+
+/* ===== ORDER SUMMARY ===== */
+.order-summary {
+    margin: var(--space-md) var(--content-padding);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+}
+.order-summary-header {
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--gray-200);
+}
+.order-summary-header h4 {
+    font-size: var(--text-base);
+}
+.order-summary-store {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+.order-items {
+    padding: var(--space-md);
+}
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm) 0;
+}
+.order-item:not(:last-child) {
+    border-bottom: 1px solid var(--gray-100);
+}
+.order-item-name {
+    font-size: var(--text-sm);
+}
+.order-item-qty {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+.order-item-price {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    white-space: nowrap;
+}
+.order-totals {
+    padding: var(--space-md);
+    background: var(--gray-50);
+    border-top: 1px solid var(--gray-200);
+}
+.order-total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--text-sm);
+    padding: 4px 0;
+}
+.order-total-row.final {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    padding-top: var(--space-sm);
+    margin-top: var(--space-sm);
+    border-top: 1px solid var(--gray-300);
+}
+
+/* ===== REPORT BUTTON ===== */
+.report-section {
+    padding: var(--space-lg) var(--content-padding);
+    padding-bottom: calc(var(--space-lg) + var(--bottom-nav-height));
+}
+
+/* ===== NO RIDER STATE ===== */
+.rider-card.no-rider {
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    color: var(--text-muted);
+}
+.rider-card.no-rider span {
+    font-size: var(--text-sm);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 768px) {
+    .tracking-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-lg);
+        padding: var(--space-lg);
+        max-width: var(--max-width);
+        margin: 0 auto;
+    }
+    .tracking-left, .tracking-right { min-width: 0; }
+    .v-stepper, .map-placeholder, .rider-card, .order-summary {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .report-section {
+        padding-bottom: var(--space-lg);
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="flex items-center gap-sm">
+        <span>📍 Port-au-Prince</span>
+        <span style="opacity:0.5">|</span>
+        <a href="#">Change location</a>
+    </div>
+    <div class="flex items-center gap-md">
+        <a href="#">EN</a>
+        <a href="#" style="font-weight:700">KR</a>
+        <a href="#">FR</a>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="header" style="top: 28px;">
+    <div class="header-inner">
+        <a href="index.html" class="header-logo">
+            <span style="font-size:24px;">🛵</span>
+            <span>My<span style="color:var(--primary-blue)">Plop</span>Plop</span>
+        </a>
+
+        <div class="header-actions">
+            <a href="shop.html" class="header-icon" title="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </a>
+            <a href="cart.html" class="header-icon" title="Cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                <span class="header-badge">2</span>
+            </a>
+            <a href="login.html" class="header-icon" title="Account">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN -->
+<main class="main" style="margin-top: calc(var(--header-height) + 28px);">
+
+<!-- ETA Banner -->
+<div class="eta-banner" id="etaBanner">
+    <div class="eta-label">Estimated Arrival</div>
+    <div class="eta-time" id="etaTime">--</div>
+    <div class="eta-sub" id="etaSub">Your order is on its way</div>
+</div>
+
+<!-- Current Status -->
+<div class="current-status" id="currentStatus">
+    <div class="status-pulse"></div>
+    <span class="status-text" id="statusText">Loading...</span>
+    <span class="status-id" id="statusId"></span>
+</div>
+
+<!-- Live Map Placeholder -->
+<div class="map-placeholder" id="mapArea">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+        <circle cx="12" cy="10" r="3"/>
+    </svg>
+    <span>Live tracking map</span>
+</div>
+
+<!-- Vertical Stepper -->
+<div class="v-stepper" id="stepperContainer">
+    <div class="v-stepper-title">Order Progress</div>
+    <div id="stepper"></div>
+</div>
+
+<!-- Rider Card -->
+<div id="riderSection"></div>
+
+<!-- Order Summary -->
+<div class="order-summary" id="orderSummary"></div>
+
+<!-- Report Issue -->
+<div class="report-section">
+    <button class="btn btn-outline btn-full" onclick="alert('Report submitted. Our support team will contact you shortly.')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Report Issue
+    </button>
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>My<span>Plop</span>Plop</h3>
+                <p>Everything Haiti needs, delivered fast. From restaurants to hardware stores, we connect you with the best merchants across Haiti.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Shop</h5>
+                <a href="shop.html">All Stores</a>
+                <a href="category.html?cat=restaurants">Restaurants</a>
+                <a href="category.html?cat=supermarkets">Supermarkets</a>
+                <a href="category.html?cat=pharmacies">Pharmacies</a>
+            </div>
+            <div class="footer-col">
+                <h5>Account</h5>
+                <a href="orders.html">My Orders</a>
+                <a href="wallet.html">San Cash</a>
+                <a href="recipients.html">Recipients</a>
+                <a href="help.html">Help Center</a>
+            </div>
+            <div class="footer-col">
+                <h5>Partners</h5>
+                <a href="merchant/dashboard.html">Merchants</a>
+                <a href="rider/dashboard.html">Riders</a>
+                <a href="#">About Us</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 MyPlopPlop. All rights reserved.</span>
+            <span>Powered by <a href="https://48hoursready.com" style="color:var(--white);font-weight:600;">48HoursReady.com</a></span>
+        </div>
+    </div>
+</footer>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+    </a>
+    <a href="shop.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span>Search</span>
+    </a>
+    <a href="cart.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        <span class="nav-badge">2</span>
+        <span>Cart</span>
+    </a>
+    <a href="orders.html" class="bottom-nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Orders</span>
+    </a>
+    <a href="login.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Account</span>
+    </a>
+</nav>
+
+<script src="js/mock-data.js"></script>
+<script>
+(function() {
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get('id') || 'ORD-2026-002';
+
+    const order = MOCK.SAMPLE_ORDERS.find(o => o.id === orderId);
+    if (!order) {
+        document.querySelector('.main').innerHTML = `
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="9" y1="15" x2="15" y2="15"/>
+                </svg>
+                <h3>Order Not Found</h3>
+                <p>We couldn't find order ${orderId}.</p>
+                <a href="orders.html" class="btn btn-red">View My Orders</a>
+            </div>`;
+        return;
+    }
+
+    // Determine current step index
+    const statusKeys = MOCK.ORDER_STATUSES.map(s => s.key);
+    const currentIdx = statusKeys.indexOf(order.status);
+
+    // ETA
+    const etaTime = document.getElementById('etaTime');
+    const etaSub = document.getElementById('etaSub');
+    const etaBanner = document.getElementById('etaBanner');
+
+    if (order.status === 'delivered') {
+        etaTime.textContent = 'Delivered';
+        etaSub.textContent = 'Your order has been delivered successfully';
+        etaBanner.style.background = 'linear-gradient(135deg, #059669 0%, #047857 100%)';
+    } else if (order.status === 'on_the_way') {
+        etaTime.textContent = '8-12 min';
+        etaSub.textContent = 'Your rider is heading to you';
+    } else if (order.status === 'picked_up') {
+        etaTime.textContent = '12-18 min';
+        etaSub.textContent = 'Rider has picked up your order';
+    } else if (order.status === 'preparing' || order.status === 'assigned') {
+        etaTime.textContent = '20-30 min';
+        etaSub.textContent = 'Your order is being prepared';
+    } else {
+        etaTime.textContent = '25-40 min';
+        etaSub.textContent = 'Waiting for confirmation';
+    }
+
+    // Current status
+    document.getElementById('statusText').textContent = MOCK.ORDER_STATUSES[currentIdx].label;
+    document.getElementById('statusId').textContent = order.id;
+
+    // Delivered status pulse color
+    if (order.status === 'delivered') {
+        document.querySelector('.status-pulse').style.background = 'var(--success)';
+    }
+
+    // Vertical stepper
+    const stepperEl = document.getElementById('stepper');
+    const stepIcons = ['📋', '✅', '👨‍🍳', '🏍️', '📦', '🛵', '🏠'];
+    const stepTimes = ['10:15 AM', '10:17 AM', '10:22 AM', '10:35 AM', '10:48 AM', '10:52 AM', '11:08 AM'];
+
+    MOCK.ORDER_STATUSES.forEach((status, i) => {
+        const isDone = i < currentIdx;
+        const isActive = i === currentIdx;
+        const stateClass = isDone ? 'done' : (isActive ? 'active' : '');
+        const timeDisplay = (isDone || isActive) ? stepTimes[i] : '--:--';
+
+        stepperEl.innerHTML += `
+            <div class="v-step ${stateClass}">
+                <div class="v-step-track">
+                    <div class="v-step-dot">${isDone ? '✓' : stepIcons[i]}</div>
+                    ${i < MOCK.ORDER_STATUSES.length - 1 ? '<div class="v-step-line"></div>' : ''}
+                </div>
+                <div class="v-step-content">
+                    <div class="v-step-label">${status.label}</div>
+                    <div class="v-step-time">${timeDisplay}</div>
+                </div>
+            </div>
+        `;
+    });
+
+    // Rider card
+    const riderSection = document.getElementById('riderSection');
+    if (order.rider) {
+        riderSection.innerHTML = `
+            <div class="rider-card">
+                <div class="rider-avatar">🏍️</div>
+                <div class="rider-info">
+                    <div class="rider-name">${order.rider}</div>
+                    <div class="rider-role">Your delivery rider</div>
+                </div>
+                <div class="rider-actions">
+                    <button class="rider-action-btn phone" title="Call rider" onclick="alert('Calling ${order.rider}...')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    </button>
+                    <button class="rider-action-btn message" title="Message rider" onclick="alert('Opening chat with ${order.rider}...')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </button>
+                </div>
+            </div>
+        `;
+    } else {
+        riderSection.innerHTML = `
+            <div class="rider-card no-rider">
+                <span style="font-size:32px;">🔍</span>
+                <span>Finding a rider for your order...</span>
+            </div>
+        `;
+    }
+
+    // Order summary
+    const subtotal = order.items.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    const summaryEl = document.getElementById('orderSummary');
+    summaryEl.innerHTML = `
+        <div class="order-summary-header">
+            <h4>Order Summary</h4>
+            <div class="order-summary-store">${order.store}</div>
+        </div>
+        <div class="order-items">
+            ${order.items.map(item => `
+                <div class="order-item">
+                    <div>
+                        <div class="order-item-name">${item.name}</div>
+                        <div class="order-item-qty">x${item.qty}</div>
+                    </div>
+                    <div class="order-item-price">${MOCK.formatHTG(item.price * item.qty)}</div>
+                </div>
+            `).join('')}
+        </div>
+        <div class="order-totals">
+            <div class="order-total-row">
+                <span>Subtotal</span>
+                <span>${MOCK.formatHTG(subtotal)}</span>
+            </div>
+            <div class="order-total-row">
+                <span>Delivery Fee</span>
+                <span>${order.deliveryFee === 0 ? 'Free' : MOCK.formatHTG(order.deliveryFee)}</span>
+            </div>
+            <div class="order-total-row final">
+                <span>Total</span>
+                <span>${MOCK.formatHTG(order.total)}</span>
+            </div>
+        </div>
+    `;
+})();
+</script>
+
+</body>
+</html>
