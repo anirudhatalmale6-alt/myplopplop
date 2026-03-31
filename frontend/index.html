@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MyPlopPlop — Everything Haiti Needs, Delivered Fast</title>
+<meta name="description" content="Order from restaurants, supermarkets, pharmacies, hardware stores and more. Delivery across Haiti. Support family from anywhere.">
+<meta property="og:title" content="MyPlopPlop — Delivery Marketplace for Haiti">
+<meta property="og:description" content="Order from restaurants, supermarkets, pharmacies and more. Support family and friends in Haiti from anywhere in the world.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/layout.css">
+<style>
+/* ===== HERO ===== */
+.hero {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 60%, var(--primary-red) 100%);
+    color: var(--white);
+    padding: var(--space-3xl) var(--content-padding) var(--space-2xl);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(210,16,52,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40%;
+    left: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+}
+.hero-logo {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--space-md);
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    box-shadow: var(--shadow-lg);
+}
+.hero h1 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: var(--space-sm);
+    color: var(--white);
+}
+.hero h1 span { color: var(--primary-red); }
+.hero p {
+    font-size: var(--text-base);
+    opacity: 0.9;
+    margin-bottom: var(--space-lg);
+    line-height: 1.6;
+}
+.hero-search {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: 6px 6px 6px 16px;
+    box-shadow: var(--shadow-xl);
+    max-width: 460px;
+    margin: 0 auto;
+}
+.hero-search input {
+    flex: 1;
+    border: none;
+    background: none;
+    font-size: var(--text-sm);
+    color: var(--text-dark);
+    padding: 8px 0;
+}
+.hero-search input::placeholder { color: var(--gray-400); }
+.hero-search .search-btn {
+    background: var(--primary-red);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    white-space: nowrap;
+}
+.hero-search .search-btn:hover { background: var(--primary-red-dark); }
+
+.hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    justify-content: center;
+    margin-top: var(--space-md);
+}
+.hero-tag {
+    padding: 4px 12px;
+    background: rgba(255,255,255,0.15);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    color: rgba(255,255,255,0.9);
+    backdrop-filter: blur(4px);
+}
+
+/* ===== CTA BUTTONS ===== */
+.hero-ctas {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    margin-top: var(--space-lg);
+}
+.cta-order {
+    background: var(--primary-red);
+    color: var(--white);
+    padding: 14px 28px;
+    border-radius: var(--radius-xl);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    box-shadow: 0 4px 16px rgba(210,16,52,0.4);
+    transition: all var(--transition-fast);
+}
+.cta-order:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(210,16,52,0.5); }
+.cta-support {
+    background: rgba(255,255,255,0.15);
+    color: var(--white);
+    padding: 14px 28px;
+    border-radius: var(--radius-xl);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-base);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    border: 1px solid rgba(255,255,255,0.3);
+    backdrop-filter: blur(4px);
+    transition: all var(--transition-fast);
+}
+.cta-support:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
+
+/* ===== CATEGORIES ===== */
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    padding: 0 var(--content-padding);
+}
+.category-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg) var(--space-md);
+    text-align: center;
+    box-shadow: var(--shadow-card);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+}
+.category-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.category-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin: 0 auto var(--space-sm);
+}
+.category-card h4 {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+.category-card .count {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* ===== FEATURED STORES ===== */
+.store-card {
+    width: 260px;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+    cursor: pointer;
+}
+.store-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.store-img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+}
+.store-info { padding: var(--space-md); }
+.store-name {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-base);
+    margin-bottom: 4px;
+}
+.store-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: var(--space-sm);
+}
+.store-meta .dot { width: 3px; height: 3px; background: var(--gray-400); border-radius: 50%; }
+.verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    color: var(--primary-blue);
+    font-size: var(--text-xs);
+    font-weight: 500;
+}
+
+/* ===== HOW IT WORKS ===== */
+.how-it-works {
+    background: var(--white);
+}
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+    padding: 0 var(--content-padding);
+}
+.step-card {
+    text-align: center;
+    padding: var(--space-lg) var(--space-md);
+}
+.step-number {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--primary-red-light);
+    color: var(--primary-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-xl);
+    margin: 0 auto var(--space-md);
+}
+.step-card h4 {
+    font-size: var(--text-base);
+    margin-bottom: var(--space-sm);
+}
+.step-card p {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* ===== DIASPORA SECTION ===== */
+.diaspora-section {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 100%);
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+}
+.diaspora-section::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(210,16,52,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.diaspora-inner {
+    padding: 0 var(--content-padding);
+    position: relative;
+    z-index: 1;
+}
+.diaspora-section h2 { color: var(--white); margin-bottom: var(--space-sm); }
+.diaspora-section p { opacity: 0.9; margin-bottom: var(--space-lg); line-height: 1.6; }
+.trust-items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+.trust-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--text-sm);
+}
+.trust-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.1);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+/* ===== PROMO BANNER ===== */
+.promo-banner {
+    background: linear-gradient(90deg, var(--primary-red) 0%, #e8244a 100%);
+    color: var(--white);
+    padding: var(--space-lg) var(--content-padding);
+    border-radius: var(--radius-xl);
+    margin: 0 var(--content-padding);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+}
+.promo-banner h3 { font-size: var(--text-lg); color: var(--white); }
+.promo-banner p { font-size: var(--text-sm); opacity: 0.9; margin-top: 4px; }
+.promo-banner .btn { background: var(--white); color: var(--primary-red); font-weight: 700; }
+
+/* ===== CTA SECTION ===== */
+.cta-section {
+    text-align: center;
+    padding: var(--space-3xl) var(--content-padding);
+}
+.cta-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+    max-width: 600px;
+    margin: var(--space-lg) auto 0;
+}
+.cta-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    text-align: center;
+    box-shadow: var(--shadow-card);
+    transition: all var(--transition-fast);
+    text-decoration: none;
+}
+.cta-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.cta-card .cta-icon { font-size: 36px; margin-bottom: var(--space-sm); }
+.cta-card h4 { font-size: var(--text-base); margin-bottom: 4px; }
+.cta-card p { font-size: var(--text-xs); color: var(--text-muted); }
+
+/* ===== FOOTER ===== */
+.footer {
+    background: var(--gray-900);
+    color: var(--gray-400);
+    padding: var(--space-2xl) var(--content-padding) var(--space-lg);
+}
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+}
+.footer-brand h3 {
+    font-family: var(--font-heading);
+    color: var(--white);
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-sm);
+}
+.footer-brand h3 span { color: var(--primary-red); }
+.footer-brand p { font-size: var(--text-sm); line-height: 1.6; }
+.footer-col h5 {
+    color: var(--white);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-md);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.footer-col a {
+    display: block;
+    font-size: var(--text-sm);
+    padding: 4px 0;
+    transition: color var(--transition-fast);
+}
+.footer-col a:hover { color: var(--white); }
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: var(--text-xs);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+    .hero h1 { font-size: 1.6rem; }
+    .categories-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-sm); }
+    .category-card { padding: var(--space-md) var(--space-sm); }
+    .category-icon { width: 44px; height: 44px; font-size: 22px; }
+    .steps-grid { grid-template-columns: 1fr; gap: var(--space-md); }
+    .trust-items { grid-template-columns: 1fr; }
+    .hero-ctas { flex-direction: column; align-items: center; }
+    .cta-order, .cta-support { width: 100%; max-width: 280px; justify-content: center; }
+    .promo-banner { flex-direction: column; text-align: center; }
+    .cta-cards { grid-template-columns: 1fr; }
+}
+@media (min-width: 768px) {
+    .hero { padding: var(--space-3xl) var(--content-padding); }
+    .hero h1 { font-size: 2.5rem; }
+    .categories-grid { grid-template-columns: repeat(3, 1fr); }
+    .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+    .store-card { width: 300px; }
+}
+@media (min-width: 1024px) {
+    .categories-grid { grid-template-columns: repeat(6, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="flex items-center gap-sm">
+        <span>📍 Port-au-Prince</span>
+        <span style="opacity:0.5">|</span>
+        <a href="#">Change location</a>
+    </div>
+    <div class="flex items-center gap-md">
+        <a href="#">EN</a>
+        <a href="#" style="font-weight:700">KR</a>
+        <a href="#">FR</a>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="header" style="top: 28px;">
+    <div class="header-inner">
+        <a href="index.html" class="header-logo">
+            <span style="font-size:24px;">🛵</span>
+            <span>My<span style="color:var(--primary-blue)">Plop</span>Plop</span>
+        </a>
+
+        <div class="header-actions">
+            <a href="shop.html" class="header-icon" title="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </a>
+            <a href="cart.html" class="header-icon" title="Cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                <span class="header-badge">2</span>
+            </a>
+            <a href="login.html" class="header-icon" title="Account">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN -->
+<main class="main" style="margin-top: calc(var(--header-height) + 28px);">
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-logo">🛵</div>
+        <h1>Everything Haiti Needs,<br><span>Delivered Fast</span></h1>
+        <p>Order from restaurants, supermarkets, hardware stores, pharmacies, wholesale and retail shops. Support family and friends in Haiti from anywhere.</p>
+
+        <div class="hero-search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" placeholder="Search stores, products, or categories...">
+            <button class="search-btn">Search</button>
+        </div>
+
+        <div class="hero-ctas">
+            <a href="shop.html" class="cta-order">
+                <span>🛒</span> Order Now
+            </a>
+            <a href="diaspora.html" class="cta-support">
+                <span>❤️</span> Send Support to Family
+            </a>
+        </div>
+
+        <div class="hero-tags">
+            <span class="hero-tag">🍽️ Restaurants</span>
+            <span class="hero-tag">🛒 Supermarkets</span>
+            <span class="hero-tag">🔧 Hardware</span>
+            <span class="hero-tag">💊 Pharmacies</span>
+            <span class="hero-tag">📦 Wholesale</span>
+            <span class="hero-tag">🏬 Retail</span>
+        </div>
+    </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h3 class="section-title">Categories</h3>
+            <a href="shop.html" class="section-link">See all →</a>
+        </div>
+    </div>
+    <div class="categories-grid" id="categoriesGrid"></div>
+</section>
+
+<!-- PROMO BANNER -->
+<section class="section" style="padding-top:0;">
+    <div class="promo-banner">
+        <div>
+            <h3>🎉 Free Delivery on First Order!</h3>
+            <p>Use code WELCOME at checkout. New customers only.</p>
+        </div>
+        <a href="shop.html" class="btn">Order Now</a>
+    </div>
+</section>
+
+<!-- FEATURED STORES -->
+<section class="section" style="padding-top:0;">
+    <div class="container">
+        <div class="section-header">
+            <h3 class="section-title">Featured Merchants</h3>
+            <a href="shop.html" class="section-link">See all →</a>
+        </div>
+    </div>
+    <div class="h-scroll" id="featuredStores" style="padding-left: var(--content-padding); padding-right: var(--content-padding);"></div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how-it-works">
+    <div class="container">
+        <div class="section-header" style="justify-content:center;">
+            <h3 class="section-title">How It Works</h3>
+        </div>
+    </div>
+    <div class="steps-grid">
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <h4>Choose a Store</h4>
+            <p>Browse restaurants, supermarkets, pharmacies and more near you.</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <h4>Add to Cart & Pay</h4>
+            <p>Pay with San Cash wallet, credit card, or debit card. Quick and secure.</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <h4>Track & Receive</h4>
+            <p>Track your delivery in real time. Your rider brings it right to your door.</p>
+        </div>
+    </div>
+</section>
+
+<!-- DIASPORA SUPPORT -->
+<section class="section diaspora-section">
+    <div class="diaspora-inner">
+        <h2>Support Family in Haiti</h2>
+        <p>Living abroad? Buy groceries, medicine, and essentials for your family and friends in Haiti. They receive the delivery, you handle the payment from anywhere in the world.</p>
+        <div class="trust-items">
+            <div class="trust-item">
+                <div class="trust-icon">✅</div>
+                <span>Verified merchants</span>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon">🔒</div>
+                <span>Secure checkout</span>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon">📍</div>
+                <span>Real-time tracking</span>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon">💬</div>
+                <span>Customer support</span>
+            </div>
+        </div>
+        <a href="diaspora.html" class="btn btn-red btn-lg btn-round">Send Support Now ❤️</a>
+    </div>
+</section>
+
+<!-- MERCHANT / RIDER CTAs -->
+<section class="section cta-section">
+    <h3>Join the MyPlopPlop Network</h3>
+    <p class="text-muted" style="max-width:500px;margin:var(--space-sm) auto 0;">Grow your business or earn as a delivery rider</p>
+    <div class="cta-cards">
+        <a href="merchant/dashboard.html" class="cta-card">
+            <div class="cta-icon">🏪</div>
+            <h4>Become a Merchant</h4>
+            <p>List your store and reach thousands of customers</p>
+        </a>
+        <a href="rider/dashboard.html" class="cta-card">
+            <div class="cta-icon">🏍️</div>
+            <h4>Become a Rider</h4>
+            <p>Deliver orders and earn on your own schedule</p>
+        </a>
+    </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>My<span>Plop</span>Plop</h3>
+                <p>Everything Haiti needs, delivered fast. From restaurants to hardware stores, we connect you with the best merchants across Haiti.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Shop</h5>
+                <a href="shop.html">All Stores</a>
+                <a href="category.html?cat=restaurants">Restaurants</a>
+                <a href="category.html?cat=supermarkets">Supermarkets</a>
+                <a href="category.html?cat=pharmacies">Pharmacies</a>
+            </div>
+            <div class="footer-col">
+                <h5>Account</h5>
+                <a href="orders.html">My Orders</a>
+                <a href="wallet.html">San Cash</a>
+                <a href="recipients.html">Recipients</a>
+                <a href="help.html">Help Center</a>
+            </div>
+            <div class="footer-col">
+                <h5>Partners</h5>
+                <a href="merchant/dashboard.html">Merchants</a>
+                <a href="rider/dashboard.html">Riders</a>
+                <a href="#">About Us</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 MyPlopPlop. All rights reserved.</span>
+            <span>Powered by <a href="https://48hoursready.com" style="color:var(--white);font-weight:600;">48HoursReady.com</a></span>
+        </div>
+    </div>
+</footer>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item active">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+    </a>
+    <a href="shop.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span>Search</span>
+    </a>
+    <a href="cart.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        <span class="nav-badge">2</span>
+        <span>Cart</span>
+    </a>
+    <a href="orders.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Orders</span>
+    </a>
+    <a href="login.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Account</span>
+    </a>
+</nav>
+
+<script src="js/mock-data.js"></script>
+<script>
+// Render categories
+const grid = document.getElementById('categoriesGrid');
+MOCK.CATEGORIES.forEach(cat => {
+    grid.innerHTML += `
+        <a href="category.html?cat=${cat.id}" class="category-card">
+            <div class="category-icon" style="background:${cat.color}15;">${cat.icon}</div>
+            <h4>${cat.name}</h4>
+            <span class="count">${cat.count} stores</span>
+        </a>
+    `;
+});
+
+// Render featured stores
+const featured = document.getElementById('featuredStores');
+MOCK.STORES.filter(s => s.featured).forEach(store => {
+    const cat = MOCK.CATEGORIES.find(c => c.id === store.category);
+    featured.innerHTML += `
+        <a href="store.html?id=${store.id}" class="store-card">
+            <div class="store-img">${cat ? cat.icon : '🏪'}</div>
+            <div class="store-info">
+                <div class="flex items-center justify-between">
+                    <span class="store-name">${store.name}</span>
+                    ${store.verified ? '<span class="verified-badge">✓ Verified</span>' : ''}
+                </div>
+                <div class="flex items-center gap-xs" style="margin-top:4px;">
+                    <span class="badge badge-gray">${cat ? cat.name : ''}</span>
+                </div>
+                <div class="store-meta">
+                    <span>⭐ ${store.rating}</span>
+                    <span class="dot"></span>
+                    <span>${store.eta} min</span>
+                    <span class="dot"></span>
+                    <span>${store.deliveryFee === 0 ? 'Free delivery' : MOCK.formatHTG(store.deliveryFee) + ' delivery'}</span>
+                </div>
+            </div>
+        </a>
+    `;
+});
+</script>
+
+</body>
+</html>
