@@ -726,6 +726,28 @@
                         </div>
                     </div>
 
+                    <div class="payment-method" data-method="moncash" onclick="selectPayment(this)">
+                        <div class="payment-icon" style="background:#FFF3E0;">📱</div>
+                        <div class="payment-details">
+                            <strong>MonCash</strong>
+                            <span>Pay with your Digicel MonCash</span>
+                        </div>
+                        <div class="payment-check">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="payment-method" data-method="natcash" onclick="selectPayment(this)">
+                        <div class="payment-icon" style="background:#E8F5E9;">📲</div>
+                        <div class="payment-details">
+                            <strong>NatCash</strong>
+                            <span>Pay with your Natcom NatCash</span>
+                        </div>
+                        <div class="payment-check">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                    </div>
+
                     <div class="payment-method" data-method="credit_card" onclick="selectPayment(this)">
                         <div class="payment-icon" style="background:var(--primary-blue-light);">💳</div>
                         <div class="payment-details">
@@ -970,6 +992,8 @@
     // Payment method display names
     const PAYMENT_LABELS = {
         san_cash: { name: 'San Cash Wallet', icon: '💰' },
+        moncash: { name: 'MonCash', icon: '📱' },
+        natcash: { name: 'NatCash', icon: '📲' },
         credit_card: { name: 'Credit Card', icon: '💳' },
         debit_card: { name: 'Debit Card', icon: '🏦' },
         saved_card: { name: 'Saved Card (**** 4829)', icon: '🔖' }

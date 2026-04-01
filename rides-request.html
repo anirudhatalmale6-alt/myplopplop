@@ -958,10 +958,15 @@
                 </div>
                 <div class="fare-payment">
                     <div class="fare-payment-method">
-                        <span>💰</span>
+                        <span id="paymentIcon">💰</span>
                         <span id="paymentMethodLabel">San Cash</span>
                     </div>
-                    <a href="#" class="fare-payment-change" onclick="return false;">Change</a>
+                    <select id="paymentSelect" onchange="var o=this.options[this.selectedIndex];document.getElementById('paymentMethodLabel').textContent=o.text;document.getElementById('paymentIcon').textContent=o.dataset.icon;" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;font-size:0.8rem;background:var(--white);color:var(--text-primary);">
+                        <option value="san_cash" data-icon="💰">San Cash</option>
+                        <option value="moncash" data-icon="📱">MonCash</option>
+                        <option value="natcash" data-icon="📲">NatCash</option>
+                        <option value="card" data-icon="💳">Card</option>
+                    </select>
                 </div>
             </div>
         </div>
