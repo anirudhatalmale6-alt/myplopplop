@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta property="og:image" content="https://myplopplop.com/assets/img/og-preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<title>Track Ride — MyPlopPlop</title>
+<meta name="description" content="Track your PlopPlop ride in real time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/layout.css">
+<style>
+/* ===== MAP AREA ===== */
+.ride-map {
+    width: 100%;
+    height: 50vh;
+    min-height: 280px;
+    background: linear-gradient(145deg, #a8d5e2 0%, #d4eaf7 30%, #e8f4e8 50%, #f0e6d3 70%, #dce8d0 100%);
+    position: relative;
+    overflow: hidden;
+}
+.ride-map-streets {
+    position: absolute;
+    inset: 0;
+    opacity: 0.15;
+}
+.ride-map-streets line {
+    stroke: var(--primary-blue);
+    stroke-width: 1;
+}
+.ride-map-route {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+.ride-map-route path {
+    fill: none;
+    stroke: var(--primary-blue);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 8 6;
+    animation: route-dash 1.5s linear infinite;
+}
+@keyframes route-dash {
+    to { stroke-dashoffset: -28; }
+}
+.map-marker {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translate(-50%, -100%);
+    z-index: 2;
+}
+.map-marker-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+.map-marker-icon span {
+    transform: rotate(45deg);
+    font-size: 14px;
+}
+.map-marker.pickup .map-marker-icon {
+    background: var(--success);
+    color: var(--white);
+}
+.map-marker.dropoff .map-marker-icon {
+    background: var(--primary-red);
+    color: var(--white);
+}
+.map-marker-label {
+    background: var(--white);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    margin-top: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    white-space: nowrap;
+}
+.driver-dot {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary-blue);
+    border: 3px solid var(--white);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    z-index: 3;
+    transform: translate(-50%, -50%);
+    transition: left 1s ease, top 1s ease;
+}
+.driver-dot::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-blue);
+    animation: driver-pulse 2s ease-out infinite;
+}
+@keyframes driver-pulse {
+    0% { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+}
+.map-eta-badge {
+    position: absolute;
+    top: var(--space-md);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--white);
+    padding: 8px 20px;
+    border-radius: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 5;
+    font-family: var(--font-heading);
+}
+.map-eta-badge .eta-number {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--primary-blue);
+}
+.map-eta-badge .eta-unit {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* ===== DRIVER CARD ===== */
+.driver-card {
+    background: var(--white);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    margin-top: -24px;
+    position: relative;
+    z-index: 10;
+    padding: var(--space-md) var(--content-padding);
+}
+.driver-card-handle {
+    width: 40px;
+    height: 4px;
+    background: var(--gray-300);
+    border-radius: 2px;
+    margin: 0 auto var(--space-md);
+}
+.driver-card-top {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+.driver-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-blue), #2a5298);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+.driver-info { flex: 1; }
+.driver-name {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    color: var(--text-dark);
+}
+.driver-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+    font-size: var(--text-sm);
+}
+.driver-rating .stars {
+    color: #f59e0b;
+}
+.driver-rating .count {
+    color: var(--text-muted);
+    font-size: var(--text-xs);
+}
+.driver-vehicle {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+.driver-actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+.driver-action-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+.driver-action-btn svg { width: 20px; height: 20px; }
+.driver-action-btn.call {
+    background: #dcfce7;
+    color: #16a34a;
+}
+.driver-action-btn.call:hover { background: #16a34a; color: var(--white); }
+.driver-action-btn.msg {
+    background: #dbeafe;
+    color: var(--primary-blue);
+}
+.driver-action-btn.msg:hover { background: var(--primary-blue); color: var(--white); }
+
+/* ===== RIDE TYPE BADGE ===== */
+.ride-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #dbeafe;
+    color: var(--primary-blue);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-top: var(--space-md);
+}
+
+/* ===== RIDE STEPPER ===== */
+.ride-stepper {
+    margin-top: var(--space-lg);
+}
+.ride-stepper-title {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--space-md);
+}
+.ride-step {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    position: relative;
+    padding-bottom: var(--space-md);
+}
+.ride-step:last-child { padding-bottom: 0; }
+.ride-step-track {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+.ride-step-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    transition: all 0.4s ease;
+}
+.ride-step-dot svg { width: 12px; height: 12px; }
+.ride-step.done .ride-step-dot {
+    background: var(--success);
+    color: var(--white);
+}
+.ride-step.active .ride-step-dot {
+    background: var(--primary-blue);
+    color: var(--white);
+    box-shadow: 0 0 0 4px rgba(29,53,87,0.2);
+    animation: step-pulse 2s ease-in-out infinite;
+}
+@keyframes step-pulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(29,53,87,0.2); }
+    50% { box-shadow: 0 0 0 8px rgba(29,53,87,0.08); }
+}
+.ride-step-line {
+    width: 2px;
+    flex: 1;
+    min-height: 16px;
+    background: var(--gray-200);
+    margin-top: 4px;
+}
+.ride-step.done .ride-step-line { background: var(--success); }
+.ride-step:last-child .ride-step-line { display: none; }
+.ride-step-label {
+    font-size: var(--text-sm);
+    color: var(--gray-400);
+    padding-top: 2px;
+}
+.ride-step.done .ride-step-label { color: var(--text-dark); }
+.ride-step.active .ride-step-label { color: var(--primary-blue); font-weight: 600; }
+
+/* ===== RIDE DETAILS ===== */
+.ride-details {
+    margin-top: var(--space-lg);
+    border-top: 1px solid var(--gray-200);
+    padding-top: var(--space-lg);
+}
+.ride-route {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+.ride-route-point {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    position: relative;
+    padding-bottom: var(--space-md);
+}
+.ride-route-point:last-child { padding-bottom: 0; }
+.ride-route-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 4px;
+    position: relative;
+}
+.ride-route-dot.pickup { background: var(--success); }
+.ride-route-dot.dropoff { background: var(--primary-red); }
+.ride-route-connector {
+    position: absolute;
+    left: 5px;
+    top: 16px;
+    width: 2px;
+    height: calc(100% - 12px);
+    background: repeating-linear-gradient(
+        to bottom,
+        var(--gray-300) 0px,
+        var(--gray-300) 4px,
+        transparent 4px,
+        transparent 8px
+    );
+}
+.ride-route-text {
+    flex: 1;
+}
+.ride-route-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.ride-route-address {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-top: 2px;
+}
+
+/* Co-riders */
+.co-riders {
+    background: #f0f7ff;
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+    margin-top: var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--text-sm);
+}
+.co-riders-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--primary-blue);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+.co-riders-text {
+    color: var(--primary-blue);
+    font-weight: 500;
+}
+
+/* Fare row */
+.ride-fare {
+    margin-top: var(--space-lg);
+    background: var(--gray-50);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+}
+.ride-fare-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    font-size: var(--text-sm);
+}
+.ride-fare-row.total {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    padding-top: var(--space-sm);
+    margin-top: var(--space-xs);
+    border-top: 1px solid var(--gray-300);
+}
+.pool-discount {
+    color: var(--success);
+    font-weight: 600;
+    font-size: var(--text-xs);
+}
+.payment-method {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.payment-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background: #f59e0b;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+/* ===== BOTTOM ACTIONS ===== */
+.ride-actions {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--gray-200);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding-bottom: calc(var(--space-lg) + var(--bottom-nav-height) + 20px);
+}
+.btn-share-eta {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--primary-blue);
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--primary-blue);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all var(--transition-fast);
+}
+.btn-share-eta:hover {
+    background: var(--primary-blue);
+    color: var(--white);
+}
+.btn-share-eta svg { width: 18px; height: 18px; }
+.btn-cancel-ride {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: transparent;
+    color: var(--primary-red);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+}
+.btn-cancel-ride:hover { opacity: 0.7; }
+.btn-emergency {
+    width: fit-content;
+    margin: 0 auto;
+    padding: 6px 16px;
+    border: 1px solid var(--primary-red);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--primary-red);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all var(--transition-fast);
+}
+.btn-emergency:hover {
+    background: var(--primary-red);
+    color: var(--white);
+}
+.btn-emergency svg { width: 14px; height: 14px; }
+
+/* ===== RATING MODAL ===== */
+.rating-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 1000;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    animation: fade-in 0.3s ease;
+}
+.rating-overlay.show { display: flex; }
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.rating-modal {
+    background: var(--white);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    width: 100%;
+    max-width: 480px;
+    padding: var(--space-xl) var(--content-padding) var(--space-xl);
+    animation: slide-up 0.4s ease;
+}
+@keyframes slide-up {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+.rating-modal-handle {
+    width: 40px;
+    height: 4px;
+    background: var(--gray-300);
+    border-radius: 2px;
+    margin: 0 auto var(--space-lg);
+}
+.rating-modal h3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: var(--space-xs);
+}
+.rating-modal .rating-sub {
+    text-align: center;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-lg);
+}
+.star-selector {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-xl);
+}
+.star-selector .star {
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    color: var(--gray-300);
+    transition: all 0.2s ease;
+}
+.star-selector .star.active {
+    color: #f59e0b;
+    transform: scale(1.15);
+}
+.star-selector .star:hover { transform: scale(1.2); }
+.tip-section { margin-bottom: var(--space-lg); }
+.tip-label {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: var(--space-sm);
+}
+.tip-options {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.tip-btn {
+    padding: 8px 16px;
+    border: 2px solid var(--gray-200);
+    border-radius: 20px;
+    background: var(--white);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    color: var(--text-dark);
+}
+.tip-btn.selected {
+    border-color: var(--primary-blue);
+    background: #dbeafe;
+    color: var(--primary-blue);
+    font-weight: 600;
+}
+.tip-btn:hover { border-color: var(--primary-blue); }
+.btn-submit-rating {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--primary-blue);
+    color: var(--white);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+.btn-submit-rating:hover { opacity: 0.9; }
+.rating-thanks {
+    display: none;
+    text-align: center;
+    padding: var(--space-xl) 0;
+}
+.rating-thanks.show { display: block; }
+.rating-thanks .check-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #dcfce7;
+    color: #16a34a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-md);
+}
+.rating-thanks .check-circle svg { width: 32px; height: 32px; }
+.rating-thanks h3 {
+    font-family: var(--font-heading);
+    margin-bottom: var(--space-sm);
+}
+.rating-thanks .savings {
+    background: #f0fdf4;
+    color: #16a34a;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    display: inline-block;
+    font-size: var(--text-sm);
+    margin-top: var(--space-sm);
+}
+.rating-form.hidden { display: none; }
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 768px) {
+    .ride-map { height: 45vh; }
+    .driver-card {
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: var(--radius-xl);
+        margin-top: -40px;
+    }
+    .rating-modal {
+        border-radius: var(--radius-xl);
+        margin-bottom: var(--space-xl);
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="flex items-center gap-sm">
+        <span>📍 Port-au-Prince</span>
+        <span style="opacity:0.5">|</span>
+        <a href="#">Change location</a>
+    </div>
+    <div class="flex items-center gap-md">
+        <a href="#" data-lang="en" style="font-weight:700">EN</a>
+        <a href="#" data-lang="kr">KR</a>
+        <a href="#" data-lang="fr">FR</a>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="header" style="top: 28px;">
+    <div class="header-inner">
+        <a href="index.html" class="header-logo">
+            <img src="assets/img/logo.png?v=2" alt="MyPlopPlop" style="height:40px;">
+        </a>
+
+        <div class="header-actions">
+            <a href="shop.html" class="header-icon" title="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </a>
+            <a href="cart.html" class="header-icon" title="Cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                <span class="header-badge">2</span>
+            </a>
+            <a href="login.html" class="header-icon" title="Account">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN -->
+<main class="main" style="margin-top: calc(var(--header-height) + 28px); padding: 0;">
+
+<!-- MAP AREA -->
+<div class="ride-map" id="rideMap">
+    <!-- Street grid pattern -->
+    <svg class="ride-map-streets" viewBox="0 0 400 300" preserveAspectRatio="none">
+        <line x1="0" y1="50" x2="400" y2="50"/>
+        <line x1="0" y1="100" x2="400" y2="100"/>
+        <line x1="0" y1="150" x2="400" y2="150"/>
+        <line x1="0" y1="200" x2="400" y2="200"/>
+        <line x1="0" y1="250" x2="400" y2="250"/>
+        <line x1="60" y1="0" x2="60" y2="300"/>
+        <line x1="130" y1="0" x2="130" y2="300"/>
+        <line x1="200" y1="0" x2="200" y2="300"/>
+        <line x1="270" y1="0" x2="270" y2="300"/>
+        <line x1="340" y1="0" x2="340" y2="300"/>
+    </svg>
+
+    <!-- Route line -->
+    <svg class="ride-map-route" viewBox="0 0 400 300" preserveAspectRatio="none">
+        <path d="M 100,220 C 130,200 150,160 180,140 S 230,100 270,90 S 320,85 340,100"/>
+    </svg>
+
+    <!-- Pickup marker -->
+    <div class="map-marker pickup" style="left:25%;top:73%;">
+        <div class="map-marker-icon"><span>A</span></div>
+        <div class="map-marker-label">Pickup</div>
+    </div>
+
+    <!-- Dropoff marker -->
+    <div class="map-marker dropoff" style="left:85%;top:33%;">
+        <div class="map-marker-icon"><span>B</span></div>
+        <div class="map-marker-label">Dropoff</div>
+    </div>
+
+    <!-- Driver pulsing dot -->
+    <div class="driver-dot" id="driverDot" style="left:38%;top:58%;"></div>
+
+    <!-- ETA badge on map -->
+    <div class="map-eta-badge">
+        <div>
+            <span class="eta-number" id="etaCountdown">8</span>
+            <span class="eta-unit">min</span>
+        </div>
+    </div>
+</div>
+
+<!-- DRIVER INFO CARD -->
+<div class="driver-card">
+    <div class="driver-card-handle"></div>
+
+    <div class="driver-card-top">
+        <div class="driver-avatar">JM</div>
+        <div class="driver-info">
+            <div class="driver-name">Jean-Marc B.</div>
+            <div class="driver-rating">
+                <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+                <strong>4.8</strong>
+                <span class="count">(342 rides)</span>
+            </div>
+            <div class="driver-vehicle">Honda CG 125 (Red) &middot; AA-12345</div>
+        </div>
+        <div class="driver-actions">
+            <button class="driver-action-btn call" title="Call driver" onclick="alert('Calling Jean-Marc B...')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </button>
+            <button class="driver-action-btn msg" title="Message driver" onclick="alert('Opening chat with Jean-Marc B...')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Ride Type Badge -->
+    <div class="ride-type-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        PlopPlop Pool
+    </div>
+
+    <!-- RIDE STEPPER -->
+    <div class="ride-stepper">
+        <div class="ride-stepper-title">Ride Status</div>
+        <div id="rideStepper">
+            <!-- Step 1: Done -->
+            <div class="ride-step done" data-step="0">
+                <div class="ride-step-track">
+                    <div class="ride-step-dot">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                    <div class="ride-step-line"></div>
+                </div>
+                <div class="ride-step-label">Driver assigned</div>
+            </div>
+            <!-- Step 2: Active -->
+            <div class="ride-step active" data-step="1">
+                <div class="ride-step-track">
+                    <div class="ride-step-dot">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
+                    </div>
+                    <div class="ride-step-line"></div>
+                </div>
+                <div class="ride-step-label">Driver en route to you</div>
+            </div>
+            <!-- Step 3: Pending -->
+            <div class="ride-step" data-step="2">
+                <div class="ride-step-track">
+                    <div class="ride-step-dot">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
+                    </div>
+                    <div class="ride-step-line"></div>
+                </div>
+                <div class="ride-step-label">Pickup</div>
+            </div>
+            <!-- Step 4: Pending -->
+            <div class="ride-step" data-step="3">
+                <div class="ride-step-track">
+                    <div class="ride-step-dot">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
+                    </div>
+                    <div class="ride-step-line"></div>
+                </div>
+                <div class="ride-step-label">En route to destination</div>
+            </div>
+            <!-- Step 5: Pending -->
+            <div class="ride-step" data-step="4">
+                <div class="ride-step-track">
+                    <div class="ride-step-dot">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
+                    </div>
+                </div>
+                <div class="ride-step-label">Arrived</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIDE DETAILS -->
+    <div class="ride-details">
+        <div class="ride-route">
+            <div class="ride-route-point" style="position:relative;">
+                <div class="ride-route-dot pickup"></div>
+                <div class="ride-route-connector"></div>
+                <div class="ride-route-text">
+                    <div class="ride-route-label">Pickup</div>
+                    <div class="ride-route-address">Petion-Ville, Rue Faubert</div>
+                </div>
+            </div>
+            <div class="ride-route-point">
+                <div class="ride-route-dot dropoff"></div>
+                <div class="ride-route-text">
+                    <div class="ride-route-label">Dropoff</div>
+                    <div class="ride-route-address">Delmas 33</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Co-riders -->
+        <div class="co-riders">
+            <div class="co-riders-icon">ML</div>
+            <div class="co-riders-text">Sharing with Marie L. (+2 min)</div>
+        </div>
+
+        <!-- Fare -->
+        <div class="ride-fare">
+            <div class="ride-fare-row">
+                <span>ETA</span>
+                <span><strong id="fareEta">8 min</strong></span>
+            </div>
+            <div class="ride-fare-row">
+                <span>Payment</span>
+                <span class="payment-method">
+                    <span class="payment-icon">S</span>
+                    San Cash
+                </span>
+            </div>
+            <div class="ride-fare-row total">
+                <span>Fare</span>
+                <span>83 HTG</span>
+            </div>
+            <div class="pool-discount">Pool discount applied</div>
+        </div>
+    </div>
+
+    <!-- BOTTOM ACTIONS -->
+    <div class="ride-actions">
+        <button class="btn-share-eta" onclick="shareETA()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Share ETA
+        </button>
+        <button class="btn-cancel-ride" onclick="cancelRide()">Cancel Ride</button>
+        <button class="btn-emergency" onclick="alert('Contacting emergency services...')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Emergency
+        </button>
+    </div>
+</div>
+
+</main>
+
+<!-- RATING MODAL -->
+<div class="rating-overlay" id="ratingOverlay">
+    <div class="rating-modal">
+        <div class="rating-modal-handle"></div>
+
+        <div class="rating-form" id="ratingForm">
+            <h3>Rate Your Ride</h3>
+            <div class="rating-sub">How was your ride with Jean-Marc?</div>
+
+            <div class="star-selector" id="starSelector">
+                <svg class="star" data-value="1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star" data-value="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star" data-value="3" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star" data-value="4" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star" data-value="5" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+
+            <div class="tip-section">
+                <div class="tip-label">Add a tip for Jean-Marc?</div>
+                <div class="tip-options" id="tipOptions">
+                    <button class="tip-btn selected" data-tip="0">No tip</button>
+                    <button class="tip-btn" data-tip="25">25 HTG</button>
+                    <button class="tip-btn" data-tip="50">50 HTG</button>
+                    <button class="tip-btn" data-tip="75">75 HTG</button>
+                    <button class="tip-btn" data-tip="custom">Custom</button>
+                </div>
+            </div>
+
+            <button class="btn-submit-rating" id="btnSubmitRating">Submit</button>
+        </div>
+
+        <div class="rating-thanks" id="ratingThanks">
+            <div class="check-circle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h3>Thank you!</h3>
+            <p>Your feedback helps us improve PlopPlop Rides.</p>
+            <div class="savings">You saved 67 HTG with PlopPlop Pool</div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <img src="assets/img/logo.png?v=2" alt="MyPlopPlop" style="height:50px;margin-bottom:8px;">
+                <p>Everything Haiti needs, delivered fast. From restaurants to hardware stores, we connect you with the best merchants across Haiti.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Shop</h5>
+                <a href="shop.html">All Stores</a>
+                <a href="category.html?cat=restaurants">Restaurants</a>
+                <a href="category.html?cat=supermarkets">Supermarkets</a>
+                <a href="category.html?cat=pharmacies">Pharmacies</a>
+            </div>
+            <div class="footer-col">
+                <h5>Account</h5>
+                <a href="orders.html">My Orders</a>
+                <a href="wallet.html">San Cash</a>
+                <a href="recipients.html">Recipients</a>
+                <a href="help.html">Help Center</a>
+            </div>
+            <div class="footer-col">
+                <h5>Partners</h5>
+                <a href="merchant/dashboard.html">Merchants</a>
+                <a href="rider/dashboard.html">Riders</a>
+                <a href="#">About Us</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 MyPlopPlop. All rights reserved.</span>
+            <span>Powered by <a href="https://48hoursready.com" style="color:var(--white);font-weight:600;">48HoursReady.com</a></span>
+        </div>
+    </div>
+</footer>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span data-i18n="nav.home">Home</span>
+    </a>
+    <a href="shop.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span data-i18n="nav.search">Search</span>
+    </a>
+    <a href="cart.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        <span class="nav-badge">2</span>
+        <span data-i18n="nav.cart">Cart</span>
+    </a>
+    <a href="orders.html" class="bottom-nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span data-i18n="nav.orders">Orders</span>
+    </a>
+    <a href="login.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span data-i18n="nav.account">Account</span>
+    </a>
+</nav>
+
+<script>
+(function() {
+    // ===== RIDE SIMULATION =====
+    const STEPS = [
+        'Driver assigned',
+        'Driver en route to you',
+        'Pickup',
+        'En route to destination',
+        'Arrived'
+    ];
+
+    let currentStep = 1; // Start at step 2 (index 1), step 1 already done
+    let etaSeconds = 8 * 60; // 8 minutes in seconds
+    let rideCompleted = false;
+
+    const stepEls = document.querySelectorAll('.ride-step');
+    const etaCountdown = document.getElementById('etaCountdown');
+    const fareEta = document.getElementById('fareEta');
+    const driverDot = document.getElementById('driverDot');
+
+    // Driver dot positions for each step
+    const driverPositions = [
+        { left: '30%', top: '65%' },   // Step 0: assigned
+        { left: '38%', top: '58%' },   // Step 1: en route to pickup
+        { left: '25%', top: '73%' },   // Step 2: at pickup
+        { left: '60%', top: '45%' },   // Step 3: en route to dest
+        { left: '85%', top: '33%' }    // Step 4: arrived
+    ];
+
+    function updateStepper() {
+        stepEls.forEach(function(el, i) {
+            el.classList.remove('done', 'active');
+            // Reset dot content
+            var dot = el.querySelector('.ride-step-dot');
+            if (i < currentStep) {
+                el.classList.add('done');
+                dot.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+            } else if (i === currentStep) {
+                el.classList.add('active');
+                dot.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>';
+            } else {
+                dot.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>';
+            }
+        });
+
+        // Move driver dot
+        if (driverPositions[currentStep]) {
+            driverDot.style.left = driverPositions[currentStep].left;
+            driverDot.style.top = driverPositions[currentStep].top;
+        }
+    }
+
+    // Auto-advance stepper every 15 seconds
+    var stepInterval = setInterval(function() {
+        if (currentStep < STEPS.length - 1) {
+            currentStep++;
+            updateStepper();
+
+            // Update ETA based on step
+            if (currentStep === 2) {
+                etaSeconds = 5 * 60;
+            } else if (currentStep === 3) {
+                etaSeconds = 3 * 60;
+            } else if (currentStep === 4) {
+                etaSeconds = 0;
+                rideCompleted = true;
+                clearInterval(stepInterval);
+                // Show rating modal after a brief delay
+                setTimeout(function() {
+                    document.getElementById('ratingOverlay').classList.add('show');
+                }, 1500);
+            }
+        }
+    }, 15000);
+
+    // ETA countdown timer
+    setInterval(function() {
+        if (etaSeconds > 0 && !rideCompleted) {
+            etaSeconds--;
+            var mins = Math.ceil(etaSeconds / 60);
+            etaCountdown.textContent = mins;
+            fareEta.textContent = mins + ' min';
+        } else if (rideCompleted) {
+            etaCountdown.textContent = '0';
+            fareEta.textContent = 'Arrived';
+        }
+    }, 1000);
+
+    // ===== RATING MODAL =====
+    var selectedRating = 0;
+    var selectedTip = 0;
+    var stars = document.querySelectorAll('#starSelector .star');
+    var tipBtns = document.querySelectorAll('#tipOptions .tip-btn');
+
+    stars.forEach(function(star) {
+        star.addEventListener('click', function() {
+            selectedRating = parseInt(this.getAttribute('data-value'));
+            stars.forEach(function(s, i) {
+                if (i < selectedRating) {
+                    s.classList.add('active');
+                    s.style.fill = '#f59e0b';
+                } else {
+                    s.classList.remove('active');
+                    s.style.fill = 'none';
+                    s.style.stroke = '#d1d5db';
+                }
+            });
+        });
+
+        star.addEventListener('mouseenter', function() {
+            var val = parseInt(this.getAttribute('data-value'));
+            stars.forEach(function(s, i) {
+                if (i < val) {
+                    s.style.fill = '#fbbf24';
+                }
+            });
+        });
+
+        star.addEventListener('mouseleave', function() {
+            stars.forEach(function(s, i) {
+                if (i < selectedRating) {
+                    s.style.fill = '#f59e0b';
+                } else {
+                    s.style.fill = 'none';
+                }
+            });
+        });
+    });
+
+    // Initialize star styles
+    stars.forEach(function(s) {
+        s.style.fill = 'none';
+        s.style.stroke = '#d1d5db';
+        s.style.strokeWidth = '1.5';
+    });
+
+    tipBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            tipBtns.forEach(function(b) { b.classList.remove('selected'); });
+            this.classList.add('selected');
+            var tipVal = this.getAttribute('data-tip');
+            if (tipVal === 'custom') {
+                var custom = prompt('Enter custom tip amount (HTG):');
+                if (custom && !isNaN(custom)) {
+                    selectedTip = parseInt(custom);
+                    this.textContent = selectedTip + ' HTG';
+                }
+            } else {
+                selectedTip = parseInt(tipVal);
+            }
+        });
+    });
+
+    document.getElementById('btnSubmitRating').addEventListener('click', function() {
+        if (selectedRating === 0) {
+            // Default to 5 stars if none selected
+            selectedRating = 5;
+        }
+        document.getElementById('ratingForm').classList.add('hidden');
+        document.getElementById('ratingThanks').classList.add('show');
+
+        // Auto-close after 4 seconds
+        setTimeout(function() {
+            document.getElementById('ratingOverlay').classList.remove('show');
+        }, 4000);
+    });
+
+    // Close overlay on background click
+    document.getElementById('ratingOverlay').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.remove('show');
+        }
+    });
+
+    // ===== ACTIONS =====
+    window.shareETA = function() {
+        var mins = Math.ceil(etaSeconds / 60);
+        var text = 'My PlopPlop Pool ride arrives in ~' + mins + ' min! Pickup: Petion-Ville, Rue Faubert -> Delmas 33. Track: myplopplop.com/rides-tracking';
+        if (navigator.share) {
+            navigator.share({ title: 'PlopPlop Ride ETA', text: text });
+        } else {
+            navigator.clipboard.writeText(text).then(function() {
+                alert('ETA copied to clipboard!');
+            });
+        }
+    };
+
+    window.cancelRide = function() {
+        if (confirm('Are you sure you want to cancel this ride? Cancellation fees may apply.')) {
+            alert('Ride cancelled. You will not be charged.');
+        }
+    };
+})();
+</script>
+
+<script src="/js/i18n.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
+</body>
+</html>

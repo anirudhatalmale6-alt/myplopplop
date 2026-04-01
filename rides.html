@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>PlopPlop Rides — Share Rides, Save Money in Haiti</title>
+<meta name="description" content="Haiti's first ride-sharing pool. Share rides, save up to 60% on transport. Pool, Moto, and Car options across Port-au-Prince.">
+<meta property="og:title" content="PlopPlop Rides — Haiti's Ride-Sharing Pool">
+<meta property="og:description" content="Share rides, save up to 60%. Pool, Moto, and Car rides across Port-au-Prince and beyond.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://myplopplop.com/assets/img/og-preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://myplopplop.com/rides.html">
+<meta property="og:site_name" content="MyPlopPlop">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/layout.css">
+<style>
+/* ===== RIDES HERO ===== */
+.rides-hero {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 50%, var(--primary-red) 100%);
+    color: var(--white);
+    padding: var(--space-3xl) var(--content-padding) var(--space-2xl);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.rides-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(210,16,52,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.rides-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40%;
+    left: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.rides-hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+}
+.rides-hero h1 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: var(--space-sm);
+    color: var(--white);
+}
+.rides-hero h1 span { color: var(--primary-red); }
+.rides-hero .subtitle {
+    font-size: var(--text-lg);
+    opacity: 0.9;
+    margin-bottom: var(--space-lg);
+    line-height: 1.6;
+}
+.savings-callout {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: var(--radius-full);
+    padding: 8px 20px;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+    margin-bottom: var(--space-xl);
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(230,57,70,0.3); }
+    50% { box-shadow: 0 0 20px 4px rgba(230,57,70,0.2); }
+}
+.hero-btns {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.hero-btn-red {
+    background: var(--primary-red);
+    color: var(--white);
+    padding: 14px 32px;
+    border-radius: var(--radius-xl);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    box-shadow: 0 4px 16px rgba(210,16,52,0.4);
+    transition: all var(--transition-fast);
+    text-decoration: none;
+}
+.hero-btn-red:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(210,16,52,0.5); }
+.hero-btn-outline {
+    background: transparent;
+    color: var(--white);
+    padding: 14px 32px;
+    border-radius: var(--radius-xl);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-base);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    border: 1.5px solid rgba(255,255,255,0.4);
+    backdrop-filter: blur(4px);
+    transition: all var(--transition-fast);
+    text-decoration: none;
+}
+.hero-btn-outline:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
+
+/* ===== RIDE OPTIONS ===== */
+.ride-options {
+    padding: var(--space-3xl) var(--content-padding);
+    background: var(--white);
+}
+.ride-options .section-heading {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+.ride-options .section-heading h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: var(--space-xs);
+}
+.ride-options .section-heading p {
+    font-size: var(--text-base);
+    color: var(--text-muted);
+}
+.ride-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+    max-width: 900px;
+    margin: 0 auto;
+}
+.ride-card {
+    background: var(--bg-light);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    text-align: center;
+    transition: all var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+    border: 2px solid transparent;
+}
+.ride-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+.ride-card.featured {
+    border-color: var(--primary-red);
+    background: linear-gradient(180deg, rgba(230,57,70,0.04) 0%, var(--white) 100%);
+}
+.ride-card.featured::before {
+    content: 'BEST VALUE';
+    position: absolute;
+    top: 12px;
+    right: -28px;
+    background: var(--primary-red);
+    color: var(--white);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 32px;
+    transform: rotate(45deg);
+    letter-spacing: 0.5px;
+}
+.ride-icon {
+    font-size: 48px;
+    margin-bottom: var(--space-md);
+    display: block;
+}
+.ride-card h3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: var(--space-xs);
+}
+.ride-card .ride-desc {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: var(--space-md);
+}
+.ride-price {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--primary-red);
+}
+.ride-price small {
+    font-size: var(--text-xs);
+    font-weight: 400;
+    color: var(--text-muted);
+}
+
+/* ===== HOW POOL WORKS ===== */
+.how-pool {
+    padding: var(--space-3xl) var(--content-padding);
+    background: var(--bg-light);
+}
+.how-pool .section-heading {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+.how-pool .section-heading h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: var(--space-xs);
+}
+.how-pool .section-heading p {
+    font-size: var(--text-base);
+    color: var(--text-muted);
+}
+.pool-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-lg);
+    max-width: 900px;
+    margin: 0 auto;
+}
+.pool-step {
+    text-align: center;
+    padding: var(--space-lg) var(--space-md);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    position: relative;
+}
+.pool-step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary-blue);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    margin: 0 auto var(--space-md);
+}
+.pool-step-icon {
+    font-size: 32px;
+    margin-bottom: var(--space-sm);
+    display: block;
+}
+.pool-step h4 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-base);
+    color: var(--text-dark);
+    margin-bottom: var(--space-xs);
+}
+.pool-step p {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* ===== WHY POOL ===== */
+.why-pool {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 100%);
+    color: var(--white);
+    padding: var(--space-3xl) var(--content-padding);
+    position: relative;
+    overflow: hidden;
+}
+.why-pool::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(210,16,52,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.why-pool-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.why-pool .fuel-alert {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    background: rgba(230,57,70,0.25);
+    border: 1px solid rgba(230,57,70,0.4);
+    border-radius: var(--radius-full);
+    padding: 6px 16px;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    margin-bottom: var(--space-lg);
+}
+.why-pool h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: var(--space-lg);
+    line-height: 1.2;
+}
+.why-pool-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+.why-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: rgba(255,255,255,0.08);
+    border-radius: var(--radius-md);
+    transition: background var(--transition-fast);
+}
+.why-item:hover { background: rgba(255,255,255,0.12); }
+.why-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.12);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.why-item-text h4 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--white);
+    margin-bottom: 2px;
+}
+.why-item-text p {
+    font-size: var(--text-xs);
+    opacity: 0.75;
+    line-height: 1.4;
+}
+
+/* ===== FARE ESTIMATOR ===== */
+.fare-estimator {
+    padding: var(--space-3xl) var(--content-padding);
+    background: var(--white);
+}
+.fare-estimator .section-heading {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+.fare-estimator .section-heading h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: var(--space-xs);
+}
+.fare-estimator .section-heading p {
+    font-size: var(--text-base);
+    color: var(--text-muted);
+}
+.fare-card {
+    background: var(--bg-light);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    max-width: 520px;
+    margin: 0 auto;
+    box-shadow: var(--shadow-md);
+}
+.fare-form .form-group {
+    margin-bottom: var(--space-md);
+}
+.fare-form label {
+    display: block;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--text-dark);
+    margin-bottom: var(--space-xs);
+}
+.fare-form select,
+.fare-form .input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    font-size: var(--text-base);
+    font-family: var(--font-body);
+    color: var(--text-dark);
+    background: var(--white);
+    transition: border-color var(--transition-fast);
+    -webkit-appearance: none;
+    appearance: none;
+}
+.fare-form select:focus,
+.fare-form .input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+}
+.ride-type-selector {
+    display: flex;
+    background: var(--gray-100);
+    border-radius: var(--radius-full);
+    padding: 4px;
+    margin-bottom: var(--space-lg);
+}
+.ride-type-btn {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    color: var(--gray-500);
+    background: transparent;
+    border: none;
+}
+.ride-type-btn.active {
+    background: var(--white);
+    color: var(--text-dark);
+    box-shadow: var(--shadow-sm);
+}
+.fare-estimate-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary-red);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+.fare-estimate-btn:hover {
+    background: var(--primary-red-dark);
+    transform: translateY(-1px);
+}
+.fare-result {
+    margin-top: var(--space-lg);
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 100%);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    text-align: center;
+    color: var(--white);
+    display: none;
+}
+.fare-result.show { display: block; animation: fadeSlideUp 0.3s ease; }
+@keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.fare-result .fare-amount {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: var(--space-xs);
+}
+.fare-result .fare-label {
+    font-size: var(--text-sm);
+    opacity: 0.8;
+}
+.fare-result .fare-savings {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(72,199,142,0.2);
+    color: #48c78e;
+    border-radius: var(--radius-full);
+    padding: 4px 12px;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    margin-top: var(--space-sm);
+}
+.fare-result .fare-compare {
+    font-size: var(--text-xs);
+    opacity: 0.65;
+    margin-top: var(--space-sm);
+}
+
+/* ===== FOR DRIVERS ===== */
+.for-drivers {
+    padding: var(--space-3xl) var(--content-padding);
+    background: var(--bg-light);
+    text-align: center;
+}
+.for-drivers-inner {
+    max-width: 600px;
+    margin: 0 auto;
+}
+.for-drivers .driver-icon {
+    font-size: 56px;
+    margin-bottom: var(--space-md);
+    display: block;
+}
+.for-drivers h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: var(--space-sm);
+}
+.for-drivers .driver-desc {
+    font-size: var(--text-base);
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: var(--space-lg);
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.for-drivers .stat-row {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+}
+.for-drivers .stat-item {
+    text-align: center;
+}
+.for-drivers .stat-number {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--primary-red);
+    display: block;
+}
+.for-drivers .stat-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+.driver-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    background: var(--primary-blue);
+    color: var(--white);
+    padding: 14px 32px;
+    border-radius: var(--radius-xl);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(29,53,87,0.3);
+    transition: all var(--transition-fast);
+}
+.driver-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(29,53,87,0.4); }
+
+/* ===== FOOTER ===== */
+.footer {
+    background: var(--gray-900);
+    color: var(--gray-400);
+    padding: var(--space-2xl) var(--content-padding) var(--space-lg);
+}
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+}
+.footer-brand h3 {
+    font-family: var(--font-heading);
+    color: var(--white);
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-sm);
+}
+.footer-brand h3 span { color: var(--primary-red); }
+.footer-brand p { font-size: var(--text-sm); line-height: 1.6; }
+.footer-col h5 {
+    color: var(--white);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-md);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.footer-col a {
+    display: block;
+    font-size: var(--text-sm);
+    padding: 4px 0;
+    transition: color var(--transition-fast);
+}
+.footer-col a:hover { color: var(--white); }
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: var(--text-xs);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+    .rides-hero h1 { font-size: 1.6rem; }
+    .hero-btns { flex-direction: column; align-items: center; }
+    .hero-btn-red, .hero-btn-outline { width: 100%; max-width: 280px; justify-content: center; }
+    .ride-cards { grid-template-columns: 1fr; }
+    .pool-steps { grid-template-columns: repeat(2, 1fr); }
+    .why-pool-grid { grid-template-columns: 1fr; }
+    .for-drivers .stat-row { gap: var(--space-lg); }
+}
+@media (min-width: 768px) {
+    .rides-hero { padding: var(--space-3xl) var(--content-padding); }
+    .rides-hero h1 { font-size: 2.5rem; }
+    .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="flex items-center gap-sm">
+        <span>📍 Port-au-Prince</span>
+        <span style="opacity:0.5">|</span>
+        <a href="#" data-i18n="topbar.change_location">Change location</a>
+    </div>
+    <div class="flex items-center gap-md">
+        <a href="#" data-lang="en" style="font-weight:700">EN</a>
+        <a href="#" data-lang="kr">KR</a>
+        <a href="#" data-lang="fr">FR</a>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="header" style="top: 28px;">
+    <div class="header-inner">
+        <a href="index.html" class="header-logo">
+            <img src="assets/img/logo.png?v=2" alt="MyPlopPlop" style="height:40px;">
+        </a>
+
+        <div class="header-actions">
+            <a href="shop.html" class="header-icon" title="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </a>
+            <a href="cart.html" class="header-icon" title="Cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                <span class="header-badge">2</span>
+            </a>
+            <a href="login.html" class="header-icon" title="Account">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN -->
+<main class="main" style="margin-top: calc(var(--header-height) + 28px);">
+
+<!-- SECTION 1: HERO -->
+<section class="rides-hero">
+    <div class="rides-hero-content">
+        <h1>PlopPlop <span>Rides</span></h1>
+        <p class="subtitle">Share rides, save money. Haiti's first ride-sharing pool.</p>
+        <div class="savings-callout">💰 Save up to 60% with PlopPlop Pool vs riding alone</div>
+        <div class="hero-btns">
+            <a href="rides-request.html" class="hero-btn-red">🚗 Request a Ride</a>
+            <a href="driver.html" class="hero-btn-outline">🏍️ Drive with Us</a>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 2: RIDE OPTIONS -->
+<section class="ride-options">
+    <div class="section-heading">
+        <h2 data-i18n="rides.options_title">Choose Your Ride</h2>
+        <p>From budget-friendly to premium comfort</p>
+    </div>
+    <div class="ride-cards">
+        <div class="ride-card featured">
+            <span class="ride-icon">🚐</span>
+            <h3>PlopPlop Pool</h3>
+            <p class="ride-desc">Share with others going your way. Cheapest option — split the fare and save big.</p>
+            <div class="ride-price">75 <small>HTG &amp; up</small></div>
+        </div>
+        <div class="ride-card">
+            <span class="ride-icon">🏍️</span>
+            <h3>PlopPlop Moto</h3>
+            <p class="ride-desc">Private motorcycle ride. Fast through traffic — get there in half the time.</p>
+            <div class="ride-price">100 <small>HTG &amp; up</small></div>
+        </div>
+        <div class="ride-card">
+            <span class="ride-icon">🚗</span>
+            <h3>PlopPlop Car</h3>
+            <p class="ride-desc">Private car ride. Comfortable, air-conditioned, and secure door-to-door.</p>
+            <div class="ride-price">200 <small>HTG &amp; up</small></div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 3: HOW POOL WORKS -->
+<section class="how-pool">
+    <div class="section-heading">
+        <h2 data-i18n="rides.howpool_title">How PlopPlop Pool Works</h2>
+        <p>Four simple steps to a cheaper ride</p>
+    </div>
+    <div class="pool-steps">
+        <div class="pool-step">
+            <div class="pool-step-number">1</div>
+            <span class="pool-step-icon">📍</span>
+            <h4>Enter Destination</h4>
+            <p>Tell us where you're going</p>
+        </div>
+        <div class="pool-step">
+            <div class="pool-step-number">2</div>
+            <span class="pool-step-icon">👥</span>
+            <h4>Match with Riders</h4>
+            <p>We find others heading your way</p>
+        </div>
+        <div class="pool-step">
+            <div class="pool-step-number">3</div>
+            <span class="pool-step-icon">🤝</span>
+            <h4>Share the Ride</h4>
+            <p>Split the cost, save money</p>
+        </div>
+        <div class="pool-step">
+            <div class="pool-step-number">4</div>
+            <span class="pool-step-icon">✅</span>
+            <h4>Arrive Safely</h4>
+            <p>Tracked ride with verified drivers</p>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 4: WHY POOL -->
+<section class="why-pool">
+    <div class="why-pool-inner">
+        <div class="fuel-alert">⛽ Gas prices up 40% — 725 gdes/gal</div>
+        <h2>Gas prices up 40%?<br>We've got you.</h2>
+        <div class="why-pool-grid">
+            <div class="why-item">
+                <div class="why-icon">💰</div>
+                <div class="why-item-text">
+                    <h4>Save up to 60% per ride</h4>
+                    <p>Pool fares split between riders — pay a fraction of solo cost</p>
+                </div>
+            </div>
+            <div class="why-item">
+                <div class="why-icon">🚦</div>
+                <div class="why-item-text">
+                    <h4>Reduce traffic congestion</h4>
+                    <p>Fewer cars on the road means faster commutes for everyone</p>
+                </div>
+            </div>
+            <div class="why-item">
+                <div class="why-icon">🌱</div>
+                <div class="why-item-text">
+                    <h4>Lower your carbon footprint</h4>
+                    <p>Share rides, reduce emissions, help Haiti breathe easier</p>
+                </div>
+            </div>
+            <div class="why-item">
+                <div class="why-icon">✅</div>
+                <div class="why-item-text">
+                    <h4>Verified drivers only</h4>
+                    <p>Background-checked, rated, and reviewed by other riders</p>
+                </div>
+            </div>
+            <div class="why-item">
+                <div class="why-icon">📍</div>
+                <div class="why-item-text">
+                    <h4>Real-time GPS tracking</h4>
+                    <p>Share your trip with family — they see you moving live</p>
+                </div>
+            </div>
+            <div class="why-item">
+                <div class="why-icon">💳</div>
+                <div class="why-item-text">
+                    <h4>In-app payments</h4>
+                    <p>Pay with San Cash, credit card, or debit — no cash needed</p>
+                </div>
+            </div>
+        </div>
+        <a href="rides-request.html" class="hero-btn-red" style="display:inline-flex;">Request a Pool Ride</a>
+    </div>
+</section>
+
+<!-- SECTION 5: FARE ESTIMATOR -->
+<section class="fare-estimator" id="fare-estimator">
+    <div class="section-heading">
+        <h2 data-i18n="rides.fare_title">Estimate Your Fare</h2>
+        <p>See how much you'll save with PlopPlop</p>
+    </div>
+    <div class="fare-card">
+        <form class="fare-form" onsubmit="return false;">
+            <div class="form-group">
+                <label for="pickup">Pickup Zone</label>
+                <select id="pickup" required>
+                    <option value="" disabled selected>Select pickup zone</option>
+                    <option value="petion-ville">Petion-Ville</option>
+                    <option value="delmas">Delmas</option>
+                    <option value="pap-centre">Port-au-Prince Centre</option>
+                    <option value="tabarre">Tabarre</option>
+                    <option value="carrefour">Carrefour</option>
+                    <option value="kenscoff">Kenscoff</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dropoff">Dropoff Zone</label>
+                <select id="dropoff" required>
+                    <option value="" disabled selected>Select dropoff zone</option>
+                    <option value="petion-ville">Petion-Ville</option>
+                    <option value="delmas">Delmas</option>
+                    <option value="pap-centre">Port-au-Prince Centre</option>
+                    <option value="tabarre">Tabarre</option>
+                    <option value="carrefour">Carrefour</option>
+                    <option value="kenscoff">Kenscoff</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Ride Type</label>
+                <div class="ride-type-selector">
+                    <button type="button" class="ride-type-btn active" data-type="pool">🚐 Pool</button>
+                    <button type="button" class="ride-type-btn" data-type="moto">🏍️ Moto</button>
+                    <button type="button" class="ride-type-btn" data-type="car">🚗 Car</button>
+                </div>
+            </div>
+            <button type="button" class="fare-estimate-btn" id="estimateBtn">Get Fare Estimate</button>
+        </form>
+
+        <div class="fare-result" id="fareResult">
+            <div class="fare-label" id="fareLabel">Estimated Pool Fare</div>
+            <div class="fare-amount" id="fareAmount">125 HTG</div>
+            <div class="fare-savings" id="fareSavings">↓ You save 185 HTG vs solo</div>
+            <div class="fare-compare" id="fareCompare">Solo taxi: ~310 HTG for same route</div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 6: FOR DRIVERS -->
+<section class="for-drivers">
+    <div class="for-drivers-inner">
+        <span class="driver-icon">🚘</span>
+        <h2>Earn More with Every Seat</h2>
+        <p class="driver-desc">Fill empty seats, earn more per trip. Pool drivers make 30% more than solo rides. Turn your commute into income.</p>
+        <div class="stat-row">
+            <div class="stat-item">
+                <span class="stat-number">+30%</span>
+                <span class="stat-label">More earnings</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">500+</span>
+                <span class="stat-label">Active drivers</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Flexible hours</span>
+            </div>
+        </div>
+        <a href="driver.html" class="driver-cta-btn">Start Driving →</a>
+    </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <img src="assets/img/logo.png?v=2" alt="MyPlopPlop" style="height:50px;margin-bottom:8px;">
+                <p>Everything Haiti needs, delivered fast. From restaurants to hardware stores, we connect you with the best merchants across Haiti.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Shop</h5>
+                <a href="shop.html">All Stores</a>
+                <a href="category.html?cat=restaurants">Restaurants</a>
+                <a href="category.html?cat=supermarkets">Supermarkets</a>
+                <a href="category.html?cat=pharmacies">Pharmacies</a>
+            </div>
+            <div class="footer-col">
+                <h5>Account</h5>
+                <a href="orders.html">My Orders</a>
+                <a href="wallet.html">San Cash</a>
+                <a href="recipients.html">Recipients</a>
+                <a href="help.html">Help Center</a>
+            </div>
+            <div class="footer-col">
+                <h5>Partners</h5>
+                <a href="merchant/dashboard.html">Merchants</a>
+                <a href="driver.html">Drivers</a>
+                <a href="#">About Us</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span data-i18n="footer.copyright">&copy; 2026 MyPlopPlop. All rights reserved.</span>
+            <span>Powered by <a href="https://48hoursready.com" style="color:var(--white);font-weight:600;">48HoursReady.com</a></span>
+        </div>
+    </div>
+</footer>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span data-i18n="nav.home">Home</span>
+    </a>
+    <a href="shop.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span data-i18n="nav.search">Search</span>
+    </a>
+    <a href="cart.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        <span class="nav-badge">2</span>
+        <span data-i18n="nav.cart">Cart</span>
+    </a>
+    <a href="orders.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span data-i18n="nav.orders">Orders</span>
+    </a>
+    <a href="login.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span data-i18n="nav.account">Account</span>
+    </a>
+</nav>
+
+<script>
+// Ride type toggle
+const rideTypeBtns = document.querySelectorAll('.ride-type-btn');
+let selectedRideType = 'pool';
+
+rideTypeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        rideTypeBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedRideType = btn.dataset.type;
+    });
+});
+
+// Fare estimation mock data
+const FARE_DATA = {
+    // [pickup][dropoff] = { pool, moto, car }
+    'petion-ville': {
+        'delmas':       { pool: 100, moto: 150, car: 275 },
+        'pap-centre':   { pool: 125, moto: 200, car: 350 },
+        'tabarre':      { pool: 150, moto: 225, car: 400 },
+        'carrefour':    { pool: 175, moto: 275, car: 475 },
+        'kenscoff':     { pool: 125, moto: 200, car: 325 },
+    },
+    'delmas': {
+        'petion-ville': { pool: 100, moto: 150, car: 275 },
+        'pap-centre':   { pool: 75,  moto: 125, car: 225 },
+        'tabarre':      { pool: 100, moto: 150, car: 250 },
+        'carrefour':    { pool: 150, moto: 225, car: 400 },
+        'kenscoff':     { pool: 175, moto: 275, car: 475 },
+    },
+    'pap-centre': {
+        'petion-ville': { pool: 125, moto: 200, car: 350 },
+        'delmas':       { pool: 75,  moto: 125, car: 225 },
+        'tabarre':      { pool: 125, moto: 200, car: 325 },
+        'carrefour':    { pool: 100, moto: 150, car: 275 },
+        'kenscoff':     { pool: 200, moto: 300, car: 525 },
+    },
+    'tabarre': {
+        'petion-ville': { pool: 150, moto: 225, car: 400 },
+        'delmas':       { pool: 100, moto: 150, car: 250 },
+        'pap-centre':   { pool: 125, moto: 200, car: 325 },
+        'carrefour':    { pool: 200, moto: 300, car: 525 },
+        'kenscoff':     { pool: 225, moto: 350, car: 575 },
+    },
+    'carrefour': {
+        'petion-ville': { pool: 175, moto: 275, car: 475 },
+        'delmas':       { pool: 150, moto: 225, car: 400 },
+        'pap-centre':   { pool: 100, moto: 150, car: 275 },
+        'tabarre':      { pool: 200, moto: 300, car: 525 },
+        'kenscoff':     { pool: 250, moto: 375, car: 625 },
+    },
+    'kenscoff': {
+        'petion-ville': { pool: 125, moto: 200, car: 325 },
+        'delmas':       { pool: 175, moto: 275, car: 475 },
+        'pap-centre':   { pool: 200, moto: 300, car: 525 },
+        'tabarre':      { pool: 225, moto: 350, car: 575 },
+        'carrefour':    { pool: 250, moto: 375, car: 625 },
+    }
+};
+
+const typeLabels = { pool: 'Pool', moto: 'Moto', car: 'Car' };
+
+document.getElementById('estimateBtn').addEventListener('click', () => {
+    const pickup = document.getElementById('pickup').value;
+    const dropoff = document.getElementById('dropoff').value;
+    const result = document.getElementById('fareResult');
+
+    if (!pickup || !dropoff) {
+        alert('Please select both pickup and dropoff zones.');
+        return;
+    }
+    if (pickup === dropoff) {
+        alert('Pickup and dropoff zones must be different.');
+        return;
+    }
+
+    const fares = FARE_DATA[pickup] && FARE_DATA[pickup][dropoff];
+    if (!fares) {
+        alert('Route not available yet. Coming soon!');
+        return;
+    }
+
+    const fare = fares[selectedRideType];
+    const soloFare = fares.car;
+    const savings = soloFare - fare;
+
+    document.getElementById('fareLabel').textContent = 'Estimated ' + typeLabels[selectedRideType] + ' Fare';
+    document.getElementById('fareAmount').textContent = fare + ' HTG';
+
+    if (selectedRideType === 'pool' || selectedRideType === 'moto') {
+        document.getElementById('fareSavings').textContent = '↓ You save ' + savings + ' HTG vs private car';
+        document.getElementById('fareSavings').style.display = 'inline-flex';
+        document.getElementById('fareCompare').textContent = 'Private car: ~' + soloFare + ' HTG for same route';
+        document.getElementById('fareCompare').style.display = 'block';
+    } else {
+        document.getElementById('fareSavings').style.display = 'none';
+        document.getElementById('fareCompare').style.display = 'none';
+    }
+
+    result.classList.add('show');
+});
+</script>
+
+<script src="js/i18n.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
+</body>
+</html>

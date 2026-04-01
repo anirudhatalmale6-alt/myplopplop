@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta property="og:image" content="https://myplopplop.com/assets/img/og-preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<title>Request a Ride — MyPlopPlop</title>
+<meta name="description" content="Book a ride on PlopPlop Rides. Pool, Moto, or Car — affordable transport across Port-au-Prince.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/layout.css">
+<style>
+/* ===== RIDES REQUEST PAGE ===== */
+.rides-page {
+    padding: 0 0 calc(var(--bottom-nav-height) + 100px);
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+/* Map Section */
+.map-section {
+    position: relative;
+    height: 280px;
+    background: linear-gradient(135deg, #1D3557 0%, #2a4a6b 50%, #1D3557 100%);
+    overflow: hidden;
+}
+
+.map-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #3a5a7c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-sm);
+    color: rgba(255,255,255,0.5);
+    position: relative;
+}
+
+.map-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+.map-placeholder-text {
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.7;
+}
+
+.map-placeholder-text svg {
+    width: 40px;
+    height: 40px;
+    opacity: 0.5;
+}
+
+.map-search-bar {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    z-index: 10;
+}
+
+.map-search-bar input {
+    width: 100%;
+    padding: 14px 16px 14px 44px;
+    border: none;
+    border-radius: var(--radius-xl);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    background: var(--white);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    outline: none;
+}
+
+.map-search-bar input::placeholder {
+    color: var(--gray-400);
+}
+
+.map-search-bar .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-red);
+    font-size: 18px;
+}
+
+/* Ride Type Selector */
+.ride-types {
+    display: flex;
+    gap: 12px;
+    padding: var(--space-md) var(--content-padding);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.ride-types::-webkit-scrollbar {
+    display: none;
+}
+
+.ride-type-card {
+    flex: 0 0 auto;
+    min-width: 140px;
+    padding: 14px 16px;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    background: var(--white);
+    text-align: center;
+    position: relative;
+}
+
+.ride-type-card:hover {
+    border-color: var(--gray-300);
+    transform: translateY(-1px);
+}
+
+.ride-type-card.selected {
+    border-color: var(--primary-red);
+    background: rgba(230, 57, 70, 0.04);
+    box-shadow: 0 2px 12px rgba(230, 57, 70, 0.15);
+}
+
+.ride-type-icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+}
+
+.ride-type-name {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-sm);
+    color: var(--text-dark);
+    margin-bottom: 2px;
+}
+
+.ride-type-price {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.ride-type-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--white);
+    background: var(--success);
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-top: 6px;
+}
+
+/* Section Container */
+.ride-section {
+    padding: 0 var(--content-padding);
+    margin-bottom: var(--space-md);
+}
+
+.ride-section-title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    margin-bottom: var(--space-sm);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Location Inputs */
+.location-form {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+    overflow: hidden;
+}
+
+.location-input-row {
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    gap: 12px;
+    position: relative;
+}
+
+.location-input-row + .location-input-row {
+    border-top: 1px solid var(--gray-100);
+}
+
+.location-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.location-dot.pickup {
+    background: var(--success);
+    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
+}
+
+.location-dot.dropoff {
+    background: var(--primary-red);
+    box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2);
+}
+
+.location-connector {
+    position: absolute;
+    left: 19px;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: repeating-linear-gradient(
+        to bottom,
+        var(--gray-300) 0px,
+        var(--gray-300) 4px,
+        transparent 4px,
+        transparent 8px
+    );
+}
+
+.location-input-row input {
+    flex: 1;
+    border: none;
+    padding: 16px 0;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    background: transparent;
+    outline: none;
+    color: var(--text-dark);
+}
+
+.location-input-row input::placeholder {
+    color: var(--gray-400);
+}
+
+/* Location Suggestions Dropdown */
+.location-suggestions {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-top: none;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 100;
+    max-height: 240px;
+    overflow-y: auto;
+}
+
+.location-suggestions.show {
+    display: block;
+}
+
+.suggestion-item {
+    padding: 12px 16px;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background var(--transition-fast);
+}
+
+.suggestion-item:hover {
+    background: var(--gray-50);
+}
+
+.suggestion-item .suggestion-icon {
+    color: var(--gray-400);
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.suggestion-item .suggestion-name {
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.suggestion-item .suggestion-zone {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-left: auto;
+}
+
+/* Pool Matching Section */
+.pool-section {
+    background: linear-gradient(135deg, rgba(29,53,87,0.04), rgba(230,57,70,0.04));
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    border: 1px solid var(--gray-200);
+}
+
+.pool-section.hidden {
+    display: none;
+}
+
+.pool-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+}
+
+.pool-header h3 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pool-scanning {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-bottom: var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pool-scanning .pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+    animation: pulseDot 1.5s ease infinite;
+}
+
+@keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+}
+
+.pool-match-card {
+    background: var(--white);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    border: 1px solid var(--gray-100);
+}
+
+.pool-match-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary-blue);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: var(--text-sm);
+    flex-shrink: 0;
+}
+
+.pool-match-info {
+    flex: 1;
+}
+
+.pool-match-name {
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--text-dark);
+}
+
+.pool-match-dest {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+.pool-match-detour {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--primary-blue);
+    white-space: nowrap;
+}
+
+.pool-savings {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: var(--space-sm);
+    padding: 10px 12px;
+    background: rgba(46, 204, 113, 0.1);
+    border-radius: var(--radius-md);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--success);
+}
+
+.seats-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: var(--space-md);
+    font-size: var(--text-sm);
+}
+
+.seats-selector label {
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.seats-btn-group {
+    display: flex;
+    gap: 0;
+}
+
+.seat-btn {
+    width: 40px;
+    height: 36px;
+    border: 2px solid var(--gray-200);
+    background: var(--white);
+    cursor: pointer;
+    font-weight: 700;
+    font-size: var(--text-sm);
+    color: var(--gray-500);
+    transition: all var(--transition-fast);
+}
+
+.seat-btn:first-child {
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.seat-btn:last-child {
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    border-left: none;
+}
+
+.seat-btn.selected {
+    background: var(--primary-blue);
+    border-color: var(--primary-blue);
+    color: var(--white);
+}
+
+/* Fare Breakdown */
+.fare-breakdown {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+    padding: var(--space-md);
+}
+
+.fare-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: var(--text-sm);
+}
+
+.fare-row .fare-label {
+    color: var(--text-muted);
+}
+
+.fare-row .fare-value {
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.fare-row.discount .fare-value {
+    color: var(--success);
+    font-weight: 600;
+}
+
+.fare-row.total {
+    border-top: 2px solid var(--gray-200);
+    margin-top: 4px;
+    padding-top: 12px;
+}
+
+.fare-row.total .fare-label {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    color: var(--text-dark);
+}
+
+.fare-row.total .fare-value {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-lg);
+    color: var(--primary-red);
+}
+
+.fare-payment {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--gray-100);
+    font-size: var(--text-sm);
+}
+
+.fare-payment-method {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.fare-payment-change {
+    color: var(--primary-blue);
+    font-weight: 600;
+    font-size: var(--text-xs);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* Confirm Button Area */
+.confirm-area {
+    position: fixed;
+    bottom: var(--bottom-nav-height);
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-top: 1px solid var(--gray-200);
+    padding: var(--space-md) var(--content-padding);
+    z-index: 999;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+}
+
+.confirm-area-inner {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.confirm-btn {
+    width: 100%;
+    padding: 16px 24px;
+    background: var(--primary-red);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-xl);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.confirm-btn:hover {
+    background: var(--primary-red-dark);
+    transform: translateY(-1px);
+}
+
+.confirm-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.confirm-eta {
+    text-align: center;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+/* Ride Confirmed Modal */
+.ride-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 9999;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.ride-modal-overlay.show {
+    display: flex;
+}
+
+.ride-modal {
+    background: var(--white);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    padding: var(--space-xl) var(--space-lg) var(--space-2xl);
+    width: 100%;
+    max-width: 640px;
+    animation: slideUpModal 0.4s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+@keyframes slideUpModal {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.ride-modal-header {
+    text-align: center;
+    margin-bottom: var(--space-lg);
+}
+
+.ride-modal-check {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--success-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin: 0 auto var(--space-md);
+    animation: successPop 0.5s ease;
+}
+
+@keyframes successPop {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.ride-modal-header h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--success);
+    margin-bottom: 4px;
+}
+
+.ride-modal-header p {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+.driver-card {
+    background: var(--gray-50);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+
+.driver-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: var(--space-md);
+}
+
+.driver-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--primary-blue);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: var(--text-lg);
+    flex-shrink: 0;
+}
+
+.driver-info h4 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    margin-bottom: 2px;
+}
+
+.driver-stats {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+.driver-stats .stars {
+    color: #f59e0b;
+    font-weight: 700;
+}
+
+.driver-vehicle-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.vehicle-detail {
+    font-size: var(--text-xs);
+}
+
+.vehicle-detail .detail-label {
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 2px;
+}
+
+.vehicle-detail .detail-value {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.eta-banner {
+    background: linear-gradient(135deg, var(--primary-blue), #2a4a6b);
+    color: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    text-align: center;
+    margin-bottom: var(--space-md);
+}
+
+.eta-banner .eta-time {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-2xl);
+    margin-bottom: 2px;
+}
+
+.eta-banner .eta-label {
+    font-size: var(--text-xs);
+    opacity: 0.8;
+}
+
+.modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.modal-actions .track-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary-red);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-xl);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    text-align: center;
+    display: block;
+}
+
+.modal-actions .track-btn:hover {
+    background: var(--primary-red-dark);
+}
+
+.modal-actions .close-modal-btn {
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    color: var(--text-muted);
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius-xl);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.modal-actions .close-modal-btn:hover {
+    border-color: var(--gray-400);
+    background: var(--gray-50);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 768px) {
+    .map-section {
+        height: 340px;
+    }
+
+    .confirm-area {
+        max-width: 640px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="flex items-center gap-sm">
+        <span>📍 Port-au-Prince</span>
+        <span style="opacity:0.5">|</span>
+        <a href="#">Change location</a>
+    </div>
+    <div class="flex items-center gap-md">
+        <a href="#" data-lang="en" style="font-weight:700">EN</a>
+        <a href="#" data-lang="kr">KR</a>
+        <a href="#" data-lang="fr">FR</a>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="header" style="top: 28px;">
+    <div class="header-inner">
+        <a href="index.html" class="header-logo">
+            <img src="assets/img/logo.png?v=2" alt="MyPlopPlop" style="height:40px;">
+        </a>
+
+        <div class="header-actions">
+            <a href="shop.html" class="header-icon" title="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </a>
+            <a href="cart.html" class="header-icon" title="Cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                <span class="header-badge" id="headerCartBadge">0</span>
+            </a>
+            <a href="login.html" class="header-icon" title="Account">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN -->
+<main class="main" style="margin-top: calc(var(--header-height) + 28px);">
+    <div class="rides-page">
+
+        <!-- 1. MAP SECTION -->
+        <div class="map-section">
+            <div class="map-search-bar">
+                <span class="search-icon">📍</span>
+                <input type="text" id="mapSearchInput" placeholder="Where are you going?" autocomplete="off">
+            </div>
+            <div class="map-placeholder">
+                <div class="map-placeholder-text">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <span>Map loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. RIDE TYPE SELECTOR -->
+        <div class="ride-types" id="rideTypes">
+            <div class="ride-type-card selected" data-type="pool" onclick="selectRideType(this)">
+                <div class="ride-type-icon">👥</div>
+                <div class="ride-type-name">PlopPlop Pool</div>
+                <div class="ride-type-price">From 75 HTG</div>
+                <div class="ride-type-badge">Save 60%</div>
+            </div>
+            <div class="ride-type-card" data-type="moto" onclick="selectRideType(this)">
+                <div class="ride-type-icon">🏍️</div>
+                <div class="ride-type-name">PlopPlop Moto</div>
+                <div class="ride-type-price">From 100 HTG</div>
+            </div>
+            <div class="ride-type-card" data-type="car" onclick="selectRideType(this)">
+                <div class="ride-type-icon">🚗</div>
+                <div class="ride-type-name">PlopPlop Car</div>
+                <div class="ride-type-price">From 200 HTG</div>
+            </div>
+        </div>
+
+        <!-- 3. PICKUP & DROPOFF FORM -->
+        <div class="ride-section">
+            <div class="ride-section-title">📍 Pickup & Destination</div>
+            <div class="location-form" style="position:relative;">
+                <div class="location-input-row" style="position:relative;">
+                    <div class="location-dot pickup"></div>
+                    <input type="text" id="pickupInput" placeholder="Current location" autocomplete="off" onfocus="showSuggestions('pickup')" oninput="filterSuggestions('pickup')">
+                    <div class="location-suggestions" id="pickupSuggestions"></div>
+                </div>
+                <div class="location-input-row" style="position:relative;">
+                    <div class="location-connector"></div>
+                    <div class="location-dot dropoff"></div>
+                    <input type="text" id="dropoffInput" placeholder="Where to?" autocomplete="off" onfocus="showSuggestions('dropoff')" oninput="filterSuggestions('dropoff')">
+                    <div class="location-suggestions" id="dropoffSuggestions"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. POOL MATCHING SECTION -->
+        <div class="ride-section">
+            <div class="pool-section" id="poolSection">
+                <div class="pool-header">
+                    <h3>👥 Pool Match</h3>
+                </div>
+                <div class="pool-scanning">
+                    <span class="pulse-dot"></span>
+                    Looking for riders heading your way...
+                </div>
+                <div class="pool-match-card">
+                    <div class="pool-match-avatar">ML</div>
+                    <div class="pool-match-info">
+                        <div class="pool-match-name">Marie L.</div>
+                        <div class="pool-match-dest">Going to Delmas 33</div>
+                    </div>
+                    <div class="pool-match-detour">+2 min detour</div>
+                </div>
+                <div class="pool-match-card">
+                    <div class="pool-match-avatar">JP</div>
+                    <div class="pool-match-info">
+                        <div class="pool-match-name">Jean P.</div>
+                        <div class="pool-match-dest">Going to Petion-Ville</div>
+                    </div>
+                    <div class="pool-match-detour">+4 min detour</div>
+                </div>
+                <div class="pool-savings">
+                    💰 You save 45% by sharing this ride
+                </div>
+                <div class="seats-selector">
+                    <label>Seats needed:</label>
+                    <div class="seats-btn-group">
+                        <button class="seat-btn selected" data-seats="1" onclick="selectSeats(this)">1</button>
+                        <button class="seat-btn" data-seats="2" onclick="selectSeats(this)">2</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. FARE BREAKDOWN -->
+        <div class="ride-section">
+            <div class="ride-section-title">💰 Fare Estimate</div>
+            <div class="fare-breakdown" id="fareBreakdown">
+                <div class="fare-row">
+                    <span class="fare-label">Distance</span>
+                    <span class="fare-value">~5.2 km</span>
+                </div>
+                <div class="fare-row">
+                    <span class="fare-label">Base fare</span>
+                    <span class="fare-value" id="fareBase">150 HTG</span>
+                </div>
+                <div class="fare-row discount" id="fareDiscountRow">
+                    <span class="fare-label">Pool discount</span>
+                    <span class="fare-value" id="fareDiscount">-67 HTG</span>
+                </div>
+                <div class="fare-row total">
+                    <span class="fare-label">Total</span>
+                    <span class="fare-value" id="fareTotal">83 HTG</span>
+                </div>
+                <div class="fare-payment">
+                    <div class="fare-payment-method">
+                        <span>💰</span>
+                        <span id="paymentMethodLabel">San Cash</span>
+                    </div>
+                    <a href="#" class="fare-payment-change" onclick="return false;">Change</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<!-- 6. CONFIRM BUTTON (fixed bottom) -->
+<div class="confirm-area" id="confirmArea">
+    <div class="confirm-area-inner">
+        <button class="confirm-btn" id="confirmBtn" onclick="confirmRide()">Confirm PlopPlop Pool — 83 HTG</button>
+        <div class="confirm-eta">Estimated arrival: 8 min</div>
+    </div>
+</div>
+
+<!-- 7. RIDE CONFIRMED MODAL -->
+<div class="ride-modal-overlay" id="rideModal">
+    <div class="ride-modal">
+        <div class="ride-modal-header">
+            <div class="ride-modal-check">✅</div>
+            <h2>Ride Confirmed!</h2>
+            <p>Your driver Jean-Marc is on the way</p>
+        </div>
+
+        <div class="driver-card">
+            <div class="driver-top">
+                <div class="driver-avatar">JM</div>
+                <div class="driver-info">
+                    <h4>Jean-Marc B.</h4>
+                    <div class="driver-stats">
+                        <span class="stars">★ 4.8</span>
+                        <span>342 rides</span>
+                    </div>
+                </div>
+            </div>
+            <div class="driver-vehicle-details">
+                <div class="vehicle-detail">
+                    <span class="detail-label">Vehicle</span>
+                    <span class="detail-value">Honda CG 125, Red</span>
+                </div>
+                <div class="vehicle-detail">
+                    <span class="detail-label">Plate</span>
+                    <span class="detail-value">AA-12345</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="eta-banner">
+            <div class="eta-time">3 min</div>
+            <div class="eta-label">Estimated time of arrival</div>
+        </div>
+
+        <div class="modal-actions">
+            <a href="rides-tracking.html" class="track-btn">Track Your Ride</a>
+            <button class="close-modal-btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <img src="assets/img/logo.png?v=2" alt="MyPlopPlop" style="height:50px;margin-bottom:8px;">
+                <p>Everything Haiti needs, delivered fast. From restaurants to hardware stores, we connect you with the best merchants across Haiti.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Shop</h5>
+                <a href="shop.html">All Stores</a>
+                <a href="category.html?cat=restaurants">Restaurants</a>
+                <a href="category.html?cat=supermarkets">Supermarkets</a>
+                <a href="category.html?cat=pharmacies">Pharmacies</a>
+            </div>
+            <div class="footer-col">
+                <h5>Account</h5>
+                <a href="orders.html">My Orders</a>
+                <a href="wallet.html">San Cash</a>
+                <a href="recipients.html">Recipients</a>
+                <a href="help.html">Help Center</a>
+            </div>
+            <div class="footer-col">
+                <h5>Partners</h5>
+                <a href="merchant/dashboard.html">Merchants</a>
+                <a href="rider/dashboard.html">Riders</a>
+                <a href="#">About Us</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 MyPlopPlop. All rights reserved.</span>
+            <span>Powered by <a href="https://48hoursready.com" style="color:var(--white);font-weight:600;">48HoursReady.com</a></span>
+        </div>
+    </div>
+</footer>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span data-i18n="nav.home">Home</span>
+    </a>
+    <a href="shop.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span data-i18n="nav.search">Search</span>
+    </a>
+    <a href="cart.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        <span class="nav-badge" id="navCartBadge">0</span>
+        <span data-i18n="nav.cart">Cart</span>
+    </a>
+    <a href="orders.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span data-i18n="nav.orders">Orders</span>
+    </a>
+    <a href="login.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span data-i18n="nav.account">Account</span>
+    </a>
+</nav>
+
+<script>
+(function() {
+    // ===== CONSTANTS =====
+    const HAITI_ZONES = [
+        { name: 'Petion-Ville', area: 'Ouest' },
+        { name: 'Delmas 33', area: 'Delmas' },
+        { name: 'Delmas 75', area: 'Delmas' },
+        { name: 'Port-au-Prince Centre', area: 'Centre-ville' },
+        { name: 'Tabarre', area: 'Nord-Est' },
+        { name: 'Carrefour', area: 'Sud' },
+        { name: 'Kenscoff', area: 'Montagne' },
+        { name: 'Bourdon', area: 'Ouest' },
+        { name: 'Turgeau', area: 'Centre' },
+        { name: 'Canape Vert', area: 'Centre' }
+    ];
+
+    const FARES = {
+        pool: { base: 150, discount: 67, total: 83, label: 'PlopPlop Pool' },
+        moto: { base: 150, discount: 0, total: 150, label: 'PlopPlop Moto' },
+        car:  { base: 300, discount: 0, total: 300, label: 'PlopPlop Car' }
+    };
+
+    let selectedType = 'pool';
+    let selectedSeats = 1;
+
+    // ===== RIDE TYPE SELECTION =====
+    window.selectRideType = function(card) {
+        document.querySelectorAll('.ride-type-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedType = card.dataset.type;
+        updateFare();
+        updatePoolVisibility();
+    };
+
+    // ===== SEAT SELECTION =====
+    window.selectSeats = function(btn) {
+        document.querySelectorAll('.seat-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedSeats = parseInt(btn.dataset.seats);
+        updateFare();
+    };
+
+    // ===== LOCATION SUGGESTIONS =====
+    window.showSuggestions = function(type) {
+        const container = document.getElementById(type + 'Suggestions');
+        renderSuggestions(container, HAITI_ZONES, type);
+        container.classList.add('show');
+    };
+
+    window.filterSuggestions = function(type) {
+        const input = document.getElementById(type + 'Input');
+        const container = document.getElementById(type + 'Suggestions');
+        const query = input.value.toLowerCase();
+        const filtered = HAITI_ZONES.filter(z => z.name.toLowerCase().includes(query));
+        renderSuggestions(container, filtered, type);
+        container.classList.add('show');
+    };
+
+    function renderSuggestions(container, zones, type) {
+        container.innerHTML = zones.map(z =>
+            '<div class="suggestion-item" onclick="selectSuggestion(\'' + type + '\', \'' + z.name + '\')">' +
+                '<span class="suggestion-icon">📍</span>' +
+                '<span class="suggestion-name">' + z.name + '</span>' +
+                '<span class="suggestion-zone">' + z.area + '</span>' +
+            '</div>'
+        ).join('');
+    }
+
+    window.selectSuggestion = function(type, name) {
+        document.getElementById(type + 'Input').value = name;
+        document.getElementById(type + 'Suggestions').classList.remove('show');
+    };
+
+    // Close suggestions when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.location-input-row')) {
+            document.querySelectorAll('.location-suggestions').forEach(s => s.classList.remove('show'));
+        }
+    });
+
+    // Map search bar also triggers dropoff
+    var mapSearch = document.getElementById('mapSearchInput');
+    if (mapSearch) {
+        mapSearch.addEventListener('input', function() {
+            var dropoff = document.getElementById('dropoffInput');
+            if (dropoff) dropoff.value = this.value;
+        });
+    }
+
+    // ===== FARE CALCULATION =====
+    function updateFare() {
+        var fare = FARES[selectedType];
+        var baseFare = fare.base;
+        var discount = fare.discount;
+        var total = fare.total;
+
+        // Multiply by seats for pool
+        if (selectedType === 'pool' && selectedSeats > 1) {
+            baseFare = fare.base * selectedSeats;
+            discount = fare.discount * selectedSeats;
+            total = fare.total * selectedSeats;
+        }
+
+        document.getElementById('fareBase').textContent = baseFare + ' HTG';
+        document.getElementById('fareDiscount').textContent = '-' + discount + ' HTG';
+        document.getElementById('fareTotal').textContent = total + ' HTG';
+
+        // Show/hide discount row
+        var discountRow = document.getElementById('fareDiscountRow');
+        if (discount > 0) {
+            discountRow.style.display = 'flex';
+        } else {
+            discountRow.style.display = 'none';
+        }
+
+        // Update confirm button
+        document.getElementById('confirmBtn').textContent = 'Confirm ' + fare.label + ' \u2014 ' + total + ' HTG';
+    }
+
+    function updatePoolVisibility() {
+        var poolSection = document.getElementById('poolSection');
+        if (selectedType === 'pool') {
+            poolSection.classList.remove('hidden');
+        } else {
+            poolSection.classList.add('hidden');
+        }
+    }
+
+    // ===== CONFIRM RIDE =====
+    window.confirmRide = function() {
+        var btn = document.getElementById('confirmBtn');
+        btn.disabled = true;
+        btn.textContent = 'Finding your driver...';
+
+        setTimeout(function() {
+            btn.disabled = false;
+            updateFare(); // Reset button text
+            document.getElementById('rideModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }, 2000);
+    };
+
+    window.closeModal = function() {
+        document.getElementById('rideModal').classList.remove('show');
+        document.body.style.overflow = '';
+    };
+
+    // Close modal on overlay click
+    document.getElementById('rideModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+
+    // ===== CART BADGE (from shared logic) =====
+    function updateBadges() {
+        var cart = [];
+        try { cart = JSON.parse(localStorage.getItem('myplopplop_cart')) || []; } catch(e) {}
+        var count = 0;
+        cart.forEach(function(item) { count += item.qty; });
+        var hb = document.getElementById('headerCartBadge');
+        var nb = document.getElementById('navCartBadge');
+        if (hb) { hb.textContent = count; hb.style.display = count > 0 ? 'flex' : 'none'; }
+        if (nb) { nb.textContent = count; nb.style.display = count > 0 ? 'flex' : 'none'; }
+    }
+
+    // ===== INIT =====
+    updateBadges();
+    updateFare();
+    updatePoolVisibility();
+})();
+</script>
+
+<script src="js/i18n.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
+</body>
+</html>
