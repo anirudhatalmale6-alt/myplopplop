@@ -126,9 +126,9 @@
 
     // ── Homepage: Hero ──
     'hero.title': {
-      en: 'Everything Haiti Needs, Delivered Fast',
-      kr: 'Tout sa Ayiti Bezwen, Livre Vit',
-      fr: 'Tout ce dont Haïti a besoin, Livré Rapidement'
+      en: "Haiti's First Marketplace",
+      kr: 'Premye Makèt Ayiti',
+      fr: "Le Premier Marché d'Haïti"
     },
     'hero.description': {
       en: 'Order from restaurants, supermarkets, hardware stores, pharmacies, wholesalers and retailers. Support family and friends in Haiti from anywhere.',
