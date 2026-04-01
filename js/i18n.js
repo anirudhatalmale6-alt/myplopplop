@@ -144,6 +144,50 @@
       kr: 'Retounen',
       es: 'Volver'
     },
+    'btn.send_support': {
+      fr: 'Envoyer du Soutien',
+      en: 'Send Support',
+      kr: 'Voye Sipò',
+      es: 'Enviar Apoyo'
+    },
+
+    // ── Homepage: Tags ──
+    'tag.restaurants': {
+      fr: '🍽️ Restaurants',
+      en: '🍽️ Restaurants',
+      kr: '🍽️ Restoran',
+      es: '🍽️ Restaurantes'
+    },
+    'tag.supermarkets': {
+      fr: '🛒 Supermarchés',
+      en: '🛒 Supermarkets',
+      kr: '🛒 Sipèmache',
+      es: '🛒 Supermercados'
+    },
+    'tag.hardware': {
+      fr: '🔧 Quincailleries',
+      en: '🔧 Hardware Stores',
+      kr: '🔧 Kenkayri',
+      es: '🔧 Ferreterías'
+    },
+    'tag.pharmacies': {
+      fr: '💊 Pharmacies',
+      en: '💊 Pharmacies',
+      kr: '💊 Famasi',
+      es: '💊 Farmacias'
+    },
+    'tag.wholesale': {
+      fr: '📦 Grossistes',
+      en: '📦 Wholesale',
+      kr: '📦 Angwo',
+      es: '📦 Mayoristas'
+    },
+    'tag.retail': {
+      fr: '🏬 Détaillants',
+      en: '🏬 Retail',
+      kr: '🏬 Detay',
+      es: '🏬 Minoristas'
+    },
 
     // ── Homepage: Hero ──
     'hero.title': {
