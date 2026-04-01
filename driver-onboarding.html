@@ -905,6 +905,29 @@ select.input {
             <div class="error-msg">Please enter a valid email</div>
         </div>
 
+        <div class="form-row">
+            <div class="input-group">
+                <label>Driver's License Number <span class="required">*</span></label>
+                <input type="text" class="input" id="licenseNumber" placeholder="e.g., H-12345678">
+                <div class="error-msg">Please enter your license number</div>
+            </div>
+            <div class="input-group">
+                <label>License Expiry Date <span class="required">*</span></label>
+                <input type="date" class="input" id="licenseExpiry">
+                <div class="error-msg">Please enter your license expiry date</div>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Driver's License Photo <span class="required">*</span></label>
+            <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.5rem;">Upload a clear photo of the front of your valid driver's license</p>
+            <div class="upload-zone" onclick="document.getElementById('licenseInput').click()" style="border:2px dashed var(--border);border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s;">
+                <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 0.5rem;display:block;opacity:0.5;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <div id="licenseFileName" style="font-size:0.9rem;color:var(--text-muted);">Tap to upload license photo</div>
+            </div>
+            <input type="file" id="licenseInput" accept="image/*" hidden onchange="document.getElementById('licenseFileName').textContent=this.files[0]?.name||'Tap to upload license photo'">
+        </div>
+
         <div class="input-group">
             <label>Service Type <span class="required">*</span></label>
             <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.5rem;">Select the services you want to provide (you can choose multiple)</p>
