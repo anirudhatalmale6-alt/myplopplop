@@ -193,7 +193,7 @@
     'hero.title': {
       fr: "Le Premier Marché d'Haïti",
       en: "Haiti's First Marketplace",
-      kr: 'Premye Makèt Ayiti',
+      kr: 'Premye Makètplés Ayiti',
       es: 'El Primer Mercado de Haití'
     },
     'hero.description': {
