@@ -905,6 +905,27 @@ select.input {
             <div class="error-msg">Please enter a valid email</div>
         </div>
 
+        <div class="input-group">
+            <label>Service Type <span class="required">*</span></label>
+            <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.5rem;">Select the services you want to provide (you can choose multiple)</p>
+            <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                <label class="service-check" style="display:flex;align-items:center;gap:0.75rem;padding:1rem;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:all 0.2s;">
+                    <input type="checkbox" id="serviceDelivery" checked style="width:20px;height:20px;accent-color:var(--primary-blue);">
+                    <div>
+                        <div style="font-weight:600;font-size:1rem;">&#x1F4E6; Delivery Driver</div>
+                        <div style="font-size:0.85rem;color:var(--text-muted);">Deliver food, groceries, pharmacy orders and more</div>
+                    </div>
+                </label>
+                <label class="service-check" style="display:flex;align-items:center;gap:0.75rem;padding:1rem;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:all 0.2s;">
+                    <input type="checkbox" id="serviceRideshare" style="width:20px;height:20px;accent-color:var(--primary-blue);">
+                    <div>
+                        <div style="font-weight:600;font-size:1rem;">&#x1F698; Rideshare Driver</div>
+                        <div style="font-size:0.85rem;color:var(--text-muted);">Transport passengers around the city (coming soon)</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
         <div class="step-actions">
             <div></div>
             <button class="btn-continue" onclick="goToStep(2)">Continue</button>
