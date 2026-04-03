@@ -1,7 +1,7 @@
 // MyPlopPlop Service Worker v11
 // Cache-first for static assets, network-first for HTML pages
 
-const CACHE_NAME = 'myplopplop-v19';
+const CACHE_NAME = 'myplopplop-v20';
 
 const PRE_CACHE_URLS = [
   '/',

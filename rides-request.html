@@ -878,6 +878,18 @@
                 <div class="ride-type-name">PlopPlop Car</div>
                 <div class="ride-type-price">From 200 HTG</div>
             </div>
+            <div class="ride-type-card" data-type="suv" onclick="selectRideType(this)">
+                <div class="ride-type-icon">🚙</div>
+                <div class="ride-type-name">PlopPlop SUV</div>
+                <div class="ride-type-price">From 500 HTG</div>
+                <div class="ride-type-badge" style="background:#1D3557;">Premium</div>
+            </div>
+            <div class="ride-type-card" data-type="armored" onclick="selectRideType(this)">
+                <div class="ride-type-icon">🛡️</div>
+                <div class="ride-type-name">PlopPlop Blende</div>
+                <div class="ride-type-price">From 1500 HTG</div>
+                <div class="ride-type-badge" style="background:#b8860b;">VIP Security</div>
+            </div>
         </div>
 
         <!-- 3. PICKUP & DROPOFF FORM -->
@@ -1107,9 +1119,11 @@
     ];
 
     const FARES = {
-        pool: { base: 150, discount: 67, total: 83, label: 'PlopPlop Pataj' },
-        moto: { base: 150, discount: 0, total: 150, label: 'PlopPlop Moto' },
-        car:  { base: 300, discount: 0, total: 300, label: 'PlopPlop Car' }
+        pool:    { base: 150,  discount: 67, total: 83,   label: 'PlopPlop Pataj' },
+        moto:    { base: 150,  discount: 0,  total: 150,  label: 'PlopPlop Moto' },
+        car:     { base: 300,  discount: 0,  total: 300,  label: 'PlopPlop Car' },
+        suv:     { base: 500,  discount: 0,  total: 500,  label: 'PlopPlop SUV' },
+        armored: { base: 1500, discount: 0,  total: 1500, label: 'PlopPlop Blende' }
     };
 
     let selectedType = 'pool';
