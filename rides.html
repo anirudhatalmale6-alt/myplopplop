@@ -702,8 +702,14 @@
         <div class="ride-card featured">
             <img src="assets/img/plopplop-souwout-logo.png" alt="PlopPlop Pataj" style="height:56px;margin:0 auto var(--space-md);display:block;">
             <h3>PlopPlop Pataj</h3>
-            <p class="ride-desc">Share with others going your way. Cheapest option — split the fare and save big.</p>
+            <p class="ride-desc">Share a car with up to 3 others going your way. Cheapest option — split the fare and save big.</p>
             <div class="ride-price">75 <small>HTG &amp; up</small></div>
+        </div>
+        <div class="ride-card featured" style="border-color:#f59e0b;">
+            <img src="assets/img/plopplop-souwout-logo.png" alt="PlopPlop Moto Pataj" style="height:56px;margin:0 auto var(--space-md);display:block;">
+            <h3>PlopPlop Moto Pataj</h3>
+            <p class="ride-desc">Share a moto ride with 1 other passenger (+2 total). Fast and affordable through traffic.</p>
+            <div class="ride-price">60 <small>HTG &amp; up</small></div>
         </div>
         <div class="ride-card">
             <img src="assets/img/plopplop-souwout-logo.png" alt="PlopPlop Moto" style="height:56px;margin:0 auto var(--space-md);display:block;">
@@ -854,7 +860,8 @@
             <div class="form-group">
                 <label>Ride Type</label>
                 <div class="ride-type-selector">
-                    <button type="button" class="ride-type-btn active" data-type="pool">🚐 Pool</button>
+                    <button type="button" class="ride-type-btn active" data-type="pool">🚐 Pataj</button>
+                    <button type="button" class="ride-type-btn" data-type="motopool">🏍️ Moto Pataj</button>
                     <button type="button" class="ride-type-btn" data-type="moto">🏍️ Moto</button>
                     <button type="button" class="ride-type-btn" data-type="car">🚗 Car</button>
                 </div>
@@ -974,52 +981,52 @@ rideTypeBtns.forEach(btn => {
 
 // Fare estimation mock data
 const FARE_DATA = {
-    // [pickup][dropoff] = { pool, moto, car }
+    // [pickup][dropoff] = { pool, motopool, moto, car }
     'petion-ville': {
-        'delmas':       { pool: 100, moto: 150, car: 275 },
-        'pap-centre':   { pool: 125, moto: 200, car: 350 },
-        'tabarre':      { pool: 150, moto: 225, car: 400 },
-        'carrefour':    { pool: 175, moto: 275, car: 475 },
-        'kenscoff':     { pool: 125, moto: 200, car: 325 },
+        'delmas':       { pool: 100, motopool: 60,  moto: 150, car: 275 },
+        'pap-centre':   { pool: 125, motopool: 80,  moto: 200, car: 350 },
+        'tabarre':      { pool: 150, motopool: 90,  moto: 225, car: 400 },
+        'carrefour':    { pool: 175, motopool: 110, moto: 275, car: 475 },
+        'kenscoff':     { pool: 125, motopool: 80,  moto: 200, car: 325 },
     },
     'delmas': {
-        'petion-ville': { pool: 100, moto: 150, car: 275 },
-        'pap-centre':   { pool: 75,  moto: 125, car: 225 },
-        'tabarre':      { pool: 100, moto: 150, car: 250 },
-        'carrefour':    { pool: 150, moto: 225, car: 400 },
-        'kenscoff':     { pool: 175, moto: 275, car: 475 },
+        'petion-ville': { pool: 100, motopool: 60,  moto: 150, car: 275 },
+        'pap-centre':   { pool: 75,  motopool: 50,  moto: 125, car: 225 },
+        'tabarre':      { pool: 100, motopool: 60,  moto: 150, car: 250 },
+        'carrefour':    { pool: 150, motopool: 90,  moto: 225, car: 400 },
+        'kenscoff':     { pool: 175, motopool: 110, moto: 275, car: 475 },
     },
     'pap-centre': {
-        'petion-ville': { pool: 125, moto: 200, car: 350 },
-        'delmas':       { pool: 75,  moto: 125, car: 225 },
-        'tabarre':      { pool: 125, moto: 200, car: 325 },
-        'carrefour':    { pool: 100, moto: 150, car: 275 },
-        'kenscoff':     { pool: 200, moto: 300, car: 525 },
+        'petion-ville': { pool: 125, motopool: 80,  moto: 200, car: 350 },
+        'delmas':       { pool: 75,  motopool: 50,  moto: 125, car: 225 },
+        'tabarre':      { pool: 125, motopool: 80,  moto: 200, car: 325 },
+        'carrefour':    { pool: 100, motopool: 60,  moto: 150, car: 275 },
+        'kenscoff':     { pool: 200, motopool: 120, moto: 300, car: 525 },
     },
     'tabarre': {
-        'petion-ville': { pool: 150, moto: 225, car: 400 },
-        'delmas':       { pool: 100, moto: 150, car: 250 },
-        'pap-centre':   { pool: 125, moto: 200, car: 325 },
-        'carrefour':    { pool: 200, moto: 300, car: 525 },
-        'kenscoff':     { pool: 225, moto: 350, car: 575 },
+        'petion-ville': { pool: 150, motopool: 90,  moto: 225, car: 400 },
+        'delmas':       { pool: 100, motopool: 60,  moto: 150, car: 250 },
+        'pap-centre':   { pool: 125, motopool: 80,  moto: 200, car: 325 },
+        'carrefour':    { pool: 200, motopool: 120, moto: 300, car: 525 },
+        'kenscoff':     { pool: 225, motopool: 140, moto: 350, car: 575 },
     },
     'carrefour': {
-        'petion-ville': { pool: 175, moto: 275, car: 475 },
-        'delmas':       { pool: 150, moto: 225, car: 400 },
-        'pap-centre':   { pool: 100, moto: 150, car: 275 },
-        'tabarre':      { pool: 200, moto: 300, car: 525 },
-        'kenscoff':     { pool: 250, moto: 375, car: 625 },
+        'petion-ville': { pool: 175, motopool: 110, moto: 275, car: 475 },
+        'delmas':       { pool: 150, motopool: 90,  moto: 225, car: 400 },
+        'pap-centre':   { pool: 100, motopool: 60,  moto: 150, car: 275 },
+        'tabarre':      { pool: 200, motopool: 120, moto: 300, car: 525 },
+        'kenscoff':     { pool: 250, motopool: 150, moto: 375, car: 625 },
     },
     'kenscoff': {
-        'petion-ville': { pool: 125, moto: 200, car: 325 },
-        'delmas':       { pool: 175, moto: 275, car: 475 },
-        'pap-centre':   { pool: 200, moto: 300, car: 525 },
-        'tabarre':      { pool: 225, moto: 350, car: 575 },
-        'carrefour':    { pool: 250, moto: 375, car: 625 },
+        'petion-ville': { pool: 125, motopool: 80,  moto: 200, car: 325 },
+        'delmas':       { pool: 175, motopool: 110, moto: 275, car: 475 },
+        'pap-centre':   { pool: 200, motopool: 120, moto: 300, car: 525 },
+        'tabarre':      { pool: 225, motopool: 140, moto: 350, car: 575 },
+        'carrefour':    { pool: 250, motopool: 150, moto: 375, car: 625 },
     }
 };
 
-const typeLabels = { pool: 'Pool', moto: 'Moto', car: 'Car' };
+const typeLabels = { pool: 'Pataj', motopool: 'Moto Pataj', moto: 'Moto', car: 'Car' };
 
 document.getElementById('estimateBtn').addEventListener('click', () => {
     const pickup = document.getElementById('pickup').value;
@@ -1048,7 +1055,7 @@ document.getElementById('estimateBtn').addEventListener('click', () => {
     document.getElementById('fareLabel').textContent = 'Estimated ' + typeLabels[selectedRideType] + ' Fare';
     document.getElementById('fareAmount').textContent = fare + ' HTG';
 
-    if (selectedRideType === 'pool' || selectedRideType === 'moto') {
+    if (selectedRideType === 'pool' || selectedRideType === 'motopool' || selectedRideType === 'moto') {
         document.getElementById('fareSavings').textContent = '↓ You save ' + savings + ' HTG vs private car';
         document.getElementById('fareSavings').style.display = 'inline-flex';
         document.getElementById('fareCompare').textContent = 'Private car: ~' + soloFare + ' HTG for same route';

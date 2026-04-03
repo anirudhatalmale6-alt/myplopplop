@@ -868,6 +868,12 @@
                 <div class="ride-type-price">From 75 HTG</div>
                 <div class="ride-type-badge">Save 60%</div>
             </div>
+            <div class="ride-type-card" data-type="motopool" onclick="selectRideType(this)">
+                <div class="ride-type-icon">🏍️👥</div>
+                <div class="ride-type-name">Moto Pataj</div>
+                <div class="ride-type-price">From 60 HTG</div>
+                <div class="ride-type-badge" style="background:#f59e0b;">+2 Riders</div>
+            </div>
             <div class="ride-type-card" data-type="moto" onclick="selectRideType(this)">
                 <div class="ride-type-icon">🏍️</div>
                 <div class="ride-type-name">PlopPlop Moto</div>
@@ -1119,11 +1125,12 @@
     ];
 
     const FARES = {
-        pool:    { base: 150,  discount: 67, total: 83,   label: 'PlopPlop Pataj' },
-        moto:    { base: 150,  discount: 0,  total: 150,  label: 'PlopPlop Moto' },
-        car:     { base: 300,  discount: 0,  total: 300,  label: 'PlopPlop Car' },
-        suv:     { base: 500,  discount: 0,  total: 500,  label: 'PlopPlop SUV' },
-        armored: { base: 1500, discount: 0,  total: 1500, label: 'PlopPlop Blende' }
+        pool:     { base: 150,  discount: 67, total: 83,   label: 'PlopPlop Pataj', maxSeats: 3 },
+        motopool: { base: 120,  discount: 50, total: 60,   label: 'Moto Pataj', maxSeats: 2 },
+        moto:     { base: 150,  discount: 0,  total: 150,  label: 'PlopPlop Moto', maxSeats: 1 },
+        car:      { base: 300,  discount: 0,  total: 300,  label: 'PlopPlop Car', maxSeats: 1 },
+        suv:      { base: 500,  discount: 0,  total: 500,  label: 'PlopPlop SUV', maxSeats: 1 },
+        armored:  { base: 1500, discount: 0,  total: 1500, label: 'PlopPlop Blende', maxSeats: 1 }
     };
 
     let selectedType = 'pool';
@@ -1334,7 +1341,7 @@
 
     function updatePoolVisibility() {
         var poolSection = document.getElementById('poolSection');
-        if (selectedType === 'pool') {
+        if (selectedType === 'pool' || selectedType === 'motopool') {
             poolSection.classList.remove('hidden');
         } else {
             poolSection.classList.add('hidden');

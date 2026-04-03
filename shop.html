@@ -504,16 +504,17 @@ function renderStores(stores) {
         const cat = MOCK.CATEGORIES.find(c => c.id === store.category);
         const catIcon = cat ? cat.icon : '🏪';
         const catName = cat ? cat.name : '';
+        const catColor = cat ? cat.color : '#00209F';
         return `
-            <a href="store.html?id=${store.id}" class="store-card-grid">
-                <div class="store-thumb">${catIcon}</div>
+            <a href="store.html?id=${store.id}" class="store-card-grid" style="border-left:4px solid ${catColor}">
+                <div class="store-thumb" style="background:linear-gradient(135deg, ${catColor}15, ${catColor}30);color:${catColor}">${catIcon}</div>
                 <div class="store-details">
                     <div class="store-top">
                         <span class="store-name">${store.name}</span>
                         ${store.verified ? '<span class="verified-badge">✓ Verified</span>' : ''}
                     </div>
                     <div class="flex items-center gap-xs" style="margin-top:2px;">
-                        <span class="badge badge-gray">${catName}</span>
+                        <span class="badge" style="background:${catColor}15;color:${catColor};border:1px solid ${catColor}30;font-weight:600">${catIcon} ${catName}</span>
                         ${store.open
                             ? '<span class="store-status-open"><span class="dot-live"></span> Open</span>'
                             : '<span class="store-status-closed">Closed</span>'}
