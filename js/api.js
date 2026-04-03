@@ -156,6 +156,35 @@ const API = (() => {
         return await request('GET', '/api/admin/transactions' + qs);
     }
 
+    // Payments
+    async function moncashTopup(amount) {
+        return await request('POST', '/api/payments/moncash/topup', { amount });
+    }
+
+    async function moncashPayRide(rideId) {
+        return await request('POST', '/api/payments/moncash/ride', { rideId });
+    }
+
+    async function natcashTopup(amount, natcashPhone) {
+        return await request('POST', '/api/payments/natcash/topup', { amount, natcashPhone });
+    }
+
+    async function natcashPayRide(rideId) {
+        return await request('POST', '/api/payments/natcash/ride', { rideId });
+    }
+
+    async function walletPayRide(rideId) {
+        return await request('POST', '/api/payments/wallet/ride', { rideId });
+    }
+
+    async function paymentHistory() {
+        return await request('GET', '/api/payments/history');
+    }
+
+    async function verifyMoncash(orderId) {
+        return await request('GET', '/api/payments/moncash/verify?orderId=' + orderId);
+    }
+
     // Health check
     async function health() {
         return await request('GET', '/api/health');
@@ -205,6 +234,7 @@ const API = (() => {
         driverOnboard, driverProfile, driverGoOnline, driverGoOffline, driverUpdateLocation, driverStats,
         createRide, getMyRides, getAvailableRides, getRide, acceptRide, updateRideStatus, cancelRide, rateRide,
         adminDashboard, adminDrivers, adminVerifyDriver, adminRides, adminTransactions,
+        moncashTopup, moncashPayRide, natcashTopup, natcashPayRide, walletPayRide, paymentHistory, verifyMoncash,
         health, updateNavForUser
     };
 })();

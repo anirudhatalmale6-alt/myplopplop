@@ -499,7 +499,7 @@
             </div>
         </div>
 
-        <button class="btn btn-blue btn-lg btn-full btn-round" onclick="closeTopUp()">Top Up Now</button>
+        <button class="btn btn-blue btn-lg btn-full btn-round" id="topUpBtn" onclick="processTopUp()">Top Up Now</button>
         <button class="btn btn-ghost btn-full" style="margin-top:var(--space-sm);" onclick="closeTopUp()">Cancel</button>
     </div>
 </div>
@@ -567,17 +567,63 @@
 </nav>
 
 <script>
-// Load real wallet balance
+var selectedAmount = 2000;
+var selectedMethod = 'card';
+var methodMap = {'Credit / Debit Card': 'card', 'Bank Transfer': 'bank', 'MonCash': 'moncash', 'NatCash': 'natcash'};
+
+// Load real wallet balance and transactions
 (function() {
-    if (API.isLoggedIn()) {
-        API.getMe().then(function(data) {
-            if (data.success && data.data && data.data.wallet) {
-                var bal = data.data.wallet.balance || 0;
+    if (!API.isLoggedIn()) {
+        window.location.href = 'login.html';
+        return;
+    }
+    loadWallet();
+    loadTransactions();
+})();
+
+function loadWallet() {
+    API.getMe().then(function(data) {
+        if (data.success) {
+            var user = data.data || data.user;
+            if (user && user.wallet) {
+                var bal = user.wallet.balance || 0;
                 document.getElementById('walletBalance').innerHTML = bal.toLocaleString('fr-HT') + ' <span style="font-size:var(--text-xl);font-weight:600;">HTG</span>';
             }
-        });
-    }
-})();
+        }
+    });
+}
+
+function loadTransactions() {
+    API.paymentHistory().then(function(data) {
+        if (data.success && data.transactions && data.transactions.length > 0) {
+            var list = document.querySelector('.transaction-list');
+            list.innerHTML = '';
+            data.transactions.forEach(function(tx) {
+                var isCredit = (tx.type === 'topup' || tx.type === 'earning');
+                var icon = tx.type === 'topup' ? '💳' : tx.type === 'earning' ? '💰' : tx.type === 'payment' ? '🛵' : '📤';
+                var methodLabel = tx.method ? ' via ' + tx.method.charAt(0).toUpperCase() + tx.method.slice(1) : '';
+                var date = new Date(tx.createdAt);
+                var dateStr = date.toLocaleDateString('fr-HT', { month: 'short', day: 'numeric' });
+                var desc = tx.description || tx.type;
+                var rideInfo = tx.ride ? (tx.ride.pickup ? tx.ride.pickup.address : '') : '';
+
+                list.innerHTML += '<div class="transaction-item">' +
+                    '<div class="transaction-icon ' + (isCredit ? 'tx-credit' : 'tx-debit') + '">' + icon + '</div>' +
+                    '<div class="transaction-info">' +
+                        '<div class="transaction-desc">' + desc + '</div>' +
+                        '<div class="transaction-sub">' + (rideInfo || methodLabel) + '</div>' +
+                    '</div>' +
+                    '<div>' +
+                        '<div class="transaction-amount ' + (isCredit ? 'amount-credit' : 'amount-debit') + '">' +
+                            (isCredit ? '+' : '-') + tx.amount.toLocaleString('fr-HT') + ' HTG</div>' +
+                        '<div class="transaction-date">' + dateStr + '</div>' +
+                    '</div>' +
+                '</div>';
+            });
+        }
+    });
+}
+
 function openTopUp() {
     document.getElementById('topUpModal').classList.add('show');
 }
@@ -585,17 +631,64 @@ function closeTopUp() {
     document.getElementById('topUpModal').classList.remove('show');
 }
 function selectPreset(btn, amount) {
-    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('.preset-btn').forEach(function(b) { b.classList.remove('selected'); });
     btn.classList.add('selected');
+    selectedAmount = amount;
     document.getElementById('customAmount').value = '';
 }
 function clearPresets() {
-    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('.preset-btn').forEach(function(b) { b.classList.remove('selected'); });
+    selectedAmount = 0;
 }
 function selectPayment(el) {
-    document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+    document.querySelectorAll('.payment-method').forEach(function(m) { m.classList.remove('selected'); });
     el.classList.add('selected');
+    var name = el.querySelector('.payment-method-name').textContent;
+    selectedMethod = methodMap[name] || 'card';
 }
+
+async function processTopUp() {
+    var custom = document.getElementById('customAmount').value;
+    var amount = custom ? parseInt(custom) : selectedAmount;
+
+    if (!amount || amount < 50) {
+        API.toast('Minimum top-up is 50 HTG', 'error');
+        return;
+    }
+
+    var btn = document.getElementById('topUpBtn');
+    btn.disabled = true;
+    btn.textContent = 'Processing...';
+
+    var data;
+    if (selectedMethod === 'moncash') {
+        data = await API.moncashTopup(amount);
+    } else if (selectedMethod === 'natcash') {
+        data = await API.natcashTopup(amount);
+    } else {
+        // Card/bank - use MonCash demo for now
+        data = await API.moncashTopup(amount);
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Top Up Now';
+
+    if (data.success) {
+        if (data.redirectUrl) {
+            // Real MonCash - redirect to payment gateway
+            window.location.href = data.redirectUrl;
+        } else {
+            // Demo mode - show success
+            API.toast(data.message || 'Top-up successful! +' + amount + ' HTG', 'success');
+            closeTopUp();
+            loadWallet();
+            loadTransactions();
+        }
+    } else {
+        API.toast(data.message || 'Top-up failed', 'error');
+    }
+}
+
 // Close modal on overlay click
 document.getElementById('topUpModal').addEventListener('click', function(e) {
     if (e.target === this) closeTopUp();
