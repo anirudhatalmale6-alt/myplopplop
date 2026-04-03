@@ -531,32 +531,202 @@
     </a>
 </nav>
 
+<script src="/js/api.js"></script>
 <script>
-let isOnline = true;
+let isOnline = false;
+let activeRideId = null;
+let activeRideStatus = null;
 
-function toggleOnline() {
-    isOnline = !isOnline;
+// Check login
+if (!API.isLoggedIn()) {
+    window.location.href = '../login.html';
+}
+
+// Load dashboard data from API
+async function loadDashboard() {
+    const user = API.getUser();
+    if (!user) return;
+
+    // Load driver stats
+    const statsData = await API.driverStats();
+    if (statsData.success) {
+        const s = statsData.stats;
+        const statValues = document.querySelectorAll('.rider-stat .value');
+        if (statValues[0]) statValues[0].textContent = s.totalDeliveries + s.totalRides;
+        if (statValues[1]) statValues[1].textContent = s.totalEarnings.toLocaleString();
+        if (statValues[2]) statValues[2].textContent = s.rating;
+        isOnline = s.isOnline;
+        updateOnlineUI();
+    }
+
+    // Check for available rides
+    await checkAvailableRides();
+
+    // Load recent rides
+    const ridesData = await API.getMyRides();
+    if (ridesData.success && ridesData.rides.length > 0) {
+        const recentSection = document.querySelector('.recent-section');
+        const items = recentSection.querySelectorAll('.recent-item');
+        items.forEach(i => i.remove());
+
+        ridesData.rides.slice(0, 5).forEach(ride => {
+            const icon = ride.type === 'delivery' ? '📦' : '🚗';
+            const time = new Date(ride.createdAt).toLocaleString('fr-HT', { hour: '2-digit', minute: '2-digit' });
+            const div = document.createElement('div');
+            div.className = 'recent-item';
+            div.innerHTML = `
+                <div class="recent-icon">${icon}</div>
+                <div class="recent-info">
+                    <div class="name">${ride.pickup.address} → ${ride.dropoff.address}</div>
+                    <div class="detail">${ride.status} • ${time}</div>
+                </div>
+                <div class="recent-amount" style="color:${ride.status === 'delivered' ? 'var(--success)' : 'var(--text-muted)'}">
+                    ${ride.status === 'delivered' ? '+' + ride.fare.driverEarning + ' HTG' : ride.status}
+                </div>`;
+            recentSection.appendChild(div);
+        });
+    }
+}
+
+async function checkAvailableRides() {
+    const available = await API.getAvailableRides();
+    const activeEl = document.getElementById('activeDelivery');
+    const waitingEl = document.getElementById('waitingState');
+
+    if (available.success && available.rides.length > 0) {
+        const ride = available.rides[0];
+        activeRideId = ride._id;
+        activeRideStatus = 'requested';
+        activeEl.style.display = 'block';
+        waitingEl.style.display = 'none';
+
+        activeEl.querySelector('.active-delivery-header h4').textContent = '🟡 New Order Available';
+        activeEl.querySelector('.badge').textContent = 'Waiting';
+        activeEl.querySelector('.badge').className = 'badge badge-yellow';
+
+        const pickup = activeEl.querySelector('.route-point:first-child .route-address');
+        const dropoff = activeEl.querySelector('.route-point:last-child .route-address');
+        pickup.textContent = ride.pickup.address;
+        dropoff.textContent = ride.dropoff.address;
+
+        const metaItems = activeEl.querySelectorAll('.delivery-meta-item span:last-child');
+        if (metaItems[0]) metaItems[0].innerHTML = '<strong>' + (ride.items?.length || 0) + '</strong> items';
+        if (metaItems[1]) metaItems[1].innerHTML = '<strong>' + ride.distanceKm + '</strong> km';
+        if (metaItems[2]) metaItems[2].innerHTML = '<strong>' + ride.fare.driverEarning + ' HTG</strong>';
+
+        updateRideButtons();
+    } else {
+        // Check for active rides (accepted/in_progress)
+        const myRides = await API.getMyRides('accepted');
+        if (myRides.success && myRides.rides.length > 0) {
+            showActiveRide(myRides.rides[0]);
+        } else {
+            const inProgress = await API.getMyRides('in_progress');
+            if (inProgress.success && inProgress.rides.length > 0) {
+                showActiveRide(inProgress.rides[0]);
+            } else {
+                activeEl.style.display = 'none';
+                waitingEl.style.display = 'block';
+            }
+        }
+    }
+}
+
+function showActiveRide(ride) {
+    const activeEl = document.getElementById('activeDelivery');
+    const waitingEl = document.getElementById('waitingState');
+    activeRideId = ride._id;
+    activeRideStatus = ride.status;
+    activeEl.style.display = 'block';
+    waitingEl.style.display = 'none';
+
+    const statusLabels = { accepted: 'Accepted', picking_up: 'Picking Up', in_progress: 'In Progress' };
+    activeEl.querySelector('.active-delivery-header h4').textContent = '🟢 Active ' + (ride.type === 'delivery' ? 'Delivery' : 'Ride');
+    activeEl.querySelector('.badge').textContent = statusLabels[ride.status] || ride.status;
+
+    const pickup = activeEl.querySelector('.route-point:first-child .route-address');
+    const dropoff = activeEl.querySelector('.route-point:last-child .route-address');
+    pickup.textContent = ride.pickup.address;
+    dropoff.textContent = ride.dropoff.address;
+
+    updateRideButtons();
+}
+
+function updateRideButtons() {
+    const actionsDiv = document.querySelector('.delivery-actions');
+    let html = '';
+    if (activeRideStatus === 'requested') {
+        html = '<a href="#" class="btn btn-blue btn-full" onclick="doAccept();return false;">✅ Accept Order</a>';
+    } else if (activeRideStatus === 'accepted') {
+        html = '<a href="#" class="btn btn-blue btn-full" onclick="doStatus(\'picking_up\');return false;">📍 Heading to Pickup</a>';
+    } else if (activeRideStatus === 'picking_up') {
+        html = '<a href="#" class="btn btn-blue btn-full" onclick="doStatus(\'in_progress\');return false;">🚗 Picked Up - Driving</a>';
+    } else if (activeRideStatus === 'in_progress') {
+        html = '<a href="#" class="btn btn-red btn-full" onclick="doStatus(\'delivered\');return false;">✅ Mark Delivered</a>';
+    }
+    actionsDiv.innerHTML = html;
+}
+
+async function doAccept() {
+    const data = await API.acceptRide(activeRideId);
+    if (data.success) {
+        activeRideStatus = 'accepted';
+        API.toast('Order accepted!', 'success');
+        updateRideButtons();
+        document.querySelector('.badge').textContent = 'Accepted';
+        document.querySelector('.badge').className = 'badge badge-blue';
+    } else {
+        API.toast(data.message || 'Failed', 'error');
+    }
+}
+
+async function doStatus(status) {
+    const data = await API.updateRideStatus(activeRideId, status);
+    if (data.success) {
+        if (status === 'delivered') {
+            API.toast('Delivery complete! Earnings added.', 'success');
+            document.getElementById('activeDelivery').style.display = 'none';
+            document.getElementById('waitingState').style.display = 'block';
+            activeRideId = null;
+            loadDashboard();
+        } else {
+            activeRideStatus = status;
+            updateRideButtons();
+            const labels = { picking_up: 'Picking Up', in_progress: 'In Progress' };
+            document.querySelector('.badge').textContent = labels[status];
+            API.toast('Status updated', 'success');
+        }
+    } else {
+        API.toast(data.message || 'Failed', 'error');
+    }
+}
+
+function updateOnlineUI() {
     const toggle = document.getElementById('onlineToggle');
     const statusText = document.getElementById('statusText');
-    const statusDot = document.getElementById('statusDot');
-
     if (isOnline) {
         toggle.classList.add('active');
-        statusDot.className = 'dot online';
-        statusText.innerHTML = '<span class="dot online" id="statusDot"></span>You\'re Online &mdash; Waiting for orders';
+        statusText.innerHTML = '<span class="dot online" id="statusDot"></span>You\'re Online — Waiting for orders';
     } else {
         toggle.classList.remove('active');
-        statusDot.className = 'dot offline';
         statusText.innerHTML = '<span class="dot offline" id="statusDot"></span>You\'re Offline';
     }
 }
 
-function markDelivered() {
-    if (confirm('Mark this delivery as completed?')) {
-        document.getElementById('activeDelivery').style.display = 'none';
-        document.getElementById('waitingState').style.display = 'block';
+async function toggleOnline() {
+    const data = isOnline ? await API.driverGoOffline() : await API.driverGoOnline();
+    if (data.success) {
+        isOnline = !isOnline;
+        updateOnlineUI();
+        API.toast(isOnline ? 'You are now online!' : 'You went offline', isOnline ? 'success' : 'info');
     }
 }
+
+// Auto-refresh available rides every 15 seconds
+setInterval(checkAvailableRides, 15000);
+
+// Load on page load
+loadDashboard();
 </script>
 
 <script src="/js/i18n.js"></script>

@@ -608,13 +608,80 @@ function startResendTimer() {
     }, 1000);
 }
 
-// Login form (demo)
-document.getElementById('loginForm').addEventListener('submit', (e) => {
+// Login form - connected to backend
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    alert('Login functionality will be connected to the backend.');
+    const btn = e.target.querySelector('button[type="submit"]');
+    const prefix = e.target.querySelector('.phone-prefix').value;
+    const phone = prefix + e.target.querySelector('input[type="tel"]').value.replace(/\s/g, '');
+    const password = e.target.querySelector('input[type="password"]').value;
+
+    btn.textContent = 'Logging in...';
+    btn.disabled = true;
+
+    const data = await API.login(phone, password);
+    if (data.success) {
+        API.toast('Welcome back, ' + data.user.name + '!', 'success');
+        setTimeout(() => {
+            if (data.user.role === 'admin') window.location.href = 'admin/dashboard.html';
+            else if (data.user.role === 'driver') window.location.href = 'rider/dashboard.html';
+            else window.location.href = 'index.html';
+        }, 800);
+    } else {
+        API.toast(data.message || 'Login failed', 'error');
+        btn.textContent = 'Login';
+        btn.disabled = false;
+    }
+});
+
+// Sign up form - connected to backend
+const origSignupHandler = document.getElementById('signupForm').onsubmit;
+document.getElementById('signupForm').removeEventListener('submit', () => {});
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const btn = form.querySelector('button[type="submit"]');
+    const name = form.querySelector('input[type="text"]').value;
+    const prefix = form.querySelector('.phone-prefix').value;
+    const phone = prefix + document.getElementById('signupPhone').value.replace(/\s/g, '');
+    const pins = form.querySelectorAll('input[type="password"]');
+    const password = pins[0].value;
+    const confirmPin = pins[1].value;
+
+    if (password !== confirmPin) {
+        API.toast('PINs do not match', 'error');
+        return;
+    }
+    if (password.length < 4) {
+        API.toast('PIN must be at least 4 digits', 'error');
+        return;
+    }
+
+    const roleMap = { customer: 'customer', merchant: 'merchant', rider: 'driver' };
+    const selectedType = form.querySelector('input[name="userType"]:checked').value;
+    const role = roleMap[selectedType] || 'customer';
+
+    const lang = localStorage.getItem('pp_lang') || 'fr';
+
+    btn.textContent = 'Creating account...';
+    btn.disabled = true;
+
+    const data = await API.register(name, phone, password, role, lang);
+    if (data.success) {
+        API.toast('Account created! Welcome to MyPlopPlop!', 'success');
+        setTimeout(() => {
+            if (role === 'driver') window.location.href = 'driver-onboarding.html';
+            else window.location.href = 'index.html';
+        }, 800);
+    } else {
+        API.toast(data.message || 'Registration failed', 'error');
+        btn.textContent = 'Create Account';
+        btn.disabled = false;
+    }
 });
 </script>
 
+<script src="/js/api.js"></script>
 <script src="/js/i18n.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
 </body>
