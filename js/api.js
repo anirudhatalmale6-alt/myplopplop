@@ -3,7 +3,7 @@
 
 const API = (() => {
     // Backend URL - change this when deploying to production
-    const BASE_URL = 'https://availability-decorative-collectible-heath.trycloudflare.com';
+    const BASE_URL = 'https://merry-sufficient-automatic-distant.trycloudflare.com';
 
     // Token management
     function getToken() { return localStorage.getItem('pp_token'); }
