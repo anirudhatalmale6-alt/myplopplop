@@ -613,21 +613,140 @@
     return entry[lang] || entry[DEFAULT_LANG] || key;
   }
 
+  // Bulk text map: English text -> translations for all languages
+  // This auto-translates page content without needing data-i18n attributes
+  var bulkTextMap = {
+    // Rides page
+    'Choose Your Ride': { fr: 'Choisissez votre Trajet', kr: 'Chwazi Transpò Ou', es: 'Elija su Viaje' },
+    'From budget-friendly to premium comfort': { fr: 'Du plus économique au plus confortable', kr: 'Soti nan pi bon mache rive nan pi konfòtab', es: 'Desde económico hasta premium' },
+    'Share rides, save money. Haiti\'s first ride-sharing pool.': { fr: 'Partagez les trajets, économisez. Le premier pool de covoiturage d\'Haïti.', kr: 'Pataje transpò, ekonomize lajan. Premye pool pataj transpò Ayiti.', es: 'Comparta viajes, ahorre dinero. El primer pool de viajes compartidos de Haití.' },
+    'Request a Ride': { fr: 'Demander un Trajet', kr: 'Mande yon Transpò', es: 'Solicitar un Viaje' },
+    'Request a Pool Ride': { fr: 'Demander un Trajet Pool', kr: 'Mande yon Transpò Pool', es: 'Solicitar un Viaje Pool' },
+    'Drive with Us': { fr: 'Conduisez avec Nous', kr: 'Kondwi avèk Nou', es: 'Conduzca con Nosotros' },
+    'PlopPlop Pool': { fr: 'PlopPlop Pool', kr: 'PlopPlop Pool', es: 'PlopPlop Pool' },
+    'PlopPlop Moto': { fr: 'PlopPlop Moto', kr: 'PlopPlop Moto', es: 'PlopPlop Moto' },
+    'PlopPlop Car': { fr: 'PlopPlop Machin', kr: 'PlopPlop Machin', es: 'PlopPlop Auto' },
+    'Share with others going your way. Cheapest option \u2014 split the fare and save big.': { fr: 'Partagez avec d\'autres allant dans votre direction. L\'option la moins chère.', kr: 'Pataje ak lòt moun ki prale menm kote. Opsyon pi bon mache a \u2014 separe pri a epi ekonomize anpil.', es: 'Comparta con otros que van en su dirección. La opción más barata.' },
+    'Private motorcycle ride. Fast through traffic \u2014 get there in half the time.': { fr: 'Trajet privé en moto. Rapide dans le trafic.', kr: 'Transpò moto prive. Rapid nan trafik la \u2014 rive nan mwatye tan an.', es: 'Viaje privado en moto. Rápido en el tráfico.' },
+    'Private car ride. Comfortable, air-conditioned, and secure door-to-door.': { fr: 'Trajet privé en voiture. Confortable et climatisé.', kr: 'Transpò machin prive. Konfòtab, klim, epi sekirize pòt-a-pòt.', es: 'Viaje privado en auto. Cómodo y con aire acondicionado.' },
+    'How PlopPlop Pool Works': { fr: 'Comment fonctionne PlopPlop Pool', kr: 'Kijan PlopPlop Pool Mache', es: 'Cómo funciona PlopPlop Pool' },
+    'Four simple steps to a cheaper ride': { fr: 'Quatre étapes simples pour un trajet moins cher', kr: 'Kat etap senp pou yon transpò pi bon mache', es: 'Cuatro pasos simples para un viaje más barato' },
+    'Enter Destination': { fr: 'Entrez la Destination', kr: 'Antre Destinasyon', es: 'Ingrese Destino' },
+    'Tell us where you\'re going': { fr: 'Dites-nous où vous allez', kr: 'Di nou ki kote ou prale', es: 'Díganos a dónde va' },
+    'Match with Riders': { fr: 'Trouvez des Passagers', kr: 'Jwenn Pasaje', es: 'Encuentre Pasajeros' },
+    'We find others heading your way': { fr: 'Nous trouvons d\'autres allant dans votre direction', kr: 'Nou jwenn lòt moun ki prale menm kote', es: 'Encontramos a otros que van en su dirección' },
+    'Share the Ride': { fr: 'Partagez le Trajet', kr: 'Pataje Transpò a', es: 'Comparta el Viaje' },
+    'Split the cost, save money': { fr: 'Partagez le coût, économisez', kr: 'Separe pri a, ekonomize lajan', es: 'Divida el costo, ahorre dinero' },
+    'Arrive Safely': { fr: 'Arrivez en Sécurité', kr: 'Rive an Sekirite', es: 'Llegue con Seguridad' },
+    'Tracked ride with verified drivers': { fr: 'Trajet suivi avec des chauffeurs vérifiés', kr: 'Transpò swivi ak chofè verifye', es: 'Viaje rastreado con conductores verificados' },
+    'Save up to 60% per ride': { fr: 'Économisez jusqu\'à 60% par trajet', kr: 'Ekonomize jiska 60% pa transpò', es: 'Ahorre hasta 60% por viaje' },
+    'Reduce traffic congestion': { fr: 'Réduisez les embouteillages', kr: 'Diminye anbouteyaj', es: 'Reduzca la congestión' },
+    'Lower your carbon footprint': { fr: 'Réduisez votre empreinte carbone', kr: 'Diminye anprent kabòn ou', es: 'Reduzca su huella de carbono' },
+    'Verified drivers only': { fr: 'Chauffeurs vérifiés uniquement', kr: 'Chofè verifye sèlman', es: 'Solo conductores verificados' },
+    'Real-time GPS tracking': { fr: 'Suivi GPS en temps réel', kr: 'Swiv GPS an tan reyèl', es: 'Rastreo GPS en tiempo real' },
+    'In-app payments': { fr: 'Paiements dans l\'appli', kr: 'Peman nan aplikasyon an', es: 'Pagos en la app' },
+    'Estimate Your Fare': { fr: 'Estimez votre Tarif', kr: 'Estime Pri Transpò Ou', es: 'Estime su Tarifa' },
+    'See how much you\'ll save with PlopPlop': { fr: 'Voyez combien vous économiserez avec PlopPlop', kr: 'Gade konbyen ou pral ekonomize ak PlopPlop', es: 'Vea cuánto ahorrará con PlopPlop' },
+    'Pickup Zone': { fr: 'Zone de Départ', kr: 'Zòn Depa', es: 'Zona de Recogida' },
+    'Dropoff Zone': { fr: 'Zone d\'Arrivée', kr: 'Zòn Rive', es: 'Zona de Destino' },
+    'Get Fare Estimate': { fr: 'Obtenir l\'Estimation', kr: 'Jwenn Estimasyon Pri', es: 'Obtener Estimación' },
+    'Earn More with Every Seat': { fr: 'Gagnez Plus à Chaque Siège', kr: 'Touche Plis ak Chak Plas', es: 'Gane Más con Cada Asiento' },
+    'Start Driving': { fr: 'Commencez à Conduire', kr: 'Kòmanse Kondwi', es: 'Empiece a Conducir' },
+    'More earnings': { fr: 'Plus de gains', kr: 'Plis revni', es: 'Más ganancias' },
+    'Active drivers': { fr: 'Chauffeurs actifs', kr: 'Chofè aktif', es: 'Conductores activos' },
+    'Flexible hours': { fr: 'Horaires flexibles', kr: 'Lè fleksib', es: 'Horarios flexibles' },
+
+    // Shop / Store pages
+    'All Stores': { fr: 'Tous les Magasins', kr: 'Tout Magazen yo', es: 'Todas las Tiendas' },
+    'Add to Cart': { fr: 'Ajouter au Panier', kr: 'Mete nan Panye', es: 'Agregar al Carrito' },
+    'View Store': { fr: 'Voir le Magasin', kr: 'Gade Magazen', es: 'Ver Tienda' },
+    'Popular Stores': { fr: 'Magasins Populaires', kr: 'Magazen Popilè', es: 'Tiendas Populares' },
+    'All Categories': { fr: 'Toutes les Catégories', kr: 'Tout Kategori yo', es: 'Todas las Categorías' },
+    'Search stores, products, or categories...': { fr: 'Rechercher magasins, produits...', kr: 'Chèche magazen, pwodwi, oswa kategori...', es: 'Buscar tiendas, productos...' },
+
+    // Cart / Checkout
+    'Your Cart': { fr: 'Votre Panier', kr: 'Panye Ou', es: 'Su Carrito' },
+    'Checkout': { fr: 'Payer', kr: 'Peye', es: 'Pagar' },
+    'Subtotal': { fr: 'Sous-total', kr: 'Sou-total', es: 'Subtotal' },
+    'Delivery Fee': { fr: 'Frais de Livraison', kr: 'Frè Livrezon', es: 'Tarifa de Entrega' },
+    'Total': { fr: 'Total', kr: 'Total', es: 'Total' },
+    'Place Order': { fr: 'Passer la Commande', kr: 'Pase Kòmand', es: 'Realizar Pedido' },
+    'Order Summary': { fr: 'Résumé de la Commande', kr: 'Rezime Kòmand', es: 'Resumen del Pedido' },
+
+    // Diaspora
+    'Support Family in Haiti': { fr: 'Soutenez votre Famille en Haïti', kr: 'Sipòte Fanmi nan Ayiti', es: 'Apoye a su Familia en Haití' },
+    'Send Support Now': { fr: 'Envoyer du Soutien', kr: 'Voye Sipò Kounye a', es: 'Enviar Apoyo Ahora' },
+    'My Recipients': { fr: 'Mes Bénéficiaires', kr: 'Benefisyè Mwen yo', es: 'Mis Beneficiarios' },
+    'Add Recipient': { fr: 'Ajouter un Bénéficiaire', kr: 'Ajoute Benefisyè', es: 'Agregar Beneficiario' },
+
+    // Help
+    'Help Center': { fr: "Centre d'Aide", kr: 'Sant Èd', es: 'Centro de Ayuda' },
+    'How can we help you?': { fr: 'Comment pouvons-nous vous aider ?', kr: 'Kijan nou ka ede ou?', es: '¿Cómo podemos ayudarle?' },
+    'Contact Us': { fr: 'Contactez-nous', kr: 'Kontakte Nou', es: 'Contáctenos' },
+
+    // Driver page
+    'Become a Driver Partner': { fr: 'Devenez Partenaire Chauffeur', kr: 'Vin yon Patnè Chofè', es: 'Sea un Socio Conductor' },
+    'Sign Up to Drive': { fr: "S'inscrire pour Conduire", kr: 'Enskri pou Kondwi', es: 'Regístrese para Conducir' },
+    'Apply as Moto Partner': { fr: 'Postuler comme Moto', kr: 'Aplike kòm Patnè Moto', es: 'Aplicar como Moto' },
+    'Apply as Car Partner': { fr: 'Postuler comme Voiture', kr: 'Aplike kòm Patnè Machin', es: 'Aplicar como Auto' },
+    'Continue as Moto Partner': { fr: 'Continuer comme Moto', kr: 'Kontinye kòm Patnè Moto', es: 'Continuar como Moto' },
+    'Continue as Car Partner': { fr: 'Continuer comme Voiture', kr: 'Kontinye kòm Patnè Machin', es: 'Continuar como Auto' },
+    'Simple Onboarding': { fr: 'Inscription Simple', kr: 'Enskripsyon Senp', es: 'Registro Simple' },
+
+    // Rider dashboard
+    'Dashboard': { fr: 'Tableau de Bord', kr: 'Tablo Kontwòl', es: 'Panel de Control' },
+    'Go Online': { fr: 'Se Mettre en Ligne', kr: 'Mete An Liy', es: 'Ponerse en Línea' },
+    'Go Offline': { fr: 'Se Mettre Hors Ligne', kr: 'Mete Deyò Liy', es: 'Ponerse Fuera de Línea' },
+    'Available Rides': { fr: 'Trajets Disponibles', kr: 'Transpò Disponib', es: 'Viajes Disponibles' },
+    'Recent Deliveries': { fr: 'Livraisons Récentes', kr: 'Dènye Livrezon yo', es: 'Entregas Recientes' },
+    'Today\'s Earnings': { fr: "Gains d'Aujourd'hui", kr: 'Revni Jodi a', es: 'Ganancias de Hoy' },
+    'Total Rides': { fr: 'Total Trajets', kr: 'Total Transpò', es: 'Total Viajes' },
+    'Earnings': { fr: 'Gains', kr: 'Revni', es: 'Ganancias' },
+    'Rating': { fr: 'Note', kr: 'Nòt', es: 'Calificación' },
+
+    // Common
+    'See all': { fr: 'Voir tout', kr: 'Wè tout', es: 'Ver todo' },
+    'View all': { fr: 'Voir tout', kr: 'Wè tout', es: 'Ver todo' },
+    'Loading...': { fr: 'Chargement...', kr: 'Ap chaje...', es: 'Cargando...' },
+    'Change location': { fr: 'Changer de lieu', kr: 'Chanje lokasyon', es: 'Cambiar ubicación' },
+    'No results found': { fr: 'Aucun résultat trouvé', kr: 'Pa gen rezilta', es: 'No se encontraron resultados' },
+    'Free Delivery on First Order!': { fr: 'Livraison Gratuite sur la Première Commande !', kr: 'Livrezon Gratis sou Premye Kòmand!', es: '¡Entrega Gratis en el Primer Pedido!' },
+
+    // Footer
+    'Haiti\'s First Marketplace. From restaurants to hardware stores, we connect you with the best merchants across Haiti.': {
+      fr: "Le Premier Marché d'Haïti. Des restaurants aux quincailleries, nous vous connectons avec les meilleurs marchands d'Haïti.",
+      kr: 'Premye Makètplés Ayiti. Soti nan restoran rive nan kenkayri, nou konekte ou ak pi bon machann nan tout Ayiti.',
+      es: 'El Primer Mercado de Haití. De restaurantes a ferreterías, lo conectamos con los mejores comerciantes de Haití.'
+    },
+    'Shop': { fr: 'Boutique', kr: 'Boutik', es: 'Tienda' },
+    'Account': { fr: 'Compte', kr: 'Kont', es: 'Cuenta' },
+    'Partners': { fr: 'Partenaires', kr: 'Patnè', es: 'Socios' },
+    'Merchants': { fr: 'Marchands', kr: 'Machann', es: 'Comerciantes' },
+    'Riders': { fr: 'Livreurs', kr: 'Chofè', es: 'Repartidores' },
+    'About Us': { fr: 'À Propos', kr: 'Sou Nou', es: 'Sobre Nosotros' },
+    'My Orders': { fr: 'Mes Commandes', kr: 'Kòmand Mwen yo', es: 'Mis Pedidos' },
+    'San Cash': { fr: 'San Cash', kr: 'San Cash', es: 'San Cash' },
+    'Recipients': { fr: 'Bénéficiaires', kr: 'Benefisyè', es: 'Beneficiarios' }
+  };
+
   function applyTranslations(lang) {
     lang = lang || getLang();
 
+    // 1. Apply data-i18n attributes
     var els = document.querySelectorAll('[data-i18n]');
     for (var i = 0; i < els.length; i++) {
       var key = els[i].getAttribute('data-i18n');
       els[i].textContent = t(key, lang);
     }
 
+    // 2. Apply data-i18n-placeholder attributes
     var placeholders = document.querySelectorAll('[data-i18n-placeholder]');
     for (var j = 0; j < placeholders.length; j++) {
       var pKey = placeholders[j].getAttribute('data-i18n-placeholder');
       placeholders[j].setAttribute('placeholder', t(pKey, lang));
     }
 
+    // 3. Update active language link
     var links = document.querySelectorAll('[data-lang]');
     for (var k = 0; k < links.length; k++) {
       var linkLang = links[k].getAttribute('data-lang');
@@ -639,6 +758,37 @@
     }
 
     document.documentElement.setAttribute('lang', lang);
+
+    // 4. Bulk text replacement for elements without data-i18n
+    if (lang !== 'en') {
+      applyBulkTranslations(lang);
+    }
+  }
+
+  function applyBulkTranslations(lang) {
+    var walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+      null,
+      false
+    );
+    var node;
+    while (node = walker.nextNode()) {
+      var text = node.nodeValue.trim();
+      if (!text || text.length < 3) continue;
+      // Skip script/style/textarea content
+      var parent = node.parentNode;
+      if (!parent) continue;
+      var tag = parent.tagName;
+      if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'TEXTAREA' || tag === 'INPUT') continue;
+      // Skip already translated elements
+      if (parent.hasAttribute && parent.hasAttribute('data-i18n')) continue;
+
+      var entry = bulkTextMap[text];
+      if (entry && entry[lang]) {
+        node.nodeValue = node.nodeValue.replace(text, entry[lang]);
+      }
+    }
   }
 
   function switchLang(lang) {
