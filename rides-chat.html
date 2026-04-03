@@ -420,20 +420,20 @@ body {
 
 <!-- CHAT HEADER -->
 <div class="chat-header">
-    <button class="chat-back" onclick="history.back()" title="Back">
+    <button class="chat-back" onclick="goBack()" title="Back">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
     <img src="assets/img/plopplop-souwout-logo.png" alt="PlopPlop SouWout" style="height:32px;border-radius:6px;flex-shrink:0;">
-    <div class="chat-driver-avatar">JM</div>
+    <div class="chat-driver-avatar" id="driverAvatar">--</div>
     <div class="chat-driver-info">
-        <div class="chat-driver-name">Jean-Marc B.</div>
-        <div class="chat-driver-status">
+        <div class="chat-driver-name" id="driverName">Loading...</div>
+        <div class="chat-driver-status" id="driverStatus">
             <span class="online-dot"></span>
-            <span>Online — Honda CG 125</span>
+            <span>Connecting...</span>
         </div>
     </div>
     <div class="chat-header-actions">
-        <button class="chat-header-btn" title="Call driver" onclick="alert('Calling Jean-Marc B...')">
+        <button class="chat-header-btn" title="Call" id="callBtn" style="display:none">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
         </button>
         <button class="chat-header-btn" title="Share location" onclick="shareMyLocation()">
@@ -450,58 +450,20 @@ body {
     <div class="route-text">
         <div class="route-from">
             <span class="route-dot pickup"></span>
-            <span class="route-label">Petion-Ville, Rue Faubert</span>
+            <span class="route-label" id="pickupLabel">--</span>
         </div>
         <div class="route-to">
             <span class="route-dot dropoff"></span>
-            <span class="route-label">Delmas 33</span>
+            <span class="route-label" id="dropoffLabel">--</span>
         </div>
     </div>
-    <a href="rides-tracking.html" class="eta-chip">ETA 8 min</a>
+    <a href="#" class="eta-chip" id="rideStatusChip">Loading</a>
 </div>
 
 <!-- MESSAGES -->
 <div class="chat-messages" id="chatMessages">
     <div class="chat-date-divider"><span>Today</span></div>
-
-    <div class="chat-system-msg">Ride confirmed. You can now chat with your driver.</div>
-
-    <!-- Driver sends first -->
-    <div class="chat-bubble received">
-        Bonjou! Mwen se Jean-Marc, chofè ou. M ap vini kounye a.
-        <div class="bubble-time">2:34 PM</div>
-    </div>
-
-    <div class="chat-bubble sent">
-        Bonjou Jean-Marc! Mwen devan bilding blan an, bò pye mango a.
-        <div class="bubble-time">
-            2:34 PM
-            <span class="bubble-check read"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
-        </div>
-    </div>
-
-    <div class="chat-bubble received">
-        Ok, m wè li. M ap rive nan 3 minit.
-        <div class="bubble-time">2:35 PM</div>
-    </div>
-
-    <div class="chat-bubble sent">
-        Pafè, mwen tann ou.
-        <div class="bubble-time">
-            2:35 PM
-            <span class="bubble-check read"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
-        </div>
-    </div>
-
-    <!-- Driver shares location -->
-    <div class="chat-bubble received">
-        Men kote m ye:
-        <div class="location-share" onclick="alert('Opening map...')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            <span>Live Location — Petion-Ville</span>
-        </div>
-        <div class="bubble-time">2:36 PM</div>
-    </div>
+    <div class="chat-system-msg">Ride confirmed. You can now chat.</div>
 
     <!-- Typing indicator -->
     <div class="typing-indicator" id="typingIndicator">
@@ -541,22 +503,51 @@ body {
     </div>
 </div>
 
+<script src="js/api.js"></script>
+<script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
 <script>
 (function() {
+    // Check auth
+    if (!API.isLoggedIn()) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // Get ride ID from URL
+    var params = new URLSearchParams(window.location.search);
+    var rideId = params.get('id');
+    if (!rideId) {
+        API.toast('No ride specified', 'error');
+        setTimeout(function() { window.location.href = 'orders.html'; }, 1500);
+        return;
+    }
+
+    var currentUser = API.getUser();
     var chatMessages = document.getElementById('chatMessages');
     var chatInput = document.getElementById('chatInput');
     var sendBtn = document.getElementById('sendBtn');
     var typingIndicator = document.getElementById('typingIndicator');
     var quickReplies = document.querySelectorAll('.quick-reply-btn');
+    var socket = null;
+    var otherName = '';
+    var typingTimeout = null;
+    var rideData = null;
+
+    // Initialize
+    loadRideAndChat();
 
     // Auto-resize textarea
     chatInput.addEventListener('input', function() {
         this.style.height = 'auto';
         this.style.height = Math.min(this.scrollHeight, 120) + 'px';
         sendBtn.disabled = this.value.trim() === '';
+        // Send typing indicator
+        if (socket && this.value.trim()) {
+            socket.emit('typing', { rideId: rideId, name: currentUser.name, role: currentUser.role });
+        }
     });
 
-    // Send on Enter (Shift+Enter for newline)
+    // Send on Enter
     chatInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -564,7 +555,6 @@ body {
         }
     });
 
-    // Send button click
     sendBtn.addEventListener('click', function() {
         if (chatInput.value.trim()) sendMessage(chatInput.value.trim());
     });
@@ -576,16 +566,140 @@ body {
         });
     });
 
-    function sendMessage(text) {
-        var now = new Date();
-        var timeStr = now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+    async function loadRideAndChat() {
+        try {
+            // Load ride details
+            var rideRes = await API.getRide(rideId);
+            if (!rideRes.success) {
+                API.toast('Could not load ride', 'error');
+                return;
+            }
+            rideData = rideRes.ride;
 
+            // Determine who the other person is
+            var isDriver = currentUser.role === 'driver';
+            if (isDriver) {
+                otherName = rideData.customer ? (rideData.customer.name || 'Customer') : 'Customer';
+            } else {
+                otherName = rideData.driver ? (rideData.driver.name || 'Driver') : 'Driver';
+            }
+
+            // Update header
+            var initials = otherName.split(' ').map(function(w) { return w[0]; }).join('').substring(0, 2).toUpperCase();
+            document.getElementById('driverAvatar').textContent = initials;
+            document.getElementById('driverName').textContent = otherName;
+            document.getElementById('driverStatus').innerHTML = '<span class="online-dot"></span><span>Online</span>';
+
+            // Update ride info banner
+            if (rideData.pickup) {
+                document.getElementById('pickupLabel').textContent = rideData.pickup.address || rideData.pickup.name || 'Pickup';
+            }
+            if (rideData.dropoff) {
+                document.getElementById('dropoffLabel').textContent = rideData.dropoff.address || rideData.dropoff.name || 'Dropoff';
+            }
+            var statusMap = { pending: 'Pending', accepted: 'Accepted', 'picked-up': 'En Route', delivered: 'Done', cancelled: 'Cancelled' };
+            var chip = document.getElementById('rideStatusChip');
+            chip.textContent = statusMap[rideData.status] || rideData.status;
+            chip.href = 'rides-tracking.html?id=' + rideId;
+
+            // Load chat messages
+            var chatRes = await API.getChatMessages(rideId);
+            if (chatRes.success && chatRes.messages) {
+                chatRes.messages.forEach(function(msg) {
+                    addMessageBubble(msg);
+                });
+            }
+            scrollToBottom();
+
+            // Connect Socket.io for real-time
+            connectSocket();
+
+        } catch (err) {
+            console.error('Chat init error:', err);
+            API.toast('Connection error', 'error');
+        }
+    }
+
+    function connectSocket() {
+        try {
+            socket = io(API.BASE_URL, { transports: ['websocket', 'polling'] });
+
+            socket.on('connect', function() {
+                console.log('Socket connected');
+                socket.emit('join_ride', { rideId: rideId });
+            });
+
+            // Receive new messages in real-time
+            socket.on('new_message', function(msg) {
+                // Don't duplicate messages we sent ourselves
+                var senderId = msg.sender && msg.sender._id ? msg.sender._id : msg.sender;
+                if (senderId === currentUser._id) return;
+
+                addMessageBubble(msg);
+                scrollToBottom();
+            });
+
+            // Typing indicator
+            socket.on('user_typing', function(data) {
+                if (data.name !== currentUser.name) {
+                    typingIndicator.classList.add('show');
+                    scrollToBottom();
+                    clearTimeout(typingTimeout);
+                    typingTimeout = setTimeout(function() {
+                        typingIndicator.classList.remove('show');
+                    }, 2000);
+                }
+            });
+
+            socket.on('disconnect', function() {
+                console.log('Socket disconnected');
+            });
+        } catch (err) {
+            console.log('Socket.io not available, using polling');
+        }
+    }
+
+    function addMessageBubble(msg) {
+        var senderId = msg.sender && msg.sender._id ? msg.sender._id : msg.sender;
+        var isMine = senderId === currentUser._id;
+        var time = new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        if (msg.type === 'system') {
+            var sys = document.createElement('div');
+            sys.className = 'chat-system-msg';
+            sys.textContent = msg.message;
+            chatMessages.insertBefore(sys, typingIndicator);
+            return;
+        }
+
+        var bubble = document.createElement('div');
+        bubble.className = 'chat-bubble ' + (isMine ? 'sent' : 'received');
+
+        if (msg.type === 'location') {
+            bubble.innerHTML = escapeHtml(msg.message) +
+                '<div class="location-share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Location Shared</span></div>' +
+                '<div class="bubble-time">' + time + '</div>';
+        } else {
+            var checkHtml = '';
+            if (isMine) {
+                checkHtml = ' <span class="bubble-check' + (msg.read ? ' read' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>';
+            }
+            bubble.innerHTML = escapeHtml(msg.message) +
+                '<div class="bubble-time">' + time + checkHtml + '</div>';
+        }
+
+        chatMessages.insertBefore(bubble, typingIndicator);
+    }
+
+    async function sendMessage(text) {
+        // Optimistically add bubble
+        var now = new Date();
+        var timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         var bubble = document.createElement('div');
         bubble.className = 'chat-bubble sent';
         bubble.innerHTML = escapeHtml(text) +
             '<div class="bubble-time">' + timeStr +
             ' <span class="bubble-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span></div>';
-
         chatMessages.insertBefore(bubble, typingIndicator);
         scrollToBottom();
 
@@ -595,64 +709,12 @@ body {
         sendBtn.disabled = true;
         chatInput.focus();
 
-        // Simulate driver typing + reply
-        setTimeout(function() {
-            typingIndicator.classList.add('show');
-            scrollToBottom();
-        }, 800);
-
-        setTimeout(function() {
-            typingIndicator.classList.remove('show');
-            var reply = getDriverReply(text);
-            var replyTime = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
-            var replyBubble = document.createElement('div');
-            replyBubble.className = 'chat-bubble received';
-            replyBubble.innerHTML = escapeHtml(reply) +
-                '<div class="bubble-time">' + replyTime + '</div>';
-            chatMessages.insertBefore(replyBubble, typingIndicator);
-            scrollToBottom();
-
-            // Mark sent messages as read
-            document.querySelectorAll('.bubble-check:not(.read)').forEach(function(c) {
-                c.classList.add('read');
-            });
-        }, 2500 + Math.random() * 1500);
-    }
-
-    function getDriverReply(msg) {
-        var lower = msg.toLowerCase();
-        if (lower.includes('here') || lower.includes('la!') || lower.includes('mwen la')) {
-            return 'Ok mwen wè ou! M ap vini kounye a.';
+        // Send to backend
+        var res = await API.sendChatMessage(rideId, text);
+        if (!res.success) {
+            bubble.style.opacity = '0.5';
+            API.toast('Failed to send message', 'error');
         }
-        if (lower.includes('wait') || lower.includes('tann') || lower.includes('moman')) {
-            return 'Pa gen pwoblèm, m ap tann ou.';
-        }
-        if (lower.includes('color') || lower.includes('koulè') || lower.includes('moto')) {
-            return 'Moto wouj, Honda CG 125. Plak AA-12345.';
-        }
-        if (lower.includes('where') || lower.includes('kote') || lower.includes('wè')) {
-            return 'Mwen sou Rue Faubert, bò restoran ble a. Ou wè m?';
-        }
-        if (lower.includes('luggage') || lower.includes('bagaj') || lower.includes('valiz')) {
-            return 'Ok, pa gen pwoblèm pou bagaj la!';
-        }
-        if (lower.includes('call') || lower.includes('rele')) {
-            return 'Ok m ap rele ou kounye a!';
-        }
-        if (lower.includes('thank') || lower.includes('mèsi') || lower.includes('merci')) {
-            return 'Avèk plezi! Bon vwayaj!';
-        }
-        if (lower.includes('cancel') || lower.includes('anile')) {
-            return 'Ou vle anile vwayaj la? Tanpri itilize bouton anile a nan paj tracking la.';
-        }
-        // Default replies
-        var defaults = [
-            'Ok, konprann!',
-            'Wi wi, pa gen pwoblèm.',
-            'M ap rive talè!',
-            'Ok, mwen note sa.'
-        ];
-        return defaults[Math.floor(Math.random() * defaults.length)];
     }
 
     function escapeHtml(text) {
@@ -667,42 +729,48 @@ body {
         }, 50);
     }
 
-    // Share location
+    // Share location via GPS
     window.shareMyLocation = function() {
-        var now = new Date();
-        var timeStr = now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
-
-        var bubble = document.createElement('div');
-        bubble.className = 'chat-bubble sent';
-        bubble.innerHTML = 'Men kote m ye:' +
-            '<div class="location-share" onclick="alert(\'Opening map...\')">' +
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
-            '<span>My Live Location</span></div>' +
-            '<div class="bubble-time">' + timeStr +
-            ' <span class="bubble-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span></div>';
-
-        chatMessages.insertBefore(bubble, typingIndicator);
-        scrollToBottom();
-
-        // Driver responds
-        setTimeout(function() {
-            typingIndicator.classList.add('show');
-            scrollToBottom();
-        }, 1000);
-        setTimeout(function() {
-            typingIndicator.classList.remove('show');
-            var replyTime = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
-            var rb = document.createElement('div');
-            rb.className = 'chat-bubble received';
-            rb.innerHTML = 'Mèsi! Mwen wè kote ou ye, m ap vini dirèk.' +
-                '<div class="bubble-time">' + replyTime + '</div>';
-            chatMessages.insertBefore(rb, typingIndicator);
-            scrollToBottom();
-        }, 3000);
+        if (!navigator.geolocation) {
+            API.toast('GPS not available', 'error');
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(function(pos) {
+            var lat = pos.coords.latitude.toFixed(6);
+            var lng = pos.coords.longitude.toFixed(6);
+            var locText = 'My location: ' + lat + ', ' + lng;
+            sendMessage(locText);
+        }, function() {
+            API.toast('Could not get location', 'error');
+        });
     };
 
-    // Scroll to bottom on load
-    scrollToBottom();
+    // Back button
+    window.goBack = function() {
+        if (rideId) {
+            window.location.href = 'rides-tracking.html?id=' + rideId;
+        } else {
+            history.back();
+        }
+    };
+
+    // Poll for new messages every 10s as fallback
+    setInterval(async function() {
+        try {
+            var res = await API.getUnreadCount(rideId);
+            if (res.success && res.count > 0) {
+                // Reload messages
+                var chatRes = await API.getChatMessages(rideId);
+                if (chatRes.success && chatRes.messages) {
+                    // Clear existing and reload
+                    var existing = chatMessages.querySelectorAll('.chat-bubble');
+                    existing.forEach(function(b) { b.remove(); });
+                    chatRes.messages.forEach(function(msg) { addMessageBubble(msg); });
+                    scrollToBottom();
+                }
+            }
+        } catch(e) {}
+    }, 10000);
 })();
 </script>
 

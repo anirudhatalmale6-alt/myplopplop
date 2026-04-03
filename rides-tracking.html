@@ -1168,10 +1168,24 @@
         });
     });
 
-    document.getElementById('btnSubmitRating').addEventListener('click', function() {
+    document.getElementById('btnSubmitRating').addEventListener('click', async function() {
         if (selectedRating === 0) {
-            // Default to 5 stars if none selected
             selectedRating = 5;
+        }
+        // Get ride ID from URL
+        var params = new URLSearchParams(window.location.search);
+        var rideId = params.get('id');
+        if (rideId) {
+            try {
+                var res = await API.rateRide(rideId, selectedRating);
+                if (res.success) {
+                    console.log('Rating submitted:', selectedRating);
+                } else {
+                    console.log('Rating save note:', res.message);
+                }
+            } catch(e) {
+                console.log('Rating API error:', e);
+            }
         }
         document.getElementById('ratingForm').classList.add('hidden');
         document.getElementById('ratingThanks').classList.add('show');
@@ -1202,9 +1216,19 @@
         }
     };
 
-    window.cancelRide = function() {
+    window.cancelRide = async function() {
         if (confirm('Are you sure you want to cancel this ride? Cancellation fees may apply.')) {
-            alert('Ride cancelled. You will not be charged.');
+            var params = new URLSearchParams(window.location.search);
+            var rideId = params.get('id');
+            if (rideId) {
+                var res = await API.cancelRide(rideId, 'Customer cancelled');
+                if (res.success) {
+                    API.toast('Ride cancelled', 'info');
+                    setTimeout(function() { window.location.href = 'orders.html'; }, 1500);
+                    return;
+                }
+            }
+            alert('Ride cancelled.');
         }
     };
 })();

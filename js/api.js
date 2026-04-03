@@ -185,6 +185,23 @@ const API = (() => {
         return await request('GET', '/api/payments/moncash/verify?orderId=' + orderId);
     }
 
+    // Chat
+    async function getChatMessages(rideId) {
+        return await request('GET', '/api/chat/' + rideId);
+    }
+
+    async function sendChatMessage(rideId, message) {
+        return await request('POST', '/api/chat/' + rideId, { message });
+    }
+
+    async function getUnreadCount(rideId) {
+        return await request('GET', '/api/chat/' + rideId + '/unread');
+    }
+
+    async function getQuickReplies() {
+        return await request('GET', '/api/chat/quick/replies');
+    }
+
     // Health check
     async function health() {
         return await request('GET', '/api/health');
@@ -235,6 +252,7 @@ const API = (() => {
         createRide, getMyRides, getAvailableRides, getRide, acceptRide, updateRideStatus, cancelRide, rateRide,
         adminDashboard, adminDrivers, adminVerifyDriver, adminRides, adminTransactions,
         moncashTopup, moncashPayRide, natcashTopup, natcashPayRide, walletPayRide, paymentHistory, verifyMoncash,
+        getChatMessages, sendChatMessage, getUnreadCount, getQuickReplies,
         health, updateNavForUser
     };
 })();
