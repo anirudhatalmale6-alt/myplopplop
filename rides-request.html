@@ -1021,8 +1021,8 @@
         </div>
 
         <div class="modal-actions">
-            <a href="rides-tracking.html" class="track-btn">Track Your Ride</a>
-            <a href="rides-chat.html" class="close-modal-btn" style="text-decoration:none;text-align:center;border-color:var(--primary-blue);color:var(--primary-blue);">Message Driver</a>
+            <a href="tracking.html" class="track-btn">Track Your Ride</a>
+            <button class="close-modal-btn" onclick="closeModal()">Close</button>
         </div>
     </div>
 </div>
@@ -1244,7 +1244,7 @@
         // Distance estimate (5km default, will use real GPS later)
         var distanceKm = 5;
 
-        var rideType = selectedType === 'pool' ? 'ride' : 'ride';
+        var rideType = 'ride';
         var data = await API.createRide(rideType,
             { address: pickup },
             { address: dropoff },
@@ -1253,9 +1253,17 @@
         );
 
         if (data.success) {
-            // Show confirmed modal with real data
-            var ride = data.ride;
+            var ride = data.ride || data.data;
+            var rideId = ride._id || ride.id;
+
+            // Update modal with real data
             document.querySelector('.ride-modal-header p').textContent = 'Looking for a driver nearby...';
+            document.querySelector('.ride-modal-header h2').textContent = 'Ride Requested!';
+
+            // Update track button to link to real ride
+            var trackBtn = document.querySelector('.track-btn');
+            if (trackBtn) trackBtn.href = 'tracking.html?id=' + rideId;
+
             document.getElementById('rideModal').classList.add('show');
             document.body.style.overflow = 'hidden';
             API.toast('Ride requested! Fare: ' + ride.fare.total + ' HTG', 'success');
