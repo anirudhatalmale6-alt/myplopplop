@@ -7,7 +7,7 @@
   'use strict';
 
   var STORAGE_KEY = 'myplopplop_lang';
-  var DEFAULT_LANG = 'fr';
+  var DEFAULT_LANG = 'kr';
 
   var translations = {
 
@@ -99,6 +99,306 @@
       en: '© 2026 MyPlopPlop. All rights reserved.',
       kr: '© 2026 MyPlopPlop. Tout dwa rezève.',
       es: '© 2026 MyPlopPlop. Todos los derechos reservados.'
+    },
+
+    // ── Login / Signup ──
+    'auth.welcome': {
+      fr: 'Bienvenue ! Connectez-vous pour continuer.',
+      en: 'Welcome back! Sign in to continue.',
+      kr: 'Byenveni! Konekte pou kontinye.',
+      es: 'Bienvenido! Inicie sesión para continuar.'
+    },
+    'auth.login': {
+      fr: 'Connexion',
+      en: 'Login',
+      kr: 'Konekte',
+      es: 'Iniciar Sesión'
+    },
+    'auth.signup': {
+      fr: "S'inscrire",
+      en: 'Sign Up',
+      kr: 'Kreye Kont',
+      es: 'Registrarse'
+    },
+    'auth.phone': {
+      fr: 'Numéro de Téléphone',
+      en: 'Phone Number',
+      kr: 'Nimewo Telefòn',
+      es: 'Número de Teléfono'
+    },
+    'auth.pin': {
+      fr: 'PIN / Mot de passe',
+      en: 'PIN / Password',
+      kr: 'PIN / Modpas',
+      es: 'PIN / Contraseña'
+    },
+    'auth.forgot': {
+      fr: 'PIN oublié ?',
+      en: 'Forgot PIN?',
+      kr: 'Bliye PIN?',
+      es: '¿Olvidó su PIN?'
+    },
+    'auth.login_btn': {
+      fr: 'Connexion',
+      en: 'Login',
+      kr: 'Konekte',
+      es: 'Iniciar Sesión'
+    },
+    'auth.create_account': {
+      fr: 'Créer un Compte',
+      en: 'Create Account',
+      kr: 'Kreye Kont',
+      es: 'Crear Cuenta'
+    },
+    'auth.fullname': {
+      fr: 'Nom Complet',
+      en: 'Full Name',
+      kr: 'Non Konplè',
+      es: 'Nombre Completo'
+    },
+    'auth.create_pin': {
+      fr: 'Créer PIN',
+      en: 'Create PIN',
+      kr: 'Kreye PIN',
+      es: 'Crear PIN'
+    },
+    'auth.confirm_pin': {
+      fr: 'Confirmer PIN',
+      en: 'Confirm PIN',
+      kr: 'Konfime PIN',
+      es: 'Confirmar PIN'
+    },
+    'auth.iam': {
+      fr: 'Je suis :',
+      en: 'I am a:',
+      kr: 'Mwen se:',
+      es: 'Soy:'
+    },
+    'auth.customer': {
+      fr: 'Client',
+      en: 'Customer',
+      kr: 'Kliyan',
+      es: 'Cliente'
+    },
+    'auth.merchant': {
+      fr: 'Marchand',
+      en: 'Merchant',
+      kr: 'Machann',
+      es: 'Comerciante'
+    },
+    'auth.rider': {
+      fr: 'Livreur',
+      en: 'Rider',
+      kr: 'Chofè',
+      es: 'Repartidor'
+    },
+    'auth.google': {
+      fr: 'Continuer avec Google',
+      en: 'Continue with Google',
+      kr: 'Kontinye ak Google',
+      es: 'Continuar con Google'
+    },
+    'auth.facebook': {
+      fr: 'Continuer avec Facebook',
+      en: 'Continue with Facebook',
+      kr: 'Kontinye ak Facebook',
+      es: 'Continuar con Facebook'
+    },
+    'auth.agree_terms': {
+      fr: "J'accepte les Conditions d'Utilisation et la Politique de Confidentialité",
+      en: 'I agree to the Terms of Service and Privacy Policy',
+      kr: 'Mwen dakò ak Kondisyon Sèvis yo ak Règ Konfidansyalite',
+      es: 'Acepto los Términos de Servicio y la Política de Privacidad'
+    },
+
+    // ── Rides ──
+    'rides.request': {
+      fr: 'Demander un Trajet',
+      en: 'Request a Ride',
+      kr: 'Mande yon Transpò',
+      es: 'Solicitar un Viaje'
+    },
+    'rides.where_going': {
+      fr: 'Où allez-vous ?',
+      en: 'Where are you going?',
+      kr: 'Ki kote ou prale?',
+      es: '¿A dónde va?'
+    },
+    'rides.pickup': {
+      fr: 'Lieu de départ',
+      en: 'Current location',
+      kr: 'Kote ou ye a',
+      es: 'Ubicación actual'
+    },
+    'rides.dropoff': {
+      fr: 'Destination',
+      en: 'Where to?',
+      kr: 'Ki kote?',
+      es: '¿A dónde?'
+    },
+    'rides.pickup_dest': {
+      fr: 'Départ & Destination',
+      en: 'Pickup & Destination',
+      kr: 'Kote Depa & Destinasyon',
+      es: 'Recogida & Destino'
+    },
+    'rides.confirm': {
+      fr: 'Confirmer',
+      en: 'Confirm',
+      kr: 'Konfime',
+      es: 'Confirmar'
+    },
+    'rides.fare_estimate': {
+      fr: 'Estimation du Tarif',
+      en: 'Fare Estimate',
+      kr: 'Estimasyon Pri',
+      es: 'Estimación de Tarifa'
+    },
+    'rides.distance': {
+      fr: 'Distance',
+      en: 'Distance',
+      kr: 'Distans',
+      es: 'Distancia'
+    },
+    'rides.base_fare': {
+      fr: 'Tarif de base',
+      en: 'Base fare',
+      kr: 'Pri debaz',
+      es: 'Tarifa base'
+    },
+    'rides.total': {
+      fr: 'Total',
+      en: 'Total',
+      kr: 'Total',
+      es: 'Total'
+    },
+    'rides.track': {
+      fr: 'Suivre votre Trajet',
+      en: 'Track Your Ride',
+      kr: 'Swiv Transpò Ou',
+      es: 'Rastrear su Viaje'
+    },
+
+    // ── Orders ──
+    'orders.title': {
+      fr: 'Mes Commandes',
+      en: 'My Orders',
+      kr: 'Kòmand Mwen yo',
+      es: 'Mis Pedidos'
+    },
+    'orders.subtitle': {
+      fr: 'Suivez vos livraisons actives et consultez les commandes passées',
+      en: 'Track active deliveries and view past orders',
+      kr: 'Swiv livrezon aktif yo epi gade ansyen kòmand yo',
+      es: 'Rastree entregas activas y vea pedidos anteriores'
+    },
+    'orders.active': {
+      fr: 'Actives',
+      en: 'Active',
+      kr: 'Aktif',
+      es: 'Activos'
+    },
+    'orders.completed': {
+      fr: 'Terminées',
+      en: 'Completed',
+      kr: 'Fini',
+      es: 'Completados'
+    },
+    'orders.all': {
+      fr: 'Toutes',
+      en: 'All',
+      kr: 'Tout',
+      es: 'Todos'
+    },
+
+    // ── Tracking ──
+    'tracking.eta': {
+      fr: 'Arrivée Estimée',
+      en: 'Estimated Arrival',
+      kr: 'Lè Ou Dwe Rive',
+      es: 'Llegada Estimada'
+    },
+    'tracking.progress': {
+      fr: 'Progrès de la Commande',
+      en: 'Order Progress',
+      kr: 'Pwogresyon Kòmand',
+      es: 'Progreso del Pedido'
+    },
+    'tracking.report': {
+      fr: 'Signaler un Problème',
+      en: 'Report Issue',
+      kr: 'Rapòte Pwoblèm',
+      es: 'Reportar Problema'
+    },
+
+    // ── Wallet ──
+    'wallet.balance': {
+      fr: 'Solde San Cash',
+      en: 'San Cash Balance',
+      kr: 'Balans San Cash',
+      es: 'Saldo San Cash'
+    },
+    'wallet.topup': {
+      fr: 'Recharger',
+      en: 'Top Up',
+      kr: 'Rechaje',
+      es: 'Recargar'
+    },
+    'wallet.send': {
+      fr: 'Envoyer',
+      en: 'Send',
+      kr: 'Voye',
+      es: 'Enviar'
+    },
+    'wallet.withdraw': {
+      fr: 'Retirer',
+      en: 'Withdraw',
+      kr: 'Retire',
+      es: 'Retirar'
+    },
+    'wallet.recent': {
+      fr: 'Transactions Récentes',
+      en: 'Recent Transactions',
+      kr: 'Dènye Tranzaksyon yo',
+      es: 'Transacciones Recientes'
+    },
+
+    // ── Driver / Rider ──
+    'rider.dashboard': {
+      fr: 'Tableau de Bord',
+      en: 'Dashboard',
+      kr: 'Tablo Kontwòl',
+      es: 'Panel de Control'
+    },
+    'rider.earnings': {
+      fr: 'Gains',
+      en: 'Earnings',
+      kr: 'Revni',
+      es: 'Ganancias'
+    },
+    'rider.go_online': {
+      fr: 'Se Mettre en Ligne',
+      en: 'Go Online',
+      kr: 'Mete An Liy',
+      es: 'Ponerse en Línea'
+    },
+    'rider.go_offline': {
+      fr: 'Se Mettre Hors Ligne',
+      en: 'Go Offline',
+      kr: 'Mete Deyò Liy',
+      es: 'Ponerse Fuera de Línea'
+    },
+    'rider.available_rides': {
+      fr: 'Trajets Disponibles',
+      en: 'Available Rides',
+      kr: 'Transpò Disponib',
+      es: 'Viajes Disponibles'
+    },
+    'rider.recent_deliveries': {
+      fr: 'Livraisons Récentes',
+      en: 'Recent Deliveries',
+      kr: 'Dènye Livrezon yo',
+      es: 'Entregas Recientes'
     },
 
     // ── Common Buttons ──

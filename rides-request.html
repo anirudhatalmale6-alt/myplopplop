@@ -810,7 +810,7 @@
         <a href="#">Change location</a>
     </div>
     <div class="flex items-center" style="gap:4px;flex-wrap:wrap;">
-        <a href="#" data-lang="fr" style="font-weight:700">🇫🇷 Français</a>
+        <a href="#" data-lang="fr">🇫🇷 Français</a>
         <a href="#" data-lang="en">🇬🇧 English</a>
         <a href="#" data-lang="kr">🇭🇹 Kreyòl</a>
         <a href="#" data-lang="es">🇪🇸 Español</a>
@@ -847,7 +847,7 @@
         <div class="map-section">
             <div class="map-search-bar">
                 <span class="search-icon">📍</span>
-                <input type="text" id="mapSearchInput" placeholder="Where are you going?" autocomplete="off">
+                <input type="text" id="mapSearchInput" placeholder="Where are you going?" data-i18n-placeholder="rides.where_going" autocomplete="off">
             </div>
             <div class="map-placeholder">
                 <div class="map-placeholder-text">
@@ -882,7 +882,7 @@
 
         <!-- 3. PICKUP & DROPOFF FORM -->
         <div class="ride-section">
-            <div class="ride-section-title">📍 Pickup & Destination</div>
+            <div class="ride-section-title">📍 <span data-i18n="rides.pickup_dest">Pickup & Destination</span></div>
             <div class="location-form" style="position:relative;">
                 <div class="location-input-row" style="position:relative;">
                     <div class="location-dot pickup"></div>
@@ -939,7 +939,7 @@
 
         <!-- 5. FARE BREAKDOWN -->
         <div class="ride-section">
-            <div class="ride-section-title">💰 Fare Estimate</div>
+            <div class="ride-section-title">💰 <span data-i18n="rides.fare_estimate">Fare Estimate</span></div>
             <div class="fare-breakdown" id="fareBreakdown">
                 <div class="fare-row">
                     <span class="fare-label">Distance</span>

@@ -286,7 +286,7 @@
         <a href="#">Change location</a>
     </div>
     <div class="flex items-center" style="gap:4px;flex-wrap:wrap;">
-        <a href="#" data-lang="fr" style="font-weight:700">🇫🇷 Français</a>
+        <a href="#" data-lang="fr">🇫🇷 Français</a>
         <a href="#" data-lang="en">🇬🇧 English</a>
         <a href="#" data-lang="kr">🇭🇹 Kreyòl</a>
         <a href="#" data-lang="es">🇪🇸 Español</a>
@@ -322,7 +322,7 @@
 
     <!-- BALANCE CARD -->
     <div class="balance-card">
-        <div class="balance-label">San Cash Balance</div>
+        <div class="balance-label" data-i18n="wallet.balance">San Cash Balance</div>
         <div class="balance-amount" id="walletBalance">-- <span style="font-size:var(--text-xl);font-weight:600;">HTG</span></div>
         <div class="balance-currency">Haitian Gourdes</div>
     </div>
@@ -333,26 +333,26 @@
             <div class="quick-action-icon qa-topup">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </div>
-            <span class="quick-action-label">Top Up</span>
+            <span class="quick-action-label" data-i18n="wallet.topup">Top Up</span>
         </a>
         <a class="quick-action" href="recipients.html">
             <div class="quick-action-icon qa-send">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             </div>
-            <span class="quick-action-label">Send</span>
+            <span class="quick-action-label" data-i18n="wallet.send">Send</span>
         </a>
         <a class="quick-action" href="#">
             <div class="quick-action-icon qa-withdraw">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg>
             </div>
-            <span class="quick-action-label">Withdraw</span>
+            <span class="quick-action-label" data-i18n="wallet.withdraw">Withdraw</span>
         </a>
     </div>
 
     <!-- RECENT TRANSACTIONS -->
     <div class="transactions-section">
         <div class="section-header">
-            <h3 class="section-title">Recent Transactions</h3>
+            <h3 class="section-title" data-i18n="wallet.recent">Recent Transactions</h3>
             <a href="#" class="section-link">See all →</a>
         </div>
         <div class="transaction-list">

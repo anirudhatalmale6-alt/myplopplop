@@ -357,7 +357,7 @@
         <a href="#">Change location</a>
     </div>
     <div class="flex items-center" style="gap:4px;flex-wrap:wrap;">
-        <a href="#" data-lang="fr" style="font-weight:700">🇫🇷 Français</a>
+        <a href="#" data-lang="fr">🇫🇷 Français</a>
         <a href="#" data-lang="en">🇬🇧 English</a>
         <a href="#" data-lang="kr">🇭🇹 Kreyòl</a>
         <a href="#" data-lang="es">🇪🇸 Español</a>
@@ -391,7 +391,7 @@
 
 <!-- ETA Banner -->
 <div class="eta-banner" id="etaBanner">
-    <div class="eta-label">Estimated Arrival</div>
+    <div class="eta-label" data-i18n="tracking.eta">Estimated Arrival</div>
     <div class="eta-time" id="etaTime">--</div>
     <div class="eta-sub" id="etaSub">Your order is on its way</div>
 </div>
@@ -414,7 +414,7 @@
 
 <!-- Vertical Stepper -->
 <div class="v-stepper" id="stepperContainer">
-    <div class="v-stepper-title">Order Progress</div>
+    <div class="v-stepper-title" data-i18n="tracking.progress">Order Progress</div>
     <div id="stepper"></div>
 </div>
 
@@ -428,7 +428,7 @@
 <div class="report-section">
     <button class="btn btn-outline btn-full" onclick="alert('Report submitted. Our support team will contact you shortly.')">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Report Issue
+        <span data-i18n="tracking.report">Report Issue</span>
     </button>
 </div>
 
