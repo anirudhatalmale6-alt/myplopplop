@@ -926,6 +926,12 @@ select.input {
         </div>
 
         <div class="input-group">
+            <label>Referral Code <span style="color:var(--text-muted);font-weight:400;">(optional)</span></label>
+            <input type="text" class="input" id="referralCode" placeholder="e.g., PPJACQ9TL0" style="text-transform:uppercase;">
+            <p id="referralStatus" style="font-size:0.8rem;margin-top:4px;color:var(--text-muted);">Got a code from another driver? Enter it here for bonus rewards!</p>
+        </div>
+
+        <div class="input-group">
             <label>Driver's License Photo <span class="required">*</span></label>
             <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.5rem;">Upload a clear photo of the front of your valid driver's license</p>
             <div class="upload-zone" onclick="document.getElementById('licenseInput').click()" style="border:2px dashed var(--border);border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s;">
