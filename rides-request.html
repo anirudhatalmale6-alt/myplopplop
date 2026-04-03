@@ -1216,10 +1216,14 @@
                     btn.textContent = '📍';
                     btn.disabled = false;
                 });
-                // Show map tile centered on user location
+                // Show location indicator on map area
                 var mapArea = document.getElementById('mapArea');
                 if (mapArea) {
-                    mapArea.innerHTML = '<img src="https://staticmap.openstreetmap.de/staticmap.php?center=' + lat + ',' + lon + '&zoom=15&size=640x280&markers=' + lat + ',' + lon + ',red-pushpin" style="width:100%;height:100%;object-fit:cover;" alt="Your location">';
+                    mapArea.innerHTML = '<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#1D3557,#2a6b4b,#1D3557);color:white;text-align:center;padding:16px;">' +
+                        '<div style="font-size:48px;margin-bottom:8px;">📍</div>' +
+                        '<div style="font-size:14px;font-weight:600;margin-bottom:4px;">Location Detected</div>' +
+                        '<div style="font-size:12px;opacity:0.8;">' + lat.toFixed(4) + ', ' + lon.toFixed(4) + '</div>' +
+                    '</div>';
                 }
             },
             function(err) {
