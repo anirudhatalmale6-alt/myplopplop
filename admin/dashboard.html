@@ -495,6 +495,90 @@
     </a>
 </nav>
 
+<script src="/js/api.js"></script>
+<script>
+// Check admin login
+if (!API.isLoggedIn()) {
+    window.location.href = '../login.html';
+} else if (API.getUser()?.role !== 'admin') {
+    API.toast('Admin access required', 'error');
+    setTimeout(() => window.location.href = '../index.html', 1000);
+}
+
+// Load real dashboard data
+async function loadAdminDashboard() {
+    const data = await API.adminDashboard();
+    if (!data.success) return;
+
+    const s = data.stats;
+    const statValues = document.querySelectorAll('.stat-value');
+    // Orders today
+    if (statValues[0]) statValues[0].innerHTML = s.totalRides + ' <span style="font-size:var(--text-sm);font-weight:500;">total</span>';
+    // Revenue
+    if (statValues[1]) statValues[1].innerHTML = s.totalRevenue.toLocaleString() + ' <span style="font-size:var(--text-sm);font-weight:500;">HTG</span>';
+    // Active merchants (not tracked yet, show users)
+    if (statValues[2]) statValues[2].textContent = s.totalUsers;
+    // Active riders
+    if (statValues[3]) statValues[3].textContent = s.totalDrivers;
+
+    // Update labels
+    const statLabels = document.querySelectorAll('.stat-label');
+    if (statLabels[0]) statLabels[0].textContent = 'Total Rides';
+    if (statLabels[1]) statLabels[1].textContent = 'Commission Revenue';
+    if (statLabels[2]) statLabels[2].textContent = 'Total Users';
+
+    // Update changes
+    const statChanges = document.querySelectorAll('.stat-change');
+    if (statChanges[0]) statChanges[0].textContent = s.activeRides + ' active now';
+    if (statChanges[1]) statChanges[1].textContent = s.completedRides + ' completed';
+    if (statChanges[2]) statChanges[2].textContent = 'Registered';
+    if (statChanges[3]) statChanges[3].textContent = s.pendingDrivers + ' pending approval';
+
+    // Alert
+    const alertCount = document.querySelector('.alert-count');
+    if (alertCount) alertCount.textContent = s.pendingDrivers;
+    const alertText = document.querySelector('.alert-text');
+    if (alertText) alertText.textContent = 'Pending Driver Approvals';
+
+    // Load recent rides
+    const ridesData = await API.adminRides();
+    if (ridesData.success && ridesData.rides.length > 0) {
+        const ordersSection = document.querySelector('.orders-section');
+        const rows = ordersSection.querySelectorAll('.order-row');
+        rows.forEach(r => r.remove());
+
+        ridesData.rides.slice(0, 5).forEach(ride => {
+            const statusMap = { requested: 'badge-yellow', accepted: 'badge-blue', picking_up: 'badge-blue', in_progress: 'badge-blue', delivered: 'badge-green', cancelled: 'badge-red' };
+            const time = new Date(ride.createdAt).toLocaleString('fr-HT', { hour: '2-digit', minute: '2-digit' });
+            const div = document.createElement('div');
+            div.className = 'order-row';
+            div.innerHTML = `
+                <span class="order-id">${ride.type === 'delivery' ? '📦' : '🚗'}</span>
+                <div class="order-info">
+                    <div class="order-customer">${ride.customer?.name || 'Customer'}</div>
+                    <div class="order-merchant">${ride.pickup.address} → ${ride.dropoff.address}</div>
+                </div>
+                <span class="order-amount">${ride.fare.total} HTG</span>
+                <div class="order-meta">
+                    <span class="badge ${statusMap[ride.status] || 'badge-gray'}">${ride.status}</span>
+                    <div class="order-time">${time}</div>
+                </div>`;
+            ordersSection.appendChild(div);
+        });
+    }
+
+    // Wallet volume = total earnings
+    const walletAmount = document.querySelector('.wallet-amount');
+    if (walletAmount) walletAmount.textContent = s.totalRevenue.toLocaleString() + ' HTG';
+    const walletLabel = document.querySelector('.wallet-label');
+    if (walletLabel) walletLabel.textContent = 'Total Commission Revenue';
+}
+
+loadAdminDashboard();
+
+// Auto-refresh every 30 seconds
+setInterval(loadAdminDashboard, 30000);
+</script>
 <script src="/js/i18n.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
 </body>

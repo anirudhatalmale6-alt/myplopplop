@@ -1218,17 +1218,53 @@
     }
 
     // ===== CONFIRM RIDE =====
-    window.confirmRide = function() {
+    window.confirmRide = async function() {
+        if (!API.isLoggedIn()) {
+            API.toast('Please login first to book a ride', 'error');
+            setTimeout(() => window.location.href = 'login.html', 1000);
+            return;
+        }
+
+        var pickup = document.getElementById('pickupInput').value;
+        var dropoff = document.getElementById('dropoffInput').value;
+        if (!pickup || !dropoff) {
+            API.toast('Please enter pickup and destination', 'error');
+            return;
+        }
+
         var btn = document.getElementById('confirmBtn');
         btn.disabled = true;
         btn.textContent = 'Finding your driver...';
 
-        setTimeout(function() {
-            btn.disabled = false;
-            updateFare(); // Reset button text
+        // Map payment select to backend values
+        var paymentMap = { san_cash: 'cash', moncash: 'moncash', natcash: 'natcash', card: 'card' };
+        var payVal = document.getElementById('paymentSelect').value;
+        var paymentMethod = paymentMap[payVal] || 'cash';
+
+        // Distance estimate (5km default, will use real GPS later)
+        var distanceKm = 5;
+
+        var rideType = selectedType === 'pool' ? 'ride' : 'ride';
+        var data = await API.createRide(rideType,
+            { address: pickup },
+            { address: dropoff },
+            paymentMethod,
+            distanceKm
+        );
+
+        if (data.success) {
+            // Show confirmed modal with real data
+            var ride = data.ride;
+            document.querySelector('.ride-modal-header p').textContent = 'Looking for a driver nearby...';
             document.getElementById('rideModal').classList.add('show');
             document.body.style.overflow = 'hidden';
-        }, 2000);
+            API.toast('Ride requested! Fare: ' + ride.fare.total + ' HTG', 'success');
+        } else {
+            API.toast(data.message || 'Could not create ride', 'error');
+        }
+
+        btn.disabled = false;
+        updateFare();
     };
 
     window.closeModal = function() {
@@ -1262,6 +1298,7 @@
 })();
 </script>
 
+<script src="js/api.js"></script>
 <script src="js/i18n.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
 </body>
