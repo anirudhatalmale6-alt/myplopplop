@@ -257,7 +257,7 @@
     'rides.savings_callout': {
       fr: 'Économisez jusqu\'à 60% avec PlopPlop Pataj',
       en: 'Save up to 60% with PlopPlop Pataj vs riding alone',
-      kr: 'Ekonomize jiska 60% ak PlopPlop Pataj olye ou vwayaje pou kont ou',
+      kr: 'Ekonomize sou transpò',
       es: 'Ahorre hasta 60% con PlopPlop Pataj vs viajar solo'
     },
     'rides.start_driving': {
