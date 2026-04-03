@@ -242,6 +242,30 @@
       kr: 'Kote Depa & Destinasyon',
       es: 'Recogida & Destino'
     },
+    'rides.drive_with_us': {
+      fr: 'Conduisez avec Nous',
+      en: 'Drive with Us',
+      kr: 'Kondwi avèk Nou',
+      es: 'Conduzca con Nosotros'
+    },
+    'rides.request_pataj': {
+      fr: 'Demander un Trajet Pataj',
+      en: 'Request a Pataj Ride',
+      kr: 'Mande yon Transpò Pataj',
+      es: 'Solicitar un Viaje Pataj'
+    },
+    'rides.savings_callout': {
+      fr: 'Économisez jusqu\'à 60% avec PlopPlop Pataj',
+      en: 'Save up to 60% with PlopPlop Pataj vs riding alone',
+      kr: 'Ekonomize jiska 60% ak PlopPlop Pataj olye ou vwayaje pou kont ou',
+      es: 'Ahorre hasta 60% con PlopPlop Pataj vs viajar solo'
+    },
+    'rides.start_driving': {
+      fr: 'Commencez à Conduire →',
+      en: 'Start Driving →',
+      kr: 'Kòmanse Kondwi →',
+      es: 'Empiece a Conducir →'
+    },
     'rides.confirm': {
       fr: 'Confirmer',
       en: 'Confirm',
@@ -788,6 +812,15 @@
       var entry = bulkTextMap[text];
       if (entry && entry[lang]) {
         node.nodeValue = node.nodeValue.replace(text, entry[lang]);
+      } else {
+        // Try stripping leading emoji (emoji + space pattern)
+        var stripped = text.replace(/^[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{FE00}-\u{FEFF}\u{1F900}-\u{1F9FF}\u{2702}-\u{27B0}]+\s*/u, '');
+        if (stripped !== text && stripped.length > 2) {
+          entry = bulkTextMap[stripped];
+          if (entry && entry[lang]) {
+            node.nodeValue = node.nodeValue.replace(stripped, entry[lang]);
+          }
+        }
       }
     }
   }
