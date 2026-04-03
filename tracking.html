@@ -496,152 +496,197 @@
     </a>
 </nav>
 
-<script src="js/mock-data.js"></script>
 <script>
 (function() {
     const params = new URLSearchParams(window.location.search);
-    const orderId = params.get('id') || 'ORD-2026-002';
+    const rideId = params.get('id');
 
-    const order = MOCK.SAMPLE_ORDERS.find(o => o.id === orderId);
-    if (!order) {
-        document.querySelector('.main').innerHTML = `
-            <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                    <line x1="9" y1="15" x2="15" y2="15"/>
-                </svg>
-                <h3>Order Not Found</h3>
-                <p>We couldn't find order ${orderId}.</p>
-                <a href="orders.html" class="btn btn-red">View My Orders</a>
-            </div>`;
+    if (!rideId) {
+        document.querySelector('.main').innerHTML = '<div style="text-align:center;padding:60px 20px;"><h3>No ride ID provided</h3><p>Go to your orders to track a delivery.</p><a href="orders.html" class="btn btn-red" style="margin-top:16px;display:inline-block;">View My Orders</a></div>';
         return;
     }
 
-    // Determine current step index
-    const statusKeys = MOCK.ORDER_STATUSES.map(s => s.key);
-    const currentIdx = statusKeys.indexOf(order.status);
-
-    // ETA
-    const etaTime = document.getElementById('etaTime');
-    const etaSub = document.getElementById('etaSub');
-    const etaBanner = document.getElementById('etaBanner');
-
-    if (order.status === 'delivered') {
-        etaTime.textContent = 'Delivered';
-        etaSub.textContent = 'Your order has been delivered successfully';
-        etaBanner.style.background = 'linear-gradient(135deg, #059669 0%, #047857 100%)';
-    } else if (order.status === 'on_the_way') {
-        etaTime.textContent = '8-12 min';
-        etaSub.textContent = 'Your rider is heading to you';
-    } else if (order.status === 'picked_up') {
-        etaTime.textContent = '12-18 min';
-        etaSub.textContent = 'Rider has picked up your order';
-    } else if (order.status === 'preparing' || order.status === 'assigned') {
-        etaTime.textContent = '20-30 min';
-        etaSub.textContent = 'Your order is being prepared';
-    } else {
-        etaTime.textContent = '25-40 min';
-        etaSub.textContent = 'Waiting for confirmation';
+    if (!API.isLoggedIn()) {
+        window.location.href = 'login.html';
+        return;
     }
 
-    // Current status
-    document.getElementById('statusText').textContent = MOCK.ORDER_STATUSES[currentIdx].label;
-    document.getElementById('statusId').textContent = order.id;
+    // Status steps for rides/deliveries
+    const STEPS = [
+        { key: 'requested', label: 'Order Placed', icon: '📋' },
+        { key: 'accepted', label: 'Driver Assigned', icon: '✅' },
+        { key: 'picking_up', label: 'Picking Up', icon: '🏍️' },
+        { key: 'in_progress', label: 'On the Way', icon: '🛵' },
+        { key: 'delivered', label: 'Delivered', icon: '🏠' }
+    ];
 
-    // Delivered status pulse color
-    if (order.status === 'delivered') {
-        document.querySelector('.status-pulse').style.background = 'var(--success)';
+    function formatHTG(amount) {
+        return amount.toLocaleString('fr-HT') + ' HTG';
     }
 
-    // Vertical stepper
-    const stepperEl = document.getElementById('stepper');
-    const stepIcons = ['📋', '✅', '👨‍🍳', '🏍️', '📦', '🛵', '🏠'];
-    const stepTimes = ['10:15 AM', '10:17 AM', '10:22 AM', '10:35 AM', '10:48 AM', '10:52 AM', '11:08 AM'];
-
-    MOCK.ORDER_STATUSES.forEach((status, i) => {
-        const isDone = i < currentIdx;
-        const isActive = i === currentIdx;
-        const stateClass = isDone ? 'done' : (isActive ? 'active' : '');
-        const timeDisplay = (isDone || isActive) ? stepTimes[i] : '--:--';
-
-        stepperEl.innerHTML += `
-            <div class="v-step ${stateClass}">
-                <div class="v-step-track">
-                    <div class="v-step-dot">${isDone ? '✓' : stepIcons[i]}</div>
-                    ${i < MOCK.ORDER_STATUSES.length - 1 ? '<div class="v-step-line"></div>' : ''}
-                </div>
-                <div class="v-step-content">
-                    <div class="v-step-label">${status.label}</div>
-                    <div class="v-step-time">${timeDisplay}</div>
-                </div>
-            </div>
-        `;
-    });
-
-    // Rider card
-    const riderSection = document.getElementById('riderSection');
-    if (order.rider) {
-        riderSection.innerHTML = `
-            <div class="rider-card">
-                <div class="rider-avatar">🏍️</div>
-                <div class="rider-info">
-                    <div class="rider-name">${order.rider}</div>
-                    <div class="rider-role">Your delivery rider</div>
-                </div>
-                <div class="rider-actions">
-                    <button class="rider-action-btn phone" title="Call rider" onclick="alert('Calling ${order.rider}...')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                    </button>
-                    <button class="rider-action-btn message" title="Message rider" onclick="alert('Opening chat with ${order.rider}...')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                    </button>
-                </div>
-            </div>
-        `;
-    } else {
-        riderSection.innerHTML = `
-            <div class="rider-card no-rider">
-                <span style="font-size:32px;">🔍</span>
-                <span>Finding a rider for your order...</span>
-            </div>
-        `;
+    function formatTime(dateStr) {
+        if (!dateStr) return '--:--';
+        const d = new Date(dateStr);
+        return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
     }
 
-    // Order summary
-    const subtotal = order.items.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    const summaryEl = document.getElementById('orderSummary');
-    summaryEl.innerHTML = `
-        <div class="order-summary-header">
-            <h4>Order Summary</h4>
-            <div class="order-summary-store">${order.store}</div>
-        </div>
-        <div class="order-items">
-            ${order.items.map(item => `
-                <div class="order-item">
-                    <div>
-                        <div class="order-item-name">${item.name}</div>
-                        <div class="order-item-qty">x${item.qty}</div>
-                    </div>
-                    <div class="order-item-price">${MOCK.formatHTG(item.price * item.qty)}</div>
-                </div>
-            `).join('')}
-        </div>
-        <div class="order-totals">
-            <div class="order-total-row">
-                <span>Subtotal</span>
-                <span>${MOCK.formatHTG(subtotal)}</span>
-            </div>
-            <div class="order-total-row">
-                <span>Delivery Fee</span>
-                <span>${order.deliveryFee === 0 ? 'Free' : MOCK.formatHTG(order.deliveryFee)}</span>
-            </div>
-            <div class="order-total-row final">
-                <span>Total</span>
-                <span>${MOCK.formatHTG(order.total)}</span>
-            </div>
-        </div>
-    `;
+    function getStepIndex(status) {
+        const idx = STEPS.findIndex(s => s.key === status);
+        return idx >= 0 ? idx : 0;
+    }
+
+    function renderRide(ride) {
+        const currentIdx = getStepIndex(ride.status);
+        const etaTime = document.getElementById('etaTime');
+        const etaSub = document.getElementById('etaSub');
+        const etaBanner = document.getElementById('etaBanner');
+
+        // ETA based on status
+        if (ride.status === 'delivered') {
+            etaTime.textContent = 'Delivered';
+            etaSub.textContent = ride.type === 'ride' ? 'You have arrived at your destination' : 'Your order has been delivered successfully';
+            etaBanner.style.background = 'linear-gradient(135deg, #059669 0%, #047857 100%)';
+        } else if (ride.status === 'in_progress') {
+            etaTime.textContent = '5-10 min';
+            etaSub.textContent = ride.type === 'ride' ? 'Your driver is taking you there' : 'Your rider is heading to you';
+        } else if (ride.status === 'picking_up') {
+            etaTime.textContent = '10-15 min';
+            etaSub.textContent = ride.type === 'ride' ? 'Driver is coming to pick you up' : 'Rider is picking up your order';
+        } else if (ride.status === 'accepted') {
+            etaTime.textContent = '15-25 min';
+            etaSub.textContent = 'A driver has been assigned';
+        } else if (ride.status === 'cancelled') {
+            etaTime.textContent = 'Cancelled';
+            etaSub.textContent = 'This order was cancelled';
+            etaBanner.style.background = 'linear-gradient(135deg, #DC2626 0%, #991B1B 100%)';
+        } else {
+            etaTime.textContent = '20-35 min';
+            etaSub.textContent = 'Looking for a driver nearby...';
+        }
+
+        // Status text
+        const statusLabel = ride.status === 'cancelled' ? 'Cancelled' : STEPS[currentIdx].label;
+        document.getElementById('statusText').textContent = statusLabel;
+        document.getElementById('statusId').textContent = ride._id.substring(0, 8).toUpperCase();
+
+        // Stepper
+        const stepperEl = document.getElementById('stepper');
+        const stepsToShow = ride.status === 'cancelled' ? STEPS : STEPS;
+        stepperEl.innerHTML = stepsToShow.map((step, i) => {
+            const isDone = i < currentIdx;
+            const isActive = i === currentIdx;
+            const stateClass = isDone ? 'done' : (isActive ? 'active' : '');
+
+            // Get timestamp for this step
+            let timeDisplay = '--:--';
+            if (isDone || isActive) {
+                if (step.key === 'requested') timeDisplay = formatTime(ride.createdAt);
+                else if (step.key === 'accepted') timeDisplay = formatTime(ride.acceptedAt);
+                else if (step.key === 'picking_up') timeDisplay = formatTime(ride.pickupAt);
+                else if (step.key === 'in_progress') timeDisplay = formatTime(ride.inProgressAt);
+                else if (step.key === 'delivered') timeDisplay = formatTime(ride.deliveredAt);
+            }
+
+            return '<div class="v-step ' + stateClass + '">' +
+                '<div class="v-step-track">' +
+                    '<div class="v-step-dot">' + (isDone ? '&#10003;' : step.icon) + '</div>' +
+                    (i < stepsToShow.length - 1 ? '<div class="v-step-line"></div>' : '') +
+                '</div>' +
+                '<div class="v-step-content">' +
+                    '<div class="v-step-label">' + step.label + '</div>' +
+                    '<div class="v-step-time">' + timeDisplay + '</div>' +
+                '</div>' +
+            '</div>';
+        }).join('');
+
+        // Rider card
+        const riderSection = document.getElementById('riderSection');
+        if (ride.driver && ride.driver.name) {
+            const driverName = ride.driver.name;
+            const driverPhone = ride.driver.phone || '';
+            riderSection.innerHTML =
+                '<div class="rider-card">' +
+                    '<div class="rider-avatar">' + (ride.type === 'ride' ? '🚗' : '🏍️') + '</div>' +
+                    '<div class="rider-info">' +
+                        '<div class="rider-name">' + driverName + '</div>' +
+                        '<div class="rider-role">Your ' + ride.type + ' driver</div>' +
+                    '</div>' +
+                    '<div class="rider-actions">' +
+                        (driverPhone ? '<a href="tel:' + driverPhone + '" class="rider-action-btn phone" title="Call driver"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>' : '') +
+                    '</div>' +
+                '</div>';
+        } else if (ride.status === 'requested') {
+            riderSection.innerHTML = '<div class="rider-card no-rider"><span style="font-size:32px;">🔍</span><span>Looking for a driver nearby...</span></div>';
+        } else {
+            riderSection.innerHTML = '';
+        }
+
+        // Order summary - show route + fare info
+        const summaryEl = document.getElementById('orderSummary');
+        const itemsHtml = ride.items && ride.items.length > 0
+            ? ride.items.map(function(item) {
+                return '<div class="order-item"><div><div class="order-item-name">' + item.name + '</div><div class="order-item-qty">x' + (item.quantity || 1) + '</div></div><div class="order-item-price">' + formatHTG(item.price || 0) + '</div></div>';
+            }).join('')
+            : '<div class="order-item"><div class="order-item-name" style="color:var(--text-muted);">No items listed</div></div>';
+
+        summaryEl.innerHTML =
+            '<div class="order-summary-header">' +
+                '<h4>' + (ride.type === 'ride' ? 'Ride Details' : 'Delivery Details') + '</h4>' +
+                '<div class="order-summary-store" style="margin-top:8px;">' +
+                    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="color:var(--success);">&#9679;</span> <strong>Pickup:</strong> ' + (ride.pickup ? ride.pickup.address : 'N/A') + '</div>' +
+                    '<div style="display:flex;align-items:center;gap:8px;"><span style="color:var(--primary-red);">&#9679;</span> <strong>Dropoff:</strong> ' + (ride.dropoff ? ride.dropoff.address : 'N/A') + '</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="order-items">' + itemsHtml + '</div>' +
+            '<div class="order-totals">' +
+                '<div class="order-total-row"><span>Driver Earning</span><span>' + formatHTG(ride.fare ? ride.fare.driverEarning : 0) + '</span></div>' +
+                '<div class="order-total-row"><span>Commission (25%)</span><span>' + formatHTG(ride.fare ? ride.fare.commission : 0) + '</span></div>' +
+                '<div class="order-total-row final"><span>Total Fare</span><span>' + formatHTG(ride.fare ? ride.fare.total : 0) + '</span></div>' +
+                '<div class="order-total-row" style="font-size:12px;color:var(--text-muted);"><span>Payment</span><span>' + (ride.paymentMethod || 'cash').toUpperCase() + ' - ' + (ride.paymentStatus || 'pending') + '</span></div>' +
+            '</div>';
+
+        // Rate button for delivered rides
+        if (ride.status === 'delivered' && !ride.driverRating) {
+            const reportSection = document.querySelector('.report-section');
+            if (reportSection) {
+                reportSection.innerHTML =
+                    '<div style="text-align:center;margin-bottom:16px;"><p style="font-weight:600;margin-bottom:8px;">Rate your driver</p>' +
+                    '<div id="rateStars" style="display:flex;gap:8px;justify-content:center;font-size:28px;cursor:pointer;">' +
+                        '<span data-r="1">&#9734;</span><span data-r="2">&#9734;</span><span data-r="3">&#9734;</span><span data-r="4">&#9734;</span><span data-r="5">&#9734;</span>' +
+                    '</div></div>' +
+                    '<button class="btn btn-outline btn-full" onclick="alert(\'Report submitted. Our support team will contact you shortly.\')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Report Issue</button>';
+
+                document.getElementById('rateStars').addEventListener('click', async function(e) {
+                    const rating = parseInt(e.target.dataset.r);
+                    if (!rating) return;
+                    const res = await API.rateRide(rideId, rating);
+                    if (res.success) {
+                        API.toast('Thanks for rating!', 'success');
+                        document.getElementById('rateStars').innerHTML = '<span style="color:#F59E0B;">&#9733;</span>'.repeat(rating) + '<span>&#9734;</span>'.repeat(5 - rating);
+                    } else {
+                        API.toast(res.message || 'Rating failed', 'error');
+                    }
+                });
+            }
+        }
+    }
+
+    // Load ride data
+    async function loadRide() {
+        const data = await API.getRide(rideId);
+        if (!data.success || !data.data) {
+            document.querySelector('.main').innerHTML = '<div style="text-align:center;padding:60px 20px;"><h3>Ride Not Found</h3><p>We could not find this ride.</p><a href="orders.html" class="btn btn-red" style="margin-top:16px;display:inline-block;">View My Orders</a></div>';
+            return;
+        }
+        renderRide(data.data);
+    }
+
+    loadRide();
+
+    // Auto-refresh every 10 seconds for active rides
+    setInterval(function() {
+        loadRide();
+    }, 10000);
 })();
 </script>
 

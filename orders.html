@@ -411,172 +411,174 @@
     </a>
 </nav>
 
-<script src="js/mock-data.js"></script>
 <script>
 (function() {
-    const orders = MOCK.SAMPLE_ORDERS;
-    const statusKeys = MOCK.ORDER_STATUSES.map(s => s.key);
-    const completedStatuses = ['delivered'];
-    const activeStatuses = statusKeys.filter(k => k !== 'delivered');
+    if (!API.isLoggedIn()) {
+        window.location.href = 'login.html';
+        return;
+    }
 
-    // Store icon mapping
-    const storeIcons = {
-        'Lakay Kreyòl': '🍽️',
-        'Ti Malice Kitchen': '🍽️',
-        'Caribbean Supermarket': '🛒',
-        'Pharma Plus Haiti': '💊',
-        'FèBlan Hardware': '🔧',
-        'Gwo Komès Haiti': '📦',
-        'Ayiti Style': '🏬'
+    const statusSteps = ['requested', 'accepted', 'picking_up', 'in_progress', 'delivered'];
+    const completedStatuses = ['delivered', 'cancelled'];
+    const activeStatuses = ['requested', 'accepted', 'picking_up', 'in_progress'];
+    let allRides = [];
+    let currentFilter = 'active';
+
+    const statusLabels = {
+        requested: 'Requested',
+        accepted: 'Driver Assigned',
+        picking_up: 'Picking Up',
+        in_progress: 'On the Way',
+        delivered: 'Delivered',
+        cancelled: 'Cancelled'
     };
 
-    // Counts
-    const activeOrders = orders.filter(o => activeStatuses.includes(o.status));
-    const completedOrders = orders.filter(o => completedStatuses.includes(o.status));
-
-    document.getElementById('activeCount').textContent = activeOrders.length;
-    document.getElementById('completedCount').textContent = completedOrders.length;
-    document.getElementById('allCount').textContent = orders.length;
-
-    // Get status label
-    function getStatusLabel(key) {
-        const s = MOCK.ORDER_STATUSES.find(st => st.key === key);
-        return s ? s.label : key;
+    function formatHTG(amount) {
+        return (amount || 0).toLocaleString('fr-HT') + ' HTG';
     }
 
-    // Get progress percentage
-    function getProgress(status) {
-        const idx = statusKeys.indexOf(status);
-        if (idx < 0) return 0;
-        return Math.round(((idx + 1) / statusKeys.length) * 100);
-    }
-
-    // Format date
     function formatDate(dateStr) {
-        const d = new Date(dateStr + 'T12:00:00');
+        const d = new Date(dateStr);
         return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
 
-    // Render order card
-    function renderCard(order) {
-        const isActive = activeStatuses.includes(order.status);
-        const itemCount = order.items.reduce((sum, i) => sum + i.qty, 0);
-        const itemNames = order.items.map(i => i.name).join(', ');
-        const icon = storeIcons[order.store] || '🏪';
-        const progress = getProgress(order.status);
-        const statusLabel = getStatusLabel(order.status);
+    function getProgress(status) {
+        const idx = statusSteps.indexOf(status);
+        if (idx < 0) return 0;
+        return Math.round(((idx + 1) / statusSteps.length) * 100);
+    }
+
+    function renderCard(ride) {
+        const isActive = activeStatuses.includes(ride.status);
+        const label = statusLabels[ride.status] || ride.status;
+        const progress = getProgress(ride.status);
+        const icon = ride.type === 'ride' ? '🚗' : '🏍️';
+        const typeLabel = ride.type === 'ride' ? 'Ride' : 'Delivery';
+        const shortId = ride._id.substring(0, 8).toUpperCase();
+        const pickup = ride.pickup ? ride.pickup.address : 'N/A';
+        const dropoff = ride.dropoff ? ride.dropoff.address : 'N/A';
 
         let progressHtml = '';
         if (isActive) {
-            progressHtml = `
-                <div class="order-progress">
-                    <div class="order-progress-bar">
-                        <div class="order-progress-fill" style="width:${progress}%"></div>
-                    </div>
-                    <div class="order-progress-label">
-                        <span class="progress-dot"></span>
-                        ${statusLabel}
-                    </div>
-                </div>
-            `;
+            progressHtml =
+                '<div class="order-progress">' +
+                    '<div class="order-progress-bar">' +
+                        '<div class="order-progress-fill" style="width:' + progress + '%"></div>' +
+                    '</div>' +
+                    '<div class="order-progress-label">' +
+                        '<span class="progress-dot"></span> ' + label +
+                    '</div>' +
+                '</div>';
         }
 
         const actionBtn = isActive
-            ? `<a href="tracking.html?id=${order.id}" class="btn btn-blue btn-sm">Track</a>`
-            : `<button class="btn btn-outline btn-sm" onclick="alert('Reorder from ${order.store} coming soon!')">Reorder</button>`;
+            ? '<a href="tracking.html?id=' + ride._id + '" class="btn btn-blue btn-sm">Track</a>'
+            : '<a href="tracking.html?id=' + ride._id + '" class="btn btn-outline btn-sm">Details</a>';
 
-        return `
-            <div class="order-card" data-status="${order.status}">
-                <div class="order-card-header">
-                    <span class="order-card-id">${order.id}</span>
-                    <span class="order-card-date">${formatDate(order.date)}</span>
-                </div>
-                <div class="order-card-body">
-                    <div class="order-card-store">
-                        <div class="order-store-icon">${icon}</div>
-                        <div>
-                            <div class="order-store-name">${order.store}</div>
-                            <div class="order-store-items">${itemCount} item${itemCount > 1 ? 's' : ''}</div>
-                        </div>
-                        <div style="margin-left:auto;">
-                            <span class="status-badge ${order.status}">${statusLabel}</span>
-                        </div>
-                    </div>
-                    <div class="order-card-items">
-                        ${itemNames}
-                    </div>
-                    ${progressHtml}
-                </div>
-                <div class="order-card-footer">
-                    <span class="order-card-total">${MOCK.formatHTG(order.total)}</span>
-                    ${actionBtn}
-                </div>
-            </div>
-        `;
+        return '<div class="order-card" data-status="' + ride.status + '">' +
+            '<div class="order-card-header">' +
+                '<span class="order-card-id">' + shortId + '</span>' +
+                '<span class="order-card-date">' + formatDate(ride.createdAt) + '</span>' +
+            '</div>' +
+            '<div class="order-card-body">' +
+                '<div class="order-card-store">' +
+                    '<div class="order-store-icon">' + icon + '</div>' +
+                    '<div>' +
+                        '<div class="order-store-name">' + typeLabel + '</div>' +
+                        '<div class="order-store-items" style="font-size:11px;">' + pickup + ' &rarr; ' + dropoff + '</div>' +
+                    '</div>' +
+                    '<div style="margin-left:auto;">' +
+                        '<span class="status-badge ' + ride.status + '">' + label + '</span>' +
+                    '</div>' +
+                '</div>' +
+                progressHtml +
+            '</div>' +
+            '<div class="order-card-footer">' +
+                '<span class="order-card-total">' + formatHTG(ride.fare ? ride.fare.total : 0) + '</span>' +
+                actionBtn +
+            '</div>' +
+        '</div>';
     }
 
-    // Empty state HTML
     function emptyState(message) {
-        return `
-            <div class="orders-empty">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                    <line x1="9" y1="15" x2="15" y2="15"/>
-                </svg>
-                <h3>No Orders Yet</h3>
-                <p>${message}</p>
-                <a href="shop.html" class="btn btn-red">Start Shopping</a>
-            </div>
-        `;
+        return '<div class="orders-empty">' +
+            '<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">' +
+                '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>' +
+                '<polyline points="14 2 14 8 20 8"/>' +
+                '<line x1="9" y1="15" x2="15" y2="15"/>' +
+            '</svg>' +
+            '<h3>No Orders Yet</h3>' +
+            '<p>' + message + '</p>' +
+            '<a href="rides-request.html" class="btn btn-red">Request a Ride</a>' +
+        '</div>';
     }
 
-    // Render list
     function renderOrders(filter) {
+        currentFilter = filter;
         const list = document.getElementById('ordersList');
         let filtered;
 
         if (filter === 'active') {
-            filtered = orders.filter(o => activeStatuses.includes(o.status));
+            filtered = allRides.filter(function(r) { return activeStatuses.includes(r.status); });
         } else if (filter === 'completed') {
-            filtered = orders.filter(o => completedStatuses.includes(o.status));
+            filtered = allRides.filter(function(r) { return completedStatuses.includes(r.status); });
         } else {
-            filtered = orders;
+            filtered = allRides;
         }
 
         if (filtered.length === 0) {
-            const messages = {
-                active: 'You have no active orders right now. Browse stores and place your first order!',
+            var messages = {
+                active: 'You have no active orders right now. Request a ride or delivery!',
                 completed: 'No completed orders yet. Your delivered orders will appear here.',
-                all: 'You haven\'t placed any orders yet. Start exploring stores!'
+                all: 'You haven\'t placed any orders yet.'
             };
             list.innerHTML = emptyState(messages[filter] || messages.all);
             return;
         }
 
-        // Sort: active orders first (most recent status), then by date descending
-        filtered.sort((a, b) => {
-            const aActive = activeStatuses.includes(a.status) ? 1 : 0;
-            const bActive = activeStatuses.includes(b.status) ? 1 : 0;
+        filtered.sort(function(a, b) {
+            var aActive = activeStatuses.includes(a.status) ? 1 : 0;
+            var bActive = activeStatuses.includes(b.status) ? 1 : 0;
             if (aActive !== bActive) return bActive - aActive;
-            return new Date(b.date) - new Date(a.date);
+            return new Date(b.createdAt) - new Date(a.createdAt);
         });
 
         list.innerHTML = filtered.map(renderCard).join('');
     }
 
     // Tab switching
-    const tabs = document.querySelectorAll('.order-tab');
-    tabs.forEach(tab => {
+    var tabs = document.querySelectorAll('.order-tab');
+    tabs.forEach(function(tab) {
         tab.addEventListener('click', function() {
-            tabs.forEach(t => t.classList.remove('active'));
+            tabs.forEach(function(t) { t.classList.remove('active'); });
             this.classList.add('active');
             renderOrders(this.dataset.filter);
         });
     });
 
-    // Initial render
-    renderOrders('active');
+    // Load rides from API
+    async function loadOrders() {
+        var data = await API.getMyRides();
+        if (data.success && data.data) {
+            allRides = data.data;
+        } else {
+            allRides = [];
+        }
+
+        var activeCount = allRides.filter(function(r) { return activeStatuses.includes(r.status); }).length;
+        var completedCount = allRides.filter(function(r) { return completedStatuses.includes(r.status); }).length;
+
+        document.getElementById('activeCount').textContent = activeCount;
+        document.getElementById('completedCount').textContent = completedCount;
+        document.getElementById('allCount').textContent = allRides.length;
+
+        renderOrders(currentFilter);
+    }
+
+    loadOrders();
+
+    // Auto-refresh every 15 seconds
+    setInterval(loadOrders, 15000);
 })();
 </script>
 

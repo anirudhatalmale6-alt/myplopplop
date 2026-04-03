@@ -323,7 +323,7 @@
     <!-- BALANCE CARD -->
     <div class="balance-card">
         <div class="balance-label">San Cash Balance</div>
-        <div class="balance-amount">5,000 <span style="font-size:var(--text-xl);font-weight:600;">HTG</span></div>
+        <div class="balance-amount" id="walletBalance">-- <span style="font-size:var(--text-xl);font-weight:600;">HTG</span></div>
         <div class="balance-currency">Haitian Gourdes</div>
     </div>
 
@@ -566,8 +566,18 @@
     </a>
 </nav>
 
-<script src="js/mock-data.js"></script>
 <script>
+// Load real wallet balance
+(function() {
+    if (API.isLoggedIn()) {
+        API.getMe().then(function(data) {
+            if (data.success && data.data && data.data.wallet) {
+                var bal = data.data.wallet.balance || 0;
+                document.getElementById('walletBalance').innerHTML = bal.toLocaleString('fr-HT') + ' <span style="font-size:var(--text-xl);font-weight:600;">HTG</span>';
+            }
+        });
+    }
+})();
 function openTopUp() {
     document.getElementById('topUpModal').classList.add('show');
 }
