@@ -1,7 +1,7 @@
 // MyPlopPlop Service Worker v11
 // Cache-first for static assets, network-first for HTML pages
 
-const CACHE_NAME = 'myplopplop-v26';
+const CACHE_NAME = 'myplopplop-v27';
 
 const PRE_CACHE_URLS = [
   '/',
@@ -41,6 +41,39 @@ self.addEventListener('activate', (event) => {
     })
   );
   self.clients.claim();
+});
+
+// Push: handle incoming push notifications
+self.addEventListener('push', (event) => {
+  if (!event.data) return;
+  try {
+    const data = event.data.json();
+    const options = {
+      body: data.body || '',
+      icon: data.icon || '/assets/img/logo.png',
+      badge: data.badge || '/assets/img/logo.png',
+      vibrate: [200, 100, 200],
+      data: data.data || {},
+      actions: [{ action: 'open', title: 'Open' }]
+    };
+    event.waitUntil(self.registration.showNotification(data.title || 'PlopPlop', options));
+  } catch (e) {
+    console.error('Push parse error:', e);
+  }
+});
+
+// Notification click: open the relevant page
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const url = event.notification.data && event.notification.data.url ? event.notification.data.url : '/';
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url.includes(url) && 'focus' in client) return client.focus();
+      }
+      return clients.openWindow(url);
+    })
+  );
 });
 
 // Fetch: route requests by type
