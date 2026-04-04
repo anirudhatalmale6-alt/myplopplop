@@ -532,6 +532,8 @@ body {
     var otherName = '';
     var typingTimeout = null;
     var rideData = null;
+    var lastMessageTime = null;
+    var knownMessageIds = {};
 
     // Initialize
     loadRideAndChat();
@@ -660,6 +662,15 @@ body {
     }
 
     function addMessageBubble(msg) {
+        // Skip duplicates
+        if (msg._id && knownMessageIds[msg._id]) return;
+        if (msg._id) knownMessageIds[msg._id] = true;
+
+        // Track latest message time for polling
+        if (msg.createdAt && (!lastMessageTime || new Date(msg.createdAt) > new Date(lastMessageTime))) {
+            lastMessageTime = msg.createdAt;
+        }
+
         var senderId = msg.sender && msg.sender._id ? msg.sender._id : msg.sender;
         var isMine = senderId === currentUser._id;
         var time = new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -711,7 +722,10 @@ body {
 
         // Send to backend
         var res = await API.sendChatMessage(rideId, text);
-        if (!res.success) {
+        if (res.success && res.chatMessage) {
+            // Track the ID so polling doesn't duplicate it
+            knownMessageIds[res.chatMessage._id] = true;
+        } else if (!res.success) {
             bubble.style.opacity = '0.5';
             API.toast('Failed to send message', 'error');
         }
@@ -754,23 +768,22 @@ body {
         }
     };
 
-    // Poll for new messages every 10s as fallback
+    // Poll for new messages every 5s as fallback (in case Socket.io doesn't connect)
     setInterval(async function() {
         try {
-            var res = await API.getUnreadCount(rideId);
-            if (res.success && res.count > 0) {
-                // Reload messages
-                var chatRes = await API.getChatMessages(rideId);
-                if (chatRes.success && chatRes.messages) {
-                    // Clear existing and reload
-                    var existing = chatMessages.querySelectorAll('.chat-bubble');
-                    existing.forEach(function(b) { b.remove(); });
-                    chatRes.messages.forEach(function(msg) { addMessageBubble(msg); });
-                    scrollToBottom();
-                }
+            var chatRes = await API.getChatMessages(rideId);
+            if (chatRes.success && chatRes.messages) {
+                var hadNew = false;
+                chatRes.messages.forEach(function(msg) {
+                    if (msg._id && !knownMessageIds[msg._id]) {
+                        addMessageBubble(msg);
+                        hadNew = true;
+                    }
+                });
+                if (hadNew) scrollToBottom();
             }
         } catch(e) {}
-    }, 10000);
+    }, 5000);
 })();
 </script>
 
