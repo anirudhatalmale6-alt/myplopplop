@@ -583,6 +583,86 @@
       es: 'Entrega Rápida'
     },
 
+    // ── Homepage: Sol (ROSCA) ──
+    'sol.badge': {
+      fr: 'Nouvelle Fonctionnalite',
+      en: 'New Feature',
+      kr: 'Nouvo Fonksyon',
+      es: 'Nueva Funcion'
+    },
+    'sol.title': {
+      fr: 'Sol - Pool d\'Argent Numerique',
+      en: 'Sol - Digital Money Pool',
+      kr: 'Sol - Pil Lajan Nimerik',
+      es: 'Sol - Pool de Dinero Digital'
+    },
+    'sol.desc': {
+      fr: 'Le Sol haitien traditionnel (ROSCA) est maintenant numerique sur MyPlopPlop ! Epargnez ensemble avec vos amis, votre famille ou votre communaute. Tout le monde contribue, tout le monde gagne.',
+      en: 'The traditional Haitian Sol (ROSCA) is now digital on MyPlopPlop! Save together with friends, family, or your community. Everyone contributes, everyone wins.',
+      kr: 'Sol tradisyonèl ayisyen an (ROSCA) kounye a dijital sou MyPlopPlop! Mete lajan ansanm ak zanmi, fanmi, oswa kominote ou. Tout moun kontribye, tout moun genyen.',
+      es: 'El Sol haitiano tradicional (ROSCA) ahora es digital en MyPlopPlop! Ahorra junto con amigos, familia o tu comunidad. Todos contribuyen, todos ganan.'
+    },
+    'sol.s1_title': {
+      fr: 'Creer un Groupe',
+      en: 'Create a Group',
+      kr: 'Kreye yon Gwoup',
+      es: 'Crear un Grupo'
+    },
+    'sol.s1_desc': {
+      fr: 'Lancez un Sol avec 5-20 membres. Definissez le montant et la frequence (hebdomadaire ou mensuel).',
+      en: 'Start a Sol with 5-20 members. Set the contribution amount and frequency (weekly or monthly).',
+      kr: 'Komanse yon Sol ak 5-20 manm. Fikse montan an ak frekans lan (chak semèn oswa chak mwa).',
+      es: 'Inicia un Sol con 5-20 miembros. Define el monto y la frecuencia (semanal o mensual).'
+    },
+    'sol.s2_title': {
+      fr: 'Tout le Monde Contribue',
+      en: 'Everyone Contributes',
+      kr: 'Tout Moun Kontribye',
+      es: 'Todos Contribuyen'
+    },
+    'sol.s2_desc': {
+      fr: 'Chaque membre paie sa part a temps. Suivi transparent pour que tout le monde voie le solde du pool.',
+      en: 'Each member pays their share on time. Transparent tracking so everyone can see the pool balance.',
+      kr: 'Chak manm peye pa yo a tan. Swivi transparan pou tout moun ka wè balans pil la.',
+      es: 'Cada miembro paga su parte a tiempo. Seguimiento transparente para que todos vean el saldo del pool.'
+    },
+    'sol.s3_title': {
+      fr: 'Prenez Votre Tour',
+      en: 'Take Your Turn',
+      kr: 'Pran Tou Ou',
+      es: 'Toma Tu Turno'
+    },
+    'sol.s3_desc': {
+      fr: 'Chaque tour, un membre recoit le pot complet. Depensez-le sur MyPlopPlop ou retirez !',
+      en: 'Each round, one member receives the full pot. Spend it on MyPlopPlop or cash out!',
+      kr: 'Chak tou, yon manm resevwa tout lajan an. Depanse li sou MyPlopPlop oswa retire li!',
+      es: 'Cada ronda, un miembro recibe el total. Gastalo en MyPlopPlop o retiralo!'
+    },
+    'sol.f1': {
+      fr: 'Securise & Transparent',
+      en: 'Secure & Transparent',
+      kr: 'Sekirize & Transparan',
+      es: 'Seguro & Transparente'
+    },
+    'sol.f2': {
+      fr: 'Suivre Chaque Paiement',
+      en: 'Track Every Payment',
+      kr: 'Swiv Chak Peman',
+      es: 'Rastrear Cada Pago'
+    },
+    'sol.f3': {
+      fr: 'Diaspora Bienvenue',
+      en: 'Diaspora Welcome',
+      kr: 'Dyaspora Byenveni',
+      es: 'Diaspora Bienvenida'
+    },
+    'sol.cta': {
+      fr: 'Rejoindre un Sol Aujourd\'hui',
+      en: 'Join a Sol Today',
+      kr: 'Rejwenn yon Sol Jodi a',
+      es: 'Unete a un Sol Hoy'
+    },
+
     // ── Homepage: Diaspora ──
     'diaspora.title': {
       fr: 'Soutenez votre Famille en Haïti',
