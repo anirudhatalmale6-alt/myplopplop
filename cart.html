@@ -402,7 +402,7 @@
                     <div class="promo-section">
                         <h4>🎫 Promo Code</h4>
                         <div class="promo-input-row">
-                            <input type="text" id="promoInput" placeholder="Enter promo code (e.g. WELCOME)">
+                            <input type="text" id="promoInput" placeholder="Enter promo code (e.g. WELCOME10)">
                             <button class="btn btn-blue btn-sm" id="applyPromoBtn">Apply</button>
                         </div>
                         <p id="promoMessage" style="display:none; font-size:var(--text-xs); margin-top:var(--space-sm);"></p>
@@ -682,9 +682,9 @@
         const serviceFee = Math.round(subtotal * 0.05);
         let total = subtotal + totalDeliveryFee + serviceFee;
 
-        // Apply promo discount
+        // Apply promo discount (10% off subtotal)
         if (promoApplied) {
-            promoDiscount = totalDeliveryFee;
+            promoDiscount = Math.round(subtotal * 0.10);
             total -= promoDiscount;
             document.getElementById('promoDiscountRow').style.display = 'flex';
             document.getElementById('summaryDiscount').textContent = '-' + MOCK.formatHTG(promoDiscount);
@@ -714,11 +714,11 @@
         const code = document.getElementById('promoInput').value.trim().toUpperCase();
         const msg = document.getElementById('promoMessage');
 
-        if (code === 'WELCOME') {
+        if (code === 'WELCOME10') {
             promoApplied = true;
             msg.style.display = 'block';
             msg.style.color = 'var(--success)';
-            msg.textContent = 'Promo applied! Free delivery on this order.';
+            msg.textContent = 'Promo applied! 10% off your order.';
             this.disabled = true;
             this.textContent = 'Applied';
             renderCart();
@@ -729,7 +729,7 @@
         } else {
             msg.style.display = 'block';
             msg.style.color = 'var(--error)';
-            msg.textContent = 'Invalid promo code. Try WELCOME for free delivery.';
+            msg.textContent = 'Invalid promo code. Try WELCOME10 for 10% off!';
         }
     });
 
