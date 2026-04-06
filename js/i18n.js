@@ -543,10 +543,10 @@
 
     // ── Homepage: Promo Banner ──
     'promo.title': {
-      fr: 'Livraison Gratuite sur la Première Commande !',
-      en: 'Free Delivery on First Order!',
-      kr: 'Livrezon Gratis sou Premye Kòmand!',
-      es: '¡Entrega Gratis en el Primer Pedido!'
+      fr: '\ud83c\udf89 Obtenez 10% de r\u00e9duction sur votre premi\u00e8re commande !',
+      en: '\ud83c\udf89 Get 10% off your first order!',
+      kr: '\ud83c\udf89 Jwenn 10% rabais sou premye k\u00f2mand ou!',
+      es: '\u00a1\ud83c\udf89 Obt\u00e9n 10% de descuento en tu primer pedido!'
     },
 
     // ── Homepage: Featured Merchants ──
