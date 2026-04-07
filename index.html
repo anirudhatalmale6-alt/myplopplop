@@ -454,6 +454,12 @@
 @media (min-width: 1024px) {
     .categories-grid { grid-template-columns: repeat(6, 1fr); }
 }
+.install-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:999;background:linear-gradient(135deg,#00209F 0%,#D21034 100%);color:#fff;padding:14px 20px;box-shadow:0 -4px 20px rgba(0,0,0,.15);align-items:center;gap:12px}
+.install-banner.show{display:flex}
+.install-banner-text{flex:1;font-size:.82rem;font-weight:600}
+.install-banner-text small{display:block;font-size:.7rem;font-weight:400;opacity:.8;margin-top:2px}
+.install-banner-btn{background:#fff;color:#00209F;border:none;padding:10px 22px;border-radius:100px;font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.install-banner-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:1.2rem;cursor:pointer;padding:4px}
 </style>
 </head>
 <body>
@@ -819,5 +825,36 @@ MOCK.STORES.filter(s => s.featured).forEach(store => {
 <script src="js/api.js"></script>
 <script src="js/i18n.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
+
+<div class="install-banner" id="installBanner">
+  <div class="install-banner-text" data-i18n="install_text">Installer MyPlopPlop<small>Ajouter à votre écran d'accueil</small></div>
+  <button class="install-banner-btn" id="installBtn" data-i18n="install_btn">Installer</button>
+  <button class="install-banner-close" id="installClose">&times;</button>
+</div>
+
+<script>
+var deferredPrompt=null;
+var iBanner=document.getElementById('installBanner');
+var iBtn=document.getElementById('installBtn');
+var iClose=document.getElementById('installClose');
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();deferredPrompt=e;iBanner.classList.add('show');
+});
+iBtn.addEventListener('click',function(){
+  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(function(){iBanner.classList.remove('show');deferredPrompt=null})}
+});
+iClose.addEventListener('click',function(){iBanner.classList.remove('show');sessionStorage.setItem('mpp_install_dismissed','1')});
+setTimeout(function(){
+  if(!deferredPrompt&&!sessionStorage.getItem('mpp_install_dismissed')&&!window.matchMedia('(display-mode: standalone)').matches){
+    iBanner.classList.add('show');
+    iBtn.addEventListener('click',function(){
+      var isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent);
+      if(isIOS){alert('Tap the Share button, then "Add to Home Screen"')}
+      else{alert('Tap the menu (⋮), then "Install app"')}
+      iBanner.classList.remove('show');
+    },{once:true});
+  }
+},3000);
+</script>
 </body>
 </html>

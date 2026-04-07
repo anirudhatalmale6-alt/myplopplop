@@ -817,6 +817,20 @@
       en: 'Deliver orders and earn on your own schedule',
       kr: 'Livre kòmand epi touche lajan sou pwòp orè ou',
       es: 'Entregue pedidos y gane con su propio horario'
+    },
+
+    // ── PWA Install Banner ──
+    'install_text': {
+      fr: 'Installer MyPlopPlop<small>Ajouter à votre écran d\'accueil</small>',
+      en: 'Install MyPlopPlop<small>Add to your home screen for quick access</small>',
+      kr: 'Enstale MyPlopPlop<small>Mete sou ekran lakay ou</small>',
+      es: 'Instalar MyPlopPlop<small>Añadir a tu pantalla de inicio</small>'
+    },
+    'install_btn': {
+      fr: 'Installer',
+      en: 'Install',
+      kr: 'Enstale',
+      es: 'Instalar'
     }
   };
 
