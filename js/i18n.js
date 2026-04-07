@@ -582,6 +582,80 @@
       kr: 'Livrezon Rapid',
       es: 'Entrega Rápida'
     },
+    'how.step1_desc': {
+      fr: 'Parcourez restaurants, supermarchés, pharmacies et plus encore près de chez vous.',
+      en: 'Browse restaurants, supermarkets, pharmacies and more near you.',
+      kr: 'Gade restoran, sipèmache, famasi ak plis ankò tou pre ou.',
+      es: 'Explore restaurantes, supermercados, farmacias y más cerca de usted.'
+    },
+    'how.step2_desc': {
+      fr: 'Payez avec le portefeuille San Cash, carte de crédit ou carte de débit. Rapide et sécurisé.',
+      en: 'Pay with San Cash wallet, credit card, or debit card. Quick and secure.',
+      kr: 'Peye ak bous San Cash, kat kredi, oswa kat debi. Rapid epi an sekirite.',
+      es: 'Pague con billetera San Cash, tarjeta de crédito o tarjeta de débito. Rápido y seguro.'
+    },
+    'how.step3_desc': {
+      fr: 'Suivez votre livraison en temps réel. Votre livreur vous l\'apporte directement à votre porte.',
+      en: 'Track your delivery in real time. Your rider brings it right to your door.',
+      kr: 'Swiv livrezon ou an tan reyèl. Livè ou a pote l dirèkteman nan pòt ou.',
+      es: 'Rastree su entrega en tiempo real. Su repartidor la lleva directo a su puerta.'
+    },
+
+    // ── Homepage: Referral Program ──
+    'ref.title': {
+      fr: 'Gagnez de l\'Argent avec les Parrainages !',
+      en: 'Earn Money with Referrals!',
+      kr: 'Touche Lajan ak Rekòmandasyon!',
+      es: '¡Gane Dinero con Referencias!'
+    },
+    'ref.desc': {
+      fr: 'Devenez ambassadeur ! Gagnez <strong>3% sur chaque commande parrainée</strong>, <strong>3% sur les ventes commerciales</strong>, et <strong>2% sur les trajets/livraisons des chauffeurs</strong>. Sans limites !',
+      en: 'Become an ambassador! Earn <strong>3% on every referral order</strong>, <strong>3% on business sales</strong>, and <strong>2% on driver rides/deliveries</strong>. No limits!',
+      kr: 'Vin yon anbasadè! Touche <strong>3% sou chak kòmand rekòmande</strong>, <strong>3% sou vant biznis</strong>, ak <strong>2% sou transpò/livrezon chofè</strong>. Pa gen limit!',
+      es: '¡Conviértase en embajador! Gane <strong>3% en cada pedido referido</strong>, <strong>3% en ventas de negocios</strong>, y <strong>2% en viajes/entregas de conductores</strong>. ¡Sin límites!'
+    },
+    'ref.card1_title': {
+      fr: 'Parrainage Client',
+      en: 'Customer Referral',
+      kr: 'Rekòmandasyon Kliyan',
+      es: 'Referencia de Cliente'
+    },
+    'ref.card1_desc': {
+      fr: 'Gagnez 3% sur chaque commande passée par une personne que vous avez parrainée !',
+      en: 'Earn 3% on every order placed by someone you referred!',
+      kr: 'Touche 3% sou chak kòmand yon moun ou te rekòmande fè!',
+      es: '¡Gane 3% en cada pedido realizado por alguien que usted refirió!'
+    },
+    'ref.card2_title': {
+      fr: 'Ventes Commerciales',
+      en: 'Business Sales',
+      kr: 'Vant Biznis',
+      es: 'Ventas de Negocios'
+    },
+    'ref.card2_desc': {
+      fr: 'Parrainez une entreprise et gagnez 3% sur toutes ses ventes.',
+      en: 'Refer a business and earn 3% on all their sales.',
+      kr: 'Rekòmande yon biznis epi touche 3% sou tout vant yo.',
+      es: 'Refiera un negocio y gane 3% en todas sus ventas.'
+    },
+    'ref.card3_title': {
+      fr: 'Gains Chauffeur',
+      en: 'Driver Earnings',
+      kr: 'Revni Chofè',
+      es: 'Ganancias de Conductor'
+    },
+    'ref.card3_desc': {
+      fr: 'Parrainez un chauffeur et gagnez 2% sur ses trajets et livraisons.',
+      en: 'Refer a driver and earn 2% on their rides and deliveries.',
+      kr: 'Rekòmande yon chofè epi touche 2% sou transpò ak livrezon yo.',
+      es: 'Refiera un conductor y gane 2% en sus viajes y entregas.'
+    },
+    'ref.learn_more': {
+      fr: 'En Savoir Plus',
+      en: 'Learn More',
+      kr: 'Aprann Plis',
+      es: 'Más Información'
+    },
 
     // ── Homepage: Sol (ROSCA) ──
     'sol.badge': {
@@ -676,6 +750,36 @@
       kr: 'Voye Sipò Kounye a',
       es: 'Enviar Apoyo Ahora'
     },
+    'diaspora.desc': {
+      fr: 'Vous vivez à l\'étranger ? Achetez des courses, des médicaments et des produits essentiels pour votre famille et vos amis en Haïti. Ils reçoivent la livraison, vous gérez le paiement depuis n\'importe où dans le monde.',
+      en: 'Living abroad? Buy groceries, medicine, and essentials for your family and friends in Haiti. They receive the delivery, you handle the payment from anywhere in the world.',
+      kr: 'Ou ap viv aletranje? Achte pwovizyon, medikaman, ak bagay esansyèl pou fanmi ak zanmi ou nan Ayiti. Yo resevwa livrezon an, ou jere peman an kèlkeswa kote ou ye nan mond lan.',
+      es: '¿Vive en el extranjero? Compre alimentos, medicinas y productos esenciales para su familia y amigos en Haití. Ellos reciben la entrega, usted maneja el pago desde cualquier parte del mundo.'
+    },
+    'diaspora.trust1': {
+      fr: 'Marchands vérifiés',
+      en: 'Verified merchants',
+      kr: 'Machann verifye',
+      es: 'Comerciantes verificados'
+    },
+    'diaspora.trust2': {
+      fr: 'Paiement sécurisé',
+      en: 'Secure checkout',
+      kr: 'Peman an sekirite',
+      es: 'Pago seguro'
+    },
+    'diaspora.trust3': {
+      fr: 'Suivi en temps réel',
+      en: 'Real-time tracking',
+      kr: 'Swivi an tan reyèl',
+      es: 'Seguimiento en tiempo real'
+    },
+    'diaspora.trust4': {
+      fr: 'Support client',
+      en: 'Customer support',
+      kr: 'Sipò kliyan',
+      es: 'Soporte al cliente'
+    },
 
     // ── Homepage: CTA / Join Network ──
     'cta.title': {
@@ -695,6 +799,24 @@
       en: 'Become a Rider',
       kr: 'Vin yon Livè',
       es: 'Ser Repartidor'
+    },
+    'cta.subtitle': {
+      fr: 'Développez votre entreprise ou gagnez en tant que livreur',
+      en: 'Grow your business or earn as a delivery rider',
+      kr: 'Grandi biznis ou oswa touche lajan kòm livè',
+      es: 'Haga crecer su negocio o gane como repartidor'
+    },
+    'cta.merchant_desc': {
+      fr: 'Inscrivez votre magasin et atteignez des milliers de clients',
+      en: 'List your store and reach thousands of customers',
+      kr: 'Enskri magazen ou epi rive jwenn dè milye kliyan',
+      es: 'Registre su tienda y llegue a miles de clientes'
+    },
+    'cta.rider_desc': {
+      fr: 'Livrez des commandes et gagnez selon votre propre emploi du temps',
+      en: 'Deliver orders and earn on your own schedule',
+      kr: 'Livre kòmand epi touche lajan sou pwòp orè ou',
+      es: 'Entregue pedidos y gane con su propio horario'
     }
   };
 
@@ -835,7 +957,39 @@
     'About Us': { fr: 'À Propos', kr: 'Sou Nou', es: 'Sobre Nosotros' },
     'My Orders': { fr: 'Mes Commandes', kr: 'Kòmand Mwen yo', es: 'Mis Pedidos' },
     'San Cash': { fr: 'San Cash', kr: 'San Cash', es: 'San Cash' },
-    'Recipients': { fr: 'Bénéficiaires', kr: 'Benefisyè', es: 'Beneficiarios' }
+    'Recipients': { fr: 'Bénéficiaires', kr: 'Benefisyè', es: 'Beneficiarios' },
+
+    // Rides page - "Why Pool" descriptions
+    'Pool fares split between riders \u2014 pay a fraction of solo cost': {
+      fr: 'Les tarifs sont partagés entre les passagers \u2014 payez une fraction du coût solo',
+      kr: 'Pri pataje ant pasaje yo \u2014 peye yon ti pati nan pri pou kont ou',
+      es: 'Las tarifas se dividen entre los pasajeros \u2014 pague una fracción del costo individual'
+    },
+    'Fewer cars on the road means faster commutes for everyone': {
+      fr: 'Moins de voitures sur la route signifie des trajets plus rapides pour tous',
+      kr: 'Mwens machin sou wout la vle di vwayaj pi rapid pou tout moun',
+      es: 'Menos autos en la carretera significa viajes más rápidos para todos'
+    },
+    'Share rides, reduce emissions, help Haiti breathe easier': {
+      fr: 'Partagez les trajets, réduisez les émissions, aidez Haïti à mieux respirer',
+      kr: 'Pataje transpò, diminye polisyon, ede Ayiti respire pi byen',
+      es: 'Comparta viajes, reduzca emisiones, ayude a Haití a respirar mejor'
+    },
+    'Background-checked, rated, and reviewed by other riders': {
+      fr: 'Vérifiés, notés et évalués par d\'autres passagers',
+      kr: 'Verifye, note, epi evalye pa lòt pasaje yo',
+      es: 'Verificados, calificados y evaluados por otros pasajeros'
+    },
+    'Share your trip with family \u2014 they see you moving live': {
+      fr: 'Partagez votre trajet avec votre famille \u2014 ils vous suivent en direct',
+      kr: 'Pataje vwayaj ou ak fanmi ou \u2014 yo wè ou ap deplase an dirèk',
+      es: 'Comparta su viaje con su familia \u2014 lo ven moverse en vivo'
+    },
+    'Pay with San Cash, credit card, or debit \u2014 no cash needed': {
+      fr: 'Payez avec San Cash, carte de crédit ou débit \u2014 pas besoin d\'espèces',
+      kr: 'Peye ak San Cash, kat kredi, oswa kat debi \u2014 pa bezwen lajan kach',
+      es: 'Pague con San Cash, tarjeta de crédito o débito \u2014 sin efectivo'
+    }
   };
 
   function applyTranslations(lang) {
@@ -846,6 +1000,13 @@
     for (var i = 0; i < els.length; i++) {
       var key = els[i].getAttribute('data-i18n');
       els[i].textContent = t(key, lang);
+    }
+
+    // 1b. Apply data-i18n-html attributes (innerHTML, for elements with bold/strong tags)
+    var htmlEls = document.querySelectorAll('[data-i18n-html]');
+    for (var h = 0; h < htmlEls.length; h++) {
+      var hKey = htmlEls[h].getAttribute('data-i18n-html');
+      htmlEls[h].innerHTML = t(hKey, lang);
     }
 
     // 2. Apply data-i18n-placeholder attributes
