@@ -1,0 +1,2237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title data-i18n="page.title">Store Designer — MyPlopPlop</title>
+<meta name="description" content="Design your branded store on MyPlopPlop. Stand out from Facebook Marketplace with your own storefront.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/layout.css">
+<style>
+/* ===== STORE DESIGNER PAGE ===== */
+body {
+  background: var(--bg-light);
+  padding-bottom: 0;
+}
+
+/* ===== TOP BAR ===== */
+.designer-topbar {
+  background: var(--primary-blue);
+  color: var(--white);
+  padding: 0 var(--content-padding);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+}
+.designer-topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--text-lg);
+}
+.designer-topbar-brand span {
+  color: #FFD700;
+}
+.designer-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.lang-btn {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: var(--white);
+  border-radius: var(--radius-full);
+  padding: 4px 10px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+.lang-btn:hover, .lang-btn.active {
+  background: rgba(255,255,255,0.3);
+}
+
+/* ===== HERO BANNER ===== */
+.designer-hero {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 55%, var(--primary-red) 100%);
+  color: var(--white);
+  padding: var(--space-2xl) var(--content-padding) var(--space-xl);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.designer-hero::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -15%;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(210,16,52,0.25) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.designer-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -40%;
+  left: -10%;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(212,160,23,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.designer-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.designer-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(212,160,23,0.25);
+  border: 1px solid rgba(212,160,23,0.5);
+  color: #FFD700;
+  border-radius: var(--radius-full);
+  padding: 5px 14px;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-md);
+}
+.designer-hero h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: var(--space-sm);
+}
+.designer-hero h1 em {
+  font-style: normal;
+  color: #FFD700;
+}
+.designer-hero p {
+  font-size: var(--text-base);
+  opacity: 0.9;
+  line-height: 1.6;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.vs-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm) var(--space-lg);
+  font-size: var(--text-sm);
+}
+.vs-item { opacity: 0.7; }
+.vs-item.highlight {
+  opacity: 1;
+  font-weight: 700;
+  color: #FFD700;
+}
+.vs-divider {
+  font-size: var(--text-xs);
+  opacity: 0.5;
+  font-weight: 700;
+}
+
+/* ===== PROGRESS BAR ===== */
+.progress-section {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  padding: var(--space-md) var(--content-padding);
+  position: sticky;
+  top: 56px;
+  z-index: 90;
+}
+.progress-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+.progress-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-dark);
+  white-space: nowrap;
+}
+.progress-bar-wrap {
+  flex: 1;
+  height: 8px;
+  background: var(--gray-200);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-red), var(--primary-blue));
+  border-radius: var(--radius-full);
+  transition: width var(--transition-slow);
+  width: 0%;
+}
+.progress-pct {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--primary-red);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* ===== MAIN LAYOUT ===== */
+.designer-layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--content-padding) var(--space-3xl);
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: var(--space-xl);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .designer-layout {
+    grid-template-columns: 1fr;
+  }
+  .preview-col {
+    order: -1;
+  }
+}
+
+/* ===== FORM COLUMN ===== */
+.form-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* ===== SECTION CARDS ===== */
+.form-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: box-shadow var(--transition-normal);
+}
+.form-card:hover {
+  box-shadow: var(--shadow-md);
+}
+.form-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 2px solid var(--gray-100);
+  background: var(--gray-50);
+}
+.form-card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-red-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.form-card-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--text-dark);
+}
+.form-card-subtitle {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+.form-card-body {
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ===== FORM FIELDS ===== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--gray-700);
+}
+.form-label span {
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+}
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  background: var(--white);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(0,32,159,0.1);
+  outline: none;
+}
+.form-textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+.char-count {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  text-align: right;
+}
+.char-count.near-limit { color: var(--warning); }
+.char-count.at-limit { color: var(--error); }
+
+/* ===== FILE UPLOAD ===== */
+.upload-zone {
+  border: 2px dashed var(--gray-300);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+  background: var(--gray-50);
+}
+.upload-zone:hover {
+  border-color: var(--primary-blue);
+  background: var(--primary-blue-light);
+}
+.upload-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+.upload-icon { font-size: 32px; margin-bottom: var(--space-xs); }
+.upload-text {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--gray-600);
+}
+.upload-hint {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.upload-preview {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  margin: 0 auto var(--space-xs);
+  display: none;
+}
+.upload-preview.show { display: block; }
+.banner-preview-img {
+  width: 100%;
+  height: 100px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  margin: 0 auto var(--space-xs);
+  display: none;
+}
+.banner-preview-img.show { display: block; }
+
+/* ===== COLOR PICKERS ===== */
+.color-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+.color-field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+.color-field:hover { border-color: var(--primary-blue); }
+.color-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-xs);
+  border: 2px solid rgba(0,0,0,0.1);
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+.color-swatch input[type="color"] {
+  position: absolute;
+  inset: -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  opacity: 0;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+.color-field-label {
+  flex: 1;
+}
+.color-field-name {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--gray-600);
+}
+.color-hex {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+/* ===== PRESET THEMES ===== */
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+}
+.theme-btn {
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  padding: 10px 8px;
+  cursor: pointer;
+  background: var(--white);
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+.theme-btn:hover {
+  border-color: var(--primary-blue);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.theme-btn.active {
+  border-color: var(--primary-blue);
+  background: var(--primary-blue-light);
+  box-shadow: 0 0 0 2px rgba(0,32,159,0.2);
+}
+.theme-colors {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+.theme-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,0,0,0.1);
+}
+.theme-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-600);
+}
+
+/* ===== BANNER PATTERNS ===== */
+.banner-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+.banner-opt {
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  height: 60px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+.banner-opt:hover {
+  border-color: var(--primary-blue);
+  transform: translateY(-2px);
+}
+.banner-opt.active {
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 2px rgba(210,16,52,0.3);
+}
+.banner-opt-label {
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--white);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.banner-geo { background: repeating-linear-gradient(45deg, #00209F 0, #00209F 5px, #D21034 5px, #D21034 10px); }
+.banner-grad { background: linear-gradient(135deg, #D21034, #00209F, #D4A017); }
+.banner-photo { background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); }
+
+/* ===== STORE HOURS ===== */
+.hours-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+/* ===== PAYMENT METHODS ===== */
+.payment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+.payment-opt {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+.payment-opt:hover { border-color: var(--primary-blue); }
+.payment-opt.checked {
+  border-color: var(--success);
+  background: var(--success-light);
+}
+.payment-opt input[type="checkbox"] { display: none; }
+.payment-check {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-xs);
+  border: 2px solid var(--gray-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  font-size: 12px;
+  color: transparent;
+}
+.payment-opt.checked .payment-check {
+  background: var(--success);
+  border-color: var(--success);
+  color: var(--white);
+}
+.payment-icon { font-size: 20px; }
+.payment-name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--gray-700);
+}
+
+/* ===== PRODUCT ITEMS ===== */
+.product-row {
+  display: grid;
+  grid-template-columns: 50px 1fr auto;
+  gap: var(--space-sm);
+  align-items: center;
+  padding: var(--space-sm);
+  background: var(--gray-50);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-200);
+}
+.product-emoji-pick {
+  width: 50px;
+  height: 44px;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  font-size: 22px;
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--transition-fast);
+  position: relative;
+}
+.product-emoji-pick:hover { border-color: var(--primary-blue); }
+.emoji-dropdown {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-sm);
+  z-index: 200;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+  width: 220px;
+  display: none;
+}
+.emoji-dropdown.open { display: grid; }
+.emoji-opt {
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-xs);
+  text-align: center;
+  transition: background var(--transition-fast);
+}
+.emoji-opt:hover { background: var(--gray-100); }
+.product-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.product-name-input,
+.product-price-input {
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-xs);
+  padding: 5px 8px;
+  font-size: var(--text-sm);
+  width: 100%;
+  background: var(--white);
+}
+.product-name-input:focus,
+.product-price-input:focus {
+  border-color: var(--primary-blue);
+  outline: none;
+}
+.remove-product-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: var(--error-light);
+  color: var(--error);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-fast);
+}
+.remove-product-btn:hover { background: var(--error); color: var(--white); }
+.add-product-btn {
+  width: 100%;
+  padding: 10px;
+  border: 2px dashed var(--gray-300);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--primary-blue);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-top: var(--space-xs);
+}
+.add-product-btn:hover {
+  border-color: var(--primary-blue);
+  background: var(--primary-blue-light);
+}
+
+/* ===== ACTION BUTTONS ===== */
+.action-bar {
+  background: var(--white);
+  border-top: 2px solid var(--gray-100);
+  padding: var(--space-lg) var(--content-padding);
+  position: sticky;
+  bottom: 0;
+  z-index: 80;
+}
+.action-bar-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+  flex-wrap: wrap;
+}
+.btn-save {
+  flex: 1;
+  min-width: 160px;
+  padding: 14px var(--space-xl);
+  background: linear-gradient(135deg, var(--primary-red) 0%, #B00D2B 100%);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 12px rgba(210,16,52,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+.btn-save:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(210,16,52,0.4);
+}
+.btn-save:active { transform: translateY(0); }
+.btn-preview {
+  padding: 14px var(--space-lg);
+  background: var(--primary-blue-light);
+  color: var(--primary-blue);
+  border: 2px solid var(--primary-blue);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  white-space: nowrap;
+}
+.btn-preview:hover {
+  background: var(--primary-blue);
+  color: var(--white);
+}
+.btn-share {
+  padding: 14px var(--space-lg);
+  background: var(--gray-100);
+  color: var(--gray-700);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  white-space: nowrap;
+}
+.btn-share:hover {
+  background: var(--gray-200);
+  border-color: var(--gray-300);
+}
+
+/* ===== PREVIEW COLUMN ===== */
+.preview-col {
+  position: sticky;
+  top: calc(56px + 56px + var(--space-xl));
+}
+.preview-wrapper {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+}
+.preview-header {
+  padding: var(--space-md) var(--space-lg);
+  background: var(--gray-50);
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.preview-header-label {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--gray-700);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--success);
+  border-radius: 50%;
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+.preview-live-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--success);
+  background: var(--success-light);
+  border-radius: var(--radius-full);
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ===== PHONE FRAME ===== */
+.phone-frame {
+  margin: var(--space-lg) auto;
+  width: 300px;
+  background: #1a1a1a;
+  border-radius: 36px;
+  padding: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.08);
+  position: relative;
+}
+.phone-notch {
+  width: 100px;
+  height: 24px;
+  background: #1a1a1a;
+  border-radius: 0 0 16px 16px;
+  margin: 0 auto 0;
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.phone-notch-cam {
+  width: 10px;
+  height: 10px;
+  background: #2d2d2d;
+  border-radius: 50%;
+  border: 2px solid #3d3d3d;
+}
+.phone-screen {
+  background: var(--bg-light);
+  border-radius: 24px;
+  overflow: hidden;
+  height: 540px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.phone-screen::-webkit-scrollbar { display: none; }
+.phone-status-bar {
+  background: #1a1a1a;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-size: 9px;
+  color: var(--white);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* ===== STORE PREVIEW CONTENT ===== */
+.preview-store-banner {
+  height: 120px;
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-red));
+  position: relative;
+  overflow: hidden;
+  transition: background var(--transition-normal);
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+}
+.preview-banner-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.3;
+}
+.preview-store-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: var(--white);
+  border: 3px solid var(--white);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+.preview-store-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.preview-store-info {
+  padding: 10px 12px 8px;
+  background: var(--white);
+}
+.preview-store-name {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.preview-verified {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary-blue);
+  color: var(--white);
+  font-size: 9px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.preview-slogan {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.preview-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+.preview-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  background: var(--primary-blue-light);
+  color: var(--primary-blue);
+  transition: background var(--transition-normal), color var(--transition-normal);
+}
+.preview-hours {
+  font-size: 10px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.preview-hours-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--success);
+  border-radius: 50%;
+}
+.preview-divider {
+  height: 6px;
+  background: var(--gray-100);
+}
+.preview-section {
+  padding: 10px 12px;
+  background: var(--white);
+}
+.preview-section + .preview-section {
+  border-top: 1px solid var(--gray-100);
+}
+.preview-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+.preview-payment-row {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.preview-pay-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: var(--radius-full);
+  background: var(--gray-100);
+  color: var(--gray-700);
+}
+.preview-products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.preview-product-card {
+  background: var(--gray-50);
+  border-radius: var(--radius-sm);
+  padding: 8px 6px;
+  text-align: center;
+  border: 1px solid var(--gray-200);
+  transition: all var(--transition-fast);
+}
+.preview-product-emoji { font-size: 22px; margin-bottom: 3px; }
+.preview-product-name {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--gray-700);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.preview-product-price {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--primary-red);
+  margin-top: 2px;
+  transition: color var(--transition-normal);
+}
+.preview-address {
+  font-size: 10px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+.preview-about {
+  font-size: 10px;
+  color: var(--gray-600);
+  line-height: 1.5;
+}
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--gray-900);
+  color: var(--white);
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  z-index: 9999;
+  opacity: 0;
+  transition: all var(--transition-normal);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  max-width: 320px;
+  text-align: center;
+  box-shadow: var(--shadow-xl);
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.toast.success { background: var(--success); }
+.toast.error { background: var(--error); }
+.toast.info { background: var(--primary-blue); }
+
+/* ===== ECOSYSTEM BAR ===== */
+.ecosystem-bar {
+  background: var(--gray-900);
+  color: var(--gray-400);
+  padding: var(--space-lg) var(--content-padding);
+}
+.ecosystem-bar-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.ecosystem-label {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+}
+.ecosystem-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  justify-content: center;
+  align-items: center;
+}
+.ecosystem-link {
+  color: var(--gray-400);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transition: color var(--transition-fast);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.ecosystem-link:hover { color: var(--white); }
+.ecosystem-link-sep {
+  color: var(--gray-700);
+  font-size: var(--text-xs);
+}
+.ecosystem-copyright {
+  font-size: var(--text-xs);
+  color: var(--gray-600);
+  margin-top: var(--space-xs);
+}
+.ecosystem-copyright a {
+  color: var(--gray-500);
+  font-weight: 600;
+}
+.ecosystem-copyright a:hover { color: var(--white); }
+
+/* ===== FORM ROW ===== */
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+@media (max-width: 480px) {
+  .form-row-2, .hours-row, .color-row { grid-template-columns: 1fr; }
+  .theme-grid { grid-template-columns: repeat(2, 1fr); }
+  .payment-grid { grid-template-columns: 1fr; }
+  .action-bar-inner { flex-direction: column; }
+  .btn-save, .btn-preview, .btn-share { width: 100%; justify-content: center; }
+}
+
+/* ===== UTILITY ===== */
+.section-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--primary-red);
+  color: var(--white);
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.preview-placeholder {
+  color: var(--gray-400);
+  font-style: italic;
+}
+
+/* Smooth transition on preview elements */
+.preview-store-banner,
+.preview-product-price,
+.preview-badge {
+  transition: all var(--transition-slow);
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="designer-topbar">
+  <div class="designer-topbar-brand">
+    <span>🛒</span>
+    <span>MyPlop<em style="color:#FFD700">Plop</em></span>
+    <span style="font-size:var(--text-xs);font-weight:400;opacity:0.7;margin-left:4px;" data-i18n="page.badge">Store Designer</span>
+  </div>
+  <div class="designer-topbar-right">
+    <button class="lang-btn" data-lang="fr">FR</button>
+    <button class="lang-btn active" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="kr">KR</button>
+    <button class="lang-btn" data-lang="es">ES</button>
+    <a href="index.html" style="color:rgba(255,255,255,0.7);font-size:var(--text-sm);margin-left:var(--space-sm);" data-i18n="nav.back">← Back</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="designer-hero">
+  <div class="designer-hero-inner">
+    <div class="designer-hero-badge">✨ <span data-i18n="hero.badge">Premium Storefront Builder</span></div>
+    <h1 data-i18n-html="hero.title">Your Store. Your <em>Brand.</em> Your Rules.</h1>
+    <p data-i18n="hero.subtitle">On Facebook you're just another listing. On MyPlopPlop, you have your <strong>OWN branded storefront</strong> — with your colors, logo, and identity.</p>
+    <div class="vs-badge">
+      <span class="vs-item" data-i18n="hero.vs_fb">😤 Facebook Marketplace: Lost in the feed</span>
+      <span class="vs-divider">VS</span>
+      <span class="vs-item highlight" data-i18n="hero.vs_mpp">🏆 MyPlopPlop: YOUR branded store</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRESS BAR -->
+<div class="progress-section">
+  <div class="progress-inner">
+    <span class="progress-label" data-i18n="progress.label">Profile Complete:</span>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <span class="progress-pct" id="progressPct">0%</span>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<main>
+<div class="designer-layout">
+
+  <!-- LEFT: FORM COLUMN -->
+  <div class="form-col">
+
+    <!-- SECTION 1: STORE IDENTITY -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <div class="form-card-icon">🏪</div>
+        <div>
+          <div class="form-card-title" data-i18n="s1.title">Store Identity</div>
+          <div class="form-card-subtitle" data-i18n="s1.sub">Your brand name, logo, and category</div>
+        </div>
+        <span class="section-number" style="margin-left:auto;">1</span>
+      </div>
+      <div class="form-card-body">
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="storeName" data-i18n="s1.name">Store Name</label>
+            <input type="text" id="storeName" class="form-input" data-i18n-placeholder="s1.name_ph" placeholder="e.g. Boulangerie Soleil" maxlength="50">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="storeCategory" data-i18n="s1.category">Category</label>
+            <select id="storeCategory" class="form-select">
+              <option value="" data-i18n="s1.cat_ph">Select category...</option>
+              <option value="restaurant" data-i18n="cat.restaurant">🍽️ Restaurant</option>
+              <option value="supermarket" data-i18n="cat.supermarket">🛒 Supermarket</option>
+              <option value="pharmacy" data-i18n="cat.pharmacy">💊 Pharmacy</option>
+              <option value="hardware" data-i18n="cat.hardware">🔧 Hardware Store</option>
+              <option value="clothing" data-i18n="cat.clothing">👗 Clothing</option>
+              <option value="electronics" data-i18n="cat.electronics">📱 Electronics</option>
+              <option value="beauty" data-i18n="cat.beauty">💄 Beauty</option>
+              <option value="other" data-i18n="cat.other">🏬 Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="storeSlogan" data-i18n="s1.slogan">Slogan / Tagline <span data-i18n="s1.optional">(optional)</span></label>
+          <input type="text" id="storeSlogan" class="form-input" data-i18n-placeholder="s1.slogan_ph" placeholder="e.g. Fresh bread every morning!" maxlength="80">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="s1.logo">Store Logo</label>
+          <div class="upload-zone" id="logoZone">
+            <input type="file" id="logoFile" accept="image/*">
+            <img class="upload-preview" id="logoPreview" src="" alt="Logo preview">
+            <div id="logoPlaceholder">
+              <div class="upload-icon">🖼️</div>
+              <div class="upload-text" data-i18n="upload.click">Click to upload logo</div>
+              <div class="upload-hint" data-i18n="upload.hint">PNG, JPG up to 2MB. Square image recommended.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: BRAND COLORS -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <div class="form-card-icon">🎨</div>
+        <div>
+          <div class="form-card-title" data-i18n="s2.title">Brand Colors</div>
+          <div class="form-card-subtitle" data-i18n="s2.sub">Choose colors that represent your brand</div>
+        </div>
+        <span class="section-number" style="margin-left:auto;">2</span>
+      </div>
+      <div class="form-card-body">
+        <div class="color-row">
+          <div class="form-group">
+            <label class="form-label" data-i18n="s2.primary">Primary Color</label>
+            <div class="color-field">
+              <div class="color-swatch" id="primarySwatch" style="background:#D21034;">
+                <input type="color" id="primaryColor" value="#D21034">
+              </div>
+              <div class="color-field-label">
+                <div class="color-field-name" data-i18n="s2.primary">Primary</div>
+                <div class="color-hex" id="primaryHex">#D21034</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="s2.secondary">Secondary Color</label>
+            <div class="color-field">
+              <div class="color-swatch" id="secondarySwatch" style="background:#00209F;">
+                <input type="color" id="secondaryColor" value="#00209F">
+              </div>
+              <div class="color-field-label">
+                <div class="color-field-name" data-i18n="s2.secondary">Secondary</div>
+                <div class="color-hex" id="secondaryHex">#00209F</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="s2.themes">Preset Themes</label>
+          <div class="theme-grid">
+            <button class="theme-btn active" data-theme="haiti" data-primary="#D21034" data-secondary="#00209F">
+              <div class="theme-colors"><div class="theme-dot" style="background:#D21034;"></div><div class="theme-dot" style="background:#00209F;"></div></div>
+              <div class="theme-name" data-i18n="theme.haiti">Haiti Classic</div>
+            </button>
+            <button class="theme-btn" data-theme="ocean" data-primary="#0EA5E9" data-secondary="#0F2557">
+              <div class="theme-colors"><div class="theme-dot" style="background:#0EA5E9;"></div><div class="theme-dot" style="background:#0F2557;"></div></div>
+              <div class="theme-name" data-i18n="theme.ocean">Ocean</div>
+            </button>
+            <button class="theme-btn" data-theme="tropical" data-primary="#10B981" data-secondary="#F97316">
+              <div class="theme-colors"><div class="theme-dot" style="background:#10B981;"></div><div class="theme-dot" style="background:#F97316;"></div></div>
+              <div class="theme-name" data-i18n="theme.tropical">Tropical</div>
+            </button>
+            <button class="theme-btn" data-theme="royal" data-primary="#7C3AED" data-secondary="#D4A017">
+              <div class="theme-colors"><div class="theme-dot" style="background:#7C3AED;"></div><div class="theme-dot" style="background:#D4A017;"></div></div>
+              <div class="theme-name" data-i18n="theme.royal">Royal</div>
+            </button>
+            <button class="theme-btn" data-theme="earth" data-primary="#92400E" data-secondary="#FBBF24">
+              <div class="theme-colors"><div class="theme-dot" style="background:#92400E;"></div><div class="theme-dot" style="background:#FBBF24;"></div></div>
+              <div class="theme-name" data-i18n="theme.earth">Earth</div>
+            </button>
+            <button class="theme-btn" data-theme="midnight" data-primary="#111827" data-secondary="#D4A017">
+              <div class="theme-colors"><div class="theme-dot" style="background:#111827;"></div><div class="theme-dot" style="background:#D4A017;"></div></div>
+              <div class="theme-name" data-i18n="theme.midnight">Midnight</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: STORE BANNER -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <div class="form-card-icon">🖼️</div>
+        <div>
+          <div class="form-card-title" data-i18n="s3.title">Store Banner</div>
+          <div class="form-card-subtitle" data-i18n="s3.sub">The banner that appears at the top of your store</div>
+        </div>
+        <span class="section-number" style="margin-left:auto;">3</span>
+      </div>
+      <div class="form-card-body">
+        <div class="form-group">
+          <label class="form-label" data-i18n="s3.upload">Upload Banner Image <span data-i18n="s1.optional">(optional)</span></label>
+          <div class="upload-zone" id="bannerZone" style="padding:var(--space-md);">
+            <input type="file" id="bannerFile" accept="image/*">
+            <img class="banner-preview-img" id="bannerPreview" src="" alt="Banner preview">
+            <div id="bannerPlaceholder">
+              <div class="upload-icon">🌅</div>
+              <div class="upload-text" data-i18n="s3.upload_text">Click to upload banner (recommended: 1200×400px)</div>
+              <div class="upload-hint" data-i18n="s3.upload_hint">PNG, JPG up to 5MB</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="s3.pattern">Or choose a preset pattern</label>
+          <div class="banner-grid">
+            <div class="banner-opt banner-geo active" data-pattern="geo" onclick="selectBannerPattern(this)">
+              <div class="banner-opt-label" data-i18n="pat.geo">Geometric</div>
+            </div>
+            <div class="banner-opt banner-grad" data-pattern="grad" onclick="selectBannerPattern(this)">
+              <div class="banner-opt-label" data-i18n="pat.grad">Gradient</div>
+            </div>
+            <div class="banner-opt banner-photo" data-pattern="photo" onclick="selectBannerPattern(this)">
+              <div class="banner-opt-label" data-i18n="pat.photo">Elegant</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: STORE INFO -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <div class="form-card-icon">📍</div>
+        <div>
+          <div class="form-card-title" data-i18n="s4.title">Store Info</div>
+          <div class="form-card-subtitle" data-i18n="s4.sub">Help customers find and contact you</div>
+        </div>
+        <span class="section-number" style="margin-left:auto;">4</span>
+      </div>
+      <div class="form-card-body">
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="storeAddress" data-i18n="s4.address">Address</label>
+            <input type="text" id="storeAddress" class="form-input" data-i18n-placeholder="s4.address_ph" placeholder="e.g. Pétionville, Port-au-Prince">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="storePhone" data-i18n="s4.phone">Phone / WhatsApp</label>
+            <input type="tel" id="storePhone" class="form-input" placeholder="+509 1234 5678">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="s4.hours">Store Hours</label>
+          <div class="hours-row">
+            <div class="form-group" style="gap:4px;">
+              <label class="form-label" style="font-weight:400;font-size:var(--text-xs);" data-i18n="s4.open">Opens at</label>
+              <input type="time" id="openTime" class="form-input" value="08:00">
+            </div>
+            <div class="form-group" style="gap:4px;">
+              <label class="form-label" style="font-weight:400;font-size:var(--text-xs);" data-i18n="s4.close">Closes at</label>
+              <input type="time" id="closeTime" class="form-input" value="20:00">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="storeDesc" data-i18n="s4.about">About Your Store <span id="descCount" class="char-count">0/200</span></label>
+          <textarea id="storeDesc" class="form-textarea" maxlength="200" rows="3" data-i18n-placeholder="s4.about_ph" placeholder="Tell customers what makes your store special..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5: PAYMENT METHODS -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <div class="form-card-icon">💳</div>
+        <div>
+          <div class="form-card-title" data-i18n="s5.title">Payment Methods</div>
+          <div class="form-card-subtitle" data-i18n="s5.sub">Which payment methods do you accept?</div>
+        </div>
+        <span class="section-number" style="margin-left:auto;">5</span>
+      </div>
+      <div class="form-card-body">
+        <div class="payment-grid">
+          <label class="payment-opt checked" data-payment="moncash" onclick="togglePayment(this)">
+            <input type="checkbox" checked>
+            <div class="payment-check">✓</div>
+            <span class="payment-icon">📱</span>
+            <span class="payment-name">MonCash</span>
+          </label>
+          <label class="payment-opt" data-payment="natcash" onclick="togglePayment(this)">
+            <input type="checkbox">
+            <div class="payment-check">✓</div>
+            <span class="payment-icon">💚</span>
+            <span class="payment-name">NatCash</span>
+          </label>
+          <label class="payment-opt checked" data-payment="cash" onclick="togglePayment(this)">
+            <input type="checkbox" checked>
+            <div class="payment-check">✓</div>
+            <span class="payment-icon">💵</span>
+            <span class="payment-name" data-i18n="pay.cash">Cash</span>
+          </label>
+          <label class="payment-opt" data-payment="card" onclick="togglePayment(this)">
+            <input type="checkbox">
+            <div class="payment-check">✓</div>
+            <span class="payment-icon">💳</span>
+            <span class="payment-name" data-i18n="pay.card">Card</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6: PRODUCTS PREVIEW -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <div class="form-card-icon">📦</div>
+        <div>
+          <div class="form-card-title" data-i18n="s6.title">Featured Products</div>
+          <div class="form-card-subtitle" data-i18n="s6.sub">Add up to 3 sample products to showcase</div>
+        </div>
+        <span class="section-number" style="margin-left:auto;">6</span>
+      </div>
+      <div class="form-card-body">
+        <div id="productsList">
+          <!-- Products injected here by JS -->
+        </div>
+        <button class="add-product-btn" id="addProductBtn" onclick="addProduct()">
+          + <span data-i18n="s6.add">Add Product</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+  <!-- END FORM COLUMN -->
+
+  <!-- RIGHT: PREVIEW COLUMN -->
+  <div class="preview-col">
+    <div class="preview-wrapper">
+      <div class="preview-header">
+        <div class="preview-header-label">
+          <div class="live-dot"></div>
+          <span data-i18n="preview.label">Live Preview</span>
+        </div>
+        <span class="preview-live-badge" data-i18n="preview.realtime">Real-time</span>
+      </div>
+
+      <!-- Phone Frame -->
+      <div style="padding: var(--space-md) var(--space-lg) var(--space-xl); background: var(--gray-100);">
+        <div class="phone-frame">
+          <div class="phone-notch">
+            <div class="phone-notch-cam"></div>
+          </div>
+          <div class="phone-screen" id="phoneScreen">
+            <!-- Status bar -->
+            <div class="phone-status-bar">
+              <span>9:41</span>
+              <span>📶 🔋</span>
+            </div>
+            <!-- Store Banner -->
+            <div class="preview-store-banner" id="previewBanner">
+              <div class="preview-banner-pattern" id="previewBannerPattern"></div>
+              <div class="preview-store-logo" id="previewLogo">
+                <span id="previewLogoEmoji">🏪</span>
+              </div>
+            </div>
+            <!-- Store Info -->
+            <div class="preview-store-info">
+              <div class="preview-store-name">
+                <span id="previewName" class="preview-placeholder">Your Store Name</span>
+                <span class="preview-verified">✓</span>
+              </div>
+              <div class="preview-slogan" id="previewSlogan"></div>
+              <div class="preview-meta-row">
+                <span class="preview-badge" id="previewCategory" style="display:none;"></span>
+                <span class="preview-hours">
+                  <div class="preview-hours-dot"></div>
+                  <span id="previewHours">8:00 – 20:00</span>
+                </span>
+              </div>
+            </div>
+            <div class="preview-divider"></div>
+            <!-- Payment Methods -->
+            <div class="preview-section" id="previewPaymentSection">
+              <div class="preview-section-title" data-i18n="preview.payment">Payment</div>
+              <div class="preview-payment-row" id="previewPayments">
+                <span class="preview-pay-badge">📱 MonCash</span>
+                <span class="preview-pay-badge">💵 Cash</span>
+              </div>
+            </div>
+            <!-- About -->
+            <div class="preview-section" id="previewAboutSection" style="display:none;">
+              <div class="preview-section-title" data-i18n="preview.about">About</div>
+              <div class="preview-about" id="previewAbout"></div>
+            </div>
+            <!-- Products -->
+            <div class="preview-section" id="previewProductsSection" style="display:none;">
+              <div class="preview-section-title" data-i18n="preview.products">Products</div>
+              <div class="preview-products-grid" id="previewProductsGrid"></div>
+            </div>
+            <!-- Address -->
+            <div class="preview-section" id="previewAddressSection" style="display:none;">
+              <div class="preview-section-title" data-i18n="preview.location">Location</div>
+              <div class="preview-address">
+                <span>📍</span>
+                <span id="previewAddress"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview Tips -->
+      <div style="padding: 0 var(--space-lg) var(--space-lg);">
+        <div style="background:var(--primary-blue-light);border-radius:var(--radius-sm);padding:var(--space-sm) var(--space-md);font-size:var(--text-xs);color:var(--primary-blue);font-weight:600;line-height:1.5;">
+          💡 <span data-i18n="preview.tip">Fill in the form on the left to see your store come alive in real-time!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END PREVIEW COLUMN -->
+
+</div>
+</main>
+
+<!-- ACTION BAR -->
+<div class="action-bar">
+  <div class="action-bar-inner">
+    <button class="btn-save" onclick="saveStore()">
+      <span>💾</span>
+      <span data-i18n="btn.save">Save Store</span>
+    </button>
+    <button class="btn-preview" onclick="previewFull()">
+      <span>👁️</span>
+      <span data-i18n="btn.preview">Preview Full Page</span>
+    </button>
+    <button class="btn-share" onclick="shareStore()">
+      <span>🔗</span>
+      <span data-i18n="btn.share">Share Link</span>
+    </button>
+  </div>
+</div>
+
+<!-- ECOSYSTEM BAR -->
+<div class="ecosystem-bar">
+  <div class="ecosystem-bar-inner">
+    <div class="ecosystem-label" data-i18n="eco.part_of">Part of the HaitiBiznis Ecosystem</div>
+    <div class="ecosystem-links">
+      <a href="https://haitibiznis.com" target="_blank" rel="noopener" class="ecosystem-link">🏢 HaitiBiznis</a>
+      <span class="ecosystem-link-sep">·</span>
+      <a href="https://48hoursready.com" target="_blank" rel="noopener" class="ecosystem-link">⚡ 48HoursReady</a>
+      <span class="ecosystem-link-sep">·</span>
+      <a href="https://msouwout.com" target="_blank" rel="noopener" class="ecosystem-link">🎵 MsouWout</a>
+      <span class="ecosystem-link-sep">·</span>
+      <a href="https://talent4peace.com" target="_blank" rel="noopener" class="ecosystem-link">🕊️ Talent4Peace</a>
+      <span class="ecosystem-link-sep">·</span>
+      <a href="https://boxetoboxe.com" target="_blank" rel="noopener" class="ecosystem-link">🥊 BoxeToBoxe</a>
+    </div>
+    <div class="ecosystem-copyright">&copy; 2026 <a href="index.html">MyPlopPlop</a>. Powered by <a href="https://48hoursready.com" target="_blank">48HoursReady.com</a>.</div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================================================
+   MyPlopPlop — Store Designer
+   =================================================== */
+
+// ── Translations ──────────────────────────────────────
+const translations = {
+  'page.title': { fr:'Concepteur de Boutique — MyPlopPlop', en:'Store Designer — MyPlopPlop', kr:'Konsèptè Boutik — MyPlopPlop', es:'Diseñador de Tienda — MyPlopPlop' },
+  'page.badge':  { fr:'Concepteur de Boutique', en:'Store Designer', kr:'Konsèptè Boutik', es:'Diseñador de Tienda' },
+  'nav.back':    { fr:'← Retour', en:'← Back', kr:'← Retounen', es:'← Volver' },
+  'hero.badge':  { fr:'Constructeur de Vitrine Premium', en:'Premium Storefront Builder', kr:'Bati Boutik Premium', es:'Constructor de Tienda Premium' },
+  'hero.title':  { fr:'Ta Boutique. Ta <em>Marque</em>. Tes Règles.', en:'Your Store. Your <em>Brand.</em> Your Rules.', kr:'Boutik Ou. <em>Mak</em> Ou. Règ Ou.', es:'Tu Tienda. Tu <em>Marca.</em> Tus Reglas.' },
+  'hero.subtitle':{ fr:'Sur Facebook vous n\'êtes qu\'une annonce parmi d\'autres. Sur MyPlopPlop, vous avez votre <strong>propre vitrine de marque</strong> — avec vos couleurs, logo et identité.', en:'On Facebook you\'re just another listing. On MyPlopPlop, you have your <strong>OWN branded storefront</strong> — with your colors, logo, and identity.', kr:'Sou Facebook ou se yon anons pami lòt. Sou MyPlopPlop, ou gen <strong>pwòp boutik mak ou</strong> — ak koulè ou, logo ou, ak idantite ou.', es:'En Facebook eres solo otro anuncio. En MyPlopPlop, tienes tu <strong>propia tienda de marca</strong> — con tus colores, logo e identidad.' },
+  'hero.vs_fb':  { fr:'😤 Facebook Marketplace: Perdu dans le fil', en:'😤 Facebook Marketplace: Lost in the feed', kr:'😤 Facebook Marketplace: Pèdi nan fil la', es:'😤 Facebook Marketplace: Perdido en el feed' },
+  'hero.vs_mpp': { fr:'🏆 MyPlopPlop: TA boutique de marque', en:'🏆 MyPlopPlop: YOUR branded store', kr:'🏆 MyPlopPlop: BOUTIK MAK OU', es:'🏆 MyPlopPlop: TU tienda de marca' },
+  'progress.label':{ fr:'Profil Complet:', en:'Profile Complete:', kr:'Pwofil Konplè:', es:'Perfil Completo:' },
+  's1.title':    { fr:'Identité de la Boutique', en:'Store Identity', kr:'Idantite Boutik', es:'Identidad de Tienda' },
+  's1.sub':      { fr:'Votre nom de marque, logo et catégorie', en:'Your brand name, logo, and category', kr:'Non mak ou, logo, ak kategori ou', es:'Tu nombre de marca, logo y categoría' },
+  's1.name':     { fr:'Nom de la Boutique', en:'Store Name', kr:'Non Boutik', es:'Nombre de Tienda' },
+  's1.name_ph':  { fr:'ex. Boulangerie Soleil', en:'e.g. Boulangerie Soleil', kr:'ex. Boutik Solèy', es:'ej. Panadería Soleil' },
+  's1.category': { fr:'Catégorie', en:'Category', kr:'Kategori', es:'Categoría' },
+  's1.cat_ph':   { fr:'Choisir une catégorie...', en:'Select category...', kr:'Chwazi kategori...', es:'Seleccionar categoría...' },
+  's1.slogan':   { fr:'Slogan / Accroche', en:'Slogan / Tagline', kr:'Slogan / Mo Kle', es:'Eslogan / Lema' },
+  's1.optional': { fr:'(optionnel)', en:'(optional)', kr:'(opsyonèl)', es:'(opcional)' },
+  's1.slogan_ph':{ fr:'ex. Pain frais chaque matin!', en:'e.g. Fresh bread every morning!', kr:'ex. Pen fre chak maten!', es:'ej. ¡Pan fresco cada mañana!' },
+  's1.logo':     { fr:'Logo de la Boutique', en:'Store Logo', kr:'Logo Boutik', es:'Logo de Tienda' },
+  'upload.click':{ fr:'Cliquer pour télécharger le logo', en:'Click to upload logo', kr:'Klike pou telechaje logo', es:'Clic para subir logo' },
+  'upload.hint': { fr:'PNG, JPG jusqu\'à 2 Mo. Image carrée recommandée.', en:'PNG, JPG up to 2MB. Square image recommended.', kr:'PNG, JPG jiska 2MB. Imaj kare rekòmande.', es:'PNG, JPG hasta 2MB. Imagen cuadrada recomendada.' },
+  's2.title':    { fr:'Couleurs de Marque', en:'Brand Colors', kr:'Koulè Mak', es:'Colores de Marca' },
+  's2.sub':      { fr:'Choisissez les couleurs qui représentent votre marque', en:'Choose colors that represent your brand', kr:'Chwazi koulè ki reprezante mak ou', es:'Elige colores que representen tu marca' },
+  's2.primary':  { fr:'Couleur Principale', en:'Primary Color', kr:'Koulè Prensipal', es:'Color Principal' },
+  's2.secondary':{ fr:'Couleur Secondaire', en:'Secondary Color', kr:'Koulè Segondè', es:'Color Secundario' },
+  's2.themes':   { fr:'Thèmes Prédéfinis', en:'Preset Themes', kr:'Tèm Predéfini', es:'Temas Predefinidos' },
+  'theme.haiti': { fr:'Classique Haïti', en:'Haiti Classic', kr:'Klasik Ayiti', es:'Clásico Haití' },
+  'theme.ocean': { fr:'Océan', en:'Ocean', kr:'Oseyan', es:'Océano' },
+  'theme.tropical':{ fr:'Tropical', en:'Tropical', kr:'Tropikal', es:'Tropical' },
+  'theme.royal': { fr:'Royal', en:'Royal', kr:'Rwayal', es:'Real' },
+  'theme.earth': { fr:'Terre', en:'Earth', kr:'Tè', es:'Tierra' },
+  'theme.midnight':{ fr:'Minuit', en:'Midnight', kr:'Minwi', es:'Medianoche' },
+  's3.title':    { fr:'Bannière de Boutique', en:'Store Banner', kr:'Banyè Boutik', es:'Banner de Tienda' },
+  's3.sub':      { fr:'La bannière qui apparaît en haut de votre boutique', en:'The banner that appears at the top of your store', kr:'Banyè ki parèt anlè boutik ou', es:'El banner que aparece en la parte superior de tu tienda' },
+  's3.upload':   { fr:'Télécharger une Image de Bannière', en:'Upload Banner Image', kr:'Telechaje Imaj Banyè', es:'Subir Imagen de Banner' },
+  's3.upload_text':{ fr:'Cliquer pour télécharger la bannière (recommandé: 1200×400px)', en:'Click to upload banner (recommended: 1200×400px)', kr:'Klike pou telechaje banyè (rekòmande: 1200×400px)', es:'Clic para subir banner (recomendado: 1200×400px)' },
+  's3.upload_hint':{ fr:'PNG, JPG jusqu\'à 5 Mo', en:'PNG, JPG up to 5MB', kr:'PNG, JPG jiska 5MB', es:'PNG, JPG hasta 5MB' },
+  's3.pattern':  { fr:'Ou choisir un motif prédéfini', en:'Or choose a preset pattern', kr:'Oswa chwazi yon modèl predéfini', es:'O elige un patrón predefinido' },
+  'pat.geo':     { fr:'Géométrique', en:'Geometric', kr:'Jewometrik', es:'Geométrico' },
+  'pat.grad':    { fr:'Dégradé', en:'Gradient', kr:'Degwade', es:'Degradado' },
+  'pat.photo':   { fr:'Élégant', en:'Elegant', kr:'Eleg an', es:'Elegante' },
+  's4.title':    { fr:'Infos de la Boutique', en:'Store Info', kr:'Enfòmasyon Boutik', es:'Info de la Tienda' },
+  's4.sub':      { fr:'Aidez les clients à vous trouver et à vous contacter', en:'Help customers find and contact you', kr:'Ede kliyan jwenn ou ak kontakte ou', es:'Ayuda a los clientes a encontrarte y contactarte' },
+  's4.address':  { fr:'Adresse', en:'Address', kr:'Adrès', es:'Dirección' },
+  's4.address_ph':{ fr:'ex. Pétionville, Port-au-Prince', en:'e.g. Pétionville, Port-au-Prince', kr:'ex. Petyonvil, Pòtoprens', es:'ej. Pétionville, Puerto Príncipe' },
+  's4.phone':    { fr:'Téléphone / WhatsApp', en:'Phone / WhatsApp', kr:'Telefòn / WhatsApp', es:'Teléfono / WhatsApp' },
+  's4.hours':    { fr:'Heures d\'Ouverture', en:'Store Hours', kr:'Lè Boutik Louvri', es:'Horario de la Tienda' },
+  's4.open':     { fr:'Ouvre à', en:'Opens at', kr:'Louvri a', es:'Abre a las' },
+  's4.close':    { fr:'Ferme à', en:'Closes at', kr:'Fèmen a', es:'Cierra a las' },
+  's4.about':    { fr:'À Propos de Votre Boutique', en:'About Your Store', kr:'Sou Boutik Ou', es:'Acerca de tu Tienda' },
+  's4.about_ph': { fr:'Dites aux clients ce qui rend votre boutique spéciale...', en:'Tell customers what makes your store special...', kr:'Di kliyan sa ki rann boutik ou espesyal...', es:'Dile a los clientes qué hace especial tu tienda...' },
+  's5.title':    { fr:'Moyens de Paiement', en:'Payment Methods', kr:'Metòd Pèman', es:'Métodos de Pago' },
+  's5.sub':      { fr:'Quels moyens de paiement acceptez-vous?', en:'Which payment methods do you accept?', kr:'Ki metòd pèman ou aksepte?', es:'¿Qué métodos de pago aceptas?' },
+  'pay.cash':    { fr:'Espèces', en:'Cash', kr:'Kach', es:'Efectivo' },
+  'pay.card':    { fr:'Carte', en:'Card', kr:'Kat', es:'Tarjeta' },
+  's6.title':    { fr:'Produits en Vedette', en:'Featured Products', kr:'Pwodwi Vedèt', es:'Productos Destacados' },
+  's6.sub':      { fr:'Ajoutez jusqu\'à 3 exemples de produits à présenter', en:'Add up to 3 sample products to showcase', kr:'Ajoute jiska 3 pwodwi egzanp pou montre', es:'Agrega hasta 3 productos de muestra para mostrar' },
+  's6.add':      { fr:'Ajouter Produit', en:'Add Product', kr:'Ajoute Pwodwi', es:'Agregar Producto' },
+  's6.name_ph':  { fr:'Nom du produit', en:'Product name', kr:'Non pwodwi', es:'Nombre del producto' },
+  's6.price_ph': { fr:'Prix (HTG)', en:'Price (HTG)', kr:'Pri (HTG)', es:'Precio (HTG)' },
+  'btn.save':    { fr:'Sauvegarder la Boutique', en:'Save Store', kr:'Sove Boutik', es:'Guardar Tienda' },
+  'btn.preview': { fr:'Aperçu Page Complète', en:'Preview Full Page', kr:'Apersi Paj Konplè', es:'Vista Previa Completa' },
+  'btn.share':   { fr:'Partager le Lien', en:'Share Store Link', kr:'Pataje Lyen', es:'Compartir Enlace' },
+  'preview.label':{ fr:'Aperçu en Direct', en:'Live Preview', kr:'Apersi an Dirèk', es:'Vista Previa en Vivo' },
+  'preview.realtime':{ fr:'Temps Réel', en:'Real-time', kr:'Tan Reyèl', es:'Tiempo Real' },
+  'preview.tip': { fr:'Remplissez le formulaire pour voir votre boutique prendre vie en temps réel!', en:'Fill in the form on the left to see your store come alive in real-time!', kr:'Ranpli fòm nan pou wè boutik ou vin vivan an tan reyèl!', es:'¡Completa el formulario para ver tu tienda cobrar vida en tiempo real!' },
+  'preview.payment':{ fr:'Paiement', en:'Payment', kr:'Pèman', es:'Pago' },
+  'preview.about':{ fr:'À Propos', en:'About', kr:'Sou', es:'Acerca de' },
+  'preview.products':{ fr:'Produits', en:'Products', kr:'Pwodwi', es:'Productos' },
+  'preview.location':{ fr:'Localisation', en:'Location', kr:'Lokalizasyon', es:'Ubicación' },
+  'cat.restaurant':{ fr:'🍽️ Restaurant', en:'🍽️ Restaurant', kr:'🍽️ Restoran', es:'🍽️ Restaurante' },
+  'cat.supermarket':{ fr:'🛒 Supermarché', en:'🛒 Supermarket', kr:'🛒 Sipèmakèt', es:'🛒 Supermercado' },
+  'cat.pharmacy':{ fr:'💊 Pharmacie', en:'💊 Pharmacy', kr:'💊 Famasi', es:'💊 Farmacia' },
+  'cat.hardware':{ fr:'🔧 Quincaillerie', en:'🔧 Hardware Store', kr:'🔧 Kinkayri', es:'🔧 Ferretería' },
+  'cat.clothing':{ fr:'👗 Vêtements', en:'👗 Clothing', kr:'👗 Rad', es:'👗 Ropa' },
+  'cat.electronics':{ fr:'📱 Électronique', en:'📱 Electronics', kr:'📱 Elektwonik', es:'📱 Electrónica' },
+  'cat.beauty':  { fr:'💄 Beauté', en:'💄 Beauty', kr:'💄 Bote', es:'💄 Belleza' },
+  'cat.other':   { fr:'🏬 Autre', en:'🏬 Other', kr:'🏬 Lòt', es:'🏬 Otro' },
+  'eco.part_of': { fr:'Fait partie de l\'Écosystème HaitiBiznis', en:'Part of the HaitiBiznis Ecosystem', kr:'Fè pati Ekosistèm HaitiBiznis', es:'Parte del Ecosistema HaitiBiznis' },
+  'toast.saved': { fr:'✅ Boutique sauvegardée avec succès!', en:'✅ Store saved successfully!', kr:'✅ Boutik sovgade avèk siksè!', es:'✅ ¡Tienda guardada exitosamente!' },
+  'toast.copied':{ fr:'🔗 Lien copié dans le presse-papiers!', en:'🔗 Link copied to clipboard!', kr:'🔗 Lyen kopye nan presse-papier!', es:'🔗 ¡Enlace copiado al portapapeles!' },
+  'toast.loaded':{ fr:'📂 Données de boutique chargées!', en:'📂 Store data loaded!', kr:'📂 Done boutik chaje!', es:'📂 ¡Datos de tienda cargados!' },
+};
+
+// ── i18n ──────────────────────────────────────────────
+let currentLang = localStorage.getItem('mpp_lang') || 'en';
+
+function t(key) {
+  const entry = translations[key];
+  if (!entry) return key;
+  return entry[currentLang] || entry['en'] || key;
+}
+
+function applyTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    el.textContent = t(key);
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    el.innerHTML = t(key);
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    el.placeholder = t(key);
+  });
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLang);
+  });
+  document.title = t('page.title');
+  // Refresh option texts
+  const catSel = document.getElementById('storeCategory');
+  if (catSel) {
+    const val = catSel.value;
+    catSel.querySelectorAll('option[data-i18n]').forEach(opt => {
+      opt.textContent = t(opt.getAttribute('data-i18n'));
+    });
+    catSel.value = val;
+  }
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentLang = btn.getAttribute('data-lang');
+    localStorage.setItem('mpp_lang', currentLang);
+    applyTranslations();
+    updatePreview();
+  });
+});
+
+// ── State ─────────────────────────────────────────────
+const state = {
+  name: '', slogan: '', category: '', logo: null,
+  primaryColor: '#D21034', secondaryColor: '#00209F',
+  bannerPattern: 'geo', bannerImage: null,
+  address: '', phone: '', openTime: '08:00', closeTime: '20:00', desc: '',
+  payments: ['moncash','cash'],
+  products: [],
+};
+
+const CATEGORY_EMOJIS = {
+  restaurant:'🍽️', supermarket:'🛒', pharmacy:'💊',
+  hardware:'🔧', clothing:'👗', electronics:'📱', beauty:'💄', other:'🏬'
+};
+
+const PRODUCT_EMOJIS = ['🍕','🍗','🍚','🥩','🥑','🍌','🥦','🧃','🍞','🧆','🍳','🥗','🛒','💊','👗','📱','🔧','💄','🏡','🎁','☕','🍰','🧴','🥛','🍫','🌿','🎶','📦','🛍️','🥤'];
+
+// ── Products ──────────────────────────────────────────
+function addProduct() {
+  if (state.products.length >= 3) return;
+  state.products.push({ emoji: '📦', name: '', price: '' });
+  renderProducts();
+  updateProgress();
+}
+
+function removeProduct(idx) {
+  state.products.splice(idx, 1);
+  renderProducts();
+  updatePreview();
+  updateProgress();
+}
+
+function renderProducts() {
+  const list = document.getElementById('productsList');
+  list.innerHTML = '';
+  state.products.forEach((p, i) => {
+    const row = document.createElement('div');
+    row.className = 'product-row';
+    row.innerHTML = `
+      <div class="product-emoji-pick" id="emojipick-${i}" onclick="toggleEmojiDropdown(${i})">
+        <span id="prodEmoji-${i}">${p.emoji}</span>
+        <div class="emoji-dropdown" id="emojiDrop-${i}">
+          ${PRODUCT_EMOJIS.map(e => `<div class="emoji-opt" onclick="setEmoji(event,${i},'${e}')">${e}</div>`).join('')}
+        </div>
+      </div>
+      <div class="product-fields">
+        <input type="text" class="product-name-input" placeholder="${t('s6.name_ph')}" value="${p.name}" maxlength="30" oninput="updateProduct(${i},'name',this.value)">
+        <input type="text" class="product-price-input" placeholder="${t('s6.price_ph')}" value="${p.price}" maxlength="15" oninput="updateProduct(${i},'price',this.value)">
+      </div>
+      <button class="remove-product-btn" onclick="removeProduct(${i})" title="Remove">×</button>
+    `;
+    list.appendChild(row);
+  });
+  const addBtn = document.getElementById('addProductBtn');
+  addBtn.style.display = state.products.length >= 3 ? 'none' : 'block';
+  updatePreviewProducts();
+}
+
+function toggleEmojiDropdown(idx) {
+  const drop = document.getElementById('emojiDrop-' + idx);
+  const isOpen = drop.classList.contains('open');
+  document.querySelectorAll('.emoji-dropdown').forEach(d => d.classList.remove('open'));
+  if (!isOpen) drop.classList.add('open');
+}
+
+function setEmoji(e, idx, emoji) {
+  e.stopPropagation();
+  state.products[idx].emoji = emoji;
+  document.getElementById('prodEmoji-' + idx).textContent = emoji;
+  document.getElementById('emojiDrop-' + idx).classList.remove('open');
+  updatePreviewProducts();
+}
+
+function updateProduct(idx, field, val) {
+  state.products[idx][field] = val;
+  updatePreviewProducts();
+  updateProgress();
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.product-emoji-pick')) {
+    document.querySelectorAll('.emoji-dropdown').forEach(d => d.classList.remove('open'));
+  }
+});
+
+// ── Payment ──────────────────────────────────────────
+function togglePayment(label) {
+  const payment = label.getAttribute('data-payment');
+  const input = label.querySelector('input[type="checkbox"]');
+  input.checked = !input.checked;
+  label.classList.toggle('checked', input.checked);
+  if (input.checked) {
+    if (!state.payments.includes(payment)) state.payments.push(payment);
+  } else {
+    state.payments = state.payments.filter(p => p !== payment);
+  }
+  updatePreviewPayments();
+  updateProgress();
+}
+
+// ── Banner Pattern ────────────────────────────────────
+function selectBannerPattern(el) {
+  document.querySelectorAll('.banner-opt').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  state.bannerPattern = el.getAttribute('data-pattern');
+  updatePreviewBanner();
+}
+
+// ── Color Themes ──────────────────────────────────────
+document.querySelectorAll('.theme-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const p = btn.getAttribute('data-primary');
+    const s = btn.getAttribute('data-secondary');
+    document.getElementById('primaryColor').value = p;
+    document.getElementById('secondaryColor').value = s;
+    setColor('primary', p);
+    setColor('secondary', s);
+  });
+});
+
+function setColor(type, val) {
+  if (type === 'primary') {
+    state.primaryColor = val;
+    document.getElementById('primarySwatch').style.background = val;
+    document.getElementById('primaryHex').textContent = val;
+  } else {
+    state.secondaryColor = val;
+    document.getElementById('secondarySwatch').style.background = val;
+    document.getElementById('secondaryHex').textContent = val;
+  }
+  updatePreviewBanner();
+}
+
+document.getElementById('primaryColor').addEventListener('input', function() {
+  setColor('primary', this.value);
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+});
+document.getElementById('secondaryColor').addEventListener('input', function() {
+  setColor('secondary', this.value);
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+});
+
+// ── File Uploads ──────────────────────────────────────
+document.getElementById('logoFile').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    state.logo = e.target.result;
+    const preview = document.getElementById('logoPreview');
+    preview.src = e.target.result;
+    preview.classList.add('show');
+    document.getElementById('logoPlaceholder').style.display = 'none';
+    updatePreviewLogo();
+    updateProgress();
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('bannerFile').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    state.bannerImage = e.target.result;
+    const preview = document.getElementById('bannerPreview');
+    preview.src = e.target.result;
+    preview.classList.add('show');
+    document.getElementById('bannerPlaceholder').style.display = 'none';
+    // Deactivate banner patterns
+    document.querySelectorAll('.banner-opt').forEach(b => b.classList.remove('active'));
+    state.bannerPattern = null;
+    updatePreviewBanner();
+    updateProgress();
+  };
+  reader.readAsDataURL(file);
+});
+
+// ── Form Inputs ──────────────────────────────────────
+document.getElementById('storeName').addEventListener('input', function() {
+  state.name = this.value.trim();
+  const el = document.getElementById('previewName');
+  if (state.name) {
+    el.textContent = state.name;
+    el.classList.remove('preview-placeholder');
+  } else {
+    el.textContent = t('s1.name_ph').replace('e.g. ', '') || 'Your Store Name';
+    el.classList.add('preview-placeholder');
+  }
+  updateProgress();
+});
+
+document.getElementById('storeSlogan').addEventListener('input', function() {
+  state.slogan = this.value;
+  const el = document.getElementById('previewSlogan');
+  el.textContent = state.slogan;
+  updateProgress();
+});
+
+document.getElementById('storeCategory').addEventListener('change', function() {
+  state.category = this.value;
+  const badge = document.getElementById('previewCategory');
+  if (state.category) {
+    const emoji = CATEGORY_EMOJIS[state.category] || '🏬';
+    const nameKey = 'cat.' + state.category;
+    const fullText = t(nameKey);
+    badge.textContent = fullText;
+    badge.style.display = 'inline-block';
+    // Update preview logo emoji if no custom logo
+    if (!state.logo) {
+      document.getElementById('previewLogoEmoji').textContent = emoji;
+    }
+  } else {
+    badge.style.display = 'none';
+    if (!state.logo) {
+      document.getElementById('previewLogoEmoji').textContent = '🏪';
+    }
+  }
+  updateProgress();
+});
+
+document.getElementById('storeAddress').addEventListener('input', function() {
+  state.address = this.value.trim();
+  const section = document.getElementById('previewAddressSection');
+  const el = document.getElementById('previewAddress');
+  if (state.address) {
+    section.style.display = 'block';
+    el.textContent = state.address;
+  } else {
+    section.style.display = 'none';
+  }
+  updateProgress();
+});
+
+document.getElementById('storePhone').addEventListener('input', function() {
+  state.phone = this.value.trim();
+  updateProgress();
+});
+
+document.getElementById('openTime').addEventListener('input', updateHours);
+document.getElementById('closeTime').addEventListener('input', updateHours);
+
+function updateHours() {
+  state.openTime = document.getElementById('openTime').value;
+  state.closeTime = document.getElementById('closeTime').value;
+  const fmt = t => {
+    if (!t) return '';
+    const [h, m] = t.split(':');
+    const hr = parseInt(h);
+    const suffix = hr >= 12 ? 'PM' : 'AM';
+    const hr12 = hr % 12 || 12;
+    return `${hr12}:${m} ${suffix}`;
+  };
+  document.getElementById('previewHours').textContent = `${fmt(state.openTime)} – ${fmt(state.closeTime)}`;
+}
+
+document.getElementById('storeDesc').addEventListener('input', function() {
+  state.desc = this.value;
+  const len = this.value.length;
+  const countEl = document.getElementById('descCount');
+  countEl.textContent = `${len}/200`;
+  countEl.className = 'char-count' + (len >= 200 ? ' at-limit' : len >= 160 ? ' near-limit' : '');
+  const section = document.getElementById('previewAboutSection');
+  const el = document.getElementById('previewAbout');
+  if (state.desc.trim()) {
+    section.style.display = 'block';
+    el.textContent = state.desc;
+  } else {
+    section.style.display = 'none';
+  }
+  updateProgress();
+});
+
+// ── Preview Updaters ──────────────────────────────────
+function updatePreviewBanner() {
+  const banner = document.getElementById('previewBanner');
+  const patternEl = document.getElementById('previewBannerPattern');
+
+  if (state.bannerImage) {
+    banner.style.backgroundImage = `url(${state.bannerImage})`;
+    banner.style.backgroundSize = 'cover';
+    banner.style.backgroundPosition = 'center';
+    banner.style.background = '';
+    patternEl.style.background = 'none';
+  } else {
+    banner.style.backgroundImage = '';
+    const p = state.primaryColor;
+    const s = state.secondaryColor;
+    banner.style.background = `linear-gradient(135deg, ${s} 0%, ${p} 100%)`;
+
+    if (state.bannerPattern === 'geo') {
+      patternEl.style.background = `repeating-linear-gradient(45deg, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 2px, transparent 2px, transparent 12px)`;
+    } else if (state.bannerPattern === 'grad') {
+      patternEl.style.background = `radial-gradient(ellipse at top right, rgba(255,255,255,0.2) 0%, transparent 60%)`;
+    } else if (state.bannerPattern === 'photo') {
+      patternEl.style.background = `radial-gradient(circle at bottom left, rgba(0,0,0,0.3) 0%, transparent 70%)`;
+    } else {
+      patternEl.style.background = 'none';
+    }
+  }
+
+  // Update product price color
+  document.querySelectorAll('.preview-product-price').forEach(el => {
+    el.style.color = state.primaryColor;
+  });
+}
+
+function updatePreviewLogo() {
+  const logoEl = document.getElementById('previewLogo');
+  if (state.logo) {
+    logoEl.innerHTML = `<img src="${state.logo}" alt="Logo" style="width:100%;height:100%;object-fit:cover;border-radius:11px;">`;
+  } else {
+    const emoji = state.category ? (CATEGORY_EMOJIS[state.category] || '🏪') : '🏪';
+    logoEl.innerHTML = `<span id="previewLogoEmoji">${emoji}</span>`;
+  }
+}
+
+function updatePreviewPayments() {
+  const row = document.getElementById('previewPayments');
+  const icons = { moncash:'📱 MonCash', natcash:'💚 NatCash', cash:'💵 Cash', card:'💳 Card' };
+  if (state.payments.length === 0) {
+    row.innerHTML = '<span style="font-size:10px;color:var(--text-muted);">—</span>';
+    return;
+  }
+  row.innerHTML = state.payments.map(p => `<span class="preview-pay-badge">${icons[p] || p}</span>`).join('');
+}
+
+function updatePreviewProducts() {
+  const grid = document.getElementById('previewProductsGrid');
+  const section = document.getElementById('previewProductsSection');
+  const visible = state.products.filter(p => p.name || p.price);
+  if (visible.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+  section.style.display = 'block';
+  grid.innerHTML = visible.map(p => `
+    <div class="preview-product-card">
+      <div class="preview-product-emoji">${p.emoji}</div>
+      <div class="preview-product-name">${p.name || '…'}</div>
+      <div class="preview-product-price" style="color:${state.primaryColor};">${p.price ? p.price + ' HTG' : ''}</div>
+    </div>
+  `).join('');
+}
+
+function updatePreview() {
+  updatePreviewBanner();
+  updatePreviewLogo();
+  updatePreviewPayments();
+  updatePreviewProducts();
+  updateHours();
+}
+
+// ── Progress Calculation ──────────────────────────────
+function updateProgress() {
+  const fields = [
+    !!state.name,
+    !!state.category,
+    !!state.slogan,
+    !!state.logo,
+    !!state.address,
+    !!state.phone,
+    !!state.desc,
+    state.payments.length > 0,
+    state.products.length > 0,
+    state.products.some(p => p.name && p.price),
+  ];
+  const done = fields.filter(Boolean).length;
+  const pct = Math.round((done / fields.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+
+// ── Save / Load ───────────────────────────────────────
+function saveStore() {
+  const data = {
+    name: document.getElementById('storeName').value,
+    slogan: document.getElementById('storeSlogan').value,
+    category: document.getElementById('storeCategory').value,
+    logo: state.logo,
+    primaryColor: state.primaryColor,
+    secondaryColor: state.secondaryColor,
+    bannerPattern: state.bannerPattern,
+    bannerImage: state.bannerImage,
+    address: document.getElementById('storeAddress').value,
+    phone: document.getElementById('storePhone').value,
+    openTime: document.getElementById('openTime').value,
+    closeTime: document.getElementById('closeTime').value,
+    desc: document.getElementById('storeDesc').value,
+    payments: state.payments,
+    products: state.products,
+  };
+  try {
+    localStorage.setItem('mpp_store_draft', JSON.stringify(data));
+  } catch(e) {
+    // Storage quota; save without images
+    const slim = { ...data, logo: null, bannerImage: null };
+    localStorage.setItem('mpp_store_draft', JSON.stringify(slim));
+  }
+  showToast(t('toast.saved'), 'success');
+}
+
+function loadStore() {
+  const raw = localStorage.getItem('mpp_store_draft');
+  if (!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    // Populate fields
+    if (data.name) { document.getElementById('storeName').value = data.name; state.name = data.name; }
+    if (data.slogan) { document.getElementById('storeSlogan').value = data.slogan; state.slogan = data.slogan; }
+    if (data.category) { document.getElementById('storeCategory').value = data.category; state.category = data.category; }
+    if (data.primaryColor) { document.getElementById('primaryColor').value = data.primaryColor; setColor('primary', data.primaryColor); }
+    if (data.secondaryColor) { document.getElementById('secondaryColor').value = data.secondaryColor; setColor('secondary', data.secondaryColor); }
+    if (data.bannerPattern) { state.bannerPattern = data.bannerPattern; }
+    if (data.address) { document.getElementById('storeAddress').value = data.address; state.address = data.address; }
+    if (data.phone) { document.getElementById('storePhone').value = data.phone; state.phone = data.phone; }
+    if (data.openTime) { document.getElementById('openTime').value = data.openTime; state.openTime = data.openTime; }
+    if (data.closeTime) { document.getElementById('closeTime').value = data.closeTime; state.closeTime = data.closeTime; }
+    if (data.desc) {
+      document.getElementById('storeDesc').value = data.desc; state.desc = data.desc;
+      const countEl = document.getElementById('descCount');
+      countEl.textContent = `${data.desc.length}/200`;
+    }
+    if (data.payments) { state.payments = data.payments; }
+    if (data.products) { state.products = data.products; }
+    if (data.logo) { state.logo = data.logo; }
+    if (data.bannerImage) { state.bannerImage = data.bannerImage; }
+
+    // Sync payment checkboxes
+    document.querySelectorAll('.payment-opt').forEach(opt => {
+      const pay = opt.getAttribute('data-payment');
+      const inp = opt.querySelector('input[type="checkbox"]');
+      if (state.payments.includes(pay)) {
+        inp.checked = true; opt.classList.add('checked');
+      } else {
+        inp.checked = false; opt.classList.remove('checked');
+      }
+    });
+
+    // Sync theme buttons
+    const matchTheme = document.querySelector(`.theme-btn[data-primary="${data.primaryColor}"]`);
+    document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+    if (matchTheme) matchTheme.classList.add('active');
+
+    // Restore banner pattern highlight
+    document.querySelectorAll('.banner-opt').forEach(b => {
+      b.classList.toggle('active', b.getAttribute('data-pattern') === state.bannerPattern);
+    });
+
+    renderProducts();
+    updatePreview();
+    updateProgress();
+    showToast(t('toast.loaded'), 'info');
+  } catch(e) {
+    console.warn('Could not load store data:', e);
+  }
+}
+
+// ── Preview Full / Share ──────────────────────────────
+function previewFull() {
+  saveStore();
+  window.open('store.html?preview=1', '_blank');
+}
+
+function shareStore() {
+  const url = window.location.origin + '/store.html?id=my-store';
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(() => showToast(t('toast.copied'), 'info'));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = url;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast(t('toast.copied'), 'info');
+  }
+}
+
+// ── Toast ─────────────────────────────────────────────
+function showToast(msg, type = '') {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'toast' + (type ? ' ' + type : '');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ── Init ──────────────────────────────────────────────
+applyTranslations();
+updatePreview();
+
+// Initialize product list (start with 1 product)
+state.products.push({ emoji: '📦', name: '', price: '' });
+renderProducts();
+
+// Load saved data
+loadStore();
+updateProgress();
+
+// Initialize hours display
+updateHours();
+</script>
+</body>
+</html>
