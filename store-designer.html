@@ -1581,17 +1581,17 @@ body {
 <!-- ACTION BAR -->
 <div class="action-bar">
   <div class="action-bar-inner">
-    <button class="btn-save" onclick="saveStore()">
-      <span>💾</span>
-      <span data-i18n="btn.save">Save Store</span>
+    <button class="btn-save" onclick="publishStore()" style="background:var(--primary-red);flex:2;">
+      <span>🚀</span>
+      <span data-i18n="btn.publish">Publish Store</span>
     </button>
     <button class="btn-preview" onclick="previewFull()">
       <span>👁️</span>
-      <span data-i18n="btn.preview">Preview Full Page</span>
+      <span data-i18n="btn.preview">Preview</span>
     </button>
     <button class="btn-share" onclick="shareStore()">
       <span>🔗</span>
-      <span data-i18n="btn.share">Share Link</span>
+      <span data-i18n="btn.share">Share</span>
     </button>
   </div>
 </div>
@@ -1686,9 +1686,9 @@ const translations = {
   's6.add':      { fr:'Ajouter Produit', en:'Add Product', kr:'Ajoute Pwodwi', es:'Agregar Producto' },
   's6.name_ph':  { fr:'Nom du produit', en:'Product name', kr:'Non pwodwi', es:'Nombre del producto' },
   's6.price_ph': { fr:'Prix (HTG)', en:'Price (HTG)', kr:'Pri (HTG)', es:'Precio (HTG)' },
-  'btn.save':    { fr:'Sauvegarder la Boutique', en:'Save Store', kr:'Sove Boutik', es:'Guardar Tienda' },
-  'btn.preview': { fr:'Aperçu Page Complète', en:'Preview Full Page', kr:'Apersi Paj Konplè', es:'Vista Previa Completa' },
-  'btn.share':   { fr:'Partager le Lien', en:'Share Store Link', kr:'Pataje Lyen', es:'Compartir Enlace' },
+  'btn.publish': { fr:'Publier la Boutique', en:'Publish Store', kr:'Pibliye Boutik', es:'Publicar Tienda' },
+  'btn.preview': { fr:'Aperçu', en:'Preview', kr:'Apersi', es:'Vista Previa' },
+  'btn.share':   { fr:'Partager', en:'Share', kr:'Pataje', es:'Compartir' },
   'preview.label':{ fr:'Aperçu en Direct', en:'Live Preview', kr:'Apersi an Dirèk', es:'Vista Previa en Vivo' },
   'preview.realtime':{ fr:'Temps Réel', en:'Real-time', kr:'Tan Reyèl', es:'Tiempo Real' },
   'preview.tip': { fr:'Remplissez le formulaire pour voir votre boutique prendre vie en temps réel!', en:'Fill in the form on the left to see your store come alive in real-time!', kr:'Ranpli fòm nan pou wè boutik ou vin vivan an tan reyèl!', es:'¡Completa el formulario para ver tu tienda cobrar vida en tiempo real!' },
@@ -2133,8 +2133,14 @@ function updateProgress() {
 
 // ── Save / Load ───────────────────────────────────────
 function saveStore() {
+  const name = document.getElementById('storeName').value.trim();
+  if (!name) {
+    showToast('Please enter a store name first!', 'error');
+    document.getElementById('storeName').focus();
+    return false;
+  }
   const data = {
-    name: document.getElementById('storeName').value,
+    name: name,
     slogan: document.getElementById('storeSlogan').value,
     category: document.getElementById('storeCategory').value,
     logo: state.logo,
@@ -2153,11 +2159,11 @@ function saveStore() {
   try {
     localStorage.setItem('mpp_store_draft', JSON.stringify(data));
   } catch(e) {
-    // Storage quota; save without images
     const slim = { ...data, logo: null, bannerImage: null };
     localStorage.setItem('mpp_store_draft', JSON.stringify(slim));
   }
   showToast(t('toast.saved'), 'success');
+  return true;
 }
 
 function loadStore() {
@@ -2218,13 +2224,20 @@ function loadStore() {
 
 // ── Preview Full / Share ──────────────────────────────
 function previewFull() {
-  saveStore();
+  if (saveStore() === false) return;
   window.open('store.html?preview=1', '_blank');
 }
 
 function shareStore() {
+  if (saveStore() === false) return;
   const url = window.location.origin + '/store.html?id=my-store';
-  if (navigator.clipboard && navigator.clipboard.writeText) {
+  if (navigator.share) {
+    navigator.share({
+      title: document.getElementById('storeName').value + ' — MyPlopPlop',
+      text: 'Check out my store on MyPlopPlop!',
+      url: url
+    }).catch(function(){});
+  } else if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(url).then(() => showToast(t('toast.copied'), 'info'));
   } else {
     const ta = document.createElement('textarea');
@@ -2235,6 +2248,15 @@ function shareStore() {
     document.body.removeChild(ta);
     showToast(t('toast.copied'), 'info');
   }
+}
+
+function publishStore() {
+  if (saveStore() === false) return;
+  const url = window.location.origin + '/store.html?id=my-store';
+  showToast('Store published! Opening your store...', 'success');
+  setTimeout(function() {
+    window.open('store.html?preview=1', '_blank');
+  }, 800);
 }
 
 // ── Toast ─────────────────────────────────────────────

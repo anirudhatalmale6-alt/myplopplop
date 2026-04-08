@@ -867,14 +867,84 @@ function showToast(msg) {
 // ===== URL PARAM & STORE LOOKUP =====
 var params = new URLSearchParams(window.location.search);
 var storeId = params.get('id');
-var store = MOCK.STORES.find(function(s) { return s.id === storeId; });
+var isPreview = params.get('preview') === '1' || storeId === 'my-store';
+var isCustomStore = false;
+var store = null;
+var category = null;
 
-if (!store) {
-    // Fallback to first store
-    store = MOCK.STORES[0];
+// Check if this is a custom store from the Store Designer
+if (isPreview) {
+    try {
+        var draft = JSON.parse(localStorage.getItem('mpp_store_draft'));
+        if (draft && draft.name) {
+            isCustomStore = true;
+            var CATEGORY_EMOJIS = {
+                restaurant:'🍽️', supermarket:'🛒', pharmacy:'💊',
+                hardware:'🔧', clothing:'👗', electronics:'📱', beauty:'💄', other:'🏬'
+            };
+            var CATEGORY_NAMES = {
+                restaurant:'Restaurant', supermarket:'Supermarket', pharmacy:'Pharmacy',
+                hardware:'Hardware Store', clothing:'Clothing', electronics:'Electronics', beauty:'Beauty', other:'Store'
+            };
+            // Build products array from designer data
+            var customProducts = [];
+            if (draft.products && draft.products.length > 0) {
+                draft.products.forEach(function(p, i) {
+                    if (p.name) {
+                        customProducts.push({
+                            id: 'custom-' + i,
+                            name: p.name,
+                            description: '',
+                            price: parseInt(p.price) || 0,
+                            category: CATEGORY_NAMES[draft.category] || 'Products',
+                            emoji: p.emoji || '📦'
+                        });
+                    }
+                });
+            }
+            // Build store object from designer draft
+            store = {
+                id: 'my-store',
+                name: draft.name,
+                description: draft.desc || '',
+                category: draft.category || 'other',
+                address: draft.address || 'Haiti',
+                phone: draft.phone || '',
+                rating: 5.0,
+                reviews: 0,
+                eta: 30,
+                deliveryFee: 0,
+                open: true,
+                verified: false,
+                products: customProducts,
+                custom: true,
+                logo: draft.logo || null,
+                slogan: draft.slogan || '',
+                primaryColor: draft.primaryColor || '#D21034',
+                secondaryColor: draft.secondaryColor || '#00209F',
+                bannerPattern: draft.bannerPattern || 'geo',
+                bannerImage: draft.bannerImage || null,
+                payments: draft.payments || ['cash'],
+                openTime: draft.openTime || '08:00',
+                closeTime: draft.closeTime || '20:00'
+            };
+            category = {
+                id: draft.category || 'other',
+                name: CATEGORY_NAMES[draft.category] || 'Store',
+                icon: CATEGORY_EMOJIS[draft.category] || '🏬'
+            };
+        }
+    } catch(e) {
+        console.warn('Could not load custom store:', e);
+    }
 }
 
-var category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
+// Fallback to mock store
+if (!store) {
+    store = MOCK.STORES.find(function(s) { return s.id === storeId; });
+    if (!store) store = MOCK.STORES[0];
+    category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
+}
 
 // Update page title
 document.title = store.name + ' — MyPlopPlop';
@@ -888,11 +958,32 @@ var CATEGORY_THEMES = {
     'wholesale':    { gradient: 'linear-gradient(135deg, #7C3AED 0%, #4C1D95 60%, #A78BFA 100%)', accent: '#8B5CF6', iconBg: '#F5F3FF', label: 'Wholesale' },
     'retail':       { gradient: 'linear-gradient(135deg, #DB2777 0%, #831843 60%, #F472B6 100%)', accent: '#EC4899', iconBg: '#FDF2F8', label: 'Retail' }
 };
-var theme = CATEGORY_THEMES[store.category] || { gradient: 'linear-gradient(135deg, var(--primary-blue) 0%, #001247 60%, var(--primary-red) 100%)', accent: '#00209F', iconBg: '#EFF6FF', label: 'Store' };
+
+var theme;
+if (isCustomStore) {
+    // Use merchant's own colors for custom stores
+    var p = store.primaryColor;
+    var s = store.secondaryColor;
+    theme = {
+        gradient: 'linear-gradient(135deg, ' + s + ' 0%, ' + p + ' 100%)',
+        accent: p,
+        iconBg: '#F8F9FA',
+        label: category ? category.name : 'Store'
+    };
+} else {
+    theme = CATEGORY_THEMES[store.category] || { gradient: 'linear-gradient(135deg, var(--primary-blue) 0%, #001247 60%, var(--primary-red) 100%)', accent: '#00209F', iconBg: '#EFF6FF', label: 'Store' };
+}
 
 // Apply theme to banner
 var bannerEl = document.getElementById('storeBanner');
-bannerEl.style.background = theme.gradient;
+// For custom stores with banner image, use that instead
+if (isCustomStore && store.bannerImage) {
+    bannerEl.style.backgroundImage = 'url(' + store.bannerImage + ')';
+    bannerEl.style.backgroundSize = 'cover';
+    bannerEl.style.backgroundPosition = 'center';
+} else {
+    bannerEl.style.background = theme.gradient;
+}
 
 // Apply accent color to add-to-cart buttons and product prices via CSS variable
 document.documentElement.style.setProperty('--store-accent', theme.accent);
@@ -905,14 +996,28 @@ document.head.appendChild(accentStyle);
 // ===== RENDER STORE BANNER =====
 var bannerHTML = '';
 bannerHTML += '<div class="store-banner-inner">';
-bannerHTML += '  <a href="shop.html" class="store-back">';
-bannerHTML += '    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>';
-bannerHTML += '    Back to Stores';
-bannerHTML += '  </a>';
+if (isCustomStore) {
+    bannerHTML += '  <a href="store-designer.html" class="store-back">';
+    bannerHTML += '    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>';
+    bannerHTML += '    Back to Designer';
+    bannerHTML += '  </a>';
+} else {
+    bannerHTML += '  <a href="shop.html" class="store-back">';
+    bannerHTML += '    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>';
+    bannerHTML += '    Back to Stores';
+    bannerHTML += '  </a>';
+}
 bannerHTML += '  <div class="store-banner-row">';
-bannerHTML += '    <div class="store-icon-large" style="background:' + theme.iconBg + '">' + (category ? category.icon : '🏪') + '</div>';
+if (isCustomStore && store.logo) {
+    bannerHTML += '    <div class="store-icon-large" style="background:' + theme.iconBg + ';padding:0;overflow:hidden;"><img src="' + store.logo + '" alt="Logo" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"></div>';
+} else {
+    bannerHTML += '    <div class="store-icon-large" style="background:' + theme.iconBg + '">' + (category ? category.icon : '🏪') + '</div>';
+}
 bannerHTML += '    <div class="store-banner-info">';
 bannerHTML += '      <h1 class="store-banner-name">' + store.name + '</h1>';
+if (isCustomStore && store.slogan) {
+    bannerHTML += '      <div style="font-size:0.85rem;opacity:0.85;margin-bottom:6px;font-style:italic;">' + store.slogan + '</div>';
+}
 bannerHTML += '      <div class="store-banner-badges">';
 if (category) {
     bannerHTML += '        <span class="store-cat-badge" style="background:rgba(255,255,255,0.2)">' + category.icon + ' ' + category.name + '</span>';
@@ -927,11 +1032,18 @@ if (store.verified) {
 }
 bannerHTML += '      </div>';
 bannerHTML += '      <div class="store-banner-meta">';
-bannerHTML += '        <span class="meta-item">⭐ ' + store.rating + ' <span style="opacity:0.7">(' + store.reviews + ' reviews)</span></span>';
-bannerHTML += '        <span class="meta-item">🕐 ' + store.eta + ' min</span>';
+if (!isCustomStore) {
+    bannerHTML += '        <span class="meta-item">⭐ ' + store.rating + ' <span style="opacity:0.7">(' + store.reviews + ' reviews)</span></span>';
+}
+bannerHTML += '        <span class="meta-item">🕐 ' + (isCustomStore ? store.openTime + ' - ' + store.closeTime : store.eta + ' min') + '</span>';
 bannerHTML += '        <span class="meta-item">🛵 ' + (store.deliveryFee === 0 ? 'Free delivery' : MOCK.formatHTG(store.deliveryFee) + ' delivery') + '</span>';
 bannerHTML += '      </div>';
-bannerHTML += '      <div class="store-banner-address">📍 ' + store.address + '</div>';
+if (store.address) {
+    bannerHTML += '      <div class="store-banner-address">📍 ' + store.address + '</div>';
+}
+if (isCustomStore && store.phone) {
+    bannerHTML += '      <div style="font-size:0.8rem;margin-top:4px;opacity:0.85;">📞 ' + store.phone + '</div>';
+}
 bannerHTML += '    </div>';
 bannerHTML += '  </div>';
 bannerHTML += '</div>';
@@ -958,7 +1070,7 @@ function renderProducts() {
         html += '<div class="product-list">';
         groups[catName].forEach(function(p) {
             html += '<div class="product-card" onclick="openProductModal(\'' + p.id + '\')">';
-            html += '  <div class="product-img-placeholder">' + (category ? category.icon : '📦') + '</div>';
+            html += '  <div class="product-img-placeholder">' + (p.emoji || (category ? category.icon : '📦')) + '</div>';
             html += '  <div class="product-details">';
             html += '    <div class="product-name">' + p.name + '</div>';
             html += '    <div class="product-desc">' + p.description + '</div>';
@@ -1023,7 +1135,28 @@ function renderAbout() {
     }
     html += '</div>';
 
-    // Hours card (mock)
+    // Payment methods (for custom stores)
+    if (isCustomStore && store.payments && store.payments.length > 0) {
+        var payIcons = { moncash:'📱 MonCash', natcash:'💚 NatCash', cash:'💵 Cash', card:'💳 Card' };
+        html += '<div class="about-card">';
+        html += '  <h4>Payment Methods</h4>';
+        html += '  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">';
+        store.payments.forEach(function(pm) {
+            html += '    <span style="background:var(--bg-light);padding:6px 14px;border-radius:20px;font-size:0.85rem;font-weight:500;">' + (payIcons[pm] || pm) + '</span>';
+        });
+        html += '  </div>';
+        html += '</div>';
+    }
+
+    // Hours card
+    var fmtTime = function(t) {
+        if (!t) return '';
+        var parts = t.split(':');
+        var hr = parseInt(parts[0]);
+        var suffix = hr >= 12 ? 'PM' : 'AM';
+        var hr12 = hr % 12 || 12;
+        return hr12 + ':' + parts[1] + ' ' + suffix;
+    };
     var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     var todayIndex = (new Date().getDay() + 6) % 7; // 0=Mon
     html += '<div class="about-card">';
@@ -1031,7 +1164,12 @@ function renderAbout() {
     html += '  <div class="hours-grid">';
     days.forEach(function(day, i) {
         var isToday = i === todayIndex;
-        var hours = (i < 6) ? '8:00 AM - 9:00 PM' : '9:00 AM - 6:00 PM';
+        var hours;
+        if (isCustomStore) {
+            hours = fmtTime(store.openTime) + ' - ' + fmtTime(store.closeTime);
+        } else {
+            hours = (i < 6) ? '8:00 AM - 9:00 PM' : '9:00 AM - 6:00 PM';
+        }
         html += '    <div class="hours-row' + (isToday ? ' today' : '') + '">';
         html += '      <span class="day">' + day + (isToday ? ' (Today)' : '') + '</span>';
         html += '      <span class="time">' + hours + '</span>';
@@ -1145,7 +1283,7 @@ function renderModalContent() {
     if (!modalProduct) return;
     var mc = document.getElementById('productModalContent');
     var html = '';
-    html += '<div class="product-modal-img">' + (category ? category.icon : '📦') + '</div>';
+    html += '<div class="product-modal-img">' + (modalProduct.emoji || (category ? category.icon : '📦')) + '</div>';
     html += '<div class="product-modal-name">' + modalProduct.name + '</div>';
     html += '<div class="product-modal-desc">' + modalProduct.description + '</div>';
     html += '<div class="product-modal-price">' + MOCK.formatHTG(modalProduct.price) + '</div>';
