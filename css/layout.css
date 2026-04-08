@@ -148,8 +148,7 @@
 
 /* ===== Main Content ===== */
 .main {
-    margin-top: var(--header-height);
-    min-height: calc(100vh - var(--header-height) - var(--bottom-nav-height));
+    min-height: calc(100vh - var(--bottom-nav-height));
 }
 
 /* ===== Page Header ===== */

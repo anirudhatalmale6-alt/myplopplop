@@ -761,6 +761,46 @@
       es: 'Unete a un Sol Hoy'
     },
 
+    // ── Help Page ──
+    'help.title': {
+      fr: 'Comment pouvons-nous vous aider ?',
+      en: 'How can we help?',
+      kr: 'Kijan nou ka ede ou?',
+      es: 'Como podemos ayudarte?'
+    },
+    'help.sub': {
+      fr: 'Cherchez dans notre centre d\'aide ou parcourez les sujets ci-dessous',
+      en: 'Search our help center or browse common topics below',
+      kr: 'Chèche nan sant èd nou oswa gade sijè yo anba a',
+      es: 'Busca en nuestro centro de ayuda o navega los temas abajo'
+    },
+    'help.search': {
+      fr: 'Chercher de l\'aide...',
+      en: 'Search for help...',
+      kr: 'Chèche èd...',
+      es: 'Buscar ayuda...'
+    },
+    'help.cat1': { fr: 'Commandes & Livraison', en: 'Orders & Delivery', kr: 'Komand & Livrezon', es: 'Pedidos & Entrega' },
+    'help.cat1d': { fr: 'Suivre, annuler, problemes', en: 'Track, cancel, issues', kr: 'Swiv, anile, pwoblem', es: 'Rastrear, cancelar, problemas' },
+    'help.cat2': { fr: 'Paiements & Portefeuille', en: 'Payments & Wallet', kr: 'Peman & Bous', es: 'Pagos & Billetera' },
+    'help.cat2d': { fr: 'Payer, remboursements, San Cash', en: 'Pay, refunds, San Cash', kr: 'Peye, ranbousman, San Cash', es: 'Pagar, reembolsos, San Cash' },
+    'help.cat3': { fr: 'Compte & Profil', en: 'Account & Profile', kr: 'Kont & Pwofil', es: 'Cuenta & Perfil' },
+    'help.cat3d': { fr: 'Connexion, parametres, PIN', en: 'Login, settings, PIN', kr: 'Konekte, paramèt, PIN', es: 'Iniciar sesion, ajustes, PIN' },
+    'help.cat4': { fr: 'Marchands & Livreurs', en: 'Merchant & Rider', kr: 'Machann & Livè', es: 'Comerciante & Repartidor' },
+    'help.cat4d': { fr: 'Rejoindre, revenus, support', en: 'Join, earnings, support', kr: 'Rejwenn, revni, sipò', es: 'Unirse, ganancias, soporte' },
+    'help.faq': { fr: 'Questions Frequentes', en: 'Frequently Asked Questions', kr: 'Kesyon Moun Poze Souvan', es: 'Preguntas Frecuentes' },
+    'help.q1': { fr: 'Comment passer une commande ?', en: 'How do I place an order?', kr: 'Kijan mwen ka pase yon komand?', es: 'Como hago un pedido?' },
+    'help.q2': { fr: 'Quels modes de paiement sont acceptes ?', en: 'What payment methods are accepted?', kr: 'Ki metod peman yo aksepte?', es: 'Que metodos de pago se aceptan?' },
+    'help.q3': { fr: 'Comment fonctionne le portefeuille San Cash ?', en: 'How does San Cash wallet work?', kr: 'Kijan bous San Cash la mache?', es: 'Como funciona la billetera San Cash?' },
+    'help.q4': { fr: 'Puis-je commander pour quelqu\'un d\'autre en Haiti ?', en: 'Can I order for someone else in Haiti?', kr: 'Eske mwen ka komande pou yon lot moun nan Ayiti?', es: 'Puedo pedir para alguien mas en Haiti?' },
+    'help.q5': { fr: 'Comment devenir marchand ?', en: 'How do I become a merchant?', kr: 'Kijan mwen ka vin yon machann?', es: 'Como me convierto en comerciante?' },
+    'help.q6': { fr: 'Comment devenir livreur ?', en: 'How do I become a delivery rider?', kr: 'Kijan mwen ka vin yon livè?', es: 'Como me convierto en repartidor?' },
+    'help.q7': { fr: 'Quel est le frais de livraison ?', en: 'What is the delivery fee?', kr: 'Konbyen frè livrezon an ye?', es: 'Cual es la tarifa de entrega?' },
+    'help.q8': { fr: 'Comment suivre ma commande ?', en: 'How do I track my order?', kr: 'Kijan mwen ka swiv komand mwen an?', es: 'Como rastreo mi pedido?' },
+    'help.q9': { fr: 'Comment obtenir un remboursement ?', en: 'How do I get a refund?', kr: 'Kijan mwen ka jwenn yon ranbousman?', es: 'Como obtengo un reembolso?' },
+    'help.q10': { fr: 'Comment fonctionne le programme de parrainage ?', en: 'How does the referral program work?', kr: 'Kijan pwogram rekomandasyon an mache?', es: 'Como funciona el programa de referencias?' },
+    'help.q11': { fr: 'Comment contacter le support ?', en: 'How do I contact support?', kr: 'Kijan mwen ka kontakte sipò?', es: 'Como contacto al soporte?' },
+
     // ── Homepage: Diaspora ──
     'diaspora.title': {
       fr: 'Soutenez votre Famille en Haïti',
