@@ -761,6 +761,20 @@
       es: 'Unete a un Sol Hoy'
     },
 
+    // ── Merchant CTA ──
+    'merchant.cta_title': {
+      fr: 'Vous avez un commerce ? Rejoignez MyPlopPlop !',
+      en: 'Got a business? Join MyPlopPlop!',
+      kr: 'Ou gen yon biznis? Rejwenn MyPlopPlop!',
+      es: 'Tienes un negocio? Unete a MyPlopPlop!'
+    },
+    'merchant.cta_sub': {
+      fr: 'Listez votre boutique gratuitement. Commencez a vendre en quelques minutes.',
+      en: 'List your store free. Start selling in minutes.',
+      kr: 'Mete boutik ou gratis. Komanse vann nan kèk minit.',
+      es: 'Lista tu tienda gratis. Empieza a vender en minutos.'
+    },
+
     // ── Help Page ──
     'help.title': {
       fr: 'Comment pouvons-nous vous aider ?',
