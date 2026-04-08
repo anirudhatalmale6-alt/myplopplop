@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/layout.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" defer></script>
 <style>
 /* ===== STORE PRODUCTS PAGE ===== */
 *, *::before, *::after { box-sizing: border-box; }
@@ -693,6 +694,385 @@ body {
 .badge-canned_packaged { background: #F3F4F6; color: #374151; }
 .badge-dairy_fresh  { background: #FFF7ED; color: #9A3412; }
 .badge-household    { background: #ECFDF5; color: #064E3B; }
+/* Hardware badges */
+.badge-tools        { background: #FEF3C7; color: #78350F; }
+.badge-electrical   { background: #FEF9C3; color: #713F12; }
+.badge-plumbing     { background: #DBEAFE; color: #1E3A8A; }
+.badge-paint        { background: #FCE7F3; color: #831843; }
+.badge-building     { background: #F3F4F6; color: #1F2937; }
+.badge-garden       { background: #D1FAE5; color: #064E3B; }
+.badge-safety       { background: #FEE2E2; color: #7F1D1D; }
+.badge-home_repair  { background: #E0F2FE; color: #0C4A6E; }
+/* Pharmacy badges */
+.badge-pain_fever   { background: #FEE2E2; color: #991B1B; }
+.badge-cold_flu     { background: #E0F2FE; color: #075985; }
+.badge-digestive    { background: #FEF9C3; color: #854D0E; }
+.badge-vitamins     { background: #D1FAE5; color: #065F46; }
+.badge-first_aid    { background: #FEE2E2; color: #9F1239; }
+.badge-skin_care    { background: #EDE9FE; color: #5B21B6; }
+.badge-eye_ear      { background: #DBEAFE; color: #1E40AF; }
+.badge-baby_health  { background: #FCE7F3; color: #9D174D; }
+.badge-feminine_health { background: #FDF4FF; color: #86198F; }
+.badge-medical_supplies { background: #F0FDF4; color: #14532D; }
+
+/* ===== STORE TYPE SELECTOR ===== */
+.store-type-section {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  padding: var(--space-lg) var(--content-padding);
+}
+.store-type-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.store-type-heading {
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--gray-700);
+  margin: 0 0 var(--space-md);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: var(--text-xs);
+}
+.store-type-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+@media (max-width: 480px) {
+  .store-type-cards {
+    display: flex;
+    gap: var(--space-sm);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 4px;
+  }
+  .store-type-cards::-webkit-scrollbar { display: none; }
+  .store-type-card { min-width: 120px; flex-shrink: 0; }
+}
+.store-type-card {
+  border: 2.5px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-sm);
+  cursor: pointer;
+  text-align: center;
+  background: var(--white);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  position: relative;
+  user-select: none;
+}
+.store-type-card:hover {
+  border-color: var(--primary-blue);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.store-type-card.active {
+  border-color: var(--primary-red);
+  box-shadow: 0 4px 16px rgba(210,16,52,0.18);
+  transform: translateY(-2px);
+}
+.store-type-emoji {
+  font-size: 48px;
+  line-height: 1;
+  margin-bottom: 8px;
+  display: block;
+}
+.store-type-name {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  color: var(--gray-800);
+  line-height: 1.2;
+}
+.store-type-name-alt {
+  font-size: 11px;
+  color: var(--gray-500);
+  font-style: italic;
+  margin-top: 2px;
+  line-height: 1.2;
+}
+.store-type-count {
+  display: inline-block;
+  margin-top: 8px;
+  background: var(--gray-100);
+  color: var(--gray-600);
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  padding: 2px 10px;
+}
+.store-type-card.active .store-type-count {
+  background: var(--primary-red);
+  color: var(--white);
+}
+
+/* ===== IMPORT MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 600;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal-sheet {
+  background: var(--white);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  width: 100%;
+  max-width: 680px;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: var(--space-lg) var(--content-padding);
+  padding-bottom: max(var(--space-xl), env(safe-area-inset-bottom));
+  transform: translateY(30px);
+  transition: transform 0.25s;
+}
+.modal-overlay.open .modal-sheet {
+  transform: translateY(0);
+}
+@media (min-width: 680px) {
+  .modal-overlay { align-items: center; }
+  .modal-sheet {
+    border-radius: var(--radius-lg);
+    margin: var(--space-lg);
+  }
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+}
+.modal-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--gray-900);
+}
+.modal-close-btn {
+  background: var(--gray-100);
+  border: none;
+  border-radius: 50%;
+  width: 34px; height: 34px;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gray-600);
+  transition: background 0.15s;
+}
+.modal-close-btn:hover { background: var(--gray-200); }
+
+.import-instructions {
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+  font-size: var(--text-xs);
+  color: var(--gray-600);
+  line-height: 1.6;
+}
+.import-instructions strong { color: var(--gray-800); display: block; margin-bottom: 4px; }
+.import-lang-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+@media (min-width: 480px) { .import-lang-grid { grid-template-columns: repeat(4, 1fr); } }
+.import-lang-item {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: 11px;
+}
+.import-lang-item .lang-tag {
+  font-weight: 700;
+  color: var(--primary-blue);
+  font-size: 10px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.import-actions-row {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+}
+.btn-template {
+  border: 1.5px solid var(--primary-blue);
+  background: var(--primary-blue-light);
+  color: var(--primary-blue);
+  border-radius: var(--radius-md);
+  padding: 9px 16px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  display: flex; align-items: center; gap: 6px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.btn-template:hover { background: var(--primary-blue); color: var(--white); }
+
+.drop-zone {
+  border: 2px dashed var(--gray-300);
+  border-radius: var(--radius-md);
+  padding: var(--space-xl) var(--space-lg);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  margin-bottom: var(--space-lg);
+  position: relative;
+}
+.drop-zone.drag-over {
+  border-color: var(--primary-blue);
+  background: var(--primary-blue-light);
+}
+.drop-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+.drop-zone-emoji { font-size: 2rem; margin-bottom: 8px; display: block; }
+.drop-zone-text { font-size: var(--text-sm); color: var(--gray-600); line-height: 1.5; }
+.drop-zone-text strong { color: var(--gray-800); }
+.drop-zone-hint { font-size: 11px; color: var(--gray-400); margin-top: 4px; }
+
+/* Import preview table */
+.import-preview {
+  margin-top: var(--space-md);
+}
+.import-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+.import-match-summary {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--gray-700);
+}
+.import-match-summary .match-good { color: #059669; }
+.import-match-summary .match-bad  { color: #DC2626; }
+.import-preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-xs);
+}
+.import-preview-table th {
+  background: var(--gray-50);
+  border-bottom: 2px solid var(--gray-200);
+  padding: 6px 8px;
+  text-align: left;
+  font-weight: 700;
+  color: var(--gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.import-preview-table td {
+  border-bottom: 1px solid var(--gray-100);
+  padding: 6px 8px;
+  color: var(--gray-700);
+  vertical-align: middle;
+}
+.import-preview-table tr:hover td { background: var(--gray-50); }
+.match-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 10px;
+}
+.match-badge.matched { background: #D1FAE5; color: #065F46; }
+.match-badge.unmatched { background: #FEE2E2; color: #991B1B; }
+.import-fix-select {
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-xs);
+  padding: 3px 6px;
+  font-size: 11px;
+  font-family: var(--font-body);
+  background: var(--white);
+  color: var(--gray-700);
+  max-width: 160px;
+}
+.import-fix-select:focus { border-color: var(--primary-blue); outline: none; }
+
+.import-footer {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+  margin-top: var(--space-lg);
+  flex-wrap: wrap;
+}
+.btn-import-all {
+  background: var(--primary-red);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 10px 22px;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-body);
+  display: flex; align-items: center; gap: 6px;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-import-all:hover { background: var(--primary-red-dark); transform: translateY(-1px); }
+.btn-import-all:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-cancel-import {
+  background: var(--white);
+  color: var(--gray-600);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: 10px 18px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.15s;
+}
+.btn-cancel-import:hover { border-color: var(--gray-400); color: var(--gray-800); }
+
+/* Import button in search row */
+.import-btn {
+  white-space: nowrap;
+  border: 1.5px solid var(--primary-blue);
+  border-radius: var(--radius-full);
+  padding: 8px 14px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--primary-blue-light);
+  color: var(--primary-blue);
+  font-family: var(--font-body);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.import-btn:hover {
+  background: var(--primary-blue);
+  color: var(--white);
+}
 
 /* ===== ECOSYSTEM BAR ===== */
 .ecosystem-bar {
@@ -785,6 +1165,33 @@ body {
   </div>
 </div>
 
+<!-- STORE TYPE SELECTOR -->
+<div class="store-type-section" id="storeTypeSection">
+  <div class="store-type-inner">
+    <div class="store-type-heading" data-i18n="storetype.heading">Choose Your Store Type</div>
+    <div class="store-type-cards" id="storeTypeCards">
+      <div class="store-type-card active" data-store="supermarket" onclick="selectStoreType('supermarket', this)">
+        <span class="store-type-emoji">🛒</span>
+        <div class="store-type-name" data-i18n="storetype.supermarket">Supermarket</div>
+        <div class="store-type-name-alt">Supèmaché</div>
+        <div class="store-type-count" id="storeCount-supermarket">…</div>
+      </div>
+      <div class="store-type-card" data-store="hardware" onclick="selectStoreType('hardware', this)">
+        <span class="store-type-emoji">🔨</span>
+        <div class="store-type-name" data-i18n="storetype.hardware">Hardware</div>
+        <div class="store-type-name-alt">Kenkayri</div>
+        <div class="store-type-count" id="storeCount-hardware">…</div>
+      </div>
+      <div class="store-type-card" data-store="pharmacy" onclick="selectStoreType('pharmacy', this)">
+        <span class="store-type-emoji">💊</span>
+        <div class="store-type-name" data-i18n="storetype.pharmacy">Pharmacy</div>
+        <div class="store-type-name-alt">Famasi</div>
+        <div class="store-type-count" id="storeCount-pharmacy">…</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- SEARCH & FILTER BAR -->
 <div class="filter-bar" id="filterBar">
   <div class="search-row">
@@ -805,6 +1212,9 @@ body {
     </button>
     <button class="popular-btn" id="popularBtn" onclick="togglePopular()" title="Popular items">
       ⭐ <span data-i18n="btn.popular">Popular</span>
+    </button>
+    <button class="import-btn" id="importBtn" onclick="openImportModal()" title="Bulk Import">
+      📥 <span data-i18n="btn.import">Import</span>
     </button>
   </div>
   <div class="cat-scroll" id="catPills">
@@ -843,6 +1253,79 @@ body {
   <button class="save-btn" onclick="saveInventory()">
     💾 <span data-i18n="btn.save">Save Inventory</span>
   </button>
+</div>
+
+<!-- BULK IMPORT MODAL -->
+<div class="modal-overlay" id="importModal" onclick="handleModalOverlayClick(event)">
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <div class="modal-title">📥 <span data-i18n="import.title">Bulk Import Products</span></div>
+      <button class="modal-close-btn" onclick="closeImportModal()" aria-label="Close">✕</button>
+    </div>
+
+    <div class="import-instructions">
+      <strong data-i18n="import.instructions_title">How to import your product list:</strong>
+      <div class="import-lang-grid">
+        <div class="import-lang-item">
+          <span class="lang-tag">FR</span>
+          Téléchargez le modèle CSV, remplissez-le avec vos produits (nom, prix, stock), puis importez-le ici. Les produits seront associés automatiquement au catalogue.
+        </div>
+        <div class="import-lang-item">
+          <span class="lang-tag">EN</span>
+          Download the CSV template, fill in your product list (name, price, stock), then upload it here. Items are fuzzy-matched against the catalog automatically.
+        </div>
+        <div class="import-lang-item">
+          <span class="lang-tag">HT</span>
+          Telechaje modèl CSV a, ranpli li ak pwodui ou yo (non, pri, estòk), epi voye li isit. Sistèm nan ap asosye pwodui yo ak katalòg la otomatikman.
+        </div>
+        <div class="import-lang-item">
+          <span class="lang-tag">ES</span>
+          Descarga la plantilla CSV, llénala con tus productos (nombre, precio, stock) y súbela aquí. Los productos se emparejan automáticamente con el catálogo.
+        </div>
+      </div>
+    </div>
+
+    <div class="import-actions-row">
+      <button class="btn-template" onclick="downloadTemplate()">
+        📄 <span data-i18n="import.download_template">Download CSV Template</span>
+      </button>
+    </div>
+
+    <div class="drop-zone" id="dropZone">
+      <input type="file" id="importFileInput" accept=".csv,.xlsx" onchange="handleFileSelect(event)">
+      <span class="drop-zone-emoji">📂</span>
+      <div class="drop-zone-text">
+        <strong data-i18n="import.drop_title">Drag & drop your file here</strong><br>
+        <span data-i18n="import.drop_or">or click to browse</span>
+      </div>
+      <div class="drop-zone-hint" data-i18n="import.drop_hint">Accepts .csv files (Excel: save as CSV first)</div>
+    </div>
+
+    <div class="import-preview" id="importPreview" style="display:none;">
+      <div class="import-preview-header">
+        <div class="import-match-summary" id="importMatchSummary"></div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="import-preview-table" id="importPreviewTable">
+          <thead>
+            <tr>
+              <th data-i18n="import.col_uploaded">Uploaded Name</th>
+              <th data-i18n="import.col_match">Catalog Match</th>
+              <th data-i18n="import.col_price">Price (HTG)</th>
+              <th data-i18n="import.col_status">Status</th>
+            </tr>
+          </thead>
+          <tbody id="importPreviewBody"></tbody>
+        </table>
+      </div>
+      <div class="import-footer">
+        <button class="btn-cancel-import" onclick="resetImport()" data-i18n="import.btn_clear">Clear</button>
+        <button class="btn-import-all" id="importAllBtn" onclick="importAll()">
+          ✅ <span data-i18n="import.btn_import_all">Import All Matched</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- TOAST -->
@@ -907,21 +1390,100 @@ const TRANSLATIONS = {
   'selectall':        { fr:'Tout sélectionner', en:'Select All', ht:'Chwazi Tout', es:'Seleccionar Todo' },
   'deselectall':      { fr:'Tout désélectionner', en:'Deselect All', ht:'Deseleksyone Tout', es:'Deseleccionar Todo' },
   'eco.part_of':      { fr:"Fait partie de l'Écosystème HaitiBiznis", en:'Part of the HaitiBiznis Ecosystem', ht:'Fè pati Ekosistèm HaitiBiznis', es:'Parte del Ecosistema HaitiBiznis' },
+  // Store type selector
+  'storetype.heading':     { fr:'Choisissez Votre Type de Boutique', en:'Choose Your Store Type', ht:'Chwazi Tip Boutik Ou', es:'Elige el Tipo de Tienda' },
+  'storetype.supermarket': { fr:'Supermarché', en:'Supermarket', ht:'Sipèmaché', es:'Supermercado' },
+  'storetype.hardware':    { fr:'Quincaillerie', en:'Hardware Store', ht:'Kenkayri', es:'Ferretería' },
+  'storetype.pharmacy':    { fr:'Pharmacie', en:'Pharmacy', ht:'Famasi', es:'Farmacia' },
+  'storetype.items':       { fr:'articles', en:'items', ht:'atik', es:'artículos' },
+  // Hardware categories
+  'cat.tools':             { fr:'Outils', en:'Tools', ht:'Zouti', es:'Herramientas' },
+  'cat.electrical':        { fr:'Électricité', en:'Electrical', ht:'Elektrik', es:'Eléctrico' },
+  'cat.plumbing':          { fr:'Plomberie', en:'Plumbing', ht:'Plonbri', es:'Plomería' },
+  'cat.paint':             { fr:'Peinture', en:'Paint', ht:'Penti', es:'Pintura' },
+  'cat.building':          { fr:'Construction', en:'Building', ht:'Konstriksyon', es:'Construcción' },
+  'cat.garden':            { fr:'Jardin', en:'Garden', ht:'Jaden', es:'Jardín' },
+  'cat.safety':            { fr:'Sécurité', en:'Safety', ht:'Sekirite', es:'Seguridad' },
+  'cat.home_repair':       { fr:'Réparation', en:'Home Repair', ht:'Reparasyon', es:'Reparación' },
+  // Pharmacy categories
+  'cat.pain_fever':        { fr:'Douleur/Fièvre', en:'Pain/Fever', ht:'Doulè/Lafyèv', es:'Dolor/Fiebre' },
+  'cat.cold_flu':          { fr:'Rhume/Grippe', en:'Cold/Flu', ht:'Rim/Grip', es:'Resfriado/Gripe' },
+  'cat.digestive':         { fr:'Digestif', en:'Digestive', ht:'Dijestif', es:'Digestivo' },
+  'cat.vitamins':          { fr:'Vitamines', en:'Vitamins', ht:'Vitamin', es:'Vitaminas' },
+  'cat.first_aid':         { fr:'Premiers Secours', en:'First Aid', ht:'Premye Swen', es:'Primeros Auxilios' },
+  'cat.skin_care':         { fr:'Soin de la Peau', en:'Skin Care', ht:'Swen Po', es:'Cuidado de Piel' },
+  'cat.eye_ear':           { fr:'Yeux/Oreilles', en:'Eye/Ear', ht:'Zye/Zòrèy', es:'Ojos/Oídos' },
+  'cat.baby_health':       { fr:'Santé Bébé', en:'Baby Health', ht:'Sante Bebe', es:'Salud Bebé' },
+  'cat.feminine_health':   { fr:'Santé Féminine', en:'Feminine Health', ht:'Sante Fanm', es:'Salud Femenina' },
+  'cat.medical_supplies':  { fr:'Fournitures Médicales', en:'Medical Supplies', ht:'Materyèl Medikal', es:'Suministros Médicos' },
+  // Import strings
+  'btn.import':            { fr:'Importer', en:'Import', ht:'Enpòte', es:'Importar' },
+  'import.title':          { fr:'Import en Masse', en:'Bulk Import Products', ht:'Enpòte Pwodui an Mas', es:'Importación Masiva' },
+  'import.instructions_title': { fr:'Comment importer votre liste de produits:', en:'How to import your product list:', ht:'Kijan pou enpòte lis pwodui ou:', es:'Cómo importar tu lista de productos:' },
+  'import.download_template': { fr:'Télécharger le Modèle CSV', en:'Download CSV Template', ht:'Telechaje Modèl CSV', es:'Descargar Plantilla CSV' },
+  'import.drop_title':     { fr:'Glissez-déposez votre fichier ici', en:'Drag & drop your file here', ht:'Glise fichye ou isit la', es:'Arrastra y suelta tu archivo aquí' },
+  'import.drop_or':        { fr:'ou cliquer pour parcourir', en:'or click to browse', ht:'oswa klike pou navige', es:'o haz clic para buscar' },
+  'import.drop_hint':      { fr:'Accepte .csv (Excel: enregistrer en CSV)', en:'Accepts .csv files (Excel: save as CSV first)', ht:'Aksepte .csv (Excel: sovgade kòm CSV)', es:'Acepta .csv (Excel: guarda como CSV primero)' },
+  'import.col_uploaded':   { fr:'Nom Importé', en:'Uploaded Name', ht:'Non Enpòte', es:'Nombre Importado' },
+  'import.col_match':      { fr:'Correspondance Catalogue', en:'Catalog Match', ht:'Matche Katalòg', es:'Coincidencia Catálogo' },
+  'import.col_price':      { fr:'Prix (HTG)', en:'Price (HTG)', ht:'Pri (HTG)', es:'Precio (HTG)' },
+  'import.col_status':     { fr:'Statut', en:'Status', ht:'Estati', es:'Estado' },
+  'import.btn_clear':      { fr:'Effacer', en:'Clear', ht:'Efase', es:'Limpiar' },
+  'import.btn_import_all': { fr:'Tout Importer', en:'Import All Matched', ht:'Enpòte Tout', es:'Importar Todo' },
+  'import.matched':        { fr:'correspondances sur', en:'matched of', ht:'matche sou', es:'coincidencias de' },
+  'import.no_match':       { fr:'Aucune correspondance', en:'No match', ht:'Pa gen matche', es:'Sin coincidencia' },
+  'import.toast_done':     { fr:'produits importés avec succès!', en:'products imported successfully!', ht:'pwodui enpòte avèk siksè!', es:'¡productos importados con éxito!' },
+  'toast.store_changed':   { fr:'Catalogue chargé', en:'Catalog loaded', ht:'Katalòg chaje', es:'Catálogo cargado' },
+  'toast.cleared_switch':  { fr:'Sélections effacées pour nouveau catalogue', en:'Selections cleared for new catalog', ht:'Seleksyon efase pou nouvo katalòg', es:'Selecciones borradas para nuevo catálogo' },
 };
 
-// Category display order + emoji
-const CAT_META = {
-  groceries:       { emoji: '🍚', order: 0 },
-  beverages:       { emoji: '🥤', order: 1 },
-  frozen_foods:    { emoji: '🧊', order: 2 },
-  cleaning:        { emoji: '🧹', order: 3 },
-  baby:            { emoji: '🍼', order: 4 },
-  personal_care:   { emoji: '🧴', order: 5 },
-  snacks:          { emoji: '🍿', order: 6 },
-  canned_packaged: { emoji: '🥫', order: 7 },
-  dairy_fresh:     { emoji: '🥛', order: 8 },
-  household:       { emoji: '🏠', order: 9 },
+// Per-store-type category metadata
+const CAT_META_BY_STORE = {
+  supermarket: {
+    groceries:       { emoji: '🍚', order: 0 },
+    beverages:       { emoji: '🥤', order: 1 },
+    frozen_foods:    { emoji: '🧊', order: 2 },
+    cleaning:        { emoji: '🧹', order: 3 },
+    baby:            { emoji: '🍼', order: 4 },
+    personal_care:   { emoji: '🧴', order: 5 },
+    snacks:          { emoji: '🍿', order: 6 },
+    canned_packaged: { emoji: '🥫', order: 7 },
+    dairy_fresh:     { emoji: '🥛', order: 8 },
+    household:       { emoji: '🏠', order: 9 },
+  },
+  hardware: {
+    tools:       { emoji: '🔧', order: 0 },
+    electrical:  { emoji: '⚡', order: 1 },
+    plumbing:    { emoji: '🚰', order: 2 },
+    paint:       { emoji: '🎨', order: 3 },
+    building:    { emoji: '🏗️', order: 4 },
+    garden:      { emoji: '🌿', order: 5 },
+    safety:      { emoji: '🔒', order: 6 },
+    home_repair: { emoji: '🔩', order: 7 },
+  },
+  pharmacy: {
+    pain_fever:        { emoji: '💊', order: 0 },
+    cold_flu:          { emoji: '🤧', order: 1 },
+    digestive:         { emoji: '🫃', order: 2 },
+    vitamins:          { emoji: '💪', order: 3 },
+    first_aid:         { emoji: '🩹', order: 4 },
+    skin_care:         { emoji: '🧴', order: 5 },
+    eye_ear:           { emoji: '👁️', order: 6 },
+    baby_health:       { emoji: '👶', order: 7 },
+    feminine_health:   { emoji: '🩷', order: 8 },
+    medical_supplies:  { emoji: '🏥', order: 9 },
+  },
 };
+
+// Store type config
+const STORE_TYPES = {
+  supermarket: { catalogUrl: 'data/catalog.json',          emoji: '🛒' },
+  hardware:    { catalogUrl: 'data/catalog-hardware.json', emoji: '🔨' },
+  pharmacy:    { catalogUrl: 'data/catalog-pharmacy.json', emoji: '💊' },
+};
+
+// Active CAT_META (set when store type changes)
+let CAT_META = CAT_META_BY_STORE.supermarket;
 
 // ─── STATE ──────────────────────────────────────────────────────────────────
 let catalog = [];
@@ -931,6 +1493,11 @@ let searchQuery = '';
 let showSelectedOnly = false;
 let showPopularOnly = false;
 let inventory = {}; // { [productId]: { price, salePrice, stock, variant } }
+let activeStoreType = 'supermarket';
+// Catalog item counts per store (populated after fetch)
+const catalogCounts = { supermarket: null, hardware: null, pharmacy: null };
+// Import state
+let importRows = []; // [{ uploadedName, matchedId, price, status }]
 
 // Lazy rendering state
 let renderedCount = 0;
@@ -965,6 +1532,10 @@ function setLang(l) {
   lang = l;
   localStorage.setItem('mpp_lang', l);
   applyTranslations();
+  updateHeroStoreType();
+  // Refresh store count badge labels (item count word may change)
+  Object.keys(STORE_TYPES).forEach(updateStoreCountBadge);
+  buildCatPills();
   renderAll();
 }
 
@@ -979,20 +1550,109 @@ function catLabel(catKey) {
 }
 
 // ─── LOAD CATALOG ───────────────────────────────────────────────────────────
-async function loadCatalog() {
+async function loadCatalog(storeType) {
+  const url = STORE_TYPES[storeType].catalogUrl;
   try {
-    const res = await fetch('data/catalog.json');
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     catalog = await res.json();
-    document.getElementById('loadingSkeletons').style.display = 'none';
-    document.getElementById('productListContainer').style.display = 'block';
-    buildCatPills();
-    renderAll();
-    restoreInventory();
   } catch (e) {
-    console.error('Failed to load catalog:', e);
-    document.getElementById('loadingSkeletons').innerHTML =
-      '<div class="no-results"><div class="nr-emoji">⚠️</div><h3>Could not load catalog</h3><p>Please refresh the page.</p></div>';
+    // If catalog file doesn't exist yet, fall back gracefully with empty array
+    console.warn(`Could not load catalog for ${storeType} (${url}):`, e);
+    catalog = [];
   }
+  // Cache count for store card badge
+  catalogCounts[storeType] = catalog.length;
+  updateStoreCountBadge(storeType);
+
+  document.getElementById('loadingSkeletons').style.display = 'none';
+  document.getElementById('productListContainer').style.display = 'block';
+  buildCatPills();
+  renderAll();
+  if (storeType === 'supermarket') restoreInventory();
+}
+
+// Pre-fetch item counts for the other stores (non-blocking, best-effort)
+async function prefetchStoreCounts() {
+  for (const [type, cfg] of Object.entries(STORE_TYPES)) {
+    if (type === activeStoreType) continue; // already loaded
+    try {
+      const res = await fetch(cfg.catalogUrl, { method: 'HEAD' });
+      if (!res.ok) { catalogCounts[type] = 0; updateStoreCountBadge(type); continue; }
+      // Full fetch to get count
+      const r2 = await fetch(cfg.catalogUrl);
+      const data = await r2.json();
+      catalogCounts[type] = data.length;
+    } catch(e) {
+      catalogCounts[type] = 0;
+    }
+    updateStoreCountBadge(type);
+  }
+}
+
+function updateStoreCountBadge(storeType) {
+  const el = document.getElementById(`storeCount-${storeType}`);
+  if (!el) return;
+  const count = catalogCounts[storeType];
+  if (count === null) { el.textContent = '…'; return; }
+  el.textContent = `${count} ${t('storetype.items')}`;
+}
+
+// ─── STORE TYPE SELECTOR ────────────────────────────────────────────────────
+async function selectStoreType(storeType, cardEl) {
+  if (storeType === activeStoreType) return;
+
+  // If user has selections, ask before clearing
+  const selCount = Object.keys(inventory).length;
+  if (selCount > 0) {
+    const msg = lang === 'fr'
+      ? `Vous avez ${selCount} produit(s) sélectionné(s). Changer de type de boutique effacera ces sélections. Continuer?`
+      : lang === 'ht'
+        ? `Ou gen ${selCount} pwodui chwazi. Chanje tip boutik ap efase seleksyon sa yo. Kontinye?`
+        : lang === 'es'
+          ? `Tienes ${selCount} producto(s) seleccionado(s). Cambiar de tienda borrará estas selecciones. ¿Continuar?`
+          : `You have ${selCount} selected product(s). Switching store type will clear these selections. Continue?`;
+    if (!confirm(msg)) return;
+  }
+
+  // Clear selections
+  inventory = {};
+
+  // Update active store type
+  activeStoreType = storeType;
+  CAT_META = CAT_META_BY_STORE[storeType];
+  activeCategory = 'all';
+  searchQuery = '';
+  showSelectedOnly = false;
+  showPopularOnly = false;
+  document.getElementById('searchInput').value = '';
+  document.getElementById('toggleSelectedBtn').classList.remove('active');
+  document.getElementById('popularBtn').classList.remove('active');
+
+  // Update card highlights
+  document.querySelectorAll('.store-type-card').forEach(c => {
+    c.classList.toggle('active', c.getAttribute('data-store') === storeType);
+  });
+
+  // Show loading skeleton
+  document.getElementById('loadingSkeletons').style.display = 'block';
+  document.getElementById('productListContainer').style.display = 'none';
+
+  // Update hero badge with store type
+  updateHeroStoreType();
+  updateCounts();
+
+  // Load new catalog
+  await loadCatalog(storeType);
+  showToast(t('toast.store_changed'), 'info');
+}
+
+function updateHeroStoreType() {
+  const badge = document.querySelector('.hero-badge');
+  if (!badge) return;
+  const storeEmoji = STORE_TYPES[activeStoreType]?.emoji || '🏪';
+  const storeName = t(`storetype.${activeStoreType}`);
+  badge.innerHTML = `${storeEmoji} ${storeName} — <span data-i18n="hero.badge">${t('hero.badge')}</span>`;
 }
 
 // ─── CATEGORY PILLS ─────────────────────────────────────────────────────────
@@ -1004,7 +1664,8 @@ function buildCatPills() {
     const pill = document.createElement('button');
     pill.className = 'cat-pill' + (cat === activeCategory ? ' active' : '');
     pill.setAttribute('data-cat', cat);
-    const emoji = cat === 'all' ? '🛒' : (CAT_META[cat]?.emoji || '');
+    const allEmoji = STORE_TYPES[activeStoreType]?.emoji || '🛒';
+    const emoji = cat === 'all' ? allEmoji : (CAT_META[cat]?.emoji || '');
     const count = cat === 'all' ? catalog.length : catalog.filter(p => p.category === cat).length;
     pill.textContent = `${emoji} ${catLabel(cat)} (${count})`;
     pill.onclick = () => filterByCategory(cat);
@@ -1369,13 +2030,230 @@ function showToast(msg, type = '') {
   toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
+// ─── IMPORT MODAL ────────────────────────────────────────────────────────────
+function openImportModal() {
+  document.getElementById('importModal').classList.add('open');
+  applyTranslations(); // refresh i18n inside modal
+}
+
+function closeImportModal() {
+  document.getElementById('importModal').classList.remove('open');
+}
+
+function handleModalOverlayClick(e) {
+  if (e.target === document.getElementById('importModal')) closeImportModal();
+}
+
+function resetImport() {
+  importRows = [];
+  document.getElementById('importPreview').style.display = 'none';
+  document.getElementById('importFileInput').value = '';
+  const dz = document.getElementById('dropZone');
+  dz.querySelector('.drop-zone-text').innerHTML =
+    `<strong data-i18n="import.drop_title">${t('import.drop_title')}</strong><br>
+     <span data-i18n="import.drop_or">${t('import.drop_or')}</span>`;
+}
+
+// Download CSV template
+function downloadTemplate() {
+  const headers = ['Product Name', 'Price (HTG)', 'Stock Status', 'Sale Price', 'Size/Variant'];
+  const example = ['Rice 5kg', '450', 'In Stock', '', '5kg'];
+  const csvContent = [headers, example].map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `myplopplop-${activeStoreType}-template.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Handle file select (from input or drop)
+function handleFileSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  parseImportFile(file);
+}
+
+// Setup drag & drop
+(function setupDropZone() {
+  const dz = document.getElementById('dropZone');
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+  dz.addEventListener('drop', e => {
+    e.preventDefault();
+    dz.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file) parseImportFile(file);
+  });
+})();
+
+function parseImportFile(file) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (ext === 'csv') {
+    if (typeof Papa === 'undefined') {
+      showToast('PapaParse not loaded yet. Please wait a moment and try again.', 'error');
+      return;
+    }
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => processImportData(results.data, file.name),
+      error: (err) => showToast('CSV parse error: ' + err.message, 'error'),
+    });
+  } else {
+    showToast('Please use a .csv file. In Excel: File → Save As → CSV.', 'error');
+  }
+}
+
+function processImportData(rows, fileName) {
+  // Normalize column names (case-insensitive, flexible)
+  importRows = rows.map(row => {
+    const keys = Object.keys(row);
+    const get = (patterns) => {
+      for (const p of patterns) {
+        const k = keys.find(k => k.toLowerCase().includes(p.toLowerCase()));
+        if (k) return (row[k] || '').trim();
+      }
+      return '';
+    };
+    const uploadedName = get(['product name', 'name', 'nom', 'produit', 'item']);
+    const price = get(['price', 'prix', 'precio']);
+    const status = get(['stock', 'status', 'statut', 'estado']);
+    const salePrice = get(['sale', 'promo', 'descuento', 'solde']);
+    const variant = get(['size', 'variant', 'taille', 'variante', 'tamaño']);
+
+    if (!uploadedName) return null;
+
+    // Fuzzy match against current catalog
+    const matchedItem = fuzzyMatchCatalog(uploadedName);
+
+    return {
+      uploadedName,
+      price,
+      salePrice,
+      status: normalizeStockStatus(status),
+      variant,
+      matchedId: matchedItem ? matchedItem.id : null,
+      matchedName: matchedItem ? productName(matchedItem) : null,
+    };
+  }).filter(Boolean);
+
+  // Update drop zone label
+  const dz = document.getElementById('dropZone');
+  dz.querySelector('.drop-zone-text').innerHTML =
+    `<strong>📄 ${escHtml(fileName)}</strong><br><span>${importRows.length} rows parsed</span>`;
+
+  renderImportPreview();
+}
+
+function normalizeStockStatus(raw) {
+  const v = (raw || '').toLowerCase();
+  if (v.includes('out') || v.includes('épuisé') || v.includes('fin') || v.includes('agotado')) return 'out';
+  if (v.includes('low') || v.includes('bas') || v.includes('ba') || v.includes('bajo')) return 'low';
+  return 'in';
+}
+
+// Fuzzy match: case-insensitive partial match across all language names and id
+function fuzzyMatchCatalog(query) {
+  const q = query.toLowerCase().trim();
+  if (!q) return null;
+  // Exact match first
+  let match = catalog.find(item =>
+    (item.name_fr||'').toLowerCase() === q ||
+    (item.name_en||'').toLowerCase() === q ||
+    (item.name_ht||'').toLowerCase() === q ||
+    (item.name_es||'').toLowerCase() === q ||
+    (item.id||'').toLowerCase() === q
+  );
+  if (match) return match;
+  // Partial match
+  match = catalog.find(item =>
+    (item.name_fr||'').toLowerCase().includes(q) ||
+    (item.name_en||'').toLowerCase().includes(q) ||
+    (item.name_ht||'').toLowerCase().includes(q) ||
+    (item.name_es||'').toLowerCase().includes(q) ||
+    q.includes((item.name_en||'').toLowerCase()) ||
+    q.includes((item.name_fr||'').toLowerCase())
+  );
+  return match || null;
+}
+
+function renderImportPreview() {
+  const matchedCount = importRows.filter(r => r.matchedId).length;
+  const total = importRows.length;
+
+  const summary = document.getElementById('importMatchSummary');
+  summary.innerHTML = `<span class="match-good">${matchedCount} ${t('import.matched')} ${total}</span>` +
+    (total - matchedCount > 0 ? ` &nbsp;·&nbsp; <span class="match-bad">${total - matchedCount} ${t('import.no_match')}</span>` : '');
+
+  const tbody = document.getElementById('importPreviewBody');
+  tbody.innerHTML = '';
+
+  importRows.forEach((row, idx) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${escHtml(row.uploadedName)}</td>
+      <td>
+        ${row.matchedId
+          ? `<span class="match-badge matched">✓ ${escHtml(row.matchedName || row.matchedId)}</span>`
+          : `<span class="match-badge unmatched">✗ ${t('import.no_match')}</span>
+             <select class="import-fix-select" onchange="fixMatch(${idx}, this.value)">
+               <option value="">— ${t('import.no_match')} —</option>
+               ${catalog.map(item => `<option value="${escAttr(item.id)}">${escHtml(productName(item))}</option>`).join('')}
+             </select>`
+        }
+      </td>
+      <td>${escHtml(row.price || '—')}</td>
+      <td><span style="font-size:10px;color:var(--gray-600)">${escHtml(row.status)}</span></td>`;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('importPreview').style.display = 'block';
+  document.getElementById('importAllBtn').disabled = matchedCount === 0;
+}
+
+function fixMatch(idx, catalogId) {
+  if (!importRows[idx]) return;
+  if (!catalogId) {
+    importRows[idx].matchedId = null;
+    importRows[idx].matchedName = null;
+  } else {
+    const item = catalog.find(i => i.id === catalogId);
+    importRows[idx].matchedId = catalogId;
+    importRows[idx].matchedName = item ? productName(item) : catalogId;
+  }
+  renderImportPreview();
+}
+
+function importAll() {
+  let count = 0;
+  importRows.forEach(row => {
+    if (!row.matchedId) return;
+    if (!inventory[row.matchedId]) {
+      inventory[row.matchedId] = { price: '', salePrice: '', stock: 'in', variant: '' };
+    }
+    if (row.price) inventory[row.matchedId].price = row.price;
+    if (row.salePrice) inventory[row.matchedId].salePrice = row.salePrice;
+    if (row.status) inventory[row.matchedId].stock = row.status;
+    if (row.variant) inventory[row.matchedId].variant = row.variant;
+    count++;
+  });
+  autoSave();
+  updateCounts();
+  renderAll();
+  closeImportModal();
+  resetImport();
+  showToast(`${count} ${t('import.toast_done')}`, 'success');
+}
+
 // ─── INIT ────────────────────────────────────────────────────────────────────
 // Restore lang preference
 const savedLang = localStorage.getItem('mpp_lang');
 if (savedLang && ['fr','en','ht','es'].includes(savedLang)) lang = savedLang;
 
 applyTranslations();
-loadCatalog();
+loadCatalog('supermarket').then(() => prefetchStoreCounts());
 </script>
 </body>
 </html>
