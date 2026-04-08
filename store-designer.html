@@ -157,6 +157,30 @@ body {
   font-weight: 700;
 }
 
+/* ===== HERO START BUTTON ===== */
+.hero-start-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: var(--space-lg);
+  padding: 14px 36px;
+  background: #FFD700;
+  color: #001247;
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 800;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(255,215,0,0.4);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  position: relative;
+  z-index: 1;
+}
+.hero-start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(255,215,0,0.55);
+}
+
 /* ===== PROGRESS BAR ===== */
 .progress-section {
   background: var(--white);
@@ -1172,12 +1196,15 @@ body {
   <div class="designer-hero-inner">
     <div class="designer-hero-badge">✨ <span data-i18n="hero.badge">Premium Storefront Builder</span></div>
     <h1 data-i18n-html="hero.title">Your Store. Your <em>Brand.</em> Your Rules.</h1>
-    <p data-i18n="hero.subtitle">On Facebook you're just another listing. On MyPlopPlop, you have your <strong>OWN branded storefront</strong> — with your colors, logo, and identity.</p>
+    <p data-i18n-html="hero.subtitle">On Facebook you're just another listing. On MyPlopPlop, you have your <strong>OWN branded storefront</strong> — with your colors, logo, and identity.</p>
     <div class="vs-badge">
       <span class="vs-item" data-i18n="hero.vs_fb">😤 Facebook Marketplace: Lost in the feed</span>
       <span class="vs-divider">VS</span>
       <span class="vs-item highlight" data-i18n="hero.vs_mpp">🏆 MyPlopPlop: YOUR branded store</span>
     </div>
+    <a href="#storeIdentity" class="hero-start-btn" onclick="document.getElementById('storeName').focus()">
+      <span data-i18n="hero.start_btn">Start Building Your Store</span> →
+    </a>
   </div>
 </section>
 

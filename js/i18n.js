@@ -775,6 +775,14 @@
       es: 'Lista tu tienda gratis. Empieza a vender en minutos.'
     },
 
+    // ── Store Designer ──
+    'hero.start_btn': {
+      fr: 'Commencez a Creer Votre Boutique',
+      en: 'Start Building Your Store',
+      kr: 'Komanse Bati Boutik Ou',
+      es: 'Empieza a Crear Tu Tienda'
+    },
+
     // ── Help Page ──
     'help.title': {
       fr: 'Comment pouvons-nous vous aider ?',
