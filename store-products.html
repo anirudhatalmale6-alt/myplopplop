@@ -443,10 +443,59 @@ body {
   pointer-events: none;
 }
 .product-card.selected .card-expanded {
-  max-height: 300px;
+  max-height: 500px;
   opacity: 1;
   pointer-events: auto;
 }
+
+/* Photo upload in product card */
+.photo-upload-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.photo-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--gray-50);
+  border: 1px dashed var(--gray-300);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.photo-upload-btn:hover {
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+  background: var(--primary-blue-light);
+}
+.photo-upload-btn input[type="file"] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+.photo-preview {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  border: 1px solid var(--gray-200);
+}
+.photo-remove {
+  background: none;
+  border: none;
+  color: var(--gray-400);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px;
+}
+.photo-remove:hover { color: #E53E3E; }
 
 .expanded-label {
   font-size: 10px;
@@ -1380,6 +1429,8 @@ const TRANSLATIONS = {
   'sale.label':       { fr:'Prix promo (HTG)', en:'Sale price (HTG)', ht:'Pri solde (HTG)', es:'Precio oferta (HTG)' },
   'variant.label':    { fr:'Taille / variante', en:'Size / variant', ht:'Gwosè / varyant', es:'Talla / variante' },
   'variant.placeholder': { fr:'ex: 1kg, 500ml…', en:'e.g. 1kg, 500ml…', ht:'e.g. 1kg, 500ml…', es:'ej: 1kg, 500ml…' },
+  'photo.label':      { fr:'Photo personnalisée', en:'Custom photo', ht:'Foto pèsonalize', es:'Foto personalizada' },
+  'photo.upload':      { fr:'Ajouter photo', en:'Add photo', ht:'Ajoute foto', es:'Agregar foto' },
   'stock.in':         { fr:'En stock', en:'In Stock', ht:'An Estòk', es:'En Stock' },
   'stock.low':        { fr:'Bas', en:'Low', ht:'Ba', es:'Bajo' },
   'stock.out':        { fr:'Épuisé', en:'Out', ht:'Fin', es:'Agotado' },
@@ -1859,7 +1910,10 @@ function createProductCard(item) {
   card.innerHTML = `
     ${item.popular ? `<div class="popular-star">⭐</div>` : ''}
     <div class="card-checkbox">${isSelected ? '✓' : ''}</div>
-    <div class="card-emoji">${item.emoji || '📦'}</div>
+    ${inv.customPhoto
+      ? `<img src="${escAttr(inv.customPhoto)}" class="card-emoji" style="width:56px;height:56px;border-radius:8px;object-fit:cover;font-size:inherit;">`
+      : `<div class="card-emoji">${item.emoji || '📦'}</div>`
+    }
     <div class="card-name">${escHtml(productName(item))}</div>
     <div class="card-cat-badge badge-${item.category}">${catLabel(item.category)}</div>
     <div class="card-unit">${escHtml(item.unit || '')}</div>
@@ -1901,6 +1955,19 @@ function createProductCard(item) {
           value="${escAttr(inv.variant || '')}"
           oninput="updateInventory('${item.id}', 'variant', this.value)"
           onclick="stopProp(event)">
+      </div>
+      <div>
+        <div class="expanded-label">${t('photo.label')}</div>
+        <div class="photo-upload-wrap" id="photoWrap-${item.id}">
+          ${inv.customPhoto
+            ? `<img src="${escAttr(inv.customPhoto)}" class="photo-preview" id="photoPreview-${item.id}">
+               <button class="photo-remove" onclick="removePhoto('${item.id}', event)" title="Remove">&#x2715;</button>`
+            : `<label class="photo-upload-btn" onclick="stopProp(event)">
+                &#128247; ${t('photo.upload')}
+                <input type="file" accept="image/*" onchange="handlePhotoUpload('${item.id}', this, event)">
+               </label>`
+          }
+        </div>
       </div>
     </div>`;
 
@@ -1960,6 +2027,47 @@ function updateInventory(id, field, value) {
   if (!inventory[id]) return;
   inventory[id][field] = value;
   autoSave();
+}
+
+// ─── CUSTOM PHOTO UPLOAD ──────────────────────────────────────────────────────
+function handlePhotoUpload(id, input, e) {
+  stopProp(e);
+  const file = input.files[0];
+  if (!file || !file.type.startsWith('image/')) return;
+  // Resize to max 400px to keep localStorage reasonable
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      const maxSize = 400;
+      let w = img.width, h = img.height;
+      if (w > maxSize || h > maxSize) {
+        if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
+        else { w = Math.round(w * maxSize / h); h = maxSize; }
+      }
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+      if (inventory[id]) {
+        inventory[id].customPhoto = dataUrl;
+        autoSave();
+        updateCard(id);
+      }
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removePhoto(id, e) {
+  stopProp(e);
+  if (inventory[id]) {
+    delete inventory[id].customPhoto;
+    autoSave();
+    updateCard(id);
+  }
 }
 
 function setStock(id, stockVal, e) {

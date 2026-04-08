@@ -175,6 +175,67 @@
 }
 .cta-support:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
 
+/* ===== REFERRAL HERO CTA ===== */
+.referral-hero-cta {
+    margin-top: 20px;
+    animation: fadeIn 0.6s ease 0.5s both;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.referral-hero-inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #FF6B35 0%, #F7C948 100%);
+    border-radius: 16px;
+    padding: 14px 20px;
+    box-shadow: 0 4px 20px rgba(255,107,53,0.4);
+    max-width: 440px;
+    margin: 0 auto;
+}
+.referral-hero-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+.referral-hero-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    flex: 1;
+    min-width: 0;
+}
+.referral-hero-text strong {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+.referral-hero-text span {
+    color: rgba(255,255,255,0.85);
+    font-size: 0.75rem;
+    margin-top: 2px;
+}
+.referral-hero-btn {
+    background: #fff;
+    color: #FF6B35;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+.referral-hero-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+@media (max-width: 480px) {
+    .referral-hero-inner { flex-wrap: wrap; justify-content: center; text-align: center; padding: 16px; }
+    .referral-hero-text { text-align: center; }
+    .referral-hero-btn { width: 100%; margin-top: 4px; }
+}
+
 /* ===== CATEGORIES ===== */
 .categories-grid {
     display: grid;
@@ -529,6 +590,18 @@
             </a>
         </div>
 
+        <!-- REFERRAL INVITE BUTTON -->
+        <div class="referral-hero-cta" id="referralHeroCta">
+            <div class="referral-hero-inner">
+                <span class="referral-hero-icon">🎁</span>
+                <div class="referral-hero-text">
+                    <strong data-i18n="ref.hero_title">Invite Friends, Earn 3%!</strong>
+                    <span data-i18n="ref.hero_sub">Share your link and earn on every order they place</span>
+                </div>
+                <button class="referral-hero-btn" onclick="shareReferral()" data-i18n="ref.hero_btn">Share Now</button>
+            </div>
+        </div>
+
         <div class="hero-tags">
             <span class="hero-tag" data-i18n="tag.restaurants">🍽️ Restaurants</span>
             <span class="hero-tag" data-i18n="tag.supermarkets">🛒 Supermarchés</span>
@@ -622,6 +695,7 @@
                     <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 4px;" data-i18n="ref.card3_desc">Refer a driver and earn 2% on their rides and deliveries.</div>
                 </div>
             </div>
+            <button onclick="shareReferral()" class="btn" style="background: #FF6B35; color: white; font-weight: 700; padding: 14px 32px; border-radius: 50px; font-size: 1rem; margin-right: 8px; cursor:pointer; border:none;">🔗 Share My Referral Link</button>
             <a href="help.html" class="btn" style="background: white; color: #1E3A8A; font-weight: 700; padding: 12px 28px; border-radius: 50px;" data-i18n="ref.learn_more">Learn More</a>
         </div>
     </div>
@@ -855,6 +929,40 @@ setTimeout(function(){
     },{once:true});
   }
 },3000);
+</script>
+
+<script>
+// ─── REFERRAL SHARING ─────────────────────────────────────────────
+function shareReferral() {
+  var refCode = localStorage.getItem('mpp_ref_code');
+  if (!refCode) {
+    refCode = 'MPP' + Math.random().toString(36).substring(2, 8).toUpperCase();
+    localStorage.setItem('mpp_ref_code', refCode);
+  }
+  var shareUrl = 'https://myplopplop.com/?ref=' + refCode;
+  var shareText = 'Join MyPlopPlop - Haiti\'s first marketplace! Order from supermarkets, pharmacies, hardware stores & more. Use my link and we both earn: ' + shareUrl;
+
+  if (navigator.share) {
+    navigator.share({
+      title: 'MyPlopPlop - Haiti\'s Marketplace',
+      text: shareText,
+      url: shareUrl
+    }).catch(function(){});
+  } else {
+    navigator.clipboard.writeText(shareUrl).then(function() {
+      showRefToast('Link copied! Share it with friends to earn 3%');
+    }).catch(function() {
+      prompt('Copy your referral link:', shareUrl);
+    });
+  }
+}
+function showRefToast(msg) {
+  var toast = document.createElement('div');
+  toast.textContent = msg;
+  toast.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#1E3A8A;color:#fff;padding:14px 24px;border-radius:50px;font-size:0.9rem;font-weight:600;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,0.3);animation:fadeIn 0.3s ease';
+  document.body.appendChild(toast);
+  setTimeout(function(){ toast.remove(); }, 3000);
+}
 </script>
 </body>
 </html>
