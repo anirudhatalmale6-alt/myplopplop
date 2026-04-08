@@ -543,10 +543,16 @@
 
     // ── Homepage: Promo Banner ──
     'promo.title': {
-      fr: '\ud83c\udf89 Obtenez 10% de r\u00e9duction sur votre premi\u00e8re commande !',
-      en: '\ud83c\udf89 Get 10% off your first order!',
-      kr: '\ud83c\udf89 Jwenn 10% rabais sou premye k\u00f2mand ou!',
-      es: '\u00a1\ud83c\udf89 Obt\u00e9n 10% de descuento en tu primer pedido!'
+      fr: '🎉 15% de réduction sur votre première livraison !',
+      en: '🎉 15% off your first delivery!',
+      kr: '🎉 15% rabè sou premye livrezon ou!',
+      es: '🎉 ¡15% de descuento en tu primera entrega!'
+    },
+    'promo.desc': {
+      fr: 'Utilisez le code : <strong>FIRST15</strong> au paiement.',
+      en: 'Use code: <strong>FIRST15</strong> at checkout.',
+      kr: 'Itilize kòd: <strong>FIRST15</strong> lè ou peye.',
+      es: 'Usa el código: <strong>FIRST15</strong> al pagar.'
     },
 
     // ── Homepage: Featured Merchants ──
@@ -655,6 +661,24 @@
       en: 'Learn More',
       kr: 'Aprann Plis',
       es: 'Más Información'
+    },
+    'ref.hero_title': {
+      fr: 'Invitez vos Amis, Gagnez 3% !',
+      en: 'Invite Friends, Earn 3%!',
+      kr: 'Envite Zanmi, Touche 3%!',
+      es: '¡Invita Amigos, Gana 3%!'
+    },
+    'ref.hero_sub': {
+      fr: 'Partagez votre lien et gagnez sur chaque commande',
+      en: 'Share your link and earn on every order they place',
+      kr: 'Pataje lyen ou epi touche sou chak kòmand yo fè',
+      es: 'Comparte tu enlace y gana en cada pedido que hagan'
+    },
+    'ref.hero_btn': {
+      fr: 'Partager',
+      en: 'Share Now',
+      kr: 'Pataje Kounye a',
+      es: 'Compartir'
     },
 
     // ── Homepage: Sol (ROSCA) ──
@@ -955,7 +979,7 @@
     'Loading...': { fr: 'Chargement...', kr: 'Ap chaje...', es: 'Cargando...' },
     'Change location': { fr: 'Changer de lieu', kr: 'Chanje lokasyon', es: 'Cambiar ubicación' },
     'No results found': { fr: 'Aucun résultat trouvé', kr: 'Pa gen rezilta', es: 'No se encontraron resultados' },
-    'Free Delivery on First Order!': { fr: 'Livraison Gratuite sur la Première Commande !', kr: 'Livrezon Gratis sou Premye Kòmand!', es: '¡Entrega Gratis en el Primer Pedido!' },
+    '15% off your first delivery!': { fr: '15% de réduction sur votre première livraison !', kr: '15% rabè sou premye livrezon ou!', es: '¡15% de descuento en tu primera entrega!' },
 
     // Footer
     'Haiti\'s First Marketplace. From restaurants to hardware stores, we connect you with the best merchants across Haiti.': {
