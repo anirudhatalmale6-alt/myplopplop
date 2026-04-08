@@ -1,12 +1,12 @@
 /* ===== MyPlopPlop Mock Data ===== */
 
 const CATEGORIES = [
-    { id: 'restaurants', name: 'Restaurants', nameKr: 'Restoran', icon: '🍽️', color: '#D21034', count: 24 },
-    { id: 'supermarkets', name: 'Supermarkets', nameKr: 'Sipèmache', icon: '🛒', color: '#10B981', count: 12 },
-    { id: 'hardware', name: 'Hardware Stores', nameKr: 'Kenkayri', icon: '🔧', color: '#F59E0B', count: 8 },
-    { id: 'pharmacies', name: 'Pharmacies', nameKr: 'Famasi', icon: '💊', color: '#3B82F6', count: 15 },
-    { id: 'wholesale', name: 'Wholesale', nameKr: 'An gwo', icon: '📦', color: '#8B5CF6', count: 6 },
-    { id: 'retail', name: 'Retail', nameKr: 'Detay', icon: '🏬', color: '#EC4899', count: 18 }
+    { id: 'restaurants', name: 'Restaurants', nameKr: 'Restoran', nameFr: 'Restaurants', nameEs: 'Restaurantes', icon: '🍽️', color: '#D21034', count: 24 },
+    { id: 'supermarkets', name: 'Supermarkets', nameKr: 'Sipèmache', nameFr: 'Supermarchés', nameEs: 'Supermercados', icon: '🛒', color: '#10B981', count: 12 },
+    { id: 'hardware', name: 'Hardware Stores', nameKr: 'Kenkayri', nameFr: 'Quincailleries', nameEs: 'Ferreterías', icon: '🔧', color: '#F59E0B', count: 8 },
+    { id: 'pharmacies', name: 'Pharmacies', nameKr: 'Famasi', nameFr: 'Pharmacies', nameEs: 'Farmacias', icon: '💊', color: '#3B82F6', count: 15 },
+    { id: 'wholesale', name: 'Wholesale', nameKr: 'Angwo', nameFr: 'Grossistes', nameEs: 'Mayoristas', icon: '📦', color: '#8B5CF6', count: 6 },
+    { id: 'retail', name: 'Retail', nameKr: 'Detay', nameFr: 'Détaillants', nameEs: 'Minoristas', icon: '🏬', color: '#EC4899', count: 18 }
 ];
 
 const STORES = [

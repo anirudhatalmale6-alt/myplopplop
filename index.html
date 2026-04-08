@@ -847,43 +847,70 @@
 
 <script src="js/mock-data.js"></script>
 <script>
-// Render categories
-const grid = document.getElementById('categoriesGrid');
-MOCK.CATEGORIES.forEach(cat => {
-    grid.innerHTML += `
-        <a href="category.html?cat=${cat.id}" class="category-card">
-            <div class="category-icon" style="background:${cat.color}15;">${cat.icon}</div>
-            <h4>${cat.name}</h4>
-            <span class="count">${cat.count} stores</span>
-        </a>
-    `;
+// Render categories (language-aware)
+function getCatName(cat) {
+    var lang = localStorage.getItem('myplopplop_lang') || 'kr';
+    if (lang === 'kr') return cat.nameKr || cat.name;
+    if (lang === 'fr') return cat.nameFr || cat.name;
+    if (lang === 'es') return cat.nameEs || cat.name;
+    return cat.name;
+}
+function getStoresLabel(count) {
+    var lang = localStorage.getItem('myplopplop_lang') || 'kr';
+    var labels = { kr: 'boutik', fr: 'boutiques', es: 'tiendas', en: 'stores' };
+    return count + ' ' + (labels[lang] || 'stores');
+}
+function renderCategories() {
+    var grid = document.getElementById('categoriesGrid');
+    grid.innerHTML = '';
+    MOCK.CATEGORIES.forEach(function(cat) {
+        grid.innerHTML += '<a href="category.html?cat=' + cat.id + '" class="category-card">'
+            + '<div class="category-icon" style="background:' + cat.color + '15;">' + cat.icon + '</div>'
+            + '<h4>' + getCatName(cat) + '</h4>'
+            + '<span class="count">' + getStoresLabel(cat.count) + '</span>'
+            + '</a>';
+    });
+}
+renderCategories();
+// Re-render on language change
+document.querySelectorAll('[data-lang]').forEach(function(btn) {
+    btn.addEventListener('click', function() { setTimeout(renderCategories, 100); });
 });
 
 // Render featured stores
-const featured = document.getElementById('featuredStores');
-MOCK.STORES.filter(s => s.featured).forEach(store => {
-    const cat = MOCK.CATEGORIES.find(c => c.id === store.category);
-    featured.innerHTML += `
-        <a href="store.html?id=${store.id}" class="store-card">
-            <div class="store-img">${cat ? cat.icon : '🏪'}</div>
-            <div class="store-info">
-                <div class="flex items-center justify-between">
-                    <span class="store-name">${store.name}</span>
-                    ${store.verified ? '<span class="verified-badge">✓ Verified</span>' : ''}
-                </div>
-                <div class="flex items-center gap-xs" style="margin-top:4px;">
-                    <span class="badge badge-gray">${cat ? cat.name : ''}</span>
-                </div>
-                <div class="store-meta">
-                    <span>⭐ ${store.rating}</span>
-                    <span class="dot"></span>
-                    <span>${store.eta} min</span>
-                    <span class="dot"></span>
-                    <span>${store.deliveryFee === 0 ? 'Free delivery' : MOCK.formatHTG(store.deliveryFee) + ' delivery'}</span>
-                </div>
-            </div>
-        </a>
-    `;
+function renderFeatured() {
+    var featured = document.getElementById('featuredStores');
+    var lang = localStorage.getItem('myplopplop_lang') || 'kr';
+    var deliveryLabel = { kr: 'livrezon', fr: 'livraison', es: 'entrega', en: 'delivery' };
+    var freeLabel = { kr: 'Livrezon gratis', fr: 'Livraison gratuite', es: 'Entrega gratis', en: 'Free delivery' };
+    var verifiedLabel = { kr: '✓ Verifye', fr: '✓ Vérifié', es: '✓ Verificado', en: '✓ Verified' };
+    featured.innerHTML = '';
+    MOCK.STORES.filter(function(s) { return s.featured; }).forEach(function(store) {
+        var cat = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
+        var catName = cat ? getCatName(cat) : '';
+        var delText = store.deliveryFee === 0 ? (freeLabel[lang] || freeLabel.en) : MOCK.formatHTG(store.deliveryFee) + ' ' + (deliveryLabel[lang] || deliveryLabel.en);
+        featured.innerHTML += '<a href="store.html?id=' + store.id + '" class="store-card">'
+            + '<div class="store-img">' + (cat ? cat.icon : '🏪') + '</div>'
+            + '<div class="store-info">'
+            + '<div class="flex items-center justify-between">'
+            + '<span class="store-name">' + store.name + '</span>'
+            + (store.verified ? '<span class="verified-badge">' + (verifiedLabel[lang] || verifiedLabel.en) + '</span>' : '')
+            + '</div>'
+            + '<div class="flex items-center gap-xs" style="margin-top:4px;">'
+            + '<span class="badge badge-gray">' + catName + '</span>'
+            + '</div>'
+            + '<div class="store-meta">'
+            + '<span>⭐ ' + store.rating + '</span>'
+            + '<span class="dot"></span>'
+            + '<span>' + store.eta + ' min</span>'
+            + '<span class="dot"></span>'
+            + '<span>' + delText + '</span>'
+            + '</div></div></a>';
+    });
+}
+renderFeatured();
+document.querySelectorAll('[data-lang]').forEach(function(btn) {
+    btn.addEventListener('click', function() { setTimeout(renderFeatured, 100); });
 });
 </script>
 
