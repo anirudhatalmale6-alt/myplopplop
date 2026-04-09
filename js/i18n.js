@@ -774,6 +774,18 @@
       kr: 'Mete boutik ou gratis. Komanse vann nan kèk minit.',
       es: 'Lista tu tienda gratis. Empieza a vender en minutos.'
     },
+    'msouwout.cta_title': {
+      fr: 'MsouWout — Taxi & Livraison',
+      en: 'MsouWout — Taxi & Delivery',
+      kr: 'MsouWout — Taksi & Livrezon',
+      es: 'MsouWout — Taxi & Entregas'
+    },
+    'msouwout.cta_sub': {
+      fr: 'Besoin d\'un trajet ou d\'une livraison ? Reservez avec MsouWout !',
+      en: 'Need a ride or delivery? Book now with MsouWout!',
+      kr: 'Bezwen yon vwayaj oswa livrezon? Rezève kounye a ak MsouWout!',
+      es: 'Necesitas un viaje o entrega? Reserva ahora con MsouWout!'
+    },
 
     // ── Store Designer ──
     'hero.start_btn': {

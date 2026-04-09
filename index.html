@@ -244,6 +244,13 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 24px rgba(16,185,129,0.4);
 }
+.merchant-cta-banner.msouwout-cta {
+    background: linear-gradient(135deg, #C2410C 0%, #FF6B35 100%);
+    box-shadow: 0 4px 16px rgba(255,107,53,0.3);
+}
+.merchant-cta-banner.msouwout-cta:hover {
+    box-shadow: 0 6px 24px rgba(255,107,53,0.4);
+}
 .merchant-cta-left {
     display: flex;
     align-items: center;
@@ -656,13 +663,23 @@
 
 <!-- MERCHANT CTA (visible right away) -->
 <section class="section" style="padding-bottom:0;">
-    <div class="container">
+    <div class="container" style="display:flex;flex-direction:column;gap:12px;">
         <a href="store-designer.html" class="merchant-cta-banner" id="merchantCtaBanner">
             <div class="merchant-cta-left">
                 <span class="merchant-cta-icon">🏪</span>
                 <div class="merchant-cta-text">
                     <strong data-i18n="merchant.cta_title">Got a business? Join MyPlopPlop!</strong>
                     <span data-i18n="merchant.cta_sub">List your store free. Start selling in minutes.</span>
+                </div>
+            </div>
+            <span class="merchant-cta-arrow">→</span>
+        </a>
+        <a href="https://msouwout.com" class="merchant-cta-banner msouwout-cta" id="msouwoutCtaBanner">
+            <div class="merchant-cta-left">
+                <span class="merchant-cta-icon">🚕</span>
+                <div class="merchant-cta-text">
+                    <strong data-i18n="msouwout.cta_title">MsouWout — Taxi & Delivery</strong>
+                    <span data-i18n="msouwout.cta_sub">Need a ride or delivery? Book now with MsouWout!</span>
                 </div>
             </div>
             <span class="merchant-cta-arrow">→</span>
