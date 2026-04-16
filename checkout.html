@@ -1222,32 +1222,117 @@
     }
 
     // Confirm order
+    const PAYMENT_API = 'https://msouwout-backend.onrender.com/api/payments';
+
+    // Map checkout payment methods to SolutionIP methods
+    function getSolutionIPMethod(method) {
+        if (method === 'moncash') return 'moncash';
+        if (method === 'natcash') return 'natcash';
+        if (method === 'credit_card' || method === 'debit_card' || method === 'saved_card') return 'kashpaw';
+        return 'all'; // san_cash or fallback
+    }
+
     function confirmOrder() {
         const btn = document.getElementById('continueBtn');
         btn.disabled = true;
         btn.textContent = 'Processing...';
 
-        // Simulate API call
-        setTimeout(function() {
-            // Generate order ID
-            const orderId = 'ORD-2026-' + String(Math.floor(Math.random() * 9000) + 1000).padStart(3, '0');
-            document.getElementById('successOrderId').textContent = orderId;
+        const orderId = 'MPP-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+        const summary = getOrderSummary() || calculateSummary(getCart());
+        const total = summary ? summary.total : 0;
+        const payMethod = getSolutionIPMethod(selectedPayment);
 
-            // Hide checkout UI, show success
-            document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
-            document.getElementById('stepIndicator').style.display = 'none';
-            document.querySelector('.checkout-title').style.display = 'none';
-            document.getElementById('checkoutBottomBar').style.display = 'none';
-            document.getElementById('successScreen').classList.add('show');
+        // For San Cash wallet (no real payment needed yet) or zero total, complete directly
+        if (selectedPayment === 'san_cash' || total < 20) {
+            completeOrder(orderId);
+            return;
+        }
 
-            // Clear cart
-            localStorage.removeItem(CART_KEY);
-            localStorage.removeItem('myplopplop_order_summary');
-            updateBadges();
-
-            window.scrollTo(0, 0);
-        }, 1500);
+        // Create real payment via SolutionIP
+        fetch(PAYMENT_API + '/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                reference_id: orderId,
+                amount: Math.ceil(total),
+                payment_method: payMethod,
+                description: 'MyPlopPlop Order ' + orderId
+            })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.success && data.payment_url) {
+                // Store order info for verification after payment
+                localStorage.setItem('mpp_pending_order', JSON.stringify({
+                    orderId: orderId,
+                    transactionId: data.transaction_id,
+                    amount: total,
+                    method: payMethod,
+                    timestamp: Date.now()
+                }));
+                // Redirect to payment page
+                window.location.href = data.payment_url;
+            } else {
+                btn.disabled = false;
+                btn.textContent = 'Place Order';
+                alert('Payment error: ' + (data.error || 'Please try again'));
+            }
+        })
+        .catch(function(err) {
+            console.error('Payment error:', err);
+            btn.disabled = false;
+            btn.textContent = 'Place Order';
+            alert('Payment service is temporarily unavailable. Please try again.');
+        });
     }
+
+    function completeOrder(orderId) {
+        document.getElementById('successOrderId').textContent = orderId;
+        document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('stepIndicator').style.display = 'none';
+        document.querySelector('.checkout-title').style.display = 'none';
+        document.getElementById('checkoutBottomBar').style.display = 'none';
+        document.getElementById('successScreen').classList.add('show');
+        localStorage.removeItem(CART_KEY);
+        localStorage.removeItem('myplopplop_order_summary');
+        localStorage.removeItem('mpp_pending_order');
+        updateBadges();
+        window.scrollTo(0, 0);
+    }
+
+    // Check if returning from payment redirect
+    (function checkPendingPayment() {
+        var pending = localStorage.getItem('mpp_pending_order');
+        if (!pending) return;
+        try {
+            var order = JSON.parse(pending);
+            // Only check if less than 30 minutes old
+            if (Date.now() - order.timestamp > 30 * 60 * 1000) {
+                localStorage.removeItem('mpp_pending_order');
+                return;
+            }
+            // Verify payment
+            fetch(PAYMENT_API + '/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ reference_id: order.orderId })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.success && data.paid) {
+                    completeOrder(order.orderId);
+                } else {
+                    // Payment not yet confirmed - could still be processing
+                    localStorage.removeItem('mpp_pending_order');
+                }
+            })
+            .catch(function() {
+                localStorage.removeItem('mpp_pending_order');
+            });
+        } catch(e) {
+            localStorage.removeItem('mpp_pending_order');
+        }
+    })();
 
     // Redirect if cart empty
     const cart = getCart();
