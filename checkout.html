@@ -1222,7 +1222,8 @@
     }
 
     // Confirm order
-    const PAYMENT_API = 'https://msouwout-backend.onrender.com/api/payments';
+    const PAYMENT_API = 'https://plopplop.solutionip.app/api';
+    const PAYMENT_CLIENT_ID = 'pp_1ohu5zz2tcx';
 
     // Map checkout payment methods to SolutionIP methods
     function getSolutionIPMethod(method) {
@@ -1249,19 +1250,19 @@
         }
 
         // Create real payment via SolutionIP
-        fetch(PAYMENT_API + '/create', {
+        fetch(PAYMENT_API + '/paiement-marchand', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                reference_id: orderId,
-                amount: Math.ceil(total),
-                payment_method: payMethod,
-                description: 'MyPlopPlop Order ' + orderId
+                client_id: PAYMENT_CLIENT_ID,
+                refference_id: orderId,
+                montant: Math.ceil(total),
+                payment_method: payMethod
             })
         })
         .then(function(r) { return r.json(); })
         .then(function(data) {
-            if (data.success && data.payment_url) {
+            if (data.status === true && data.url) {
                 // Store order info for verification after payment
                 localStorage.setItem('mpp_pending_order', JSON.stringify({
                     orderId: orderId,
@@ -1271,7 +1272,7 @@
                     timestamp: Date.now()
                 }));
                 // Redirect to payment page
-                window.location.href = data.payment_url;
+                window.location.href = data.url;
             } else {
                 btn.disabled = false;
                 btn.textContent = 'Place Order';
@@ -1312,14 +1313,14 @@
                 return;
             }
             // Verify payment
-            fetch(PAYMENT_API + '/verify', {
+            fetch(PAYMENT_API + '/paiement-verify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ reference_id: order.orderId })
+                body: JSON.stringify({ client_id: PAYMENT_CLIENT_ID, refference_id: order.orderId })
             })
             .then(function(r) { return r.json(); })
             .then(function(data) {
-                if (data.success && data.paid) {
+                if (data.status === true && data.trans_status === 'ok') {
                     completeOrder(order.orderId);
                 } else {
                     // Payment not yet confirmed - could still be processing
