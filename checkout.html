@@ -1017,7 +1017,7 @@
         let subtotal = 0;
         const storeIds = new Set();
         cart.forEach(item => {
-            subtotal += item.price * item.qty;
+            subtotal += (item.product ? item.product.price : item.price) * item.qty;
             storeIds.add(item.storeId);
         });
         let deliveryFee = 0;
@@ -1196,9 +1196,9 @@
         cart.forEach(item => {
             itemsContainer.innerHTML += `
                 <div class="review-item">
-                    <span class="item-name">${item.name}</span>
+                    <span class="item-name">${item.product ? item.product.name : item.name}</span>
                     <span class="item-qty">x${item.qty}</span>
-                    <span class="item-total">${MOCK.formatHTG(item.price * item.qty)}</span>
+                    <span class="item-total">${MOCK.formatHTG((item.product ? item.product.price : item.price) * item.qty)}</span>
                 </div>
             `;
         });
