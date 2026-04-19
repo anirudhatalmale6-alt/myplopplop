@@ -760,6 +760,18 @@
       kr: 'Rejwenn yon Sol Jodi a',
       es: 'Unete a un Sol Hoy'
     },
+    'sol.cta_title': {
+      fr: 'Sol — Epargne Rotative',
+      en: 'Sol — Digital Money Pool',
+      kr: 'Sol — Lajan Kolektif Dijital',
+      es: 'Sol — Ahorro Rotativo'
+    },
+    'sol.cta_sub': {
+      fr: 'Epargnez ensemble avec votre communaute. Rejoignez un Sol !',
+      en: 'Save together with your community. Join a Sol today!',
+      kr: 'Ekonomize ansanm ak kominote ou. Rejwenn yon Sol jodi a!',
+      es: 'Ahorra junto con tu comunidad. Unete a un Sol hoy!'
+    },
 
     // ── Merchant CTA ──
     'merchant.cta_title': {
