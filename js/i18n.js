@@ -689,16 +689,16 @@
       es: 'Nueva Funcion'
     },
     'sol.title': {
-      fr: 'Sol - Pool d\'Argent Numerique',
-      en: 'Sol - Digital Money Pool',
-      kr: 'Sol - Pil Lajan Nimerik',
-      es: 'Sol - Pool de Dinero Digital'
+      fr: 'Sòl - Pool d\'Argent Numerique',
+      en: 'Sòl - Digital Money Pool',
+      kr: 'Sòl - Pil Lajan Nimerik',
+      es: 'Sòl - Pool de Dinero Digital'
     },
     'sol.desc': {
-      fr: 'Le Sol haitien traditionnel (ROSCA) est maintenant numerique sur MyPlopPlop ! Epargnez ensemble avec vos amis, votre famille ou votre communaute. Tout le monde contribue, tout le monde gagne.',
-      en: 'The traditional Haitian Sol (ROSCA) is now digital on MyPlopPlop! Save together with friends, family, or your community. Everyone contributes, everyone wins.',
-      kr: 'Sol tradisyonèl ayisyen an (ROSCA) kounye a dijital sou MyPlopPlop! Mete lajan ansanm ak zanmi, fanmi, oswa kominote ou. Tout moun kontribye, tout moun genyen.',
-      es: 'El Sol haitiano tradicional (ROSCA) ahora es digital en MyPlopPlop! Ahorra junto con amigos, familia o tu comunidad. Todos contribuyen, todos ganan.'
+      fr: 'Le Sòl haitien traditionnel (ROSCA) est maintenant numerique sur MyPlopPlop ! Epargnez ensemble avec vos amis, votre famille ou votre communaute. Tout le monde contribue, tout le monde gagne.',
+      en: 'The traditional Haitian Sòl (ROSCA) is now digital on MyPlopPlop! Save together with friends, family, or your community. Everyone contributes, everyone wins.',
+      kr: 'Sòl tradisyonèl ayisyen an (ROSCA) kounye a dijital sou MyPlopPlop! Mete lajan ansanm ak zanmi, fanmi, oswa kominote ou. Tout moun kontribye, tout moun genyen.',
+      es: 'El Sòl haitiano tradicional (ROSCA) ahora es digital en MyPlopPlop! Ahorra junto con amigos, familia o tu comunidad. Todos contribuyen, todos ganan.'
     },
     'sol.s1_title': {
       fr: 'Creer un Groupe',
@@ -707,10 +707,10 @@
       es: 'Crear un Grupo'
     },
     'sol.s1_desc': {
-      fr: 'Lancez un Sol avec 5-20 membres. Definissez le montant et la frequence (hebdomadaire ou mensuel).',
-      en: 'Start a Sol with 5-20 members. Set the contribution amount and frequency (weekly or monthly).',
-      kr: 'Komanse yon Sol ak 5-20 manm. Fikse montan an ak frekans lan (chak semèn oswa chak mwa).',
-      es: 'Inicia un Sol con 5-20 miembros. Define el monto y la frecuencia (semanal o mensual).'
+      fr: 'Lancez un Sòl avec 5-20 membres. Definissez le montant et la frequence (hebdomadaire ou mensuel).',
+      en: 'Start a Sòl with 5-20 members. Set the contribution amount and frequency (weekly or monthly).',
+      kr: 'Komanse yon Sòl ak 5-20 manm. Fikse montan an ak frekans lan (chak semèn oswa chak mwa).',
+      es: 'Inicia un Sòl con 5-20 miembros. Define el monto y la frecuencia (semanal o mensual).'
     },
     'sol.s2_title': {
       fr: 'Tout le Monde Contribue',
@@ -755,22 +755,22 @@
       es: 'Diaspora Bienvenida'
     },
     'sol.cta': {
-      fr: 'Rejoindre un Sol Aujourd\'hui',
-      en: 'Join a Sol Today',
-      kr: 'Rejwenn yon Sol Jodi a',
-      es: 'Unete a un Sol Hoy'
+      fr: 'Rejoindre un Sòl Aujourd\'hui',
+      en: 'Join a Sòl Today',
+      kr: 'Rejwenn yon Sòl Jodi a',
+      es: 'Unete a un Sòl Hoy'
     },
     'sol.cta_title': {
-      fr: 'Sol — Epargne Rotative',
-      en: 'Sol — Digital Money Pool',
-      kr: 'Sol — Lajan Kolektif Dijital',
-      es: 'Sol — Ahorro Rotativo'
+      fr: 'Sòl — Epargne Rotative',
+      en: 'Sòl — Digital Money Pool',
+      kr: 'Sòl — Lajan Kolektif Dijital',
+      es: 'Sòl — Ahorro Rotativo'
     },
     'sol.cta_sub': {
-      fr: 'Epargnez ensemble avec votre communaute. Rejoignez un Sol !',
-      en: 'Save together with your community. Join a Sol today!',
-      kr: 'Ekonomize ansanm ak kominote ou. Rejwenn yon Sol jodi a!',
-      es: 'Ahorra junto con tu comunidad. Unete a un Sol hoy!'
+      fr: 'Epargnez ensemble avec votre communaute. Rejoignez un Sòl !',
+      en: 'Save together with your community. Join a Sòl today!',
+      kr: 'Ekonomize ansanm ak kominote ou. Rejwenn yon Sòl jodi a!',
+      es: 'Ahorra junto con tu comunidad. Unete a un Sòl hoy!'
     },
 
     // ── Merchant CTA ──
