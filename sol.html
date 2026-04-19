@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sòl By MyPlopPlop — Épargne Rotative Structurée</title>
+<meta name="description" content="Créez et gérez votre propre Sòl structuré. Une plateforme communautaire pour les mutuelles, associations et groupes de confiance.">
+<meta property="og:title" content="Sòl By MyPlopPlop — SPAP Sòl Structuré">
+<meta property="og:description" content="Organisez un système d'épargne rotative clair, discipliné et structuré pour votre communauté.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --green:#1B5E20;--green-dark:#0D3B12;--green-mid:#2E7D32;--green-light:#E8F5E9;
+  --gold:#C6930A;--gold-light:#F5E6B8;--gold-dark:#8B6914;
+  --red:#D21034;--blue:#00209F;
+  --white:#FFFFFF;--off-white:#FAF9F6;--cream:#F5F0E8;
+  --dark:#0F1A0F;--text:#1C2B1C;--text-mid:#3D5A3D;--text-light:#6B8A6B;--text-muted:#8FA68F;
+  --border:#D4CEBC;--border-light:#E8E3D6;
+  --heading:'Playfair Display',Georgia,serif;
+  --body:'Source Sans 3','Source Sans Pro',system-ui,sans-serif;
+  --radius:14px;--radius-sm:8px;--radius-lg:20px;
+}
+
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+
+/* ═══ ANCHOR NAV ═══ */
+.anchor-nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(15,26,15,.95);backdrop-filter:blur(12px);
+  border-bottom:2px solid var(--gold);
+  padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;
+}
+.anchor-nav .logo{
+  font-family:var(--heading);font-weight:800;font-size:1.15rem;color:var(--gold);
+  display:flex;align-items:center;gap:8px;
+}
+.anchor-nav .logo span{color:var(--white);font-weight:500;font-size:.85rem;opacity:.7}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{
+  color:rgba(255,255,255,.7);font-size:.78rem;font-weight:600;letter-spacing:.02em;
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{
+  background:var(--gold);color:var(--dark);padding:8px 18px;border-radius:100px;
+  font-size:.78rem;font-weight:700;transition:all .2s;border:none;cursor:pointer;
+}
+.nav-cta:hover{background:var(--gold-light);transform:translateY(-1px)}
+.mobile-toggle{display:none;background:none;border:none;color:var(--gold);font-size:1.5rem;cursor:pointer}
+.mobile-menu{
+  display:none;position:fixed;top:56px;left:0;right:0;
+  background:rgba(15,26,15,.98);padding:20px;z-index:99;
+  flex-direction:column;gap:16px;border-bottom:2px solid var(--gold);
+}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:rgba(255,255,255,.85);font-size:.95rem;font-weight:600;padding:8px 0}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+}
+
+/* ═══ HAITIAN ACCENT RIBBON ═══ */
+.ribbon{height:4px;background:linear-gradient(90deg,var(--blue) 50%,var(--red) 50%)}
+
+/* ═══ SECTION BASE ═══ */
+.section{padding:80px 24px}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--green-light);color:var(--green);
+  font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:6px 16px;border-radius:100px;margin-bottom:16px;
+}
+.section-title{
+  font-family:var(--heading);font-size:clamp(1.8rem,4vw,2.6rem);
+  color:var(--dark);line-height:1.2;margin-bottom:12px;font-weight:700;
+}
+.section-title em{color:var(--green);font-style:italic}
+.section-desc{
+  font-size:1.05rem;color:var(--text-mid);line-height:1.7;max-width:600px;
+}
+
+/* ═══ HERO ═══ */
+.hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding:100px 24px 60px;position:relative;overflow:hidden;
+  background:linear-gradient(160deg,var(--green-dark) 0%,var(--green) 40%,#1A4A1A 100%);
+}
+.hero::before{
+  content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;
+  background:radial-gradient(circle,rgba(198,147,10,.15) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:120px;
+  background:linear-gradient(to top,var(--off-white),transparent);pointer-events:none;
+}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.hero-text{position:relative;z-index:2}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(198,147,10,.4);background:rgba(198,147,10,.1);
+  color:var(--gold-light);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:8px 18px;border-radius:100px;margin-bottom:24px;
+}
+.hero h1{
+  font-family:var(--heading);font-size:clamp(2.2rem,5vw,3.4rem);font-weight:800;
+  color:var(--white);line-height:1.1;letter-spacing:-.02em;margin-bottom:20px;
+}
+.hero h1 em{color:var(--gold);font-style:italic}
+.hero p{
+  font-size:1.1rem;color:rgba(255,255,255,.75);line-height:1.7;
+  max-width:480px;margin-bottom:32px;
+}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-primary{
+  background:var(--gold);color:var(--dark);
+  padding:16px 32px;border-radius:100px;font-family:var(--body);
+  font-size:.95rem;font-weight:700;border:none;cursor:pointer;
+  transition:all .25s;box-shadow:0 4px 20px rgba(198,147,10,.3);
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(198,147,10,.4)}
+.btn-secondary{
+  background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.3);
+  padding:15px 28px;border-radius:100px;font-family:var(--body);
+  font-size:.95rem;font-weight:600;cursor:pointer;transition:all .25s;
+}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold)}
+
+/* Dashboard mockup */
+.hero-visual{position:relative;z-index:2}
+.dashboard-mock{
+  background:var(--white);border-radius:var(--radius-lg);
+  padding:24px;box-shadow:0 30px 60px rgba(0,0,0,.25),0 0 0 1px rgba(255,255,255,.1);
+  position:relative;
+}
+.dashboard-mock::before{
+  content:'SÒL DASHBOARD';position:absolute;top:-10px;left:24px;
+  background:var(--gold);color:var(--dark);font-size:.6rem;font-weight:800;
+  letter-spacing:.15em;padding:4px 12px;border-radius:6px;
+}
+.dash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-top:8px}
+.dash-group{font-family:var(--heading);font-size:1.1rem;font-weight:700;color:var(--dark)}
+.dash-badge{background:var(--green-light);color:var(--green);font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:6px}
+.dash-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.dash-stat{background:var(--cream);border-radius:var(--radius-sm);padding:14px}
+.dash-stat .label{font-size:.68rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.dash-stat .value{font-family:var(--heading);font-size:1.2rem;font-weight:700;color:var(--dark)}
+.dash-progress{margin-top:12px}
+.dash-progress .bar-label{display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;color:var(--text-mid);margin-bottom:6px}
+.dash-progress .bar{height:8px;background:var(--cream);border-radius:100px;overflow:hidden}
+.dash-progress .bar-fill{height:100%;width:65%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:100px}
+
+@media(max-width:768px){
+  .hero-inner{grid-template-columns:1fr;text-align:center}
+  .hero p{margin-left:auto;margin-right:auto}
+  .hero-btns{justify-content:center}
+  .hero-visual{max-width:400px;margin:0 auto}
+}
+
+/* ═══ TRUST BAR ═══ */
+.trust-bar{
+  background:var(--white);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);
+  padding:40px 24px;
+}
+.trust-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.trust-card{
+  text-align:center;padding:20px 16px;
+  background:var(--cream);border-radius:var(--radius);
+  border:1px solid var(--border-light);
+}
+.trust-card .num{
+  font-family:var(--heading);font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;
+  color:var(--green);margin-bottom:4px;
+}
+.trust-card .label{font-size:.82rem;font-weight:600;color:var(--text-mid);line-height:1.4}
+@media(max-width:600px){.trust-inner{grid-template-columns:1fr 1fr}}
+
+/* ═══ HOW IT WORKS ═══ */
+.steps-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:40px}
+.step-card{
+  background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius);
+  padding:28px 20px;position:relative;text-align:center;
+  transition:all .3s;
+}
+.step-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(27,94,32,.08);border-color:var(--green)}
+.step-num{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--green);color:var(--white);
+  font-family:var(--heading);font-size:1rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 14px;
+}
+.step-icon{font-size:2rem;margin-bottom:10px}
+.step-card h4{font-family:var(--heading);font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:8px}
+.step-card p{font-size:.82rem;color:var(--text-mid);line-height:1.5}
+@media(max-width:900px){.steps-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:500px){.steps-grid{grid-template-columns:1fr}}
+
+/* ═══ WHO CAN USE IT ═══ */
+.bg-cream{background:var(--cream)}
+.use-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+.use-card{
+  background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius);
+  padding:28px 24px;display:flex;align-items:flex-start;gap:14px;
+  transition:all .3s;
+}
+.use-card:hover{box-shadow:0 8px 24px rgba(27,94,32,.06);border-color:var(--green)}
+.use-icon{
+  width:48px;height:48px;border-radius:12px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--green-light),var(--cream));
+  display:flex;align-items:center;justify-content:center;font-size:1.5rem;
+}
+.use-card h4{font-family:var(--heading);font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:4px}
+.use-card p{font-size:.82rem;color:var(--text-mid);line-height:1.4}
+@media(max-width:600px){.use-grid{grid-template-columns:1fr}}
+
+/* ═══ FEATURES ═══ */
+.features-layout{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-top:40px}
+.features-phone{
+  background:var(--green-dark);border-radius:30px;padding:20px;
+  box-shadow:0 24px 48px rgba(0,0,0,.15);position:relative;overflow:hidden;
+  aspect-ratio:9/16;max-width:280px;margin:0 auto;
+  display:flex;align-items:center;justify-content:center;
+}
+.features-phone::before{
+  content:'';position:absolute;top:12px;left:50%;transform:translateX(-50%);
+  width:80px;height:20px;background:var(--dark);border-radius:100px;
+}
+.phone-screen{
+  background:var(--white);border-radius:20px;width:100%;height:100%;
+  padding:40px 16px 16px;overflow:hidden;
+}
+.phone-screen .ph-title{font-family:var(--heading);font-size:.85rem;font-weight:700;color:var(--dark);margin-bottom:12px}
+.phone-screen .ph-item{
+  display:flex;align-items:center;gap:8px;padding:8px 0;
+  border-bottom:1px solid var(--border-light);font-size:.72rem;color:var(--text-mid);
+}
+.phone-screen .ph-item .ph-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
+.phone-screen .ph-bar{height:6px;background:var(--cream);border-radius:100px;margin-top:12px}
+.phone-screen .ph-bar-fill{height:100%;width:45%;background:var(--gold);border-radius:100px}
+
+.features-list{list-style:none}
+.features-list li{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 0;border-bottom:1px solid var(--border-light);
+  font-size:.95rem;font-weight:500;color:var(--text);
+}
+.features-list li:last-child{border-bottom:none}
+.feat-check{
+  width:28px;height:28px;border-radius:8px;flex-shrink:0;
+  background:var(--green-light);color:var(--green);
+  display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;
+}
+@media(max-width:768px){
+  .features-layout{grid-template-columns:1fr;text-align:center}
+  .features-phone{margin-bottom:40px}
+}
+
+/* ═══ ROLE OF SPAP ═══ */
+.spap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.spap-card{
+  background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius);
+  padding:32px 24px;text-align:center;position:relative;overflow:hidden;
+  transition:all .3s;
+}
+.spap-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--green),var(--gold));
+}
+.spap-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(27,94,32,.08)}
+.spap-icon{
+  width:56px;height:56px;border-radius:50%;margin:0 auto 16px;
+  background:linear-gradient(135deg,var(--green),var(--green-mid));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;color:var(--white);
+}
+.spap-card h4{font-family:var(--heading);font-size:1.1rem;font-weight:700;color:var(--dark);margin-bottom:8px}
+.spap-card p{font-size:.88rem;color:var(--text-mid);line-height:1.6}
+@media(max-width:600px){.spap-grid{grid-template-columns:1fr}}
+
+/* ═══ 48HR INTEGRATION ═══ */
+.flow-section{background:linear-gradient(160deg,var(--green-dark),var(--green));color:var(--white)}
+.flow-section .section-title{color:var(--white)}
+.flow-section .section-title em{color:var(--gold)}
+.flow-section .section-desc{color:rgba(255,255,255,.7)}
+.flow-steps{
+  display:flex;align-items:center;gap:0;margin-top:40px;flex-wrap:wrap;justify-content:center;
+}
+.flow-step{
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
+  border-radius:var(--radius);padding:20px 22px;text-align:center;
+  flex:1;min-width:140px;max-width:200px;
+  backdrop-filter:blur(4px);
+}
+.flow-step h4{font-family:var(--heading);font-size:.9rem;font-weight:700;color:var(--gold-light);margin-bottom:4px}
+.flow-step p{font-size:.75rem;color:rgba(255,255,255,.6)}
+.flow-arrow{font-size:1.2rem;color:var(--gold);padding:0 8px;flex-shrink:0}
+.flow-text{
+  max-width:700px;margin:32px auto 0;text-align:center;
+  font-size:.95rem;color:rgba(255,255,255,.75);line-height:1.7;
+}
+@media(max-width:600px){
+  .flow-steps{flex-direction:column;gap:8px}
+  .flow-arrow{transform:rotate(90deg)}
+}
+
+/* ═══ PILOT ═══ */
+.pilot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.pilot-card{
+  background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius);
+  padding:28px 24px;position:relative;
+}
+.pilot-phase{
+  font-family:var(--heading);font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gold-dark);background:var(--gold-light);
+  display:inline-block;padding:4px 12px;border-radius:6px;margin-bottom:12px;
+}
+.pilot-card h4{font-family:var(--heading);font-size:1.1rem;font-weight:700;color:var(--dark);margin-bottom:8px}
+.pilot-card p{font-size:.88rem;color:var(--text-mid);line-height:1.6}
+@media(max-width:600px){.pilot-grid{grid-template-columns:1fr}}
+
+/* ═══ FINAL CTA ═══ */
+.final-cta{
+  background:var(--cream);text-align:center;padding:80px 24px;
+  position:relative;overflow:hidden;
+}
+.final-cta::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--green),var(--gold),var(--green));
+}
+.final-cta h2{
+  font-family:var(--heading);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;
+  color:var(--dark);line-height:1.15;margin-bottom:14px;
+}
+.final-cta h2 em{color:var(--green);font-style:italic}
+.final-cta p{font-size:1.05rem;color:var(--text-mid);max-width:550px;margin:0 auto 32px;line-height:1.7}
+.final-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-green{
+  background:var(--green);color:var(--white);
+  padding:16px 32px;border-radius:100px;font-family:var(--body);
+  font-size:.95rem;font-weight:700;border:none;cursor:pointer;
+  transition:all .25s;box-shadow:0 4px 20px rgba(27,94,32,.2);
+}
+.btn-green:hover{background:var(--green-dark);transform:translateY(-2px)}
+.btn-outline{
+  background:transparent;color:var(--green);border:1.5px solid var(--green);
+  padding:15px 28px;border-radius:100px;font-family:var(--body);
+  font-size:.95rem;font-weight:600;cursor:pointer;transition:all .25s;
+}
+.btn-outline:hover{background:var(--green-light)}
+
+/* ═══ FOOTER ═══ */
+.site-footer{
+  background:var(--dark);color:rgba(255,255,255,.5);
+  text-align:center;padding:32px 24px;font-size:.82rem;line-height:1.8;
+}
+.site-footer strong{color:var(--gold);font-weight:700}
+.site-footer a{color:var(--gold);font-weight:600}
+
+/* ═══ WHATSAPP FLOAT ═══ */
+.wa-float{
+  position:fixed;bottom:24px;right:24px;z-index:90;
+  width:56px;height:56px;border-radius:50%;
+  background:#25D366;color:#fff;font-size:1.6rem;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(37,211,102,.3);
+  transition:all .25s;cursor:pointer;text-decoration:none;
+}
+.wa-float:hover{transform:scale(1.1);box-shadow:0 8px 24px rgba(37,211,102,.4)}
+
+/* ═══ FAQ ═══ */
+.faq-list{max-width:700px;margin:40px auto 0}
+.faq-item{border-bottom:1px solid var(--border-light)}
+.faq-q{
+  width:100%;background:none;border:none;text-align:left;
+  padding:18px 0;font-family:var(--body);font-size:1rem;font-weight:600;
+  color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;
+}
+.faq-q::after{content:'+';font-size:1.3rem;color:var(--green);font-weight:700;transition:transform .2s}
+.faq-item.open .faq-q::after{transform:rotate(45deg)}
+.faq-a{
+  max-height:0;overflow:hidden;transition:max-height .3s ease;
+  font-size:.9rem;color:var(--text-mid);line-height:1.7;
+}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:18px}
+
+/* ═══ CALCULATOR ═══ */
+.calc-box{
+  background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius);
+  padding:28px 24px;max-width:420px;margin:40px auto 0;
+}
+.calc-box h4{font-family:var(--heading);font-size:1.1rem;font-weight:700;color:var(--dark);margin-bottom:16px;text-align:center}
+.calc-row{margin-bottom:14px}
+.calc-row label{font-size:.82rem;font-weight:600;color:var(--text-mid);display:block;margin-bottom:4px}
+.calc-row input{
+  width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  font-family:var(--body);font-size:1rem;color:var(--dark);
+}
+.calc-row input:focus{border-color:var(--green);outline:none;box-shadow:0 0 0 3px rgba(27,94,32,.1)}
+.calc-result{
+  text-align:center;padding:16px;background:var(--green-light);border-radius:var(--radius-sm);
+  margin-top:16px;
+}
+.calc-result .result-label{font-size:.78rem;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.05em}
+.calc-result .result-value{font-family:var(--heading);font-size:1.8rem;font-weight:800;color:var(--green)}
+
+/* ═══ ANIMATIONS ═══ */
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ANCHOR NAV -->
+<nav class="anchor-nav">
+  <a href="#" class="logo">Sòl <span>by MyPlopPlop</span></a>
+  <div class="nav-links">
+    <a href="#accueil">Accueil</a>
+    <a href="#fonctionnement">Fonctionnement</a>
+    <a href="#groupes">Groupes</a>
+    <a href="#fonctionnalites">Fonctionnalites</a>
+    <a href="#contact">Contact</a>
+    <button class="nav-cta" onclick="alert('Bientot disponible!')">Creer un groupe</button>
+  </div>
+  <button class="mobile-toggle" onclick="document.getElementById('mobileMenu').classList.toggle('open')">&#9776;</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#accueil" onclick="this.parentElement.classList.remove('open')">Accueil</a>
+  <a href="#fonctionnement" onclick="this.parentElement.classList.remove('open')">Fonctionnement</a>
+  <a href="#groupes" onclick="this.parentElement.classList.remove('open')">Groupes</a>
+  <a href="#fonctionnalites" onclick="this.parentElement.classList.remove('open')">Fonctionnalites</a>
+  <a href="#contact" onclick="this.parentElement.classList.remove('open')">Contact</a>
+</div>
+
+<!-- RIBBON -->
+<div class="ribbon" style="margin-top:56px"></div>
+
+<!-- 1. HERO -->
+<section class="hero" id="accueil">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-eyebrow">&#9733; SPAP Sol Structure</div>
+      <h1>Creez et gerez votre propre <em>Sol structure</em></h1>
+      <p>Une plateforme communautaire pensee pour les mutuelles, associations et groupes de confiance qui veulent organiser un systeme d'epargne rotative clair, discipline et structure.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="alert('Bientot disponible!')">&#10132; Creer un groupe</button>
+        <a href="#fonctionnement" class="btn-secondary">Voir comment ca marche</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="dashboard-mock">
+        <div class="dash-header">
+          <div class="dash-group">Mutuelle Solidarite Leogane</div>
+          <div class="dash-badge">Actif</div>
+        </div>
+        <div class="dash-stats">
+          <div class="dash-stat">
+            <div class="label">Membres</div>
+            <div class="value">12</div>
+          </div>
+          <div class="dash-stat">
+            <div class="label">Cotisation</div>
+            <div class="value">2,500 HTG</div>
+          </div>
+          <div class="dash-stat">
+            <div class="label">Prochain Tour</div>
+            <div class="value">Marie J.</div>
+          </div>
+          <div class="dash-stat">
+            <div class="label">Capital Total</div>
+            <div class="value">30,000 HTG</div>
+          </div>
+        </div>
+        <div class="dash-progress">
+          <div class="bar-label"><span>Cycle en cours</span><span>Tour 8/12</span></div>
+          <div class="bar"><div class="bar-fill" style="width:66%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. TRUST BAR -->
+<section class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-card fade-up">
+      <div class="num">+7,000</div>
+      <div class="label">membres a travers Haiti</div>
+    </div>
+    <div class="trust-card fade-up">
+      <div class="num">~4,000</div>
+      <div class="label">dans l'Ouest</div>
+    </div>
+    <div class="trust-card fade-up">
+      <div class="num">+20</div>
+      <div class="label">mutuelles sectorielles</div>
+    </div>
+    <div class="trust-card fade-up">
+      <div class="num">200+</div>
+      <div class="label">PME mobilisables par mois</div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. HOW IT WORKS -->
+<section class="section" id="fonctionnement">
+  <div class="section-inner">
+    <div class="section-badge">&#9881; Fonctionnement</div>
+    <div class="section-title">Comment ca <em>marche</em></div>
+    <div class="section-desc">Un systeme simple en 5 etapes pour organiser votre epargne rotative.</div>
+    <div class="steps-grid">
+      <div class="step-card fade-up">
+        <div class="step-num">1</div>
+        <div class="step-icon">&#128101;</div>
+        <h4>Creer un groupe</h4>
+        <p>Le responsable lance son cercle d'epargne et definit les parametres.</p>
+      </div>
+      <div class="step-card fade-up">
+        <div class="step-num">2</div>
+        <div class="step-icon">&#128233;</div>
+        <h4>Inviter les membres</h4>
+        <p>Ajout via WhatsApp ou inscription simple sur la plateforme.</p>
+      </div>
+      <div class="step-card fade-up">
+        <div class="step-num">3</div>
+        <div class="step-icon">&#9881;</div>
+        <h4>Definir les regles</h4>
+        <p>Montant, frequence, ordre des beneficiaires. Tout est transparent.</p>
+      </div>
+      <div class="step-card fade-up">
+        <div class="step-num">4</div>
+        <div class="step-icon">&#128197;</div>
+        <h4>Suivre les cycles</h4>
+        <p>Paiements, retards, historique, calendrier. Tout en un seul endroit.</p>
+      </div>
+      <div class="step-card fade-up">
+        <div class="step-num">5</div>
+        <div class="step-icon">&#128176;</div>
+        <h4>Distribuer le capital</h4>
+        <p>Chaque membre recoit selon le tour defini. Simple et equitable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. WHO CAN USE IT -->
+<section class="section bg-cream" id="groupes">
+  <div class="section-inner">
+    <div class="section-badge">&#127758; Groupes</div>
+    <div class="section-title">Une plateforme pour tous les <em>groupes organises</em></div>
+    <div class="use-grid">
+      <div class="use-card fade-up">
+        <div class="use-icon">&#127969;</div>
+        <div>
+          <h4>Mutuelles SPAP</h4>
+          <p>Mutuelles sectorielles reconnues par le SPAP pour l'epargne structuree.</p>
+        </div>
+      </div>
+      <div class="use-card fade-up">
+        <div class="use-icon">&#129309;</div>
+        <div>
+          <h4>Associations communautaires</h4>
+          <p>Associations de quartier, religieuses ou communautaires.</p>
+        </div>
+      </div>
+      <div class="use-card fade-up">
+        <div class="use-icon">&#128722;</div>
+        <div>
+          <h4>Groupes de commercants</h4>
+          <p>Commercants de marche et vendeurs qui s'organisent ensemble.</p>
+        </div>
+      </div>
+      <div class="use-card fade-up">
+        <div class="use-icon">&#128105;&#8205;&#128188;</div>
+        <div>
+          <h4>Groupes de femmes entrepreneures</h4>
+          <p>Femmes en affaires qui investissent dans leur croissance collective.</p>
+        </div>
+      </div>
+      <div class="use-card fade-up">
+        <div class="use-icon">&#127891;</div>
+        <div>
+          <h4>Groupes de jeunes</h4>
+          <p>Jeunes entrepreneurs et etudiants qui epargnent pour l'avenir.</p>
+        </div>
+      </div>
+      <div class="use-card fade-up">
+        <div class="use-icon">&#127760;</div>
+        <div>
+          <h4>Organisations partenaires</h4>
+          <p>ONGs et partenaires qui facilitent l'acces au capital communautaire.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. PLATFORM FEATURES -->
+<section class="section" id="fonctionnalites">
+  <div class="section-inner">
+    <div class="section-badge">&#128736; Fonctionnalites</div>
+    <div class="section-title">Une vraie <em>plateforme</em> de gestion</div>
+    <div class="section-desc">Tout ce dont vous avez besoin pour gerer votre Sol en toute confiance.</div>
+    <div class="features-layout">
+      <div class="features-phone">
+        <div class="phone-screen">
+          <div class="ph-title">Sol Dashboard</div>
+          <div class="ph-item"><span class="ph-dot"></span> Mutuelle Solidarite</div>
+          <div class="ph-item"><span class="ph-dot"></span> 12 membres actifs</div>
+          <div class="ph-item"><span class="ph-dot"></span> Prochain: Marie J.</div>
+          <div class="ph-item"><span class="ph-dot"></span> 2,500 HTG / mois</div>
+          <div class="ph-item"><span class="ph-dot"></span> Tour 8 de 12</div>
+          <div class="ph-bar"><div class="ph-bar-fill"></div></div>
+          <div style="margin-top:16px">
+            <div class="ph-item"><span class="ph-dot" style="background:var(--gold)"></span> Historique complet</div>
+            <div class="ph-item"><span class="ph-dot" style="background:var(--gold)"></span> Notifications actives</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <ul class="features-list">
+          <li><span class="feat-check">&#10003;</span> Creation de groupes</li>
+          <li><span class="feat-check">&#10003;</span> Gestion des membres</li>
+          <li><span class="feat-check">&#10003;</span> Historique des contributions</li>
+          <li><span class="feat-check">&#10003;</span> Calendrier des tours</li>
+          <li><span class="feat-check">&#10003;</span> Notifications WhatsApp</li>
+          <li><span class="feat-check">&#10003;</span> Tableau de suivi</li>
+          <li><span class="feat-check">&#10003;</span> Vue administrateur</li>
+          <li><span class="feat-check">&#10003;</span> Historique des beneficiaires</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. ROLE OF SPAP -->
+<section class="section bg-cream">
+  <div class="section-inner">
+    <div class="section-badge">&#128737; Confiance</div>
+    <div class="section-title">Le SPAP comme <em>structure de confiance</em></div>
+    <div class="section-desc">Le SPAP encadre et valide les groupes pour garantir transparence et discipline.</div>
+    <div class="spap-grid">
+      <div class="spap-card fade-up">
+        <div class="spap-icon">&#128203;</div>
+        <h4>Validation</h4>
+        <p>SPAP verifie les groupes et responsables avant le lancement de chaque Sol.</p>
+      </div>
+      <div class="spap-card fade-up">
+        <div class="spap-icon">&#128218;</div>
+        <h4>Encadrement</h4>
+        <p>SPAP aide a organiser les regles, resoudre les conflits et maintenir la discipline.</p>
+      </div>
+      <div class="spap-card fade-up">
+        <div class="spap-icon">&#127942;</div>
+        <h4>Credibilite</h4>
+        <p>SPAP renforce la confiance entre membres et prepare les groupes a aller plus loin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. 48HR INTEGRATION -->
+<section class="section flow-section">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-badge" style="background:rgba(255,255,255,.1);color:var(--gold-light)">&#128640; Integration</div>
+    <div class="section-title">Du Sol au <em>Business Ready</em></div>
+    <div class="section-desc" style="margin:0 auto">Grace a 48HoursReady, un membre qui recoit son cycle de capital peut ensuite structurer son activite.</div>
+    <div class="flow-steps">
+      <div class="flow-step fade-up">
+        <h4>Creer un Sol</h4>
+        <p>Lancer le cercle</p>
+      </div>
+      <div class="flow-arrow">&#10132;</div>
+      <div class="flow-step fade-up">
+        <h4>Recevoir du capital</h4>
+        <p>Votre tour arrive</p>
+      </div>
+      <div class="flow-arrow">&#10132;</div>
+      <div class="flow-step fade-up">
+        <h4>Structurer le business</h4>
+        <p>Branding & pitch</p>
+      </div>
+      <div class="flow-arrow">&#10132;</div>
+      <div class="flow-step fade-up">
+        <h4>Business Ready Package</h4>
+        <p>48HoursReady.com</p>
+      </div>
+      <div class="flow-arrow">&#10132;</div>
+      <div class="flow-step fade-up">
+        <h4>PME plus credible</h4>
+        <p>Croissance durable</p>
+      </div>
+    </div>
+    <div class="flow-text">
+      Branding, executive summary, pitch deck, carte professionnelle et mini site. Tout ce qu'il faut pour transformer le capital en croissance reelle.
+    </div>
+  </div>
+</section>
+
+<!-- 8. PILOT ROLLOUT -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-badge">&#128640; Lancement</div>
+    <div class="section-title">Plan de <em>deploiement</em></div>
+    <div class="section-desc">Un lancement progressif pour garantir la qualite et l'impact.</div>
+    <div class="pilot-grid">
+      <div class="pilot-card fade-up">
+        <div class="pilot-phase">Phase 1</div>
+        <h4>Lancement pilote</h4>
+        <p>Lancer avec 3 a 5 mutuelles SPAP pour tester la plateforme et ajuster les processus.</p>
+      </div>
+      <div class="pilot-card fade-up">
+        <div class="pilot-phase">Phase 2</div>
+        <h4>Suivi & Mesure</h4>
+        <p>Suivre la discipline, mesurer l'impact et documenter les resultats concrets.</p>
+      </div>
+      <div class="pilot-card fade-up">
+        <div class="pilot-phase">Phase 3</div>
+        <h4>Expansion</h4>
+        <p>Ouvrir a d'autres groupes organises a travers Haiti et la diaspora.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section bg-cream">
+  <div class="section-inner">
+    <div class="section-badge">&#10067; FAQ</div>
+    <div class="section-title">Questions <em>frequentes</em></div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">Qu'est-ce qu'un Sol structure?</button>
+        <div class="faq-a">Un Sol est un systeme d'epargne rotative ou chaque membre contribue un montant fixe regulierement. A chaque tour, un membre recoit le total. La plateforme digitalise et structure ce processus traditionnel haitien.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">Comment rejoindre un groupe?</button>
+        <div class="faq-a">Vous pouvez etre invite par un responsable de groupe via WhatsApp ou vous inscrire directement sur la plateforme. Chaque groupe a ses propres regles et criteres d'adhesion.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">Mon argent est-il en securite?</button>
+        <div class="faq-a">Le SPAP valide les groupes et leurs responsables. La plateforme offre une transparence totale avec historique, notifications et suivi en temps reel de chaque contribution.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">Combien coute la plateforme?</button>
+        <div class="faq-a">L'inscription et la creation de groupe sont gratuites. Des frais de gestion minimaux peuvent s'appliquer pour les services avances.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="section">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-badge">&#128200; Calculateur</div>
+    <div class="section-title">Calculez votre <em>Sol</em></div>
+    <div class="calc-box">
+      <h4>Estimateur de Sol</h4>
+      <div class="calc-row">
+        <label>Nombre de membres</label>
+        <input type="number" id="calcMembers" value="10" min="2" max="50" oninput="updateCalc()">
+      </div>
+      <div class="calc-row">
+        <label>Cotisation mensuelle (HTG)</label>
+        <input type="number" id="calcAmount" value="2500" min="100" step="100" oninput="updateCalc()">
+      </div>
+      <div class="calc-result">
+        <div class="result-label">Capital a recevoir par tour</div>
+        <div class="result-value" id="calcResult">25,000 HTG</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. FINAL CTA -->
+<section class="final-cta" id="contact">
+  <h2>Cree ton groupe. Lance ton <em>Sol</em>.<br>Fais circuler le capital.</h2>
+  <p>Une solution communautaire, structuree et credible pour financer la croissance des membres.</p>
+  <div class="final-btns">
+    <button class="btn-green" onclick="alert('Bientot disponible!')">&#10132; Creer un groupe</button>
+    <button class="btn-outline" onclick="alert('Bientot disponible!')">Demander une demo</button>
+    <a href="https://wa.me/50948950099" class="btn-outline" target="_blank">Parler a un responsable</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="ribbon" style="margin-bottom:24px"></div>
+  <strong>SPAP</strong> &mdash; Secteur Prive des Affaires Populaire<br>
+  Powered by <a href="https://48hoursready.com" target="_blank">48HoursReady.com</a><br>
+  &copy; 2026 <a href="index.html">MyPlopPlop</a>. Tous droits reserves.
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/50948950099" class="wa-float" target="_blank" title="Contactez-nous sur WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+/* Calculator */
+function updateCalc(){
+  var m = parseInt(document.getElementById('calcMembers').value) || 0;
+  var a = parseInt(document.getElementById('calcAmount').value) || 0;
+  var total = m * a;
+  document.getElementById('calcResult').textContent = total.toLocaleString('fr-FR') + ' HTG';
+}
+
+/* Scroll animations */
+var fadeEls = document.querySelectorAll('.fade-up');
+var observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+    }
+  });
+}, {threshold:0.1, rootMargin:'0px 0px -40px 0px'});
+fadeEls.forEach(function(el){ observer.observe(el); });
+
+/* Stagger animations */
+document.querySelectorAll('.steps-grid .step-card, .trust-inner .trust-card, .spap-grid .spap-card, .pilot-grid .pilot-card, .flow-steps .flow-step').forEach(function(el, i){
+  el.style.transitionDelay = (i * 0.08) + 's';
+});
+</script>
+</body>
+</html>
