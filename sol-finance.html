@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sòl By MyPlopPlop — Structure Financière</title>
+<meta name="description" content="Modèle financier transparent pour l'épargne communautaire. Découvrez les frais, la répartition des revenus et le parcours de croissance.">
+<meta property="og:title" content="Sòl By MyPlopPlop — Finance & Pricing">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0A1F5C;--navy-dark:#06143D;--navy-mid:#00209F;--navy-light:#E8EBF5;
+  --gold:#C6930A;--gold-light:#F5E6B8;--gold-dark:#8B6914;
+  --red:#D21034;--red-light:#FDE8EC;--blue:#00209F;
+  --green:#10B981;--green-light:#D1FAE5;
+  --white:#FFFFFF;--off-white:#F8F9FC;--cream:#F0EDE5;
+  --dark:#0A0F1E;--text:#1A1F2E;--text-mid:#3D4562;--text-light:#6B7394;
+  --border:#E2E5EF;--border-light:#F0F1F5;
+  --heading:'Playfair Display',Georgia,serif;
+  --body:'Source Sans 3','Source Sans Pro',system-ui,sans-serif;
+  --radius:14px;--radius-sm:8px;--radius-lg:20px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+
+/* ═══ NAV ═══ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(10,31,92,.96);backdrop-filter:blur(12px);
+  border-bottom:2px solid var(--gold);
+  padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;
+}
+.nav .logo{font-family:var(--heading);font-weight:800;font-size:1.1rem;color:var(--gold);display:flex;align-items:center;gap:8px}
+.nav .logo img{height:36px;border-radius:4px}
+.nav .logo span{color:var(--white);font-weight:500;font-size:.82rem;opacity:.7}
+.nav-links{display:flex;gap:20px;align-items:center}
+.nav-links a{color:rgba(255,255,255,.7);font-size:.75rem;font-weight:600;letter-spacing:.02em;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{background:var(--gold);color:var(--dark);padding:7px 16px;border-radius:100px;font-size:.75rem;font-weight:700;border:none;cursor:pointer;transition:all .2s}
+.nav-cta:hover{background:var(--gold-light);transform:translateY(-1px)}
+.mobile-toggle{display:none;background:none;border:none;color:var(--gold);font-size:1.5rem;cursor:pointer}
+.mobile-menu{display:none;position:fixed;top:56px;left:0;right:0;background:rgba(10,31,92,.98);padding:20px;z-index:99;flex-direction:column;gap:14px;border-bottom:2px solid var(--gold)}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:rgba(255,255,255,.85);font-size:.9rem;font-weight:600;padding:6px 0}
+@media(max-width:860px){.nav-links{display:none}.mobile-toggle{display:block}}
+
+.ribbon{height:4px;background:linear-gradient(90deg,var(--blue) 50%,var(--red) 50%)}
+
+/* ═══ SHARED ═══ */
+.section{padding:80px 24px}
+.section-inner{max-width:1100px;margin:0 auto}
+.badge{display:inline-flex;align-items:center;gap:6px;background:var(--navy-light);color:var(--navy);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:16px}
+.stitle{font-family:var(--heading);font-size:clamp(1.6rem,3.5vw,2.4rem);color:var(--dark);line-height:1.2;margin-bottom:12px;font-weight:700}
+.stitle em{color:var(--navy-mid);font-style:italic}
+.sdesc{font-size:1rem;color:var(--text-mid);line-height:1.7;max-width:620px}
+.bg-navy{background:linear-gradient(160deg,var(--navy-dark),var(--navy),#0D1B4A);color:var(--white)}
+.bg-navy .stitle{color:var(--white)}
+.bg-navy .stitle em{color:var(--gold)}
+.bg-navy .sdesc{color:rgba(255,255,255,.7)}
+.bg-cream{background:var(--cream)}
+
+/* ═══ HERO ═══ */
+.hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding:100px 24px 60px;position:relative;overflow:hidden;
+  background:linear-gradient(160deg,var(--navy-dark) 0%,var(--navy) 40%,#0D1B4A 100%);
+}
+.hero::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(198,147,10,.12) 0%,transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,var(--off-white),transparent);pointer-events:none}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+.hero-text{position:relative;z-index:2}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(198,147,10,.4);background:rgba(198,147,10,.1);color:var(--gold-light);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 18px;border-radius:100px;margin-bottom:24px}
+.hero h1{font-family:var(--heading);font-size:clamp(1.9rem,4.5vw,3rem);font-weight:800;color:var(--white);line-height:1.1;margin-bottom:16px}
+.hero h1 em{color:var(--gold);font-style:italic}
+.hero p{font-size:1rem;color:rgba(255,255,255,.75);line-height:1.7;max-width:480px;margin-bottom:28px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-gold{background:var(--gold);color:var(--dark);padding:14px 28px;border-radius:100px;font-family:var(--body);font-size:.9rem;font-weight:700;border:none;cursor:pointer;transition:all .25s;box-shadow:0 4px 20px rgba(198,147,10,.3);display:inline-flex;align-items:center;gap:8px}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(198,147,10,.4)}
+.btn-ghost{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.3);padding:13px 24px;border-radius:100px;font-family:var(--body);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .25s}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+/* Hero dashboard preview */
+.hero-dash{position:relative;z-index:2;background:var(--white);border-radius:var(--radius-lg);padding:24px;box-shadow:0 30px 60px rgba(0,0,0,.25)}
+.hero-dash .dash-title{font-family:var(--heading);font-size:.9rem;font-weight:700;color:var(--dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.hero-dash .dash-title span{background:var(--gold);color:var(--dark);font-size:.55rem;font-weight:800;letter-spacing:.1em;padding:3px 8px;border-radius:4px}
+.mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.mini-stat{background:var(--off-white);border-radius:var(--radius-sm);padding:12px}
+.mini-stat .ms-label{font-size:.65rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+.mini-stat .ms-val{font-family:var(--heading);font-size:1.1rem;font-weight:700;color:var(--dark)}
+.mini-stat .ms-val.green{color:var(--green)}
+.fee-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border-light);font-size:.78rem}
+.fee-row:last-child{border-bottom:none}
+.fee-row .fee-name{color:var(--text-mid);font-weight:500}
+.fee-row .fee-val{font-weight:700;color:var(--dark)}
+
+@media(max-width:768px){
+  .hero-inner{grid-template-columns:1fr;text-align:center}
+  .hero p{margin-left:auto;margin-right:auto}
+  .hero-btns{justify-content:center}
+  .hero-dash{max-width:380px;margin:0 auto}
+}
+
+/* ═══ MONEY FLOW ═══ */
+.flow-track{display:flex;align-items:flex-start;gap:0;margin-top:40px;flex-wrap:wrap;justify-content:center}
+.flow-node{flex:1;min-width:120px;max-width:160px;text-align:center;padding:16px 10px}
+.flow-icon{width:48px;height:48px;border-radius:50%;background:var(--navy-light);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 10px}
+.flow-node h4{font-size:.82rem;font-weight:700;color:var(--dark);margin-bottom:4px}
+.flow-node p{font-size:.72rem;color:var(--text-mid);line-height:1.4}
+.flow-arrow{display:flex;align-items:center;padding-top:20px;color:var(--gold);font-size:1.2rem;font-weight:700;flex-shrink:0}
+@media(max-width:700px){
+  .flow-track{flex-direction:column;align-items:center}
+  .flow-arrow{transform:rotate(90deg);padding:0}
+  .flow-node{max-width:280px}
+}
+
+/* ═══ PRICING CARDS ═══ */
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
+.price-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:28px 22px;position:relative;transition:all .3s}
+.price-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(10,31,92,.08);border-color:var(--navy)}
+.price-card.featured{border-color:var(--gold);box-shadow:0 4px 20px rgba(198,147,10,.12)}
+.price-card.featured::before{content:'POPULAIRE';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--dark);font-size:.58rem;font-weight:800;letter-spacing:.1em;padding:3px 12px;border-radius:6px}
+.price-icon{width:44px;height:44px;border-radius:12px;background:var(--navy-light);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:14px}
+.price-card h4{font-family:var(--heading);font-size:1.05rem;font-weight:700;color:var(--dark);margin-bottom:6px}
+.price-card .price-desc{font-size:.82rem;color:var(--text-mid);line-height:1.5;margin-bottom:14px}
+.price-val{font-family:var(--heading);font-size:1.3rem;font-weight:800;color:var(--navy);margin-bottom:6px}
+.price-note{font-size:.72rem;color:var(--text-light);line-height:1.4}
+.price-features{list-style:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border-light)}
+.price-features li{font-size:.78rem;color:var(--text-mid);padding:4px 0;display:flex;align-items:center;gap:6px}
+.price-features li::before{content:'✓';color:var(--green);font-weight:800;font-size:.7rem}
+@media(max-width:900px){.pricing-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.pricing-grid{grid-template-columns:1fr}}
+
+/* ═══ REVENUE SPLIT ═══ */
+.split-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+.split-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:28px 22px;position:relative;overflow:hidden}
+.split-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--navy-mid),var(--gold))}
+.split-card h4{font-family:var(--heading);font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:14px}
+.split-bar{margin-bottom:10px}
+.split-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.split-fill{height:24px;border-radius:6px;display:flex;align-items:center;padding:0 10px;font-size:.68rem;font-weight:700;color:var(--white)}
+.split-fill.navy{background:var(--navy)}
+.split-fill.gold{background:var(--gold);color:var(--dark)}
+.split-fill.red{background:var(--red)}
+.split-fill.green{background:var(--green)}
+.split-label{font-size:.78rem;color:var(--text-mid);font-weight:600;white-space:nowrap}
+.split-note{font-size:.72rem;color:var(--text-light);line-height:1.4;margin-top:12px;padding-top:12px;border-top:1px solid var(--border-light)}
+@media(max-width:700px){.split-grid{grid-template-columns:1fr}}
+
+/* ═══ TRUST CARD ═══ */
+.trust-highlight{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:var(--radius-lg);padding:40px 32px;color:var(--white);margin-top:40px;position:relative;overflow:hidden;display:flex;align-items:center;gap:32px}
+.trust-highlight::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:radial-gradient(circle,rgba(198,147,10,.15),transparent);pointer-events:none}
+.trust-icon-big{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0}
+.trust-content h4{font-family:var(--heading);font-size:1.2rem;font-weight:700;margin-bottom:8px}
+.trust-content p{font-size:.9rem;opacity:.8;line-height:1.6;margin-bottom:12px}
+.trust-price{font-family:var(--heading);font-size:1.4rem;font-weight:800;color:var(--gold);margin-bottom:12px}
+.trust-benefits{display:flex;gap:12px;flex-wrap:wrap}
+.trust-tag{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:6px 14px;font-size:.75rem;font-weight:600}
+@media(max-width:600px){
+  .trust-highlight{flex-direction:column;text-align:center}
+  .trust-benefits{justify-content:center}
+}
+
+/* ═══ FUNNEL ═══ */
+.funnel-track{display:flex;align-items:center;gap:0;margin-top:40px;flex-wrap:wrap;justify-content:center}
+.funnel-step{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:20px 18px;text-align:center;flex:1;min-width:130px;max-width:170px;transition:all .3s}
+.funnel-step:hover{border-color:var(--navy);box-shadow:0 8px 24px rgba(10,31,92,.06)}
+.funnel-step .fi{font-size:1.6rem;margin-bottom:8px}
+.funnel-step h4{font-size:.8rem;font-weight:700;color:var(--dark);margin-bottom:4px}
+.funnel-step p{font-size:.68rem;color:var(--text-mid);line-height:1.4}
+.funnel-arrow{color:var(--gold);font-size:1.2rem;padding:0 6px;flex-shrink:0}
+@media(max-width:700px){
+  .funnel-track{flex-direction:column;align-items:center}
+  .funnel-arrow{transform:rotate(90deg)}
+  .funnel-step{max-width:280px}
+}
+
+/* ═══ SIMULATION ═══ */
+.sim-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+.sim-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:28px 22px;text-align:center}
+.sim-users{font-family:var(--heading);font-size:2rem;font-weight:800;color:var(--navy);margin-bottom:4px}
+.sim-label{font-size:.72rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
+.sim-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border-light);font-size:.8rem}
+.sim-row:last-child{border-bottom:none}
+.sim-row .sr-name{color:var(--text-mid)}
+.sim-row .sr-val{font-weight:700;color:var(--dark)}
+.sim-total{margin-top:14px;padding-top:14px;border-top:2px solid var(--navy-light);display:flex;justify-content:space-between;align-items:center}
+.sim-total .sr-name{font-weight:700;color:var(--dark);font-size:.85rem}
+.sim-total .sr-val{font-family:var(--heading);font-size:1.2rem;font-weight:800;color:var(--green)}
+@media(max-width:600px){.sim-grid{grid-template-columns:1fr}}
+
+/* ═══ DASHBOARD PREVIEW ═══ */
+.dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:40px}
+.dash-mod{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:20px 16px;text-align:center;backdrop-filter:blur(4px)}
+.dash-mod .dm-icon{font-size:1.6rem;margin-bottom:8px}
+.dash-mod h4{font-size:.82rem;font-weight:700;color:var(--gold-light);margin-bottom:4px}
+.dash-mod .dm-val{font-family:var(--heading);font-size:1.3rem;font-weight:800;color:var(--white)}
+.dash-mod .dm-sub{font-size:.68rem;color:rgba(255,255,255,.5);margin-top:2px}
+@media(max-width:700px){.dash-grid{grid-template-columns:1fr 1fr}}
+
+/* ═══ FINAL CTA ═══ */
+.final-cta{background:var(--cream);text-align:center;padding:80px 24px;position:relative;overflow:hidden}
+.final-cta::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--navy),var(--red),var(--navy))}
+.final-cta h2{font-family:var(--heading);font-size:clamp(1.6rem,3.5vw,2.6rem);font-weight:800;color:var(--dark);line-height:1.15;margin-bottom:14px}
+.final-cta h2 em{color:var(--navy-mid);font-style:italic}
+.final-cta p{font-size:1rem;color:var(--text-mid);max-width:550px;margin:0 auto 28px;line-height:1.7}
+.final-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-navy{background:var(--navy);color:var(--white);padding:14px 28px;border-radius:100px;font-family:var(--body);font-size:.9rem;font-weight:700;border:none;cursor:pointer;transition:all .25s;box-shadow:0 4px 20px rgba(10,31,92,.2)}
+.btn-navy:hover{background:var(--navy-dark);transform:translateY(-2px)}
+.btn-outline{background:transparent;color:var(--navy);border:1.5px solid var(--navy);padding:13px 24px;border-radius:100px;font-family:var(--body);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .25s}
+.btn-outline:hover{background:var(--navy-light)}
+
+/* ═══ FOOTER ═══ */
+.site-footer{background:var(--dark);color:rgba(255,255,255,.5);text-align:center;padding:28px 24px;font-size:.8rem;line-height:1.8}
+.site-footer strong{color:var(--gold);font-weight:700}
+.site-footer a{color:var(--gold);font-weight:600}
+
+/* ═══ WHATSAPP ═══ */
+.wa-float{position:fixed;bottom:24px;right:24px;z-index:90;width:56px;height:56px;border-radius:50%;background:#25D366;color:#fff;font-size:1.6rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.3);transition:all .25s;text-decoration:none}
+.wa-float:hover{transform:scale(1.1)}
+
+/* ═══ ANIMATIONS ═══ */
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="sol.html" class="logo"><img src="assets/sol-logo.png" alt="Sòl" style="height:36px;border-radius:4px"> <span>Finance</span></a>
+  <div class="nav-links">
+    <a href="#overview">Vue d'ensemble</a>
+    <a href="#pricing">Tarification</a>
+    <a href="#revenue">Revenus</a>
+    <a href="#growth">Croissance</a>
+    <a href="#dashboard">Dashboard</a>
+    <a href="#contact">Contact</a>
+    <button class="nav-cta" onclick="window.location.href='login.html'">Creer un groupe</button>
+  </div>
+  <button class="mobile-toggle" onclick="document.getElementById('mm').classList.toggle('open')">&#9776;</button>
+</nav>
+<div class="mobile-menu" id="mm">
+  <a href="#overview" onclick="this.parentElement.classList.remove('open')">Vue d'ensemble</a>
+  <a href="#pricing" onclick="this.parentElement.classList.remove('open')">Tarification</a>
+  <a href="#revenue" onclick="this.parentElement.classList.remove('open')">Revenus</a>
+  <a href="#growth" onclick="this.parentElement.classList.remove('open')">Croissance</a>
+  <a href="#dashboard" onclick="this.parentElement.classList.remove('open')">Dashboard</a>
+  <a href="#contact" onclick="this.parentElement.classList.remove('open')">Contact</a>
+</div>
+<div class="ribbon" style="margin-top:56px"></div>
+
+<!-- 1. HERO -->
+<section class="hero" id="overview">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-eyebrow">&#128176; Structure Financière</div>
+      <h1>Un modèle financier <em>transparent</em> pour le capital communautaire</h1>
+      <p>Sòl by MyPlopPlop aide les groupes à épargner, faire circuler le capital et développer des entreprises grâce à un système de frais structuré, accessible pour les membres et durable pour la plateforme.</p>
+      <div class="hero-btns">
+        <button class="btn-gold" onclick="window.location.href='login.html'">&#10132; Créer un groupe</button>
+        <a href="#pricing" class="btn-ghost">Voir les tarifs</a>
+      </div>
+    </div>
+    <div class="hero-dash">
+      <div class="dash-title">&#128200; Aperçu financier <span>LIVE</span></div>
+      <div class="mini-stats">
+        <div class="mini-stat">
+          <div class="ms-label">Solde Wallet</div>
+          <div class="ms-val">12,500 HTG</div>
+        </div>
+        <div class="mini-stat">
+          <div class="ms-label">Cotisation mensuelle</div>
+          <div class="ms-val">2,500 HTG</div>
+        </div>
+        <div class="mini-stat">
+          <div class="ms-label">Prochain versement</div>
+          <div class="ms-val green">30,000 HTG</div>
+        </div>
+        <div class="mini-stat">
+          <div class="ms-label">Cycle actuel</div>
+          <div class="ms-val">8 / 12</div>
+        </div>
+      </div>
+      <div style="font-size:.72rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Détail des frais</div>
+      <div class="fee-row"><span class="fee-name">Frais d'accès</span><span class="fee-val">150 HTG/mois</span></div>
+      <div class="fee-row"><span class="fee-name">Frais de cycle (2%)</span><span class="fee-val">50 HTG</span></div>
+      <div class="fee-row"><span class="fee-name">Frais de retrait</span><span class="fee-val">1.5%</span></div>
+      <div class="fee-row"><span class="fee-name">Total net à recevoir</span><span class="fee-val" style="color:var(--green);font-size:.9rem">29,250 HTG</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. HOW MONEY FLOWS -->
+<section class="section" id="flow">
+  <div class="section-inner">
+    <div class="badge">&#128260; Flux financier</div>
+    <div class="stitle">Comment la plateforme fonctionne <em>financièrement</em></div>
+    <div class="sdesc">Un parcours simple et transparent, de l'inscription au versement.</div>
+    <div class="flow-track">
+      <div class="flow-node fade-up">
+        <div class="flow-icon">&#128100;</div>
+        <h4>Inscription</h4>
+        <p>Le membre rejoint la plateforme et son groupe</p>
+      </div>
+      <div class="flow-arrow">&#10132;</div>
+      <div class="flow-node fade-up">
+        <div class="flow-icon">&#128179;</div>
+        <h4>Frais d'accès</h4>
+        <p>Paiement de l'activation ou abonnement mensuel</p>
+      </div>
+      <div class="flow-arrow">&#10132;</div>
+      <div class="flow-node fade-up">
+        <div class="flow-icon">&#128176;</div>
+        <h4>Contribution</h4>
+        <p>Cotisation régulière au cycle du groupe</p>
+      </div>
+      <div class="flow-arrow">&#10132;</div>
+      <div class="flow-node fade-up">
+        <div class="flow-icon">&#128202;</div>
+        <h4>Suivi</h4>
+        <p>La plateforme suit tous les paiements en temps réel</p>
+      </div>
+      <div class="flow-arrow">&#10132;</div>
+      <div class="flow-node fade-up">
+        <div class="flow-icon">&#127881;</div>
+        <h4>Versement</h4>
+        <p>Le membre reçoit le capital total à son tour</p>
+      </div>
+      <div class="flow-arrow">&#10132;</div>
+      <div class="flow-node fade-up">
+        <div class="flow-icon">&#128640;</div>
+        <h4>Croissance</h4>
+        <p>Option: Business Ready Package pour structurer son activité</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. PRICING BLOCKS -->
+<section class="section bg-cream" id="pricing">
+  <div class="section-inner">
+    <div class="badge">&#128181; Tarification</div>
+    <div class="stitle">Structure des <em>frais</em></div>
+    <div class="sdesc">Des frais transparents et accessibles pour soutenir la plateforme et la communauté.</div>
+    <div class="pricing-grid">
+      <div class="price-card fade-up">
+        <div class="price-icon">&#128273;</div>
+        <h4>Accès / Adhésion</h4>
+        <p class="price-desc">Frais mensuel ou d'activation pour accéder au dashboard, rappels et suivi des cycles.</p>
+        <div class="price-val">$1 – $3 / mois</div>
+        <div class="price-note">ou $5 activation unique</div>
+        <ul class="price-features">
+          <li>Accès au dashboard</li>
+          <li>Rappels automatiques</li>
+          <li>Suivi des cycles</li>
+        </ul>
+      </div>
+      <div class="price-card featured fade-up">
+        <div class="price-icon">&#128260;</div>
+        <h4>Frais de Cycle Sòl</h4>
+        <p class="price-desc">Un petit frais par cycle de contribution pour la gestion du groupe et l'infrastructure de paiement.</p>
+        <div class="price-val">1% – 3% par cycle</div>
+        <div class="price-note">ou frais fixe par versement</div>
+        <ul class="price-features">
+          <li>Calcul automatique</li>
+          <li>Prélevé sur les contributions</li>
+          <li>Transparent pour tous</li>
+        </ul>
+      </div>
+      <div class="price-card fade-up">
+        <div class="price-icon">&#128182;</div>
+        <h4>Retrait / Transfert</h4>
+        <p class="price-desc">Frais appliqué lors du retrait via mobile money, banque ou agents cash locaux.</p>
+        <div class="price-val">1% – 2%</div>
+        <div class="price-note">Uniquement lors du retrait</div>
+        <ul class="price-features">
+          <li>Mobile money</li>
+          <li>Virement bancaire</li>
+          <li>Agents cash locaux</li>
+        </ul>
+      </div>
+      <div class="price-card fade-up">
+        <div class="price-icon">&#11088;</div>
+        <h4>Groupe Premium</h4>
+        <p class="price-desc">Les responsables peuvent créer des cercles avancés avec plus de contrôles admin et visibilité.</p>
+        <div class="price-val">Gratuit – $10</div>
+        <div class="price-note">Groupe basique gratuit</div>
+        <ul class="price-features">
+          <li>Badge groupe vérifié</li>
+          <li>Outils admin avancés</li>
+          <li>Règles personnalisées</li>
+          <li>Support prioritaire</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. REVENUE SPLIT -->
+<section class="section" id="revenue">
+  <div class="section-inner">
+    <div class="badge">&#128200; Répartition</div>
+    <div class="stitle">Comment les revenus sont <em>partagés</em></div>
+    <div class="sdesc">Un modèle de répartition équitable entre la plateforme, le SPAP et la communauté.</div>
+    <div class="split-grid">
+      <div class="split-card fade-up">
+        <h4>Frais d'adhésion / Plateforme</h4>
+        <div class="split-bar">
+          <div class="split-row">
+            <div class="split-fill navy" style="width:60%">60%</div>
+            <span class="split-label">48HoursReady</span>
+          </div>
+          <div class="split-row">
+            <div class="split-fill gold" style="width:40%">40%</div>
+            <span class="split-label">SPAP</span>
+          </div>
+        </div>
+        <div class="split-note">Frais d'accès et opérations de la plateforme</div>
+      </div>
+      <div class="split-card fade-up">
+        <h4>Frais de gestion des cycles</h4>
+        <div class="split-bar">
+          <div class="split-row">
+            <div class="split-fill navy" style="width:50%">50%</div>
+            <span class="split-label">SPAP</span>
+          </div>
+          <div class="split-row">
+            <div class="split-fill gold" style="width:50%">50%</div>
+            <span class="split-label">MyPlopPlop</span>
+          </div>
+        </div>
+        <div class="split-note">Gestion des contributions et infrastructure</div>
+      </div>
+      <div class="split-card fade-up">
+        <h4>Business Ready Package</h4>
+        <div class="split-bar">
+          <div class="split-row">
+            <div class="split-fill navy" style="width:60%">$149</div>
+            <span class="split-label">48HoursReady</span>
+          </div>
+          <div class="split-row">
+            <div class="split-fill gold" style="width:15%">$25</div>
+            <span class="split-label">SPAP</span>
+          </div>
+          <div class="split-row">
+            <div class="split-fill green" style="width:15%">$25</div>
+            <span class="split-label">Référeur</span>
+          </div>
+        </div>
+        <div class="split-note">Prix spécial SPAP: $199. Déclenché après réception du capital.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. TRUST LAYER -->
+<section class="section bg-cream">
+  <div class="section-inner">
+    <div class="badge">&#128737; Protection</div>
+    <div class="stitle">Couche de <em>confiance</em> optionnelle</div>
+    <div class="sdesc">Renforcez la discipline et la continuité de votre groupe.</div>
+    <div class="trust-highlight fade-up">
+      <div class="trust-icon-big">&#128737;</div>
+      <div class="trust-content">
+        <h4>Protection & Continuité</h4>
+        <p>Les groupes peuvent choisir une couche de protection optionnelle qui soutient la continuité, la gestion des défauts et le renforcement de la confiance.</p>
+        <div class="trust-price">$2 – $5 par membre par cycle</div>
+        <div class="trust-benefits">
+          <span class="trust-tag">&#128170; Meilleure confiance</span>
+          <span class="trust-tag">&#9878; Moins de conflits</span>
+          <span class="trust-tag">&#128172; Support de secours</span>
+          <span class="trust-tag">&#128200; Discipline renforcée</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. BUSINESS UPGRADE FUNNEL -->
+<section class="section" id="growth">
+  <div class="section-inner">
+    <div class="badge">&#128640; Croissance</div>
+    <div class="stitle">Du capital à la <em>croissance business</em></div>
+    <div class="sdesc">Le parcours complet de l'épargne à l'entreprise structurée.</div>
+    <div class="funnel-track">
+      <div class="funnel-step fade-up">
+        <div class="fi">&#128101;</div>
+        <h4>Rejoindre un Sòl</h4>
+        <p>Créer ou rejoindre un cercle</p>
+      </div>
+      <div class="funnel-arrow">&#10132;</div>
+      <div class="funnel-step fade-up">
+        <div class="fi">&#128176;</div>
+        <h4>Contribuer</h4>
+        <p>Cotiser régulièrement</p>
+      </div>
+      <div class="funnel-arrow">&#10132;</div>
+      <div class="funnel-step fade-up">
+        <div class="fi">&#127881;</div>
+        <h4>Recevoir le capital</h4>
+        <p>Votre tour arrive</p>
+      </div>
+      <div class="funnel-arrow">&#10132;</div>
+      <div class="funnel-step fade-up">
+        <div class="fi">&#128640;</div>
+        <h4>Business Ready</h4>
+        <p>Branding + pitch + site web</p>
+      </div>
+      <div class="funnel-arrow">&#10132;</div>
+      <div class="funnel-step fade-up">
+        <div class="fi">&#127942;</div>
+        <h4>PME crédible</h4>
+        <p>Croissance durable</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:32px">
+      <a href="https://48hoursready.com" target="_blank" class="btn-gold" style="display:inline-flex">Découvrir 48HoursReady &#10132;</a>
+    </div>
+  </div>
+</section>
+
+<!-- 7. REVENUE SIMULATION -->
+<section class="section bg-cream">
+  <div class="section-inner">
+    <div class="badge">&#128202; Simulation</div>
+    <div class="stitle">Exemples de <em>revenus</em></div>
+    <div class="sdesc">Projections basées sur différents niveaux d'adoption.</div>
+    <div class="sim-grid">
+      <div class="sim-card fade-up">
+        <div class="sim-users">100</div>
+        <div class="sim-label">utilisateurs</div>
+        <div class="sim-row"><span class="sr-name">Frais d'adhésion</span><span class="sr-val">$200/mois</span></div>
+        <div class="sim-row"><span class="sr-name">Frais de cycle</span><span class="sr-val">$150/mois</span></div>
+        <div class="sim-row"><span class="sr-name">Frais de retrait</span><span class="sr-val">$75/mois</span></div>
+        <div class="sim-row"><span class="sr-name">Packages (5%)</span><span class="sr-val">$995</span></div>
+        <div class="sim-total">
+          <span class="sr-name">Total mensuel</span>
+          <span class="sr-val">~$1,420</span>
+        </div>
+      </div>
+      <div class="sim-card fade-up">
+        <div class="sim-users">500</div>
+        <div class="sim-label">utilisateurs</div>
+        <div class="sim-row"><span class="sr-name">Frais d'adhésion</span><span class="sr-val">$1,000/mois</span></div>
+        <div class="sim-row"><span class="sr-name">Frais de cycle</span><span class="sr-val">$750/mois</span></div>
+        <div class="sim-row"><span class="sr-name">Frais de retrait</span><span class="sr-val">$375/mois</span></div>
+        <div class="sim-row"><span class="sr-name">Packages (5%)</span><span class="sr-val">$4,975</span></div>
+        <div class="sim-total">
+          <span class="sr-name">Total mensuel</span>
+          <span class="sr-val">~$7,100</span>
+        </div>
+      </div>
+      <div class="sim-card fade-up">
+        <div class="sim-users">1,000</div>
+        <div class="sim-label">utilisateurs</div>
+        <div class="sim-row"><span class="sr-name">Frais d'adhésion</span><span class="sr-val">$2,000/mois</span></div>
+        <div class="sim-row"><span class="sr-name">Frais de cycle</span><span class="sr-val">$1,500/mois</span></div>
+        <div class="sim-row"><span class="sr-name">Frais de retrait</span><span class="sr-val">$750/mois</span></div>
+        <div class="sim-row"><span class="sr-name">Packages (5%)</span><span class="sr-val">$9,950</span></div>
+        <div class="sim-total">
+          <span class="sr-name">Total mensuel</span>
+          <span class="sr-val">~$14,200</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. ADMIN DASHBOARD PREVIEW -->
+<section class="section bg-navy" id="dashboard">
+  <div class="section-inner" style="text-align:center">
+    <div class="badge" style="background:rgba(255,255,255,.1);color:var(--gold-light)">&#128200; Dashboard Admin</div>
+    <div class="stitle">Ce que les admins SPAP et plateforme <em>peuvent suivre</em></div>
+    <div class="sdesc" style="margin:0 auto 0">Visibilité complète sur les opérations, la performance et les revenus.</div>
+    <div class="dash-grid">
+      <div class="dash-mod fade-up">
+        <div class="dm-icon">&#128101;</div>
+        <div class="dm-val">247</div>
+        <h4>Groupes actifs</h4>
+        <div class="dm-sub">+12 ce mois</div>
+      </div>
+      <div class="dash-mod fade-up">
+        <div class="dm-icon">&#128100;</div>
+        <div class="dm-val">3,842</div>
+        <h4>Membres actifs</h4>
+        <div class="dm-sub">+156 ce mois</div>
+      </div>
+      <div class="dash-mod fade-up">
+        <div class="dm-icon">&#128176;</div>
+        <div class="dm-val">2.4M</div>
+        <h4>Volume contributions</h4>
+        <div class="dm-sub">HTG ce mois</div>
+      </div>
+      <div class="dash-mod fade-up">
+        <div class="dm-icon">&#127881;</div>
+        <div class="dm-val">1.8M</div>
+        <h4>Volume versements</h4>
+        <div class="dm-sub">HTG ce mois</div>
+      </div>
+      <div class="dash-mod fade-up">
+        <div class="dm-icon">&#9888;</div>
+        <div class="dm-val">23</div>
+        <h4>Retards de paiement</h4>
+        <div class="dm-sub">2.1% du total</div>
+      </div>
+      <div class="dash-mod fade-up">
+        <div class="dm-icon">&#128200;</div>
+        <div class="dm-val">94%</div>
+        <h4>Performance groupes</h4>
+        <div class="dm-sub">Taux de discipline</div>
+      </div>
+      <div class="dash-mod fade-up">
+        <div class="dm-icon">&#128640;</div>
+        <div class="dm-val">38</div>
+        <h4>Packages vendus</h4>
+        <div class="dm-sub">Business Ready</div>
+      </div>
+      <div class="dash-mod fade-up">
+        <div class="dm-icon">&#128181;</div>
+        <div class="dm-val">$8.2K</div>
+        <h4>Revenus plateforme</h4>
+        <div class="dm-sub">Ce mois</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. FINAL CTA -->
+<section class="final-cta" id="contact">
+  <h2>Lance ton cercle. Fais circuler le <em>capital</em>.<br>Développe des <em>entreprises</em>.</h2>
+  <p>Un modèle financier durable pour les groupes communautaires, les mutuelles et les entrepreneurs.</p>
+  <div class="final-btns">
+    <button class="btn-navy" onclick="window.location.href='login.html'">&#10132; Créer un groupe</button>
+    <button class="btn-outline" onclick="window.location.href='login.html'">Demander une démo</button>
+    <a href="https://wa.me/50948950099" class="btn-outline" target="_blank">Parler au SPAP</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="ribbon" style="margin-bottom:20px"></div>
+  <strong>SPAP</strong> &mdash; Secteur Privé des Affaires Populaire<br>
+  Powered by <a href="https://48hoursready.com" target="_blank">48HoursReady.com</a><br>
+  &copy; 2026 <a href="index.html">MyPlopPlop</a>. Tous droits réservés.
+</footer>
+
+<!-- WHATSAPP -->
+<a href="https://wa.me/50948950099" class="wa-float" target="_blank" title="WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+/* Scroll animations */
+var fadeEls = document.querySelectorAll('.fade-up');
+var observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, {threshold:0.1, rootMargin:'0px 0px -40px 0px'});
+fadeEls.forEach(function(el){ observer.observe(el); });
+
+/* Stagger */
+document.querySelectorAll('.pricing-grid .price-card, .split-grid .split-card, .sim-grid .sim-card, .dash-grid .dash-mod, .flow-track .flow-node, .funnel-track .funnel-step').forEach(function(el, i){
+  el.style.transitionDelay = (i * 0.08) + 's';
+});
+</script>
+</body>
+</html>
