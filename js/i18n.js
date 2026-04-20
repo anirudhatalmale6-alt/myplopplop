@@ -749,42 +749,42 @@
       es: 'Unete a un Sòl Hoy'
     },
     'sol.cta_title': {
-      fr: 'Sòl — Epargne Rotative',
-      en: 'Sòl — Digital Money Pool',
+      fr: 'Sòl — Epargne Collective Digitale',
+      en: 'Sòl — Digital Community Savings',
       kr: 'Sòl — Lajan Kolektif Dijital',
-      es: 'Sòl — Ahorro Rotativo'
+      es: 'Sòl — Ahorro Colectivo Digital'
     },
     'sol.cta_sub': {
-      fr: 'Epargnez ensemble avec votre communaute. Rejoignez un Sòl !',
-      en: 'Save together with your community. Join a Sòl today!',
-      kr: 'Ekonomize ansanm ak kominote ou. Rejwenn yon Sòl jodi a!',
-      es: 'Ahorra junto con tu comunidad. Unete a un Sòl hoy!'
+      fr: 'Epargnez ensemble. Rejoignez un Sòl aujourd\'hui.',
+      en: 'Save together. Join a Sòl today.',
+      kr: 'Ekonomize ansanm. Antre nan yon Sòl jodi a.',
+      es: 'Ahorra junto. Unete a un Sòl hoy.'
     },
 
     // ── Merchant CTA ──
     'merchant.cta_title': {
-      fr: 'Vous avez un commerce ? Rejoignez MyPlopPlop !',
-      en: 'Got a business? Join MyPlopPlop!',
-      kr: 'Ou gen yon biznis? Rejwenn MyPlopPlop!',
-      es: 'Tienes un negocio? Unete a MyPlopPlop!'
+      fr: 'Vous avez un commerce ? Vendez sur MyPlopPlop !',
+      en: 'Got a business? Sell on MyPlopPlop!',
+      kr: 'Ou gen yon biznis? Vann sou MyPlopPlop!',
+      es: 'Tienes un negocio? Vende en MyPlopPlop!'
     },
     'merchant.cta_sub': {
-      fr: 'Listez votre boutique gratuitement. Commencez a vendre en quelques minutes.',
+      fr: 'Inscrivez votre boutique gratuitement. Vendez en quelques minutes.',
       en: 'List your store free. Start selling in minutes.',
-      kr: 'Mete boutik ou gratis. Komanse vann nan kèk minit.',
+      kr: 'Mete boutik ou gratis. Kòmanse vann nan kèk minit.',
       es: 'Lista tu tienda gratis. Empieza a vender en minutos.'
     },
     'msouwout.cta_title': {
       fr: 'MsouWout — Taxi & Livraison',
       en: 'MsouWout — Taxi & Delivery',
-      kr: 'MsouWout — Taksi & Livrezon',
+      kr: 'MsouWout — Taxi & Livrezon',
       es: 'MsouWout — Taxi & Entregas'
     },
     'msouwout.cta_sub': {
-      fr: 'Besoin d\'un trajet ou d\'une livraison ? Reservez avec MsouWout !',
-      en: 'Need a ride or delivery? Book now with MsouWout!',
-      kr: 'Bezwen yon vwayaj oswa livrezon? Rezève kounye a ak MsouWout!',
-      es: 'Necesitas un viaje o entrega? Reserva ahora con MsouWout!'
+      fr: 'Taxi, moto et livraison en toute securite.',
+      en: 'Taxi, moto and delivery in safety.',
+      kr: 'Taxi, moto ak livrezon an sekirite.',
+      es: 'Taxi, moto y entregas con seguridad.'
     },
 
     // ── Store Designer ──
