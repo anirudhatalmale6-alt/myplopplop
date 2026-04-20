@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>MsouWout — Share Rides, Save Money in Haiti</title>
-<meta name="description" content="Haiti's first ride-sharing pataj. Share rides, save up to 60% on transport. Pataj, Moto, and Car options across Port-au-Prince.">
-<meta property="og:title" content="MsouWout — Haiti's Ride-Sharing Pool">
-<meta property="og:description" content="Share rides, save up to 60%. Pataj, Moto, and Car rides across Port-au-Prince and beyond.">
+<title>MsouWout — Taxi, Moto & Livrezon an Sekirite</title>
+<meta name="description" content="MsouWout - Haiti's trusted transport service. Private taxi, moto rides, and delivery across Port-au-Prince. Verified drivers, safe rides.">
+<meta property="og:title" content="MsouWout — Taxi & Moto an Sekirite">
+<meta property="og:description" content="Private taxi, moto rides and delivery across Port-au-Prince. Verified drivers, GPS tracking, in-app payments.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://myplopplop.com/assets/img/og-preview.jpg">
 <meta property="og:image:width" content="1200">
@@ -154,7 +154,7 @@
 }
 .ride-cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: var(--space-lg);
     max-width: 900px;
     margin: 0 auto;
@@ -178,7 +178,7 @@
     background: linear-gradient(180deg, rgba(230,57,70,0.04) 0%, var(--white) 100%);
 }
 .ride-card.featured::before {
-    content: 'BEST VALUE';
+    content: 'PI POPILÈ';
     position: absolute;
     top: 12px;
     right: -28px;
@@ -686,9 +686,10 @@
 <!-- SECTION 1: HERO -->
 <section class="rides-hero">
     <div class="rides-hero-content">
-        <img src="assets/myplopplop-icon.png" alt="MsouWout" style="height:110px;margin:0 auto var(--space-md);display:block;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.3));">
-        <p class="subtitle">Share rides, save money. Haiti's first ride-sharing pataj.</p>
-        <div class="savings-callout">💰 <span data-i18n="rides.savings_callout">Save up to 60% with PlopPlop Pataj vs riding alone</span></div>
+        <img src="assets/msouwout-icon.png" alt="MsouWout" style="height:90px;margin:0 auto var(--space-md);display:block;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.3));">
+        <h1>Taxi, Moto &amp; Livrezon<br><span>An Sekirite</span></h1>
+        <p class="subtitle">Chofè verifye, GPS tracking, peman nan app — nan tout Port-au-Prince.</p>
+        <div class="savings-callout">✅ <span>Chofè verifye · GPS tracking · Peman nan app</span></div>
         <div class="hero-btns">
             <a href="rides-request.html" class="hero-btn-red">🚗 <span data-i18n="rides.request">Request a Ride</span></a>
             <a href="driver.html" class="hero-btn-outline">🏍️ <span data-i18n="rides.drive_with_us">Drive with Us</span></a>
@@ -699,45 +700,39 @@
 <!-- SECTION 2: RIDE OPTIONS -->
 <section class="ride-options">
     <div class="section-heading">
-        <h2>Choose Your Ride</h2>
-        <p>From budget-friendly to premium comfort</p>
+        <h2>Chwazi Kous Ou</h2>
+        <p>Moto, machin, SUV, blende, oswa livrezon</p>
     </div>
     <div class="ride-cards">
-        <div class="ride-card featured">
-            <img src="assets/myplopplop-icon.png" alt="PlopPlop Pataj" style="height:56px;margin:0 auto var(--space-md);display:block;">
-            <h3>PlopPlop Pataj</h3>
-            <p class="ride-desc">Share a car with up to 3 others going your way. Cheapest option — split the fare and save big.</p>
-            <div class="ride-price">75 <small>HTG &amp; up</small></div>
-        </div>
-        <div class="ride-card featured" style="border-color:#f59e0b;">
-            <img src="assets/myplopplop-icon.png" alt="PlopPlop Moto Pataj" style="height:56px;margin:0 auto var(--space-md);display:block;">
-            <h3>PlopPlop Moto Pataj</h3>
-            <p class="ride-desc">Share a moto ride with 1 other passenger (+2 total). Fast and affordable through traffic.</p>
-            <div class="ride-price">60 <small>HTG &amp; up</small></div>
-        </div>
         <div class="ride-card">
-            <img src="assets/myplopplop-icon.png" alt="PlopPlop Moto" style="height:56px;margin:0 auto var(--space-md);display:block;">
-            <h3>PlopPlop Moto</h3>
-            <p class="ride-desc">Private motorcycle ride. Fast through traffic — get there in half the time.</p>
+            <span class="ride-icon">🏍️</span>
+            <h3>MsouWout Moto</h3>
+            <p class="ride-desc">Moto prive. Rapid nan trafik — rive 2x pi vit.</p>
             <div class="ride-price">100 <small>HTG &amp; up</small></div>
         </div>
-        <div class="ride-card">
-            <img src="assets/myplopplop-icon.png" alt="PlopPlop Car" style="height:56px;margin:0 auto var(--space-md);display:block;">
-            <h3>PlopPlop Car</h3>
-            <p class="ride-desc">Private car ride. Comfortable, air-conditioned, and secure door-to-door.</p>
+        <div class="ride-card featured">
+            <span class="ride-icon">🚗</span>
+            <h3>MsouWout Car</h3>
+            <p class="ride-desc">Machin prive ak klimatizasyon. Konfòtab epi an sekirite pòt-a-pòt.</p>
             <div class="ride-price">200 <small>HTG &amp; up</small></div>
         </div>
         <div class="ride-card">
-            <img src="assets/myplopplop-icon.png" alt="PlopPlop SUV" style="height:56px;margin:0 auto var(--space-md);display:block;">
-            <h3>PlopPlop SUV</h3>
-            <p class="ride-desc">Premium SUV ride. Extra space, power, and comfort for longer trips or groups.</p>
+            <span class="ride-icon">🚙</span>
+            <h3>MsouWout SUV</h3>
+            <p class="ride-desc">SUV premyòm. Plis espas ak konfò pou gwoup oswa vwayaj long.</p>
             <div class="ride-price">500 <small>HTG &amp; up</small></div>
         </div>
         <div class="ride-card">
-            <img src="assets/myplopplop-icon.png" alt="PlopPlop Blende" style="height:56px;margin:0 auto var(--space-md);display:block;">
-            <h3>PlopPlop Blende</h3>
-            <p class="ride-desc">Armored bulletproof SUV. Maximum security with trained driver for VIP protection.</p>
+            <span class="ride-icon">🛡️</span>
+            <h3>MsouWout Blende</h3>
+            <p class="ride-desc">SUV blende anti-bal. Sekirite maksimòm ak chofè fòme pou VIP.</p>
             <div class="ride-price">1,500 <small>HTG &amp; up</small></div>
+        </div>
+        <div class="ride-card">
+            <span class="ride-icon">📦</span>
+            <h3>MsouWout Livrezon</h3>
+            <p class="ride-desc">Livrezon rapid nan tout Port-au-Prince. Pake, manje, komisyon — nou pote l ba ou.</p>
+            <div class="ride-price">75 <small>HTG &amp; up</small></div>
         </div>
     </div>
 </section>
@@ -745,33 +740,33 @@
 <!-- SECTION 3: HOW POOL WORKS -->
 <section class="how-pool">
     <div class="section-heading">
-        <h2>How PlopPlop Pataj Works</h2>
-        <p>Four simple steps to a cheaper ride</p>
+        <h2>Kijan MsouWout Mache</h2>
+        <p>4 etap senp pou yon kous an sekirite</p>
     </div>
     <div class="pool-steps">
         <div class="pool-step">
             <div class="pool-step-number">1</div>
             <span class="pool-step-icon">📍</span>
-            <h4>Enter Destination</h4>
-            <p>Tell us where you're going</p>
+            <h4>Antre Destinasyon</h4>
+            <p>Di nou ki kote ou prale</p>
         </div>
         <div class="pool-step">
             <div class="pool-step-number">2</div>
-            <span class="pool-step-icon">👥</span>
-            <h4>Match with Riders</h4>
-            <p>We find others heading your way</p>
+            <span class="pool-step-icon">🚗</span>
+            <h4>Chwazi Kous Ou</h4>
+            <p>Moto, machin, SUV oswa livrezon</p>
         </div>
         <div class="pool-step">
             <div class="pool-step-number">3</div>
-            <span class="pool-step-icon">🤝</span>
-            <h4>Share the Ride</h4>
-            <p>Split the cost, save money</p>
+            <span class="pool-step-icon">✅</span>
+            <h4>Chofè Verifye</h4>
+            <p>Chofè tcheke ak GPS an dirèk</p>
         </div>
         <div class="pool-step">
             <div class="pool-step-number">4</div>
-            <span class="pool-step-icon">✅</span>
-            <h4>Arrive Safely</h4>
-            <p>Tracked ride with verified drivers</p>
+            <span class="pool-step-icon">🏠</span>
+            <h4>Rive An Sekirite</h4>
+            <p>Peye nan app — pa bezwen kach</p>
         </div>
     </div>
 </section>
@@ -779,53 +774,53 @@
 <!-- SECTION 4: WHY POOL -->
 <section class="why-pool">
     <div class="why-pool-inner">
-        <div class="fuel-alert">⛽ Gas prices up 40% — 725 gdes/gal</div>
-        <h2>Gas prices up 40%?<br>We've got you.</h2>
+        <div class="fuel-alert">🛡️ Transpò an sekirite nan Port-au-Prince</div>
+        <h2>Poukisa Chwazi<br>MsouWout?</h2>
         <div class="why-pool-grid">
-            <div class="why-item">
-                <div class="why-icon">💰</div>
-                <div class="why-item-text">
-                    <h4>Save up to 60% per ride</h4>
-                    <p>Pool fares split between riders — pay a fraction of solo cost</p>
-                </div>
-            </div>
-            <div class="why-item">
-                <div class="why-icon">🚦</div>
-                <div class="why-item-text">
-                    <h4>Reduce traffic congestion</h4>
-                    <p>Fewer cars on the road means faster commutes for everyone</p>
-                </div>
-            </div>
-            <div class="why-item">
-                <div class="why-icon">🌱</div>
-                <div class="why-item-text">
-                    <h4>Lower your carbon footprint</h4>
-                    <p>Share rides, reduce emissions, help Haiti breathe easier</p>
-                </div>
-            </div>
             <div class="why-item">
                 <div class="why-icon">✅</div>
                 <div class="why-item-text">
-                    <h4>Verified drivers only</h4>
-                    <p>Background-checked, rated, and reviewed by other riders</p>
+                    <h4>Chofè verifye sèlman</h4>
+                    <p>Tout chofè tcheke, evalye, ak revize pa lòt pasaje</p>
                 </div>
             </div>
             <div class="why-item">
                 <div class="why-icon">📍</div>
                 <div class="why-item-text">
-                    <h4>Real-time GPS tracking</h4>
-                    <p>Share your trip with family — they see you moving live</p>
+                    <h4>GPS tracking an dirèk</h4>
+                    <p>Pataje vwayaj ou ak fanmi — yo wè ou ap deplase an dirèk</p>
+                </div>
+            </div>
+            <div class="why-item">
+                <div class="why-icon">💰</div>
+                <div class="why-item-text">
+                    <h4>Pri jis ak transparan</h4>
+                    <p>Wè pri a anvan ou monte — pa gen sipriz</p>
                 </div>
             </div>
             <div class="why-item">
                 <div class="why-icon">💳</div>
                 <div class="why-item-text">
-                    <h4>In-app payments</h4>
-                    <p>Pay with San Cash, credit card, or debit — no cash needed</p>
+                    <h4>Peman nan app</h4>
+                    <p>Peye ak San Cash, kat kredi, oswa MonCash — pa bezwen kach</p>
+                </div>
+            </div>
+            <div class="why-item">
+                <div class="why-icon">📦</div>
+                <div class="why-item-text">
+                    <h4>Livrezon rapid</h4>
+                    <p>Voye pake, manje, oswa komisyon nenpòt kote nan vil la</p>
+                </div>
+            </div>
+            <div class="why-item">
+                <div class="why-icon">🏍️</div>
+                <div class="why-item-text">
+                    <h4>Moto oswa machin — ou chwazi</h4>
+                    <p>Rapid sou moto oswa konfòtab nan machin — sa ki pi bon pou ou</p>
                 </div>
             </div>
         </div>
-        <a href="rides-request.html" class="hero-btn-red" style="display:inline-flex;" data-i18n="rides.request_pataj">Request a Pataj Ride</a>
+        <a href="rides-request.html" class="hero-btn-red" style="display:inline-flex;">🚗 Mande Yon Kous</a>
     </div>
 </section>
 
@@ -833,7 +828,7 @@
 <section class="fare-estimator" id="fare-estimator">
     <div class="section-heading">
         <h2>Estimate Your Fare</h2>
-        <p>See how much you'll save with PlopPlop</p>
+        <p>Wè konbyen kous ou a ap koute</p>
     </div>
     <div class="fare-card">
         <form class="fare-form" onsubmit="return false;">
@@ -864,10 +859,10 @@
             <div class="form-group">
                 <label>Ride Type</label>
                 <div class="ride-type-selector">
-                    <button type="button" class="ride-type-btn active" data-type="pool">🚐 Pataj</button>
-                    <button type="button" class="ride-type-btn" data-type="motopool">🏍️ Moto Pataj</button>
-                    <button type="button" class="ride-type-btn" data-type="moto">🏍️ Moto</button>
+                    <button type="button" class="ride-type-btn active" data-type="moto">🏍️ Moto</button>
                     <button type="button" class="ride-type-btn" data-type="car">🚗 Car</button>
+                    <button type="button" class="ride-type-btn" data-type="suv">🚙 SUV</button>
+                    <button type="button" class="ride-type-btn" data-type="delivery">📦 Livrezon</button>
                 </div>
             </div>
             <button type="button" class="fare-estimate-btn" id="estimateBtn">Get Fare Estimate</button>
@@ -886,20 +881,20 @@
 <section class="for-drivers">
     <div class="for-drivers-inner">
         <span class="driver-icon">🚘</span>
-        <h2>Earn More with Every Seat</h2>
-        <p class="driver-desc">Fill empty seats, earn more per trip. Pool drivers make 30% more than solo rides. Turn your commute into income.</p>
+        <h2>Touche Plis ak MsouWout</h2>
+        <p class="driver-desc">Kondui ak MsouWout epi touche plis chak jou. Kous prive, livrezon, oswa VIP — ou chwazi orè ou.</p>
         <div class="stat-row">
             <div class="stat-item">
-                <span class="stat-number">+30%</span>
-                <span class="stat-label">More earnings</span>
+                <span class="stat-number">85%</span>
+                <span class="stat-label">Pou chofè</span>
             </div>
             <div class="stat-item">
                 <span class="stat-number">500+</span>
-                <span class="stat-label">Active drivers</span>
+                <span class="stat-label">Chofè aktif</span>
             </div>
             <div class="stat-item">
                 <span class="stat-number">24/7</span>
-                <span class="stat-label">Flexible hours</span>
+                <span class="stat-label">Orè fleksib</span>
             </div>
         </div>
         <a href="driver.html" class="driver-cta-btn" data-i18n="rides.start_driving">Start Driving →</a>
@@ -973,7 +968,7 @@
 <script>
 // Ride type toggle
 const rideTypeBtns = document.querySelectorAll('.ride-type-btn');
-let selectedRideType = 'pool';
+let selectedRideType = 'moto';
 
 rideTypeBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -983,54 +978,53 @@ rideTypeBtns.forEach(btn => {
     });
 });
 
-// Fare estimation mock data
+// Fare estimation data
 const FARE_DATA = {
-    // [pickup][dropoff] = { pool, motopool, moto, car }
     'petion-ville': {
-        'delmas':       { pool: 100, motopool: 60,  moto: 150, car: 275 },
-        'pap-centre':   { pool: 125, motopool: 80,  moto: 200, car: 350 },
-        'tabarre':      { pool: 150, motopool: 90,  moto: 225, car: 400 },
-        'carrefour':    { pool: 175, motopool: 110, moto: 275, car: 475 },
-        'kenscoff':     { pool: 125, motopool: 80,  moto: 200, car: 325 },
+        'delmas':       { moto: 150, car: 275, suv: 500, delivery: 100 },
+        'pap-centre':   { moto: 200, car: 350, suv: 600, delivery: 125 },
+        'tabarre':      { moto: 225, car: 400, suv: 700, delivery: 150 },
+        'carrefour':    { moto: 275, car: 475, suv: 800, delivery: 175 },
+        'kenscoff':     { moto: 200, car: 325, suv: 550, delivery: 125 },
     },
     'delmas': {
-        'petion-ville': { pool: 100, motopool: 60,  moto: 150, car: 275 },
-        'pap-centre':   { pool: 75,  motopool: 50,  moto: 125, car: 225 },
-        'tabarre':      { pool: 100, motopool: 60,  moto: 150, car: 250 },
-        'carrefour':    { pool: 150, motopool: 90,  moto: 225, car: 400 },
-        'kenscoff':     { pool: 175, motopool: 110, moto: 275, car: 475 },
+        'petion-ville': { moto: 150, car: 275, suv: 500, delivery: 100 },
+        'pap-centre':   { moto: 125, car: 225, suv: 400, delivery: 75 },
+        'tabarre':      { moto: 150, car: 250, suv: 450, delivery: 100 },
+        'carrefour':    { moto: 225, car: 400, suv: 700, delivery: 150 },
+        'kenscoff':     { moto: 275, car: 475, suv: 800, delivery: 175 },
     },
     'pap-centre': {
-        'petion-ville': { pool: 125, motopool: 80,  moto: 200, car: 350 },
-        'delmas':       { pool: 75,  motopool: 50,  moto: 125, car: 225 },
-        'tabarre':      { pool: 125, motopool: 80,  moto: 200, car: 325 },
-        'carrefour':    { pool: 100, motopool: 60,  moto: 150, car: 275 },
-        'kenscoff':     { pool: 200, motopool: 120, moto: 300, car: 525 },
+        'petion-ville': { moto: 200, car: 350, suv: 600, delivery: 125 },
+        'delmas':       { moto: 125, car: 225, suv: 400, delivery: 75 },
+        'tabarre':      { moto: 200, car: 325, suv: 550, delivery: 125 },
+        'carrefour':    { moto: 150, car: 275, suv: 500, delivery: 100 },
+        'kenscoff':     { moto: 300, car: 525, suv: 900, delivery: 200 },
     },
     'tabarre': {
-        'petion-ville': { pool: 150, motopool: 90,  moto: 225, car: 400 },
-        'delmas':       { pool: 100, motopool: 60,  moto: 150, car: 250 },
-        'pap-centre':   { pool: 125, motopool: 80,  moto: 200, car: 325 },
-        'carrefour':    { pool: 200, motopool: 120, moto: 300, car: 525 },
-        'kenscoff':     { pool: 225, motopool: 140, moto: 350, car: 575 },
+        'petion-ville': { moto: 225, car: 400, suv: 700, delivery: 150 },
+        'delmas':       { moto: 150, car: 250, suv: 450, delivery: 100 },
+        'pap-centre':   { moto: 200, car: 325, suv: 550, delivery: 125 },
+        'carrefour':    { moto: 300, car: 525, suv: 900, delivery: 200 },
+        'kenscoff':     { moto: 350, car: 575, suv: 950, delivery: 225 },
     },
     'carrefour': {
-        'petion-ville': { pool: 175, motopool: 110, moto: 275, car: 475 },
-        'delmas':       { pool: 150, motopool: 90,  moto: 225, car: 400 },
-        'pap-centre':   { pool: 100, motopool: 60,  moto: 150, car: 275 },
-        'tabarre':      { pool: 200, motopool: 120, moto: 300, car: 525 },
-        'kenscoff':     { pool: 250, motopool: 150, moto: 375, car: 625 },
+        'petion-ville': { moto: 275, car: 475, suv: 800, delivery: 175 },
+        'delmas':       { moto: 225, car: 400, suv: 700, delivery: 150 },
+        'pap-centre':   { moto: 150, car: 275, suv: 500, delivery: 100 },
+        'tabarre':      { moto: 300, car: 525, suv: 900, delivery: 200 },
+        'kenscoff':     { moto: 375, car: 625, suv: 1050, delivery: 250 },
     },
     'kenscoff': {
-        'petion-ville': { pool: 125, motopool: 80,  moto: 200, car: 325 },
-        'delmas':       { pool: 175, motopool: 110, moto: 275, car: 475 },
-        'pap-centre':   { pool: 200, motopool: 120, moto: 300, car: 525 },
-        'tabarre':      { pool: 225, motopool: 140, moto: 350, car: 575 },
-        'carrefour':    { pool: 250, motopool: 150, moto: 375, car: 625 },
+        'petion-ville': { moto: 200, car: 325, suv: 550, delivery: 125 },
+        'delmas':       { moto: 275, car: 475, suv: 800, delivery: 175 },
+        'pap-centre':   { moto: 300, car: 525, suv: 900, delivery: 200 },
+        'tabarre':      { moto: 350, car: 575, suv: 950, delivery: 225 },
+        'carrefour':    { moto: 375, car: 625, suv: 1050, delivery: 250 },
     }
 };
 
-const typeLabels = { pool: 'Pataj', motopool: 'Moto Pataj', moto: 'Moto', car: 'Car' };
+const typeLabels = { moto: 'Moto', car: 'Car', suv: 'SUV', delivery: 'Livrezon' };
 
 document.getElementById('estimateBtn').addEventListener('click', () => {
     const pickup = document.getElementById('pickup').value;
@@ -1038,31 +1032,30 @@ document.getElementById('estimateBtn').addEventListener('click', () => {
     const result = document.getElementById('fareResult');
 
     if (!pickup || !dropoff) {
-        alert('Please select both pickup and dropoff zones.');
+        alert('Tanpri chwazi zòn depa ak zòn rive.');
         return;
     }
     if (pickup === dropoff) {
-        alert('Pickup and dropoff zones must be different.');
+        alert('Zòn depa ak zòn rive dwe diferan.');
         return;
     }
 
     const fares = FARE_DATA[pickup] && FARE_DATA[pickup][dropoff];
     if (!fares) {
-        alert('Route not available yet. Coming soon!');
+        alert('Wout sa a pa disponib ankò. Byento!');
         return;
     }
 
     const fare = fares[selectedRideType];
-    const soloFare = fares.car;
-    const savings = soloFare - fare;
-
-    document.getElementById('fareLabel').textContent = 'Estimated ' + typeLabels[selectedRideType] + ' Fare';
+    document.getElementById('fareLabel').textContent = 'Estimasyon ' + typeLabels[selectedRideType];
     document.getElementById('fareAmount').textContent = fare + ' HTG';
 
-    if (selectedRideType === 'pool' || selectedRideType === 'motopool' || selectedRideType === 'moto') {
-        document.getElementById('fareSavings').textContent = '↓ You save ' + savings + ' HTG vs private car';
+    if (selectedRideType === 'moto') {
+        const carFare = fares.car;
+        const savings = carFare - fare;
+        document.getElementById('fareSavings').textContent = '↓ Ou ekonomize ' + savings + ' HTG vs machin';
         document.getElementById('fareSavings').style.display = 'inline-flex';
-        document.getElementById('fareCompare').textContent = 'Private car: ~' + soloFare + ' HTG for same route';
+        document.getElementById('fareCompare').textContent = 'Machin: ~' + carFare + ' HTG pou menm wout la';
         document.getElementById('fareCompare').style.display = 'block';
     } else {
         document.getElementById('fareSavings').style.display = 'none';
