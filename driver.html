@@ -22,6 +22,19 @@
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/layout.css">
 <style>
+/* ===== BREADCRUMB ===== */
+.driver-breadcrumb {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.85);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-md);
+    letter-spacing: 0.5px;
+}
+
 /* ===== DRIVER HERO ===== */
 .driver-hero {
     background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 60%, #001a5e 100%);
@@ -193,21 +206,48 @@
 .vehicle-card {
     background: var(--white);
     border-radius: var(--radius-xl);
-    padding: var(--space-2xl) var(--space-xl);
+    padding: var(--space-xl) var(--space-lg);
     text-align: center;
     box-shadow: var(--shadow-card);
     transition: all var(--transition-fast);
     cursor: pointer;
     border: 2px solid transparent;
+    position: relative;
+    overflow: visible;
 }
 .vehicle-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
     border-color: var(--primary-blue);
 }
-.vehicle-card .v-icon {
-    font-size: 64px;
+.vehicle-card--recommended {
+    border-color: var(--primary-red);
+    position: relative;
+}
+.vehicle-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary-red);
+    color: var(--white);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+    font-family: var(--font-heading);
+}
+.vehicle-hook {
+    font-size: var(--text-sm);
+    color: var(--primary-blue);
+    font-weight: 600;
     margin-bottom: var(--space-md);
+    opacity: 0.85;
+}
+.vehicle-card .v-icon {
+    font-size: 72px;
+    margin-bottom: var(--space-sm);
     display: block;
 }
 .vehicle-card h3 {
@@ -242,6 +282,7 @@
 .hiw-section {
     background: var(--white);
     padding: var(--space-3xl) var(--content-padding);
+    text-align: center;
 }
 .hiw-section .section-heading {
     text-align: center;
@@ -292,6 +333,21 @@
     font-size: var(--text-sm);
     color: var(--text-muted);
     line-height: 1.6;
+}
+.hiw-approval-note {
+    text-align: center;
+    margin-top: var(--space-xl);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--primary-blue);
+    background: var(--primary-blue-light);
+    padding: 10px 20px;
+    border-radius: var(--radius-full);
+    display: inline-block;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
 }
 /* Progress line */
 .hiw-step:not(:last-child)::after {
@@ -355,13 +411,14 @@
 .req-check {
     width: 32px;
     height: 32px;
-    background: var(--success-light);
-    color: var(--success);
+    background: #d4edda;
+    color: #1a7f37;
     border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
+    font-weight: 800;
+    font-size: var(--text-base);
     flex-shrink: 0;
 }
 .req-item span {
@@ -685,8 +742,14 @@
     .vehicle-card-hero { padding: var(--space-lg) var(--space-xl); }
     .vehicle-card-hero .v-icon { font-size: 36px; }
     .vehicle-cards { grid-template-columns: 1fr; }
-    .hiw-steps { flex-direction: column; gap: var(--space-xl); }
-    .hiw-step:not(:last-child)::after { display: none; }
+    .hiw-steps { flex-direction: column; gap: var(--space-lg); position: relative; }
+    .hiw-step:not(:last-child)::after {
+        left: 50%;
+        top: 72px;
+        width: 3px;
+        height: calc(100% - 36px);
+        transform: translateX(-50%);
+    }
     .benefits-grid { grid-template-columns: 1fr; }
     .trust-stats { gap: var(--space-lg); }
     .final-cta h2 { font-size: var(--text-2xl); }
@@ -794,8 +857,9 @@
 <!-- SECTION 1: HERO -->
 <section class="driver-hero">
     <div class="driver-hero-content">
-        <h1>Travay ak MsouWout</h1>
-        <p class="subtitle">Enskri kòm patnè moto oswa machin. Livre kòmand oswa transpòte pasaje — touche sou pwòp orè ou.</p>
+        <div class="driver-breadcrumb">Vin Patnè MsouWout</div>
+        <h1>Fè Lajan ak Moto oswa Machin Ou</h1>
+        <p class="subtitle">Travay sou pwòp orè pa w. Livre kòmand oswa transpòte pasaje — kòmanse touche ak MsouWout.</p>
 
         <div class="hero-btns">
             <a href="#signup" class="hero-btn-red">Enskri Kounye a</a>
@@ -834,30 +898,33 @@
 <!-- SECTION 2: CHOOSE YOUR VEHICLE -->
 <section class="choose-vehicle-section" id="choose-vehicle">
     <div class="section-heading">
-        <h2>Chwazi Vehicule Ou</h2>
+        <h2>Chwazi Veyikil Ou</h2>
     </div>
     <div class="vehicle-cards">
-        <div class="vehicle-card">
+        <div class="vehicle-card vehicle-card--recommended">
+            <span class="vehicle-badge">⚡ Pi Fleksib</span>
             <span class="v-icon">🏍️</span>
             <h3>Patnè Moto</h3>
+            <p class="vehicle-hook">Kòmanse pi vit · Mwens depans</p>
             <ul>
-                <li>Livrezon lokal rapid</li>
-                <li>Lè fleksib</li>
-                <li>Ideyal pou wout nan vil</li>
-                <li>Mwens depans gazolin</li>
+                <li>Livrezon rapid nan vil la</li>
+                <li>Pi fleksib</li>
+                <li>Mwens depans gaz</li>
+                <li>Bon pou ti kous</li>
             </ul>
-            <a href="driver-onboarding.html?vehicle=moto" class="btn btn-red btn-lg btn-full btn-round">Kontinye kòm Patnè Moto</a>
+            <a href="driver-onboarding.html?vehicle=moto" class="btn btn-red btn-lg btn-full btn-round">Chwazi Moto</a>
         </div>
         <div class="vehicle-card">
             <span class="v-icon">🚗</span>
             <h3>Patnè Machin</h3>
+            <p class="vehicle-hook">Pi bon pou sèvis pasaje</p>
             <ul>
-                <li>Pi gwo livrezon</li>
-                <li>Prè pou sèvis pasaje ak livrezon</li>
-                <li>Opòtinite pou touche plis</li>
-                <li>Vwayaj konfòtab</li>
+                <li>Pi gwo opòtinite</li>
+                <li>Bon pou pasaje ak livrezon</li>
+                <li>Plis konfò</li>
+                <li>Pi bon pou kous long</li>
             </ul>
-            <a href="driver-onboarding.html?vehicle=car" class="btn btn-blue btn-lg btn-full btn-round">Kontinye kòm Patnè Machin</a>
+            <a href="driver-onboarding.html?vehicle=car" class="btn btn-blue btn-lg btn-full btn-round">Chwazi Machin</a>
         </div>
     </div>
 </section>
@@ -872,55 +939,56 @@
             <div class="hiw-step-icon">📝</div>
             <div class="hiw-step-num">1</div>
             <h4>Kreye Kont Ou</h4>
-            <p>Enskri ak nimewo telefòn ou ak enfòmasyon debaz. Sa pran mwens pase 2 minit.</p>
+            <p>Enskri ak nimewo telefòn ou ak enfòmasyon debaz ou.</p>
         </div>
         <div class="hiw-step">
             <div class="hiw-step-icon">📄</div>
             <div class="hiw-step-num">2</div>
-            <h4>Telechaje Dokiman</h4>
-            <p>Soumèt idantite ou, lisans, ak dokiman vehicule ou. Nou verifye tout bagay rapidman.</p>
+            <h4>Voye Dokiman Ou</h4>
+            <p>Telechaje pyès idantite, lisans, ak papye machin ou.</p>
         </div>
         <div class="hiw-step">
             <div class="hiw-step-icon">✅</div>
             <div class="hiw-step-num">3</div>
-            <h4>Jwenn Apwobasyon &amp; Kòmanse Touche</h4>
-            <p>Lè ou apwouve, ale an liy epi kòmanse aksepte livrezon touswit.</p>
+            <h4>Verifye epi Kòmanse Travay</h4>
+            <p>Lè yo apwouve w, ou ka kòmanse resevwa kous oswa livrezon.</p>
         </div>
     </div>
+    <div class="hiw-approval-note">⚡ Apwobasyon rapid — Verifikasyon fèt nan 24-48 èdtan</div>
 </section>
 
 <!-- SECTION 4: WHAT YOU NEED -->
 <section class="requirements-section">
     <div class="section-heading">
-        <h2>Kisa Ou Bezwen</h2>
+        <h2>Sa Ou Bezwen</h2>
     </div>
     <div class="requirements-card">
         <div class="req-item">
             <div class="req-check">✓</div>
-            <span>Idantite gouvènman valid (NIF oswa paspò)</span>
+            <span>Pyès idantite valab</span>
         </div>
         <div class="req-item">
             <div class="req-check">✓</div>
-            <span>Lisans chofè valid</span>
+            <span>Lisans chofè valab</span>
         </div>
         <div class="req-item">
             <div class="req-check">✓</div>
-            <span>Dokiman enskripsyon vehicule</span>
+            <span>Papye machin</span>
         </div>
         <div class="req-item">
             <div class="req-check">✓</div>
-            <span>Enfòmasyon vehicule (mak, modèl, ane, plak)</span>
+            <span>Enfòmasyon machin</span>
         </div>
         <div class="req-item">
             <div class="req-check">✓</div>
-            <span>Nimewo telefòn ak aksè entènèt</span>
+            <span>Telefòn ak entènèt</span>
         </div>
         <div class="req-item">
             <div class="req-check">✓</div>
             <span>Foto pwofil resan</span>
         </div>
         <div class="req-note">
-            Ou pa gen tout dokiman yo? Kòmanse aplikasyon an epi telechaje yo pita.
+            Ou pa gen tout dokiman yo pare? Kòmanse enskripsyon an jodi a epi ajoute rès yo pita.
         </div>
     </div>
 </section>
@@ -1090,10 +1158,10 @@
 <section class="final-cta">
     <div class="final-cta-content">
         <h2>Kòmanse Travay ak MsouWout Jodi a</h2>
-        <p class="sub">Jwenn dè santèn patnè k ap touche sou pwòp orè yo</p>
+        <p class="sub">Ou pa bezwen tout bagay pare jodi a. Kòmanse kounye a, fini pita.</p>
         <div class="final-cta-btns">
-            <a href="#signup" class="final-cta-btn" onclick="setVehicle('moto')">Aplike kòm Patnè Moto 🏍️</a>
-            <a href="#signup" class="final-cta-btn blue" onclick="setVehicle('car')">Aplike kòm Patnè Machin 🚗</a>
+            <a href="#signup" class="final-cta-btn" onclick="setVehicle('moto')">Chwazi Moto 🏍️</a>
+            <a href="#signup" class="final-cta-btn blue" onclick="setVehicle('car')">Chwazi Machin 🚗</a>
         </div>
     </div>
 </section>
