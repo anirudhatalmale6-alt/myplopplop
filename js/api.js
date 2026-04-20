@@ -3,7 +3,7 @@
 
 const API = (() => {
     // Backend URL - change this when deploying to production
-    const BASE_URL = 'https://myplopplop-api.onrender.com';
+    const BASE_URL = 'https://api.myplopplop.com';
 
     // Token management
     function getToken() { return localStorage.getItem('pp_token'); }
