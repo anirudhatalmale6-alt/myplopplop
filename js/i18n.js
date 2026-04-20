@@ -517,7 +517,7 @@
     'hero.title': {
       fr: "Le Premier Marché d'Haïti",
       en: "Haiti's First Marketplace",
-      kr: 'Premye Makètplés Ayiti',
+      kr: 'Premye Makètples Ayiti',
       es: 'El Primer Mercado de Haití'
     },
     'hero.description': {
@@ -783,7 +783,7 @@
     'msouwout.cta_sub': {
       fr: 'Taxi, moto et livraison en toute securite.',
       en: 'Taxi, moto and delivery in safety.',
-      kr: 'Taxi, moto ak livrezon an sekirite.',
+      kr: 'Mande kous ou oswa livrezon an sekirite.',
       es: 'Taxi, moto y entregas con seguridad.'
     },
 
@@ -1058,7 +1058,7 @@
     // Footer
     'Haiti\'s First Marketplace. From restaurants to hardware stores, we connect you with the best merchants across Haiti.': {
       fr: "Le Premier Marché d'Haïti. Des restaurants aux quincailleries, nous vous connectons avec les meilleurs marchands d'Haïti.",
-      kr: 'Premye Makètplés Ayiti. Soti nan restoran rive nan kenkayri, nou konekte ou ak pi bon machann nan tout Ayiti.',
+      kr: 'Premye Makètples Ayiti. Soti nan restoran rive nan kenkayri, nou konekte ou ak pi bon machann nan tout Ayiti.',
       es: 'El Primer Mercado de Haití. De restaurantes a ferreterías, lo conectamos con los mejores comerciantes de Haití.'
     },
     'Shop': { fr: 'Boutique', kr: 'Boutik', es: 'Tienda' },
