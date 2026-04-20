@@ -74,63 +74,70 @@
     margin-bottom: var(--space-lg);
     line-height: 1.6;
 }
-.savings-callout {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-sm);
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.25);
-    border-radius: var(--radius-full);
-    padding: 8px 20px;
-    font-size: var(--text-sm);
-    font-weight: 600;
-    backdrop-filter: blur(4px);
-    margin-bottom: var(--space-xl);
-    animation: pulse-glow 2s ease-in-out infinite;
-}
-@keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(230,57,70,0.3); }
-    50% { box-shadow: 0 0 20px 4px rgba(230,57,70,0.2); }
-}
-.hero-btns {
+/* Trust strip - reassurance, not a button */
+.trust-strip {
     display: flex;
-    gap: var(--space-md);
+    align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
+    gap: 8px;
+    background: rgba(0,18,71,0.5);
+    border-radius: var(--radius-md);
+    padding: 10px 20px;
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: var(--space-lg);
+    letter-spacing: 0.3px;
 }
-.hero-btn-red {
+.trust-strip .trust-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+.hero-ctas {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    max-width: 340px;
+    margin: 0 auto;
+}
+/* Primary CTA - strongest, full width red */
+.hero-cta-primary {
     background: var(--primary-red);
     color: var(--white);
-    padding: 14px 32px;
+    padding: 16px 32px;
     border-radius: var(--radius-xl);
     font-family: var(--font-heading);
     font-weight: 700;
-    font-size: var(--text-base);
-    display: inline-flex;
+    font-size: var(--text-lg);
+    display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-sm);
-    box-shadow: 0 4px 16px rgba(210,16,52,0.4);
+    box-shadow: 0 6px 24px rgba(210,16,52,0.5);
     transition: all var(--transition-fast);
     text-decoration: none;
+    width: 100%;
 }
-.hero-btn-red:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(210,16,52,0.5); }
-.hero-btn-outline {
-    background: transparent;
+.hero-cta-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(210,16,52,0.6); }
+/* Secondary CTA - outlined, lighter weight */
+.hero-cta-secondary {
+    background: rgba(255,255,255,0.06);
     color: var(--white);
     padding: 14px 32px;
     border-radius: var(--radius-xl);
     font-family: var(--font-heading);
     font-weight: 600;
     font-size: var(--text-base);
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-sm);
-    border: 1.5px solid rgba(255,255,255,0.4);
-    backdrop-filter: blur(4px);
+    border: 1.5px solid rgba(255,255,255,0.3);
     transition: all var(--transition-fast);
     text-decoration: none;
+    width: 100%;
 }
-.hero-btn-outline:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
+.hero-cta-secondary:hover { background: rgba(255,255,255,0.12); transform: translateY(-1px); }
 
 /* ===== RIDE OPTIONS ===== */
 .ride-options {
@@ -627,8 +634,7 @@
 /* ===== RESPONSIVE ===== */
 @media (max-width: 600px) {
     .rides-hero h1 { font-size: 1.6rem; }
-    .hero-btns { flex-direction: column; align-items: center; }
-    .hero-btn-red, .hero-btn-outline { width: 100%; max-width: 280px; justify-content: center; }
+    .hero-ctas { max-width: 100%; }
     .ride-cards { grid-template-columns: 1fr; }
     .pool-steps { grid-template-columns: repeat(2, 1fr); }
     .why-pool-grid { grid-template-columns: 1fr; }
@@ -687,11 +693,13 @@
 <section class="rides-hero">
     <div class="rides-hero-content">
         <img src="assets/img/msouwout-logo-full.png" alt="MsouWout" style="height:200px;max-width:90%;margin:0 auto var(--space-md);display:block;filter:drop-shadow(0 4px 16px rgba(0,0,0,0.3));">
-        <p class="subtitle">Chofè verifye, GPS tracking, peman nan app — nan tout Port-au-Prince.</p>
-        <div class="savings-callout">✅ <span>Chofè verifye · GPS tracking · Peman nan app</span></div>
-        <div class="hero-btns">
-            <a href="rides-request.html" class="hero-btn-red">🚗 <span data-i18n="rides.request">Request a Ride</span></a>
-            <a href="driver.html" class="hero-btn-outline">🏍️ <span data-i18n="rides.drive_with_us">Drive with Us</span></a>
+        <div class="trust-strip">
+            <span class="trust-icon">✅</span>
+            <span>Chofè verifye · GPS tracking · Peman nan app</span>
+        </div>
+        <div class="hero-ctas">
+            <a href="rides-request.html" class="hero-cta-primary">🚗 Mande yon Transpò</a>
+            <a href="driver.html" class="hero-cta-secondary">Travay ak MsouWout</a>
         </div>
     </div>
 </section>
@@ -819,7 +827,7 @@
                 </div>
             </div>
         </div>
-        <a href="rides-request.html" class="hero-btn-red" style="display:inline-flex;">🚗 Mande Yon Kous</a>
+        <a href="rides-request.html" class="hero-cta-primary" style="display:inline-flex;width:auto;">🚗 Mande Yon Kous</a>
     </div>
 </section>
 
