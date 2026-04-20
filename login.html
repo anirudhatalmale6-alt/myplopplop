@@ -306,6 +306,27 @@
     margin-top: var(--space-lg);
 }
 .otp-back:hover { color: var(--text-dark); }
+.pin-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.pin-wrap .input {
+    flex: 1;
+    padding-right: 48px;
+}
+.pin-toggle {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 6px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+.pin-toggle:hover { opacity: 1; }
 </style>
 </head>
 <body>
@@ -378,7 +399,10 @@
 
                 <div class="input-group">
                     <label data-i18n="auth.pin">PIN / Password</label>
-                    <input type="password" class="input" placeholder="Enter your PIN" maxlength="20" required>
+                    <div class="pin-wrap">
+                        <input type="password" class="input" placeholder="Enter your PIN" maxlength="20" required>
+                        <button type="button" class="pin-toggle" onclick="togglePin(this)" aria-label="Show PIN">👁️</button>
+                    </div>
                 </div>
 
                 <a href="#" class="forgot-link" data-i18n="auth.forgot">Forgot PIN?</a>
@@ -442,12 +466,18 @@
 
                 <div class="input-group">
                     <label data-i18n="auth.create_pin">Create PIN</label>
-                    <input type="password" class="input" id="signupPassword" placeholder="4-digit PIN" minlength="4" maxlength="4" inputmode="numeric" pattern="[0-9]{4}" required>
+                    <div class="pin-wrap">
+                        <input type="password" class="input" id="signupPassword" placeholder="4-digit PIN" minlength="4" maxlength="4" inputmode="numeric" pattern="[0-9]{4}" required>
+                        <button type="button" class="pin-toggle" onclick="togglePin(this)" aria-label="Show PIN">👁️</button>
+                    </div>
                 </div>
 
                 <div class="input-group">
                     <label data-i18n="auth.confirm_pin">Confirm PIN</label>
-                    <input type="password" class="input" id="signupConfirmPassword" placeholder="Confirm your 4-digit PIN" minlength="4" maxlength="4" inputmode="numeric" pattern="[0-9]{4}" required>
+                    <div class="pin-wrap">
+                        <input type="password" class="input" id="signupConfirmPassword" placeholder="Confirm your 4-digit PIN" minlength="4" maxlength="4" inputmode="numeric" pattern="[0-9]{4}" required>
+                        <button type="button" class="pin-toggle" onclick="togglePin(this)" aria-label="Show PIN">👁️</button>
+                    </div>
                 </div>
 
                 <div class="checkbox-group">
@@ -502,6 +532,18 @@
 </nav>
 
 <script>
+// Show/hide PIN toggle
+function togglePin(btn) {
+    const input = btn.parentElement.querySelector('input');
+    if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🙈';
+    } else {
+        input.type = 'password';
+        btn.textContent = '👁️';
+    }
+}
+
 // Tab toggle
 const tabs = document.querySelectorAll('.auth-tab');
 const panels = document.querySelectorAll('.auth-panel');

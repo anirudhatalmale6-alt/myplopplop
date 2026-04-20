@@ -609,52 +609,40 @@
 
     // ── Homepage: Referral Program ──
     'ref.title': {
-      fr: 'Gagnez de l\'Argent avec les Parrainages !',
-      en: 'Earn Money with Referrals!',
-      kr: 'Touche Lajan ak Rekòmandasyon!',
-      es: '¡Gane Dinero con Referencias!'
+      fr: 'Gagnez du Cash 💰 avec les Parrainages !',
+      en: 'Earn Cash 💰 with Referrals!',
+      kr: 'Touche Lajan 💰 ak Rekòmandasyon!',
+      es: '¡Gana Dinero 💰 con Referencias!'
     },
     'ref.desc': {
-      fr: 'Devenez ambassadeur ! Gagnez <strong>3% sur chaque commande parrainée</strong>, <strong>3% sur les ventes commerciales</strong>, et <strong>2% sur les trajets/livraisons des chauffeurs</strong>. Sans limites !',
-      en: 'Become an ambassador! Earn <strong>3% on every referral order</strong>, <strong>3% on business sales</strong>, and <strong>2% on driver rides/deliveries</strong>. No limits!',
-      kr: 'Vin yon anbasadè! Touche <strong>3% sou chak kòmand rekòmande</strong>, <strong>3% sou vant biznis</strong>, ak <strong>2% sou transpò/livrezon chofè</strong>. Pa gen limit!',
-      es: '¡Conviértase en embajador! Gane <strong>3% en cada pedido referido</strong>, <strong>3% en ventas de negocios</strong>, y <strong>2% en viajes/entregas de conductores</strong>. ¡Sin límites!'
+      fr: 'Devenez ambassadeur ! Gagnez <strong>10% sur chaque package</strong> et <strong>10% sur les frais de plateforme</strong> des personnes que vous parrainez !',
+      en: 'Become an ambassador! Earn <strong>10% on every package</strong> and <strong>10% on platform fees</strong> from people you refer!',
+      kr: 'Vin yon anbasadè! Touche <strong>10% sou chak pakè</strong> ak <strong>10% sou frè platfòm</strong> moun ou rekòmande yo!',
+      es: '¡Conviertete en embajador! Gana <strong>10% en cada paquete</strong> y <strong>10% en tarifas de plataforma</strong> de personas que refieras!'
     },
     'ref.card1_title': {
-      fr: 'Parrainage Client',
-      en: 'Customer Referral',
-      kr: 'Rekòmandasyon Kliyan',
-      es: 'Referencia de Cliente'
+      fr: 'Packages 48HoursReady',
+      en: '48HoursReady Packages',
+      kr: 'Pakè 48HoursReady',
+      es: 'Paquetes 48HoursReady'
     },
     'ref.card1_desc': {
-      fr: 'Gagnez 3% sur chaque commande passée par une personne que vous avez parrainée !',
-      en: 'Earn 3% on every order placed by someone you referred!',
-      kr: 'Touche 3% sou chak kòmand yon moun ou te rekòmande fè!',
-      es: '¡Gane 3% en cada pedido realizado por alguien que usted refirió!'
+      fr: 'Gagnez 10% sur chaque package acheté par une personne que vous avez parrainée !',
+      en: 'Earn 10% on every package purchased by someone you referred!',
+      kr: 'Touche 10% sou chak pakè yon moun ou te rekòmande achte!',
+      es: '¡Gana 10% en cada paquete comprado por alguien que referiste!'
     },
     'ref.card2_title': {
-      fr: 'Ventes Commerciales',
-      en: 'Business Sales',
-      kr: 'Vant Biznis',
-      es: 'Ventas de Negocios'
+      fr: 'Frais de Plateforme',
+      en: 'Platform Fees',
+      kr: 'Frè Platfòm',
+      es: 'Tarifas de Plataforma'
     },
     'ref.card2_desc': {
-      fr: 'Parrainez une entreprise et gagnez 3% sur toutes ses ventes.',
-      en: 'Refer a business and earn 3% on all their sales.',
-      kr: 'Rekòmande yon biznis epi touche 3% sou tout vant yo.',
-      es: 'Refiera un negocio y gane 3% en todas sus ventas.'
-    },
-    'ref.card3_title': {
-      fr: 'Gains Chauffeur',
-      en: 'Driver Earnings',
-      kr: 'Revni Chofè',
-      es: 'Ganancias de Conductor'
-    },
-    'ref.card3_desc': {
-      fr: 'Parrainez un chauffeur et gagnez 2% sur ses trajets et livraisons.',
-      en: 'Refer a driver and earn 2% on their rides and deliveries.',
-      kr: 'Rekòmande yon chofè epi touche 2% sou transpò ak livrezon yo.',
-      es: 'Refiera un conductor y gane 2% en sus viajes y entregas.'
+      fr: 'Gagnez 10% sur tous les frais de plateforme de vos filleuls pendant 3 mois !',
+      en: 'Earn 10% on all platform fees from your referrals for 3 months!',
+      kr: 'Touche 10% sou tout frè platfòm moun ou rekòmande yo pandan 3 mwa!',
+      es: '¡Gana 10% en todas las tarifas de plataforma de tus referidos por 3 meses!'
     },
     'ref.learn_more': {
       fr: 'En Savoir Plus',
@@ -663,16 +651,16 @@
       es: 'Más Información'
     },
     'ref.hero_title': {
-      fr: 'Invitez vos Amis, Gagnez 3% !',
-      en: 'Invite Friends, Earn 3%!',
-      kr: 'Envite Zanmi, Touche 3%!',
-      es: '¡Invita Amigos, Gana 3%!'
+      fr: 'Gagnez du Cash 💰',
+      en: 'Earn Cash 💰',
+      kr: 'Touche Lajan 💰',
+      es: 'Gana Dinero 💰'
     },
     'ref.hero_sub': {
-      fr: 'Partagez votre lien et gagnez sur chaque commande',
-      en: 'Share your link and earn on every order they place',
-      kr: 'Pataje lyen ou epi touche sou chak kòmand yo fè',
-      es: 'Comparte tu enlace y gana en cada pedido que hagan'
+      fr: 'Invitez des amis et gagnez 10% sur chaque transaction !',
+      en: 'Invite friends and earn 10% on every transaction!',
+      kr: 'Envite zanmi epi touche 10% sou chak tranzaksyon!',
+      es: '¡Invita amigos y gana 10% en cada transaccion!'
     },
     'ref.hero_btn': {
       fr: 'Partager',
