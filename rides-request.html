@@ -6,8 +6,8 @@
 <meta property="og:image" content="https://myplopplop.com/assets/img/og-preview.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<title>Request a Ride — MyPlopPlop</title>
-<meta name="description" content="Book a ride on MsouWout. Pool, Moto, or Car — affordable transport across Port-au-Prince.">
+<title>MsouWout — Mande yon Transpò</title>
+<meta name="description" content="MsouWout - Mande yon kous moto, machin oswa livrezon an sekirite nan Port-au-Prince.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
@@ -138,12 +138,12 @@
 
 .ride-type-card.selected {
     border-color: var(--primary-red);
-    background: rgba(230, 57, 70, 0.04);
-    box-shadow: 0 2px 12px rgba(230, 57, 70, 0.15);
+    background: rgba(230, 57, 70, 0.06);
+    box-shadow: 0 0 0 2px var(--primary-red), 0 4px 16px rgba(230, 57, 70, 0.25);
 }
 
 .ride-type-icon {
-    font-size: 28px;
+    font-size: 36px;
     margin-bottom: 6px;
 }
 
@@ -851,7 +851,7 @@
         <div class="map-section">
             <div class="map-search-bar">
                 <span class="search-icon">📍</span>
-                <input type="text" id="mapSearchInput" placeholder="Where are you going?" data-i18n-placeholder="rides.where_going" autocomplete="off">
+                <input type="text" id="mapSearchInput" placeholder="Antre destinasyon ou" autocomplete="off">
             </div>
             <div class="map-placeholder" id="mapArea">
                 <div class="map-placeholder-text" id="mapPlaceholder">
@@ -859,126 +859,77 @@
                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                         <circle cx="12" cy="10" r="3"/>
                     </svg>
-                    <span>Detecting your location...</span>
+                    <span>Ap chèche kote w ye...</span>
                 </div>
             </div>
         </div>
 
         <!-- 2. RIDE TYPE SELECTOR -->
         <div class="ride-types" id="rideTypes">
-            <div class="ride-type-card selected" data-type="pool" onclick="selectRideType(this)">
-                <div class="ride-type-icon">👥</div>
-                <div class="ride-type-name">PlopPlop Pataj</div>
-                <div class="ride-type-price">From 75 HTG</div>
-                <div class="ride-type-badge">Save 60%</div>
-            </div>
-            <div class="ride-type-card" data-type="motopool" onclick="selectRideType(this)">
-                <div class="ride-type-icon">🏍️👥</div>
-                <div class="ride-type-name">Moto Pataj</div>
-                <div class="ride-type-price">From 60 HTG</div>
-                <div class="ride-type-badge" style="background:#f59e0b;">+2 Riders</div>
-            </div>
-            <div class="ride-type-card" data-type="moto" onclick="selectRideType(this)">
+            <div class="ride-type-card selected" data-type="moto" onclick="selectRideType(this)">
                 <div class="ride-type-icon">🏍️</div>
-                <div class="ride-type-name">PlopPlop Moto</div>
-                <div class="ride-type-price">From 100 HTG</div>
+                <div class="ride-type-name">Moto</div>
+                <div class="ride-type-price">Depi 100 HTG</div>
             </div>
             <div class="ride-type-card" data-type="car" onclick="selectRideType(this)">
                 <div class="ride-type-icon">🚗</div>
-                <div class="ride-type-name">PlopPlop Car</div>
-                <div class="ride-type-price">From 200 HTG</div>
+                <div class="ride-type-name">Machin</div>
+                <div class="ride-type-price">Depi 200 HTG</div>
             </div>
             <div class="ride-type-card" data-type="suv" onclick="selectRideType(this)">
                 <div class="ride-type-icon">🚙</div>
-                <div class="ride-type-name">PlopPlop SUV</div>
-                <div class="ride-type-price">From 500 HTG</div>
+                <div class="ride-type-name">Premium</div>
+                <div class="ride-type-price">Depi 500 HTG</div>
                 <div class="ride-type-badge" style="background:#1D3557;">Premium</div>
             </div>
             <div class="ride-type-card" data-type="armored" onclick="selectRideType(this)">
                 <div class="ride-type-icon">🛡️</div>
-                <div class="ride-type-name">PlopPlop Blende</div>
-                <div class="ride-type-price">From 1500 HTG</div>
-                <div class="ride-type-badge" style="background:#b8860b;">VIP Security</div>
+                <div class="ride-type-name">Blende</div>
+                <div class="ride-type-price">Depi 1500 HTG</div>
+                <div class="ride-type-badge" style="background:#b8860b;">VIP</div>
+            </div>
+            <div class="ride-type-card" data-type="delivery" onclick="selectRideType(this)">
+                <div class="ride-type-icon">📦</div>
+                <div class="ride-type-name">Livrezon</div>
+                <div class="ride-type-price">Depi 75 HTG</div>
             </div>
         </div>
 
         <!-- 3. PICKUP & DROPOFF FORM -->
         <div class="ride-section">
-            <div class="ride-section-title">📍 <span data-i18n="rides.pickup_dest">Pickup & Destination</span></div>
+            <div class="ride-section-title">📍 Kote depa ak destinasyon</div>
             <div class="location-form" style="position:relative;">
                 <div class="location-input-row" style="position:relative;">
                     <div class="location-dot pickup"></div>
-                    <input type="text" id="pickupInput" placeholder="Current location" autocomplete="off" onfocus="showSuggestions('pickup')" oninput="filterSuggestions('pickup')" style="padding-right:44px;">
+                    <input type="text" id="pickupInput" placeholder="Kote depa ou" autocomplete="off" onfocus="showSuggestions('pickup')" oninput="filterSuggestions('pickup')" style="padding-right:44px;">
                     <button type="button" id="gpsBtn" onclick="detectMyLocation()" title="Use GPS" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:20px;cursor:pointer;padding:6px;z-index:5;line-height:1;">📍</button>
                     <div class="location-suggestions" id="pickupSuggestions"></div>
                 </div>
                 <div class="location-input-row" style="position:relative;">
                     <div class="location-connector"></div>
                     <div class="location-dot dropoff"></div>
-                    <input type="text" id="dropoffInput" placeholder="Where to?" autocomplete="off" onfocus="showSuggestions('dropoff')" oninput="filterSuggestions('dropoff')">
+                    <input type="text" id="dropoffInput" placeholder="Antre destinasyon ou" autocomplete="off" onfocus="showSuggestions('dropoff')" oninput="filterSuggestions('dropoff')">
                     <div class="location-suggestions" id="dropoffSuggestions"></div>
                 </div>
             </div>
         </div>
 
-        <!-- 4. POOL MATCHING SECTION -->
-        <div class="ride-section">
-            <div class="pool-section" id="poolSection">
-                <div class="pool-header">
-                    <h3>👥 Pool Match</h3>
-                </div>
-                <div class="pool-scanning">
-                    <span class="pulse-dot"></span>
-                    Looking for riders heading your way...
-                </div>
-                <div class="pool-match-card">
-                    <div class="pool-match-avatar">ML</div>
-                    <div class="pool-match-info">
-                        <div class="pool-match-name">Marie L.</div>
-                        <div class="pool-match-dest">Going to Delmas 33</div>
-                    </div>
-                    <div class="pool-match-detour">+2 min detour</div>
-                </div>
-                <div class="pool-match-card">
-                    <div class="pool-match-avatar">JP</div>
-                    <div class="pool-match-info">
-                        <div class="pool-match-name">Jean P.</div>
-                        <div class="pool-match-dest">Going to Petion-Ville</div>
-                    </div>
-                    <div class="pool-match-detour">+4 min detour</div>
-                </div>
-                <div class="pool-savings">
-                    💰 You save 45% by sharing this ride
-                </div>
-                <div class="seats-selector">
-                    <label>Seats needed:</label>
-                    <div class="seats-btn-group">
-                        <button class="seat-btn selected" data-seats="1" onclick="selectSeats(this)">1</button>
-                        <button class="seat-btn" data-seats="2" onclick="selectSeats(this)">2</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- 5. FARE BREAKDOWN -->
         <div class="ride-section">
-            <div class="ride-section-title">💰 <span data-i18n="rides.fare_estimate">Fare Estimate</span></div>
+            <div class="ride-section-title">💰 Estimasyon Pri</div>
             <div class="fare-breakdown" id="fareBreakdown">
                 <div class="fare-row">
-                    <span class="fare-label">Distance</span>
+                    <span class="fare-label">Distans</span>
                     <span class="fare-value">~5.2 km</span>
                 </div>
                 <div class="fare-row">
-                    <span class="fare-label">Base fare</span>
+                    <span class="fare-label">Pri debaz</span>
                     <span class="fare-value" id="fareBase">150 HTG</span>
-                </div>
-                <div class="fare-row discount" id="fareDiscountRow">
-                    <span class="fare-label">Pool discount</span>
-                    <span class="fare-value" id="fareDiscount">-67 HTG</span>
                 </div>
                 <div class="fare-row total">
                     <span class="fare-label">Total</span>
-                    <span class="fare-value" id="fareTotal">83 HTG</span>
+                    <span class="fare-value" id="fareTotal">150 HTG</span>
                 </div>
                 <div class="fare-payment">
                     <div class="fare-payment-method">
@@ -1001,8 +952,9 @@
 <!-- 6. CONFIRM BUTTON (fixed bottom) -->
 <div class="confirm-area" id="confirmArea">
     <div class="confirm-area-inner">
-        <button class="confirm-btn" id="confirmBtn" onclick="confirmRide()">Confirm PlopPlop Pataj — 83 HTG</button>
-        <div class="confirm-eta">Estimated arrival: 8 min</div>
+        <button class="confirm-btn" id="confirmBtn" onclick="confirmRide()">Konfime Kous Ou — 150 HTG</button>
+        <div class="confirm-eta">Arive estime: 8 min</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.6);text-align:center;margin-top:4px;">✅ Chofè verifye · GPS tracking · Peman nan app</div>
     </div>
 </div>
 
@@ -1011,8 +963,8 @@
     <div class="ride-modal">
         <div class="ride-modal-header">
             <div class="ride-modal-check">✅</div>
-            <h2>Ride Confirmed!</h2>
-            <p>Your driver Jean-Marc is on the way</p>
+            <h2>Kous Konfime!</h2>
+            <p>Chofè ou Jean-Marc ap vini</p>
         </div>
 
         <div class="driver-card">
@@ -1028,11 +980,11 @@
             </div>
             <div class="driver-vehicle-details">
                 <div class="vehicle-detail">
-                    <span class="detail-label">Vehicle</span>
+                    <span class="detail-label">Machin</span>
                     <span class="detail-value">Honda CG 125, Red</span>
                 </div>
                 <div class="vehicle-detail">
-                    <span class="detail-label">Plate</span>
+                    <span class="detail-label">Plak</span>
                     <span class="detail-value">AA-12345</span>
                 </div>
             </div>
@@ -1040,12 +992,12 @@
 
         <div class="eta-banner">
             <div class="eta-time">3 min</div>
-            <div class="eta-label">Estimated time of arrival</div>
+            <div class="eta-label">Arive estime</div>
         </div>
 
         <div class="modal-actions">
-            <a href="tracking.html" class="track-btn">Track Your Ride</a>
-            <button class="close-modal-btn" onclick="closeModal()">Close</button>
+            <a href="tracking.html" class="track-btn">Swiv Kous Ou</a>
+            <button class="close-modal-btn" onclick="closeModal()">Fèmen</button>
         </div>
     </div>
 </div>
@@ -1129,15 +1081,14 @@
     ];
 
     const FARES = {
-        pool:     { base: 150,  discount: 67, total: 83,   label: 'PlopPlop Pataj', maxSeats: 3 },
-        motopool: { base: 120,  discount: 50, total: 60,   label: 'Moto Pataj', maxSeats: 2 },
-        moto:     { base: 150,  discount: 0,  total: 150,  label: 'PlopPlop Moto', maxSeats: 1 },
-        car:      { base: 300,  discount: 0,  total: 300,  label: 'PlopPlop Car', maxSeats: 1 },
-        suv:      { base: 500,  discount: 0,  total: 500,  label: 'PlopPlop SUV', maxSeats: 1 },
-        armored:  { base: 1500, discount: 0,  total: 1500, label: 'PlopPlop Blende', maxSeats: 1 }
+        moto:     { base: 150,  total: 150,  label: 'Moto' },
+        car:      { base: 300,  total: 300,  label: 'Machin' },
+        suv:      { base: 500,  total: 500,  label: 'Premium' },
+        armored:  { base: 1500, total: 1500, label: 'Blende' },
+        delivery: { base: 100,  total: 100,  label: 'Livrezon' }
     };
 
-    let selectedType = 'pool';
+    let selectedType = 'moto';
     let selectedSeats = 1;
 
     // ===== RIDE TYPE SELECTION =====
@@ -1146,7 +1097,7 @@
         card.classList.add('selected');
         selectedType = card.dataset.type;
         updateFare();
-        updatePoolVisibility();
+        updateFare();
     };
 
     // ===== SEAT SELECTION =====
@@ -1224,12 +1175,12 @@
         var btn = document.getElementById('gpsBtn');
         var input = document.getElementById('pickupInput');
         if (!navigator.geolocation) {
-            input.value = 'GPS not supported';
+            input.value = 'GPS pa sipòte';
             return;
         }
         btn.textContent = '⏳';
         btn.disabled = true;
-        input.value = 'Detecting location...';
+        input.value = 'Ap chèche kote w ye...';
 
         navigator.geolocation.getCurrentPosition(
             function(pos) {
@@ -1246,8 +1197,8 @@
                 if (mapArea) {
                     mapArea.innerHTML = '<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#1D3557,#2a6b4b,#1D3557);color:white;text-align:center;padding:16px;">' +
                         '<div style="font-size:48px;margin-bottom:8px;">📍</div>' +
-                        '<div style="font-size:14px;font-weight:600;margin-bottom:4px;">Location Detected</div>' +
-                        '<div style="font-size:12px;opacity:0.8;">' + lat.toFixed(4) + ', ' + lon.toFixed(4) + '</div>' +
+                        '<div style="font-size:14px;font-weight:600;margin-bottom:4px;">Kote depa ou</div>' +
+                        '<div style="font-size:12px;opacity:0.8;">Pòtoprens, Ayiti</div>' +
                     '</div>';
                 }
             },
@@ -1256,10 +1207,10 @@
                 btn.disabled = false;
                 if (err.code === 1) {
                     input.value = '';
-                    input.placeholder = 'Location permission denied';
+                    input.placeholder = 'Pèmisyon lokalizasyon refize';
                 } else {
                     input.value = '';
-                    input.placeholder = 'Could not detect location';
+                    input.placeholder = 'Pa ka jwenn kote w ye';
                 }
             },
             { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
@@ -1316,46 +1267,15 @@
     // ===== FARE CALCULATION =====
     function updateFare() {
         var fare = FARES[selectedType];
-        var baseFare = fare.base;
-        var discount = fare.discount;
-        var total = fare.total;
-
-        // Multiply by seats for pool
-        if (selectedType === 'pool' && selectedSeats > 1) {
-            baseFare = fare.base * selectedSeats;
-            discount = fare.discount * selectedSeats;
-            total = fare.total * selectedSeats;
-        }
-
-        document.getElementById('fareBase').textContent = baseFare + ' HTG';
-        document.getElementById('fareDiscount').textContent = '-' + discount + ' HTG';
-        document.getElementById('fareTotal').textContent = total + ' HTG';
-
-        // Show/hide discount row
-        var discountRow = document.getElementById('fareDiscountRow');
-        if (discount > 0) {
-            discountRow.style.display = 'flex';
-        } else {
-            discountRow.style.display = 'none';
-        }
-
-        // Update confirm button
-        document.getElementById('confirmBtn').textContent = 'Confirm ' + fare.label + ' \u2014 ' + total + ' HTG';
-    }
-
-    function updatePoolVisibility() {
-        var poolSection = document.getElementById('poolSection');
-        if (selectedType === 'pool' || selectedType === 'motopool') {
-            poolSection.classList.remove('hidden');
-        } else {
-            poolSection.classList.add('hidden');
-        }
+        document.getElementById('fareBase').textContent = fare.base + ' HTG';
+        document.getElementById('fareTotal').textContent = fare.total + ' HTG';
+        document.getElementById('confirmBtn').textContent = 'Konfime Kous Ou \u2014 ' + fare.total + ' HTG';
     }
 
     // ===== CONFIRM RIDE =====
     window.confirmRide = async function() {
         if (!API.isLoggedIn()) {
-            API.toast('Please login first to book a ride', 'error');
+            API.toast('Tanpri konekte anvan pou rezève yon kous', 'error');
             setTimeout(() => window.location.href = 'login.html', 1000);
             return;
         }
@@ -1363,13 +1283,13 @@
         var pickup = document.getElementById('pickupInput').value;
         var dropoff = document.getElementById('dropoffInput').value;
         if (!pickup || !dropoff) {
-            API.toast('Please enter pickup and destination', 'error');
+            API.toast('Tanpri antre kote depa ak destinasyon', 'error');
             return;
         }
 
         var btn = document.getElementById('confirmBtn');
         btn.disabled = true;
-        btn.textContent = 'Finding your driver...';
+        btn.textContent = 'Ap chèche chofè ou...';
 
         // Map payment select to backend values
         var paymentMap = { san_cash: 'cash', moncash: 'moncash', natcash: 'natcash', card: 'card' };
