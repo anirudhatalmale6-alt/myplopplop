@@ -46,7 +46,7 @@ const API = (() => {
 
     // Auth
     async function register(name, phone, password, role = 'customer', language = 'fr', email = '') {
-        const body = { name, phone, password, role, language };
+        const body = { name, phone, pin: password, role, language };
         if (email) body.email = email;
         const data = await request('POST', '/api/auth/register', body);
         if (data.success && data.token) {
@@ -57,7 +57,7 @@ const API = (() => {
     }
 
     async function login(phone, password) {
-        const data = await request('POST', '/api/auth/login', { phone, password });
+        const data = await request('POST', '/api/auth/login', { phone, pin: password });
         if (data.success && data.token) {
             setToken(data.token);
             setUser(data.user);

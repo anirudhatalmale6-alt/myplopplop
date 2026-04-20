@@ -428,8 +428,8 @@
                 </div>
 
                 <div class="input-group">
-                    <label data-i18n="auth.email">Email</label>
-                    <input type="email" class="input" id="signupEmail" placeholder="your@email.com" required>
+                    <label>Email (optional)</label>
+                    <input type="email" class="input" id="signupEmail" placeholder="your@email.com">
                 </div>
 
                 <div class="input-group">
@@ -441,13 +441,13 @@
                 </div>
 
                 <div class="input-group">
-                    <label data-i18n="auth.create_password">Create Password</label>
-                    <input type="password" class="input" id="signupPassword" placeholder="Minimum 6 characters" minlength="6" required>
+                    <label data-i18n="auth.create_pin">Create PIN</label>
+                    <input type="password" class="input" id="signupPassword" placeholder="4-digit PIN" minlength="4" maxlength="4" inputmode="numeric" pattern="[0-9]{4}" required>
                 </div>
 
                 <div class="input-group">
-                    <label data-i18n="auth.confirm_password">Confirm Password</label>
-                    <input type="password" class="input" id="signupConfirmPassword" placeholder="Confirm your password" minlength="6" required>
+                    <label data-i18n="auth.confirm_pin">Confirm PIN</label>
+                    <input type="password" class="input" id="signupConfirmPassword" placeholder="Confirm your 4-digit PIN" minlength="4" maxlength="4" inputmode="numeric" pattern="[0-9]{4}" required>
                 </div>
 
                 <div class="checkbox-group">
@@ -566,11 +566,11 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
     const confirmPassword = document.getElementById('signupConfirmPassword').value;
 
     if (password !== confirmPassword) {
-        API.toast('Passwords do not match', 'error');
+        API.toast('PINs do not match', 'error');
         return;
     }
-    if (password.length < 6) {
-        API.toast('Password must be at least 6 characters', 'error');
+    if (password.length !== 4 || !/^\d{4}$/.test(password)) {
+        API.toast('PIN must be exactly 4 digits', 'error');
         return;
     }
 
