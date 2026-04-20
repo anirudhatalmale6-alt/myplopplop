@@ -548,17 +548,23 @@ function togglePin(btn) {
 const tabs = document.querySelectorAll('.auth-tab');
 const panels = document.querySelectorAll('.auth-panel');
 
+function switchTab(target) {
+    tabs.forEach(t => t.classList.remove('active'));
+    document.querySelector('.auth-tab[data-tab="' + target + '"]').classList.add('active');
+    panels.forEach(p => p.classList.remove('active'));
+    document.getElementById(target + 'Panel').classList.add('active');
+    document.querySelector('.auth-logo p').textContent =
+        target === 'login' ? 'Welcome back! Sign in to continue.' : 'Create your free account.';
+}
+
 tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-        const target = tab.dataset.tab;
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        panels.forEach(p => p.classList.remove('active'));
-        document.getElementById(target + 'Panel').classList.add('active');
-        document.querySelector('.auth-logo p').textContent =
-            target === 'login' ? 'Welcome back! Sign in to continue.' : 'Create your free account.';
-    });
+    tab.addEventListener('click', () => switchTab(tab.dataset.tab));
 });
+
+// Auto-switch to signup tab if URL has #signup
+if (window.location.hash === '#signup') {
+    switchTab('signup');
+}
 
 // User type radio cards
 const typeCards = document.querySelectorAll('.user-type-card');
