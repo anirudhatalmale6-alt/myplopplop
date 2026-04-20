@@ -26,9 +26,9 @@
 <style>
 /* ===== RIDES HERO ===== */
 .rides-hero {
-    background: linear-gradient(160deg, #001247 0%, var(--primary-blue) 40%, #0A1F5C 70%, #1a0a2e 100%);
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 50%, var(--primary-red) 100%);
     color: var(--white);
-    padding: var(--space-xl) var(--content-padding) var(--space-lg);
+    padding: var(--space-3xl) var(--content-padding) var(--space-2xl);
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -36,159 +36,101 @@
 .rides-hero::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Ccircle cx='200' cy='200' r='150' fill='none' stroke='rgba(255,255,255,0.03)' stroke-width='1'/%3E%3Ccircle cx='200' cy='200' r='100' fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='1'/%3E%3Ccircle cx='200' cy='200' r='50' fill='none' stroke='rgba(255,255,255,0.05)' stroke-width='1'/%3E%3Cpath d='M200 50 L200 350 M50 200 L350 200' stroke='rgba(255,255,255,0.02)' stroke-width='0.5'/%3E%3C/svg%3E") center/cover no-repeat;
-    opacity: 0.5;
+    top: -50%;
+    right: -30%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(210,16,52,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.rides-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40%;
+    left: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+    border-radius: 50%;
 }
 .rides-hero-content {
     position: relative;
     z-index: 1;
-    max-width: 500px;
+    max-width: 700px;
     margin: 0 auto;
-}
-.rides-hero-logo {
-    height: 56px;
-    margin: 0 auto var(--space-sm);
-    display: block;
-    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
 }
 .rides-hero h1 {
     font-family: var(--font-heading);
-    font-size: 1.6rem;
+    font-size: 2rem;
     font-weight: 800;
-    line-height: 1.2;
-    margin-bottom: var(--space-xs);
+    line-height: 1.1;
+    margin-bottom: var(--space-sm);
     color: var(--white);
 }
+.rides-hero h1 span { color: var(--primary-red); }
 .rides-hero .subtitle {
-    font-size: var(--text-sm);
-    opacity: 0.85;
-    margin-bottom: var(--space-md);
-    line-height: 1.5;
-}
-.trust-badges {
-    display: flex;
-    justify-content: center;
-    gap: var(--space-sm);
-    flex-wrap: wrap;
+    font-size: var(--text-lg);
+    opacity: 0.9;
     margin-bottom: var(--space-lg);
+    line-height: 1.6;
 }
-.trust-badge {
+.savings-callout {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.15);
+    gap: var(--space-sm);
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
     border-radius: var(--radius-full);
-    padding: 5px 12px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: rgba(255,255,255,0.9);
-}
-.trust-badge-icon { font-size: 0.85rem; }
-.booking-card {
-    background: var(--white);
-    border-radius: var(--radius-xl);
-    padding: var(--space-lg);
-    margin-bottom: var(--space-md);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-    text-align: left;
-}
-.booking-input {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 14px;
-    background: var(--gray-50);
-    border: 1.5px solid var(--gray-200);
-    border-radius: var(--radius-md);
-    margin-bottom: 10px;
-    transition: border-color 0.2s;
-}
-.booking-input:focus-within {
-    border-color: var(--primary-blue);
-    background: #fff;
-}
-.booking-input .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-.booking-input .dot-green { background: #10B981; }
-.booking-input .dot-red { background: #F31746; }
-.booking-input input {
-    flex: 1;
-    border: none;
-    background: none;
+    padding: 8px 20px;
     font-size: var(--text-sm);
-    font-family: var(--font-body);
-    outline: none;
-    color: var(--text-dark);
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+    margin-bottom: var(--space-xl);
+    animation: pulse-glow 2s ease-in-out infinite;
 }
-.booking-input input::placeholder { color: var(--gray-400); }
-.booking-btn {
-    width: 100%;
-    background: #F31746;
-    color: #fff;
-    border: none;
-    padding: 14px;
-    border-radius: var(--radius-lg);
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: var(--text-base);
-    cursor: pointer;
-    box-shadow: 0 4px 14px rgba(243,23,70,0.4);
-    transition: all 0.2s;
-    margin-top: 4px;
-}
-.booking-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(243,23,70,0.5);
-}
-.trust-line {
-    font-size: 0.72rem;
-    color: rgba(255,255,255,0.7);
-    margin-bottom: var(--space-md);
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(230,57,70,0.3); }
+    50% { box-shadow: 0 0 20px 4px rgba(230,57,70,0.2); }
 }
 .hero-btns {
     display: flex;
-    gap: var(--space-sm);
+    gap: var(--space-md);
     justify-content: center;
     flex-wrap: wrap;
 }
-.hero-btn-white {
-    background: #fff;
-    color: #0B2A8A;
-    padding: 12px 28px;
+.hero-btn-red {
+    background: var(--primary-red);
+    color: var(--white);
+    padding: 14px 32px;
     border-radius: var(--radius-xl);
     font-family: var(--font-heading);
     font-weight: 700;
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
     display: inline-flex;
     align-items: center;
-    gap: var(--space-xs);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    gap: var(--space-sm);
+    box-shadow: 0 4px 16px rgba(210,16,52,0.4);
     transition: all var(--transition-fast);
     text-decoration: none;
-    border: none;
 }
-.hero-btn-white:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
-.hero-btn-gold {
+.hero-btn-red:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(210,16,52,0.5); }
+.hero-btn-outline {
     background: transparent;
-    color: #FFC83D;
-    padding: 12px 20px;
+    color: var(--white);
+    padding: 14px 32px;
     border-radius: var(--radius-xl);
+    font-family: var(--font-heading);
     font-weight: 600;
-    font-size: 0.78rem;
+    font-size: var(--text-base);
     display: inline-flex;
     align-items: center;
-    gap: var(--space-xs);
-    border: 1.5px solid rgba(255,200,61,0.4);
+    gap: var(--space-sm);
+    border: 1.5px solid rgba(255,255,255,0.4);
+    backdrop-filter: blur(4px);
     transition: all var(--transition-fast);
     text-decoration: none;
 }
-.hero-btn-gold:hover { background: rgba(255,200,61,0.1); }
+.hero-btn-outline:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
 
 /* ===== RIDE OPTIONS ===== */
 .ride-options {
@@ -684,19 +626,17 @@
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 600px) {
-    .rides-hero h1 { font-size: 1.5rem; }
+    .rides-hero h1 { font-size: 1.6rem; }
     .hero-btns { flex-direction: column; align-items: center; }
-    .hero-btn-white, .hero-btn-gold { width: 100%; max-width: 280px; justify-content: center; }
+    .hero-btn-red, .hero-btn-outline { width: 100%; max-width: 280px; justify-content: center; }
     .ride-cards { grid-template-columns: 1fr; }
     .pool-steps { grid-template-columns: repeat(2, 1fr); }
     .why-pool-grid { grid-template-columns: 1fr; }
     .for-drivers .stat-row { gap: var(--space-lg); }
-    .booking-card { padding: var(--space-md); }
 }
 @media (min-width: 768px) {
-    .rides-hero { padding: var(--space-2xl) var(--content-padding) var(--space-xl); }
-    .rides-hero h1 { font-size: 2rem; }
-    .booking-card { max-width: 420px; margin-left: auto; margin-right: auto; }
+    .rides-hero { padding: var(--space-3xl) var(--content-padding); }
+    .rides-hero h1 { font-size: 2.5rem; }
     .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
 }
 </style>
@@ -746,39 +686,18 @@
 <!-- SECTION 1: HERO -->
 <section class="rides-hero">
     <div class="rides-hero-content">
-        <img src="assets/msouwout-icon.png" alt="MsouWout" class="rides-hero-logo">
-        <h1>Mande transpò ou an sekirite</h1>
-        <p class="subtitle">Taxi ak moto fasil, rapid, epi serye.</p>
-
-        <div class="trust-badges">
-            <span class="trust-badge"><span class="trust-badge-icon">✅</span> Chofè verifye</span>
-            <span class="trust-badge"><span class="trust-badge-icon">🚗</span> Taxi & Moto</span>
-            <span class="trust-badge"><span class="trust-badge-icon">🛡️</span> Pi fasil pou deplase</span>
-        </div>
-
-        <div class="booking-card">
-            <div class="booking-input">
-                <span class="dot dot-green"></span>
-                <input type="text" placeholder="Kote w ye?" id="pickupInput" readonly onclick="window.location='rides-request.html'">
-            </div>
-            <div class="booking-input">
-                <span class="dot dot-red"></span>
-                <input type="text" placeholder="Kote w prale?" id="destInput" readonly onclick="window.location='rides-request.html'">
-            </div>
-            <button class="booking-btn" onclick="window.location='rides-request.html'">🚗 Mande yon Transpò</button>
-        </div>
-
-        <p class="trust-line">🔒 Chofè verifye. Kous an sekirite.</p>
-
+        <img src="assets/myplopplop-icon.png" alt="MsouWout" style="height:110px;margin:0 auto var(--space-md);display:block;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.3));">
+        <p class="subtitle">Share rides, save money. Haiti's first ride-sharing pataj.</p>
+        <div class="savings-callout">💰 <span data-i18n="rides.savings_callout">Save up to 60% with PlopPlop Pataj vs riding alone</span></div>
         <div class="hero-btns">
-            <a href="driver.html" class="hero-btn-white">🏍️ Vin Chofè / Livrè</a>
-            <a href="#ride-options" class="hero-btn-gold">💰 Ekonomize sou transpò</a>
+            <a href="rides-request.html" class="hero-btn-red">🚗 <span data-i18n="rides.request">Request a Ride</span></a>
+            <a href="driver.html" class="hero-btn-outline">🏍️ <span data-i18n="rides.drive_with_us">Drive with Us</span></a>
         </div>
     </div>
 </section>
 
 <!-- SECTION 2: RIDE OPTIONS -->
-<section class="ride-options" id="ride-options">
+<section class="ride-options">
     <div class="section-heading">
         <h2>Choose Your Ride</h2>
         <p>From budget-friendly to premium comfort</p>
