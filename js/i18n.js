@@ -426,6 +426,12 @@
     },
 
     // ── Common Buttons ──
+    'btn.signup_free': {
+      fr: 'Inscrivez-vous Gratuitement',
+      en: 'Sign Up For Free',
+      kr: 'Enskri Gratis',
+      es: 'Regístrese Gratis'
+    },
     'btn.order_now': {
       fr: 'Commander',
       en: 'Order Now',
