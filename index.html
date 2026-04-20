@@ -144,36 +144,53 @@
     margin-top: var(--space-lg);
 }
 .cta-order {
-    background: var(--primary-red);
-    color: var(--white);
-    padding: 14px 28px;
+    background: #F31746;
+    color: #FFFFFF;
+    padding: 16px 28px;
     border-radius: var(--radius-xl);
     font-family: var(--font-heading);
     font-weight: 700;
     font-size: var(--text-base);
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-sm);
-    box-shadow: 0 4px 16px rgba(210,16,52,0.4);
+    box-shadow: 0 4px 14px rgba(243,23,70,0.4);
     transition: all var(--transition-fast);
 }
-.cta-order:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(210,16,52,0.5); }
+.cta-order:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(243,23,70,0.5); }
 .cta-support {
-    background: rgba(255,255,255,0.15);
-    color: var(--white);
-    padding: 14px 28px;
+    background: #FFC83D;
+    color: #0B2A8A;
+    padding: 16px 28px;
     border-radius: var(--radius-xl);
     font-family: var(--font-heading);
-    font-weight: 600;
+    font-weight: 700;
     font-size: var(--text-base);
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-sm);
-    border: 1px solid rgba(255,255,255,0.3);
-    backdrop-filter: blur(4px);
+    box-shadow: 0 4px 14px rgba(255,200,61,0.4);
     transition: all var(--transition-fast);
 }
-.cta-support:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
+.cta-support:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,200,61,0.5); }
+.cta-ride {
+    background: #1565FF;
+    color: #FFFFFF;
+    padding: 16px 28px;
+    border-radius: var(--radius-xl);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    box-shadow: 0 4px 14px rgba(21,101,255,0.35);
+    transition: all var(--transition-fast);
+}
+.cta-ride:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(21,101,255,0.5); }
 
 /* ===== REFERRAL HERO CTA ===== */
 .referral-hero-cta {
@@ -556,7 +573,7 @@
     .steps-grid { grid-template-columns: 1fr; gap: var(--space-md); }
     .trust-items { grid-template-columns: 1fr; }
     .hero-ctas { flex-direction: column; align-items: center; }
-    .cta-order, .cta-support { width: 100%; max-width: 280px; justify-content: center; }
+    .cta-order, .cta-support, .cta-ride { width: 100%; max-width: 280px; justify-content: center; }
     .promo-banner { flex-direction: column; text-align: center; }
     .cta-cards { grid-template-columns: 1fr; }
 }
@@ -634,17 +651,17 @@
         </div>
 
         <div style="text-align:center;margin:var(--space-md) 0;">
-            <a href="login.html" class="btn" style="display:inline-block;background:var(--white);color:var(--primary-blue);font-weight:800;font-size:1.1rem;padding:14px 40px;border-radius:100px;box-shadow:0 4px 16px rgba(0,0,0,0.2);text-decoration:none;letter-spacing:0.5px;">Sign Up For Free</a>
+            <a href="login.html" class="btn" style="display:inline-block;background:#FFFFFF;color:#0B2A8A;font-weight:800;font-size:1.1rem;padding:16px 44px;border-radius:100px;box-shadow:0 4px 14px rgba(0,0,0,0.15);text-decoration:none;letter-spacing:0.5px;">Sign Up For Free</a>
         </div>
 
         <div class="hero-ctas">
             <a href="shop.html" class="cta-order">
-                <span>🛒</span> <span data-i18n="btn.order_now">Commander</span>
+                <span>🛒</span> <span data-i18n="btn.order_now">Kòmande Kounye a</span>
             </a>
             <a href="diaspora.html" class="cta-support">
                 <span>❤️</span> Sipòte Fanmiw
             </a>
-            <a href="rides.html" class="cta-order" style="background:var(--primary-blue);">
+            <a href="rides.html" class="cta-ride">
                 <img src="assets/msouwout-icon.png" alt="MsouWout" style="height:24px;vertical-align:middle;margin-right:4px;"> Mande Taxi/Moto An Sekirite
             </a>
         </div>
