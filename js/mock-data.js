@@ -88,7 +88,8 @@ const STORES = [
         products: [
             { id: 'p25', name: 'Rice 100lb Bulk', price: 2800, image: '', description: 'Long grain rice, 100lb bulk sack', category: 'Bulk Staples' },
             { id: 'p26', name: 'Sugar 50lb', price: 1200, image: '', description: 'White granulated sugar, 50lb bag', category: 'Bulk Staples' },
-            { id: 'p27', name: 'Cooking Oil Case (6gal)', price: 2400, image: '', description: '6 gallons vegetable oil', category: 'Bulk Staples' }
+            { id: 'p27', name: 'Cooking Oil Case (6gal)', price: 2400, image: '', description: '6 gallons vegetable oil', category: 'Bulk Staples' },
+            { id: 'p31', name: 'Dlo Sachè (Water Sachet)', price: 20, image: '', description: 'Single purified water sachet', category: 'Beverages' }
         ]
     },
     {
