@@ -317,6 +317,39 @@
     margin-right: auto;
 }
 
+/* Clear Cart Button */
+.clear-cart-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--space-md);
+}
+
+.clear-cart-btn {
+    background: none;
+    border: 1.5px solid var(--gray-300);
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.clear-cart-btn:hover {
+    border-color: var(--error);
+    color: var(--error);
+    background: rgba(220,38,38,0.05);
+}
+
+/* Hide desktop checkout button on mobile */
+.desktop-only-checkout {
+    display: none;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (min-width: 768px) {
     .cart-page {
@@ -337,6 +370,10 @@
 
     .cart-bottom-bar {
         display: none;
+    }
+
+    .desktop-only-checkout {
+        display: block;
     }
 }
 </style>
@@ -394,8 +431,16 @@
 
         <!-- Cart Content (shown when items exist) -->
         <div id="cartContent" style="display:none;">
-            <h1 class="cart-page-title">Shopping Cart</h1>
-            <p class="cart-count" id="cartCountText">0 items</p>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div>
+                    <h1 class="cart-page-title">Shopping Cart</h1>
+                    <p class="cart-count" id="cartCountText" style="margin-bottom:0;">0 items</p>
+                </div>
+                <button class="clear-cart-btn" id="clearCartBtn" onclick="window.cartClearAll()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    Clear Cart
+                </button>
+            </div>
 
             <div class="cart-layout">
                 <!-- Left: Cart Items -->
@@ -437,7 +482,7 @@
                             <span class="summary-label">Total</span>
                             <span class="summary-value" id="summaryTotal">0 HTG</span>
                         </div>
-                        <a href="checkout.html" class="btn btn-red btn-full btn-lg" style="margin-top:var(--space-md); border-radius:var(--radius-xl);" id="desktopCheckoutBtn">
+                        <a href="checkout.html" class="btn btn-red btn-full btn-lg desktop-only-checkout" style="margin-top:var(--space-md); border-radius:var(--radius-xl);" id="desktopCheckoutBtn">
                             Proceed to Checkout
                         </a>
                     </div>
@@ -709,9 +754,15 @@
         }));
     }
 
+    function clearAll() {
+        saveCart([]);
+        renderCart();
+    }
+
     // Expose functions to global scope for onclick handlers
     window.cartUpdateQty = updateQty;
     window.cartRemove = removeItem;
+    window.cartClearAll = clearAll;
 
     // Promo code handler
     document.getElementById('applyPromoBtn').addEventListener('click', function() {
