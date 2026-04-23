@@ -756,51 +756,11 @@
                     <div class="payment-method" data-method="credit_card" onclick="selectPayment(this)">
                         <div class="payment-icon" style="background:var(--primary-blue-light);">💳</div>
                         <div class="payment-details">
-                            <strong>Credit Card</strong>
-                            <span>Visa, Mastercard, Amex</span>
+                            <strong>Credit / Debit Card</strong>
+                            <span>Visa, Mastercard, Amex via Stripe</span>
                         </div>
                         <div class="payment-check">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                        </div>
-                    </div>
-
-                    <div class="payment-method" data-method="debit_card" onclick="selectPayment(this)">
-                        <div class="payment-icon" style="background:var(--warning-light);">🏦</div>
-                        <div class="payment-details">
-                            <strong>Debit Card</strong>
-                            <span>Direct from your bank account</span>
-                        </div>
-                        <div class="payment-check">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                        </div>
-                    </div>
-
-                    <div class="payment-method" data-method="saved_card" onclick="selectPayment(this)">
-                        <div class="payment-icon" style="background:var(--gray-100);">🔖</div>
-                        <div class="payment-details">
-                            <strong>Saved Card</strong>
-                            <span>**** **** **** 4829</span>
-                        </div>
-                        <div class="payment-check">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card Details (for credit/debit) -->
-                <div class="card-inputs" id="cardInputs">
-                    <div class="input-group">
-                        <label for="cardNumber">Card Number</label>
-                        <input type="text" id="cardNumber" class="input" placeholder="1234 5678 9012 3456" maxlength="19">
-                    </div>
-                    <div class="card-row">
-                        <div class="input-group">
-                            <label for="cardExpiry">Expiry Date</label>
-                            <input type="text" id="cardExpiry" class="input" placeholder="MM/YY" maxlength="5">
-                        </div>
-                        <div class="input-group">
-                            <label for="cardCvv">CVV</label>
-                            <input type="text" id="cardCvv" class="input" placeholder="123" maxlength="4">
                         </div>
                     </div>
                 </div>
@@ -999,9 +959,7 @@
         san_cash: { name: 'San Cash Wallet', icon: '💰' },
         moncash: { name: 'MonCash', icon: '📱' },
         natcash: { name: 'NatCash', icon: '📲' },
-        credit_card: { name: 'Credit Card', icon: '💳' },
-        debit_card: { name: 'Debit Card', icon: '🏦' },
-        saved_card: { name: 'Saved Card (**** 4829)', icon: '🔖' }
+        credit_card: { name: 'Credit / Debit Card (Stripe)', icon: '💳' }
     };
 
     function getCart() {
@@ -1061,35 +1019,7 @@
         document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
         el.classList.add('selected');
         selectedPayment = el.dataset.method;
-
-        const cardInputs = document.getElementById('cardInputs');
-        if (selectedPayment === 'credit_card' || selectedPayment === 'debit_card') {
-            cardInputs.classList.add('show');
-        } else {
-            cardInputs.classList.remove('show');
-        }
     };
-
-    // Card number formatting
-    const cardNumInput = document.getElementById('cardNumber');
-    if (cardNumInput) {
-        cardNumInput.addEventListener('input', function(e) {
-            let val = this.value.replace(/\D/g, '').substring(0, 16);
-            this.value = val.replace(/(.{4})/g, '$1 ').trim();
-        });
-    }
-
-    // Expiry formatting
-    const expiryInput = document.getElementById('cardExpiry');
-    if (expiryInput) {
-        expiryInput.addEventListener('input', function(e) {
-            let val = this.value.replace(/\D/g, '').substring(0, 4);
-            if (val.length >= 2) {
-                val = val.substring(0, 2) + '/' + val.substring(2);
-            }
-            this.value = val;
-        });
-    }
 
     // Step navigation
     function updateStepUI() {
@@ -1136,16 +1066,6 @@
             }
             currentStep = 2;
         } else if (currentStep === 2) {
-            // Validate payment
-            if ((selectedPayment === 'credit_card' || selectedPayment === 'debit_card')) {
-                const cardNum = document.getElementById('cardNumber').value.replace(/\s/g, '');
-                const expiry = document.getElementById('cardExpiry').value;
-                const cvv = document.getElementById('cardCvv').value;
-                if (cardNum.length < 13 || !expiry || !cvv) {
-                    alert('Please fill in all card details.');
-                    return;
-                }
-            }
             populateReview();
             currentStep = 3;
         } else if (currentStep === 3) {
@@ -1224,13 +1144,13 @@
     // Confirm order
     const PAYMENT_API = 'https://plopplop.solutionip.app/api';
     const PAYMENT_CLIENT_ID = 'pp_1ohu5zz2tcx';
+    const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_9B63co7SobSognSfrvgYU07';
 
     // Map checkout payment methods to SolutionIP methods
     function getSolutionIPMethod(method) {
         if (method === 'moncash') return 'moncash';
         if (method === 'natcash') return 'natcash';
-        if (method === 'credit_card' || method === 'debit_card' || method === 'saved_card') return 'kashpaw';
-        return 'all'; // san_cash or fallback
+        return 'all';
     }
 
     function confirmOrder() {
@@ -1241,7 +1161,6 @@
         const orderId = 'MPP-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
         const summary = getOrderSummary() || calculateSummary(getCart());
         const total = summary ? summary.total : 0;
-        const payMethod = getSolutionIPMethod(selectedPayment);
 
         // For San Cash wallet (no real payment needed yet) or zero total, complete directly
         if (selectedPayment === 'san_cash' || total < 20) {
@@ -1249,7 +1168,20 @@
             return;
         }
 
-        // Create real payment via SolutionIP
+        // Credit/Debit Card -> redirect to Stripe Payment Link
+        if (selectedPayment === 'credit_card') {
+            localStorage.setItem('mpp_pending_order', JSON.stringify({
+                orderId: orderId,
+                amount: total,
+                method: 'stripe',
+                timestamp: Date.now()
+            }));
+            window.location.href = STRIPE_PAYMENT_LINK;
+            return;
+        }
+
+        // MonCash / NatCash -> SolutionIP
+        const payMethod = getSolutionIPMethod(selectedPayment);
         fetch(PAYMENT_API + '/paiement-marchand', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1263,7 +1195,6 @@
         .then(function(r) { return r.json(); })
         .then(function(data) {
             if (data.status === true && data.url) {
-                // Store order info for verification after payment
                 localStorage.setItem('mpp_pending_order', JSON.stringify({
                     orderId: orderId,
                     transactionId: data.transaction_id,
@@ -1271,7 +1202,6 @@
                     method: payMethod,
                     timestamp: Date.now()
                 }));
-                // Redirect to payment page
                 window.location.href = data.url;
             } else {
                 btn.disabled = false;
