@@ -438,6 +438,18 @@
       kr: 'Kòmande Kounye a',
       es: 'Pedir Ahora'
     },
+    'btn.support_family': {
+      fr: 'Soutenir Ma Famille',
+      en: 'Support Family',
+      kr: 'Sipòte Fanmiw',
+      es: 'Apoyar Familia'
+    },
+    'btn.ride_taxi': {
+      fr: 'Taxi/Moto En Securite',
+      en: 'Request Taxi/Moto Safely',
+      kr: 'Mande Taxi/Moto An Sekirite',
+      es: 'Pedir Taxi/Moto Seguro'
+    },
     'btn.search': {
       fr: 'Recherche',
       en: 'Search',
