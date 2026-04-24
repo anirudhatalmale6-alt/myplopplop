@@ -238,10 +238,78 @@ body {
 @media (max-width: 900px) {
   .designer-layout {
     grid-template-columns: 1fr;
+    padding: var(--space-md) var(--content-padding) var(--space-xl);
   }
   .preview-col {
-    order: -1;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 200;
+    background: var(--white);
+    overflow-y: auto;
+    padding: 0;
   }
+  .preview-col.mobile-show {
+    display: block;
+  }
+  .preview-col .preview-wrapper {
+    border-radius: 0;
+    min-height: 100vh;
+  }
+  .designer-hero {
+    padding: var(--space-lg) var(--content-padding) var(--space-md);
+  }
+  .designer-hero h1 {
+    font-size: 1.3rem !important;
+  }
+  .designer-hero p {
+    font-size: 0.85rem !important;
+  }
+  .mobile-preview-toggle {
+    display: flex !important;
+  }
+  .mobile-preview-close {
+    display: flex !important;
+  }
+}
+.mobile-preview-toggle {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 150;
+  background: var(--primary-blue);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 14px 20px;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,32,159,0.4);
+  align-items: center;
+  gap: 8px;
+}
+.mobile-preview-close {
+  display: none;
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 210;
+  background: var(--gray-800);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-full);
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
 /* ===== FORM COLUMN ===== */
@@ -1490,7 +1558,12 @@ body {
   <!-- END FORM COLUMN -->
 
   <!-- RIGHT: PREVIEW COLUMN -->
+  <button class="mobile-preview-toggle" onclick="document.querySelector('.preview-col').classList.add('mobile-show')">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    Preview
+  </button>
   <div class="preview-col">
+    <button class="mobile-preview-close" onclick="document.querySelector('.preview-col').classList.remove('mobile-show')">✕</button>
     <div class="preview-wrapper">
       <div class="preview-header">
         <div class="preview-header-label">
