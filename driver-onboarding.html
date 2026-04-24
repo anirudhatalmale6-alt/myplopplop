@@ -886,7 +886,20 @@ select.input {
         <div class="form-row">
             <div class="input-group">
                 <label>Date of Birth <span class="required">*</span></label>
-                <input type="date" class="input" id="dob">
+                <div style="display:flex;gap:8px;">
+                    <select class="input" id="dobMonth" style="flex:1.2;">
+                        <option value="">Month</option>
+                        <option value="01">January</option><option value="02">February</option>
+                        <option value="03">March</option><option value="04">April</option>
+                        <option value="05">May</option><option value="06">June</option>
+                        <option value="07">July</option><option value="08">August</option>
+                        <option value="09">September</option><option value="10">October</option>
+                        <option value="11">November</option><option value="12">December</option>
+                    </select>
+                    <select class="input" id="dobDay" style="flex:0.8;"></select>
+                    <select class="input" id="dobYear" style="flex:1;"></select>
+                </div>
+                <input type="hidden" id="dob">
                 <div class="error-msg">Please enter your date of birth</div>
             </div>
             <div class="input-group">
@@ -1448,6 +1461,30 @@ let formData = {};
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', function() {
+    // Populate DOB dropdowns
+    (function initDobDropdowns() {
+        var daySelect = document.getElementById('dobDay');
+        var yearSelect = document.getElementById('dobYear');
+        daySelect.innerHTML = '<option value="">Day</option>';
+        for (var d = 1; d <= 31; d++) {
+            daySelect.innerHTML += '<option value="' + (d < 10 ? '0' + d : d) + '">' + d + '</option>';
+        }
+        yearSelect.innerHTML = '<option value="">Year</option>';
+        var currentYear = new Date().getFullYear();
+        for (var y = currentYear - 18; y >= 1940; y--) {
+            yearSelect.innerHTML += '<option value="' + y + '">' + y + '</option>';
+        }
+        function syncDob() {
+            var m = document.getElementById('dobMonth').value;
+            var dd = document.getElementById('dobDay').value;
+            var yy = document.getElementById('dobYear').value;
+            document.getElementById('dob').value = (m && dd && yy) ? yy + '-' + m + '-' + dd : '';
+        }
+        document.getElementById('dobMonth').addEventListener('change', syncDob);
+        document.getElementById('dobDay').addEventListener('change', syncDob);
+        document.getElementById('dobYear').addEventListener('change', syncDob);
+    })();
+
     // Populate year dropdowns
     populateYears('motoYear', 2015, 2026);
     populateYears('carYear', 2010, 2026);
@@ -1778,7 +1815,18 @@ function val(id) {
 }
 function setVal(id, value) {
     const el = document.getElementById(id);
-    if (el && value) el.value = value;
+    if (el && value) {
+        el.value = value;
+        if (id === 'dob' && value.match(/^\d{4}-\d{2}-\d{2}$/)) {
+            var parts = value.split('-');
+            var ym = document.getElementById('dobYear');
+            var mm = document.getElementById('dobMonth');
+            var dm = document.getElementById('dobDay');
+            if (ym) ym.value = parts[0];
+            if (mm) mm.value = parts[1];
+            if (dm) dm.value = parts[2];
+        }
+    }
 }
 function getCheckedZones() {
     return Array.from(document.querySelectorAll('#zoneGrid input:checked')).map(function(cb) { return cb.value; });
