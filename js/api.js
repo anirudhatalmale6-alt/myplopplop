@@ -2,7 +2,7 @@
 // Connects frontend to backend
 
 const API = (() => {
-    const BASE_URL = 'https://offered-ultra-interpretation-computer.trycloudflare.com';
+    const BASE_URL = 'https://myplopplop-api.onrender.com';
 
     // Token management
     function getToken() { return localStorage.getItem('pp_token'); }
