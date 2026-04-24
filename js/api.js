@@ -2,8 +2,7 @@
 // Connects frontend to backend
 
 const API = (() => {
-    // Backend URL - change this when deploying to production
-    const BASE_URL = 'https://api.myplopplop.com';
+    const BASE_URL = 'https://offered-ultra-interpretation-computer.trycloudflare.com';
 
     // Token management
     function getToken() { return localStorage.getItem('pp_token'); }
@@ -204,6 +203,32 @@ const API = (() => {
         return await request('GET', '/api/chat/quick/replies');
     }
 
+    // Sol Groups
+    async function solCreateGroup(data) { return await request('POST', '/api/sol', data); }
+    async function solGetGroups() { return await request('GET', '/api/sol'); }
+    async function solGetGroup(id) { return await request('GET', '/api/sol/' + id); }
+    async function solUpdateGroup(id, data) { return await request('PATCH', '/api/sol/' + id, data); }
+    async function solPublish(id) { return await request('POST', '/api/sol/' + id + '/publish'); }
+    async function solPause(id) { return await request('POST', '/api/sol/' + id + '/pause'); }
+    async function solClose(id) { return await request('POST', '/api/sol/' + id + '/close'); }
+    async function solMyGroups() { return await request('GET', '/api/sol/my-groups'); }
+    async function solJoin(id) { return await request('POST', '/api/sol/' + id + '/join'); }
+    async function solJoinByCode(code) { return await request('POST', '/api/sol/join/' + code); }
+    async function solInvite(id) { return await request('POST', '/api/sol/' + id + '/invite'); }
+    async function solGetMembers(id) { return await request('GET', '/api/sol/' + id + '/members'); }
+    async function solUpdateMember(gid, mid, data) { return await request('PATCH', '/api/sol/' + gid + '/members/' + mid, data); }
+    async function solRemoveMember(gid, uid) { return await request('DELETE', '/api/sol/' + gid + '/members/' + uid); }
+    async function solContribute(id, data) { return await request('POST', '/api/sol/' + id + '/contribute', data); }
+    async function solVerifyContribution(id, data) { return await request('PATCH', '/api/sol/contributions/' + id + '/verify', data); }
+    async function solGetContributions(id) { return await request('GET', '/api/sol/' + id + '/contributions'); }
+    async function solGetPayouts(id) { return await request('GET', '/api/sol/' + id + '/payouts'); }
+    async function solGeneratePayout(id) { return await request('POST', '/api/sol/' + id + '/payouts/generate'); }
+    async function solApprovePayout(id) { return await request('POST', '/api/sol/payouts/' + id + '/approve'); }
+    async function solSendPayout(id) { return await request('POST', '/api/sol/payouts/' + id + '/send'); }
+    async function solStartCycle(id) { return await request('PUT', '/api/sol/' + id + '/start'); }
+    async function solGetCycle(id) { return await request('GET', '/api/sol/' + id + '/cycle'); }
+    async function solGetAudit(id) { return await request('GET', '/api/sol/' + id + '/audit'); }
+
     // Health check
     async function health() {
         return await request('GET', '/api/health');
@@ -292,6 +317,11 @@ const API = (() => {
         adminDashboard, adminDrivers, adminVerifyDriver, adminRides, adminTransactions,
         moncashTopup, moncashPayRide, natcashTopup, natcashPayRide, walletPayRide, paymentHistory, verifyMoncash,
         getChatMessages, sendChatMessage, getUnreadCount, getQuickReplies,
-        subscribeToPush, health, updateNavForUser
+        subscribeToPush, health, updateNavForUser,
+        solCreateGroup, solGetGroups, solGetGroup, solUpdateGroup, solPublish, solPause, solClose,
+        solMyGroups, solJoin, solJoinByCode, solInvite, solGetMembers, solUpdateMember, solRemoveMember,
+        solContribute, solVerifyContribution, solGetContributions,
+        solGetPayouts, solGeneratePayout, solApprovePayout, solSendPayout,
+        solStartCycle, solGetCycle, solGetAudit
     };
 })();

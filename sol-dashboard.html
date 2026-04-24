@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sòl Dashboard — MyPlopPlop</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0A1F5C;--navy-dark:#06143D;--navy-mid:#00209F;--navy-light:#E8EBF5;
+  --gold:#C6930A;--gold-light:#F5E6B8;
+  --red:#D21034;--green:#10B981;--green-light:#D1FAE5;
+  --white:#FFFFFF;--off-white:#F8F9FC;
+  --dark:#0A0F1E;--text:#1A1F2E;--text-mid:#3D4562;--text-light:#6B7394;
+  --border:#E2E5EF;
+  --heading:'Playfair Display',Georgia,serif;
+  --body:'Source Sans 3',system-ui,sans-serif;
+  --radius:14px;--radius-sm:8px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh}
+
+/* NAV */
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--navy);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:2px solid var(--gold)}
+.top-bar .logo{font-family:var(--heading);font-weight:800;font-size:1.1rem;color:var(--gold);display:flex;align-items:center;gap:8px}
+.top-bar .logo span{color:rgba(255,255,255,.7);font-weight:500;font-size:.8rem}
+.top-bar .nav-right{display:flex;align-items:center;gap:12px}
+.top-bar .nav-right a,.top-bar .nav-right button{color:rgba(255,255,255,.7);font-size:.8rem;font-weight:600;text-decoration:none;background:none;border:none;cursor:pointer}
+.top-bar .nav-right a:hover,.top-bar .nav-right button:hover{color:var(--gold)}
+.ribbon{height:4px;background:linear-gradient(90deg,var(--navy-mid) 50%,var(--red) 50%)}
+
+/* LAYOUT */
+.page{padding:72px 16px 100px;max-width:800px;margin:0 auto}
+.page-title{font-family:var(--heading);font-size:1.6rem;font-weight:800;color:var(--dark);margin-bottom:4px}
+.page-sub{font-size:.9rem;color:var(--text-light);margin-bottom:20px}
+
+/* TABS */
+.tabs{display:flex;gap:0;background:var(--white);border-radius:var(--radius);overflow:hidden;margin-bottom:20px;border:1px solid var(--border)}
+.tab{flex:1;padding:12px;text-align:center;font-size:.82rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;border:none;background:none}
+.tab.active{background:var(--navy);color:var(--white)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* CARDS */
+.group-card{background:var(--white);border-radius:var(--radius);padding:18px;margin-bottom:12px;border:1px solid var(--border);cursor:pointer;transition:all .2s}
+.group-card:hover{border-color:var(--gold);box-shadow:0 4px 16px rgba(10,31,92,.08)}
+.gc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.gc-name{font-family:var(--heading);font-size:1.1rem;font-weight:700;color:var(--dark)}
+.gc-badge{font-size:.65rem;font-weight:700;padding:4px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:.05em}
+.gc-badge.forming{background:var(--gold-light);color:var(--gold)}
+.gc-badge.active{background:var(--green-light);color:var(--green)}
+.gc-badge.open{background:var(--navy-light);color:var(--navy)}
+.gc-badge.completed{background:#E5E7EB;color:#6B7280}
+.gc-badge.paused{background:#FEF3C7;color:#D97706}
+.gc-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+.gc-stat{text-align:center}
+.gc-stat-label{font-size:.65rem;color:var(--text-light);text-transform:uppercase;font-weight:600;letter-spacing:.04em}
+.gc-stat-val{font-size:1rem;font-weight:700;color:var(--dark)}
+.gc-foot{font-size:.78rem;color:var(--text-light);display:flex;justify-content:space-between;align-items:center}
+.gc-code{background:var(--off-white);padding:3px 8px;border-radius:4px;font-weight:600;font-family:monospace;font-size:.72rem}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:40px 20px}
+.empty-icon{font-size:3rem;margin-bottom:12px}
+.empty-title{font-family:var(--heading);font-size:1.2rem;font-weight:700;color:var(--dark);margin-bottom:6px}
+.empty-text{font-size:.9rem;color:var(--text-light);margin-bottom:20px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border-radius:100px;font-family:var(--body);font-size:.9rem;font-weight:700;border:none;cursor:pointer;transition:all .2s;text-decoration:none}
+.btn-gold{background:var(--gold);color:var(--dark);box-shadow:0 4px 12px rgba(198,147,10,.2)}
+.btn-gold:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(198,147,10,.3)}
+.btn-navy{background:var(--navy);color:var(--white)}
+.btn-navy:hover{background:var(--navy-dark)}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text)}
+.btn-outline:hover{border-color:var(--navy);color:var(--navy)}
+.btn-red{background:var(--red);color:var(--white)}
+.btn-green{background:var(--green);color:var(--white)}
+.btn-sm{padding:8px 16px;font-size:.78rem}
+.btn-full{width:100%}
+
+/* FORMS */
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:.8rem;font-weight:700;color:var(--text-mid);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--body);font-size:.95rem;color:var(--text);background:var(--white);transition:border-color .2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--navy)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* JOIN BOX */
+.join-box{background:var(--white);border-radius:var(--radius);padding:24px;border:1px solid var(--border);margin-bottom:20px}
+.join-box h3{font-family:var(--heading);font-size:1.1rem;font-weight:700;margin-bottom:12px}
+.join-input-row{display:flex;gap:8px}
+.join-input-row input{flex:1}
+.join-input-row button{white-space:nowrap}
+
+/* DETAIL VIEW */
+.detail-view{display:none}
+.detail-view.active{display:block}
+.detail-header{background:var(--navy);color:var(--white);border-radius:var(--radius);padding:24px;margin-bottom:16px;position:relative}
+.detail-back{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.15);color:var(--white);border:none;padding:6px 14px;border-radius:100px;font-size:.78rem;font-weight:600;cursor:pointer}
+.detail-back:hover{background:rgba(255,255,255,.25)}
+.detail-header h2{font-family:var(--heading);font-size:1.4rem;font-weight:800;margin-top:28px}
+.detail-header .dh-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.dh-stat{text-align:center}
+.dh-stat-label{font-size:.65rem;color:rgba(255,255,255,.6);text-transform:uppercase;font-weight:600;letter-spacing:.04em}
+.dh-stat-val{font-size:1.05rem;font-weight:700;color:var(--gold)}
+
+.detail-tabs{display:flex;gap:0;background:var(--white);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;border:1px solid var(--border)}
+.dtab{flex:1;padding:10px;text-align:center;font-size:.78rem;font-weight:700;color:var(--text-light);cursor:pointer;border:none;background:none;transition:all .2s}
+.dtab.active{background:var(--navy-light);color:var(--navy)}
+.dtab-panel{display:none}
+.dtab-panel.active{display:block}
+
+/* MEMBERS LIST */
+.member-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--white);border-radius:var(--radius-sm);margin-bottom:8px;border:1px solid var(--border)}
+.member-avatar{width:40px;height:40px;border-radius:50%;background:var(--navy-light);color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;flex-shrink:0}
+.member-info{flex:1}
+.member-name{font-weight:700;font-size:.9rem}
+.member-meta{font-size:.75rem;color:var(--text-light)}
+.member-badge{font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:100px}
+.member-badge.admin{background:var(--gold-light);color:var(--gold)}
+.member-badge.active{background:var(--green-light);color:var(--green)}
+.member-badge.pending{background:#FEF3C7;color:#D97706}
+
+/* CONTRIBUTIONS */
+.contrib-item{display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--white);border-radius:var(--radius-sm);margin-bottom:8px;border:1px solid var(--border)}
+.contrib-left{display:flex;align-items:center;gap:10px}
+.contrib-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.contrib-icon.paid{background:var(--green-light);color:var(--green)}
+.contrib-icon.pending{background:#FEF3C7;color:#D97706}
+.contrib-icon.missed{background:#FEE2E2;color:var(--red)}
+.contrib-name{font-weight:600;font-size:.85rem}
+.contrib-date{font-size:.72rem;color:var(--text-light)}
+.contrib-amount{font-weight:700;font-size:.95rem}
+.contrib-amount.paid{color:var(--green)}
+.contrib-amount.pending{color:#D97706}
+
+/* ACTIONS BAR */
+.actions-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+
+/* INVITE BOX */
+.invite-box{background:var(--gold-light);border-radius:var(--radius);padding:16px;margin-bottom:16px;text-align:center}
+.invite-box h4{font-family:var(--heading);font-size:.95rem;margin-bottom:8px}
+.invite-code-display{font-family:monospace;font-size:1.2rem;font-weight:700;color:var(--navy);background:var(--white);padding:10px 20px;border-radius:var(--radius-sm);display:inline-block;margin-bottom:8px;letter-spacing:.1em}
+.invite-box .share-row{display:flex;gap:8px;justify-content:center;margin-top:8px}
+
+/* LOADING */
+.loading{text-align:center;padding:40px}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* TOAST */
+.sol-toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:12px;font-size:.85rem;font-weight:600;color:var(--white);z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.2);text-align:center;max-width:90%;transition:opacity .3s}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:var(--radius);padding:24px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto}
+.modal h3{font-family:var(--heading);font-size:1.15rem;margin-bottom:16px}
+.modal-close{position:absolute;top:12px;right:12px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--text-light)}
+
+@media(max-width:600px){
+  .form-row{grid-template-columns:1fr}
+  .gc-stats{grid-template-columns:1fr 1fr}
+  .detail-header .dh-stats{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<nav class="top-bar">
+  <a href="sol.html" class="logo">Sòl <span>by MyPlopPlop</span></a>
+  <div class="nav-right">
+    <a href="index.html">Lakay</a>
+    <a href="wallet.html">Bous</a>
+    <button onclick="API.logout()" id="logoutBtn" style="display:none">Dekonekte</button>
+  </div>
+</nav>
+<div class="ribbon"></div>
+
+<div class="page" id="mainView">
+  <h1 class="page-title" id="welcomeMsg">Sòl ou yo</h1>
+  <p class="page-sub">Jere gwoup epay ou yo, kontribisyon ak pèman.</p>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="my-groups">Gwoup Mwen</button>
+    <button class="tab" data-tab="discover">Dekouvri</button>
+    <button class="tab" data-tab="create">+ Kreye</button>
+  </div>
+
+  <!-- JOIN BY CODE -->
+  <div class="join-box">
+    <h3>Antre ak yon kòd envitasyon</h3>
+    <div class="join-input-row">
+      <input type="text" id="joinCode" placeholder="SOL-XXXXXX" style="text-transform:uppercase">
+      <button class="btn btn-navy btn-sm" onclick="joinByCode()">Antre</button>
+    </div>
+  </div>
+
+  <!-- MY GROUPS -->
+  <div class="tab-panel active" id="panel-my-groups">
+    <div class="loading" id="myGroupsLoading"><div class="spinner"></div>Ap chaje...</div>
+    <div id="myGroupsList"></div>
+  </div>
+
+  <!-- DISCOVER -->
+  <div class="tab-panel" id="panel-discover">
+    <div class="loading" id="discoverLoading"><div class="spinner"></div>Ap chache gwoup piblik...</div>
+    <div id="discoverList"></div>
+  </div>
+
+  <!-- CREATE GROUP -->
+  <div class="tab-panel" id="panel-create">
+    <div style="background:var(--white);border-radius:var(--radius);padding:24px;border:1px solid var(--border)">
+      <h3 style="font-family:var(--heading);font-size:1.15rem;margin-bottom:16px">Kreye yon nouvo gwoup Sòl</h3>
+      <form id="createForm" onsubmit="return false;">
+        <div class="form-group">
+          <label>Non gwoup la</label>
+          <input type="text" id="cName" placeholder="Ekzanp: Sòl Fanmi Pyè" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Montan kontribisyon (HTG)</label>
+            <input type="number" id="cAmount" value="500" min="100" step="50" required>
+          </div>
+          <div class="form-group">
+            <label>Frekans</label>
+            <select id="cFrequency">
+              <option value="weekly">Chak semèn</option>
+              <option value="biweekly">Chak 2 semèn</option>
+              <option value="monthly" selected>Chak mwa</option>
+              <option value="daily">Chak jou</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Kantite manm maks</label>
+            <input type="number" id="cMaxMembers" value="10" min="3" max="30" required>
+          </div>
+          <div class="form-group">
+            <label>Tip gwoup</label>
+            <select id="cType">
+              <option value="private">Prive (envitasyon sèlman)</option>
+              <option value="public">Piblik (nenpòt ka antre)</option>
+              <option value="community">Kominote</option>
+              <option value="business">Biznis</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Deskripsyon (opsyonèl)</label>
+          <textarea id="cDesc" rows="2" placeholder="Dekri gwoup ou a..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Peryòd gras (jou)</label>
+            <input type="number" id="cGrace" value="2" min="0" max="7">
+          </div>
+          <div class="form-group">
+            <label>Frè reta?</label>
+            <select id="cLateFee">
+              <option value="no">Non</option>
+              <option value="yes">Wi</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" id="lateFeeAmountGroup" style="display:none">
+          <label>Montan frè reta (HTG)</label>
+          <input type="number" id="cLateFeeAmount" value="50" min="0">
+        </div>
+        <button type="submit" class="btn btn-gold btn-full" onclick="createGroup()">Kreye Gwoup la</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- GROUP DETAIL VIEW -->
+<div class="page detail-view" id="detailView">
+  <div class="detail-header" id="detailHeader">
+    <button class="detail-back" onclick="showMain()">&#8592; Retounen</button>
+    <h2 id="detailName"></h2>
+    <div class="dh-stats">
+      <div class="dh-stat"><div class="dh-stat-label">Manm</div><div class="dh-stat-val" id="detailMembers">0</div></div>
+      <div class="dh-stat"><div class="dh-stat-label">Kontribisyon</div><div class="dh-stat-val" id="detailAmount">0 HTG</div></div>
+      <div class="dh-stat"><div class="dh-stat-label">Sik</div><div class="dh-stat-val" id="detailCycle">0</div></div>
+    </div>
+  </div>
+
+  <div class="actions-bar" id="adminActions" style="display:none">
+    <button class="btn btn-green btn-sm" id="btnPublish" onclick="publishGroup()">Pibliye</button>
+    <button class="btn btn-navy btn-sm" id="btnStart" onclick="startGroup()">Kòmanse Sik</button>
+    <button class="btn btn-sm btn-outline" id="btnPause" onclick="pauseGroup()">Poz</button>
+  </div>
+
+  <div class="invite-box" id="inviteBox">
+    <h4>Envite manm</h4>
+    <div class="invite-code-display" id="inviteCodeDisplay"></div>
+    <div class="share-row">
+      <button class="btn btn-sm btn-navy" onclick="copyInviteCode()">Kopye Kòd</button>
+      <button class="btn btn-sm btn-green" onclick="shareWhatsApp()">WhatsApp</button>
+    </div>
+  </div>
+
+  <div class="detail-tabs">
+    <button class="dtab active" data-dtab="members">Manm</button>
+    <button class="dtab" data-dtab="contribs">Kontribisyon</button>
+    <button class="dtab" data-dtab="payouts">Pèman</button>
+  </div>
+
+  <div class="dtab-panel active" id="dpanel-members">
+    <div id="membersList"></div>
+  </div>
+
+  <div class="dtab-panel" id="dpanel-contribs">
+    <button class="btn btn-gold btn-sm" style="margin-bottom:12px" onclick="makeContribution()">+ Kontribye</button>
+    <div id="contribsList"></div>
+  </div>
+
+  <div class="dtab-panel" id="dpanel-payouts">
+    <div id="payoutsList"></div>
+  </div>
+</div>
+
+<!-- CONTRIBUTE MODAL -->
+<div class="modal-overlay" id="contributeModal">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeModal('contributeModal')">&times;</button>
+    <h3>Kontribye nan Sòl la</h3>
+    <div class="form-group">
+      <label>Montan (HTG)</label>
+      <input type="number" id="contribAmount" readonly>
+    </div>
+    <div class="form-group">
+      <label>Metòd pèman</label>
+      <select id="contribMethod">
+        <option value="moncash">MonCash</option>
+        <option value="natcash">NatCash</option>
+        <option value="wallet">Bous MyPlopPlop</option>
+        <option value="cash_admin">Kach (admin verifye)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Referans pèman (opsyonèl)</label>
+      <input type="text" id="contribRef" placeholder="ID tranzaksyon">
+    </div>
+    <button class="btn btn-gold btn-full" onclick="submitContribution()">Kontribye</button>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script>
+let currentGroupId = null;
+let currentGroup = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (!API.isLoggedIn()) { window.location.href = 'login.html'; return; }
+  const user = API.getUser();
+  if (user) document.getElementById('welcomeMsg').textContent = 'Bonjou, ' + user.name.split(' ')[0];
+  document.getElementById('logoutBtn').style.display = 'inline';
+  loadMyGroups();
+
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+  document.querySelectorAll('.dtab').forEach(t => t.addEventListener('click', () => switchDTab(t.dataset.dtab)));
+  document.getElementById('cLateFee').addEventListener('change', e => {
+    document.getElementById('lateFeeAmountGroup').style.display = e.target.value === 'yes' ? 'block' : 'none';
+  });
+
+  const urlCode = new URLSearchParams(window.location.search).get('code');
+  if (urlCode) {
+    document.getElementById('joinCode').value = urlCode;
+    joinByCode();
+  }
+});
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + tab));
+  if (tab === 'my-groups') loadMyGroups();
+  if (tab === 'discover') loadPublicGroups();
+}
+
+function switchDTab(tab) {
+  document.querySelectorAll('.dtab').forEach(t => t.classList.toggle('active', t.dataset.dtab === tab));
+  document.querySelectorAll('.dtab-panel').forEach(p => p.classList.toggle('active', p.id === 'dpanel-' + tab));
+}
+
+function showMain() {
+  document.getElementById('mainView').style.display = 'block';
+  document.getElementById('detailView').classList.remove('active');
+  loadMyGroups();
+}
+
+function showDetail() {
+  document.getElementById('mainView').style.display = 'none';
+  document.getElementById('detailView').classList.add('active');
+}
+
+function toast(msg, type) {
+  var el = document.querySelector('.sol-toast');
+  if (el) el.remove();
+  var d = document.createElement('div');
+  d.className = 'sol-toast';
+  d.style.background = type === 'success' ? '#10B981' : type === 'error' ? '#D21034' : '#0A1F5C';
+  d.textContent = msg;
+  document.body.appendChild(d);
+  setTimeout(() => d.remove(), 3500);
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function formatHTG(n) { return (n || 0).toLocaleString('fr-FR') + ' HTG'; }
+
+function statusLabel(s) {
+  var map = { forming: 'Fòmasyon', open: 'Ouvè', active: 'Aktif', paused: 'Poz', completed: 'Fini', full: 'Plen', draft: 'Bouyon', cancelled: 'Anile' };
+  return map[s] || s;
+}
+
+// MY GROUPS
+async function loadMyGroups() {
+  var list = document.getElementById('myGroupsList');
+  document.getElementById('myGroupsLoading').style.display = 'block';
+  list.innerHTML = '';
+  var res = await API.solMyGroups();
+  document.getElementById('myGroupsLoading').style.display = 'none';
+  if (!res.success || !res.data || !res.data.length) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">&#127793;</div><div class="empty-title">Pa gen gwoup ankò</div><div class="empty-text">Kreye yon gwoup oswa antre ak yon kòd envitasyon.</div></div>';
+    return;
+  }
+  res.data.forEach(g => list.appendChild(groupCard(g)));
+}
+
+// PUBLIC GROUPS
+async function loadPublicGroups() {
+  var list = document.getElementById('discoverList');
+  document.getElementById('discoverLoading').style.display = 'block';
+  list.innerHTML = '';
+  var res = await API.solGetGroups();
+  document.getElementById('discoverLoading').style.display = 'none';
+  if (!res.success || !res.data || !res.data.length) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128269;</div><div class="empty-title">Pa gen gwoup piblik pou kounye a</div><div class="empty-text">Gwoup piblik ap parèt isit la lè yo disponib.</div></div>';
+    return;
+  }
+  res.data.forEach(g => {
+    var card = groupCard(g);
+    var joinBtn = document.createElement('button');
+    joinBtn.className = 'btn btn-gold btn-sm';
+    joinBtn.textContent = 'Antre';
+    joinBtn.style.marginTop = '8px';
+    joinBtn.onclick = async (e) => {
+      e.stopPropagation();
+      var r = await API.solJoin(g._id);
+      if (r.success) { toast('Ou antre nan gwoup la!', 'success'); loadPublicGroups(); }
+      else toast(r.message || 'Erè', 'error');
+    };
+    card.appendChild(joinBtn);
+    list.appendChild(card);
+  });
+}
+
+function groupCard(g) {
+  var d = document.createElement('div');
+  d.className = 'group-card';
+  d.onclick = () => openGroup(g._id);
+  var members = g.members ? g.members.filter(m => ['active','approved'].includes(m.status)).length : 0;
+  d.innerHTML =
+    '<div class="gc-top"><div class="gc-name">' + (g.name || 'Sòl') + '</div><span class="gc-badge ' + g.status + '">' + statusLabel(g.status) + '</span></div>' +
+    '<div class="gc-stats">' +
+      '<div class="gc-stat"><div class="gc-stat-label">Manm</div><div class="gc-stat-val">' + members + '/' + g.maxMembers + '</div></div>' +
+      '<div class="gc-stat"><div class="gc-stat-label">Kotizasyon</div><div class="gc-stat-val">' + formatHTG(g.contributionAmount) + '</div></div>' +
+      '<div class="gc-stat"><div class="gc-stat-label">Frekans</div><div class="gc-stat-val">' + freqLabel(g.frequency) + '</div></div>' +
+    '</div>' +
+    '<div class="gc-foot"><span>' + (g.groupType || 'private') + '</span><span class="gc-code">' + (g.inviteCode || g.groupCode || '') + '</span></div>';
+  return d;
+}
+
+function freqLabel(f) {
+  return { daily: 'Chak jou', weekly: 'Chak semèn', biweekly: '2 semèn', monthly: 'Chak mwa' }[f] || f;
+}
+
+// OPEN GROUP
+async function openGroup(id) {
+  currentGroupId = id;
+  showDetail();
+  document.getElementById('membersList').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  document.getElementById('contribsList').innerHTML = '';
+  document.getElementById('payoutsList').innerHTML = '';
+
+  var res = await API.solGetGroup(id);
+  if (!res.success) { toast('Erè: ' + (res.message || ''), 'error'); showMain(); return; }
+  currentGroup = res.data;
+  var g = currentGroup;
+  var user = API.getUser();
+  var isAdmin = g.admins && g.admins.some(a => (a._id || a) === user.id);
+
+  document.getElementById('detailName').textContent = g.name;
+  var activeMembers = g.members ? g.members.filter(m => ['active','approved'].includes(m.status)).length : 0;
+  document.getElementById('detailMembers').textContent = activeMembers + '/' + g.maxMembers;
+  document.getElementById('detailAmount').textContent = formatHTG(g.contributionAmount);
+  document.getElementById('detailCycle').textContent = (g.currentCycle || 0) + '/' + (g.totalCycles || g.maxMembers);
+  document.getElementById('inviteCodeDisplay').textContent = g.inviteCode || g.groupCode || '';
+
+  var adminBar = document.getElementById('adminActions');
+  if (isAdmin) {
+    adminBar.style.display = 'flex';
+    document.getElementById('btnPublish').style.display = ['forming','draft'].includes(g.status) ? 'inline-flex' : 'none';
+    document.getElementById('btnStart').style.display = ['open','full'].includes(g.status) ? 'inline-flex' : 'none';
+    document.getElementById('btnPause').style.display = g.status === 'active' ? 'inline-flex' : 'none';
+  } else {
+    adminBar.style.display = 'none';
+  }
+
+  renderMembers(g);
+  loadContributions(id);
+  loadPayouts(id);
+  switchDTab('members');
+}
+
+function renderMembers(g) {
+  var list = document.getElementById('membersList');
+  list.innerHTML = '';
+  if (!g.members || !g.members.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128100;</div><div class="empty-title">Pa gen manm ankò</div></div>'; return; }
+  g.members.forEach((m, i) => {
+    var u = m.user || {};
+    var name = typeof u === 'object' ? (u.name || 'Manm') : 'Manm';
+    var initials = name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+    var isGroupAdmin = g.admins && g.admins.some(a => (a._id || a) === (u._id || u));
+    var badgeClass = isGroupAdmin ? 'admin' : m.status === 'active' ? 'active' : 'pending';
+    var badgeText = isGroupAdmin ? 'Admin' : m.status === 'active' ? 'Aktif' : m.status;
+    var div = document.createElement('div');
+    div.className = 'member-item';
+    div.innerHTML =
+      '<div class="member-avatar">' + initials + '</div>' +
+      '<div class="member-info"><div class="member-name">' + name + '</div><div class="member-meta">Pozisyon: #' + m.position + ' | Peye: ' + formatHTG(m.totalContributed) + '</div></div>' +
+      '<span class="member-badge ' + badgeClass + '">' + badgeText + '</span>';
+    list.appendChild(div);
+  });
+}
+
+async function loadContributions(id) {
+  var list = document.getElementById('contribsList');
+  var res = await API.solGetContributions(id);
+  if (!res.success || !res.data || !res.data.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128176;</div><div class="empty-title">Pa gen kontribisyon ankò</div></div>'; return; }
+  list.innerHTML = '';
+  res.data.forEach(c => {
+    var userName = c.user ? (typeof c.user === 'object' ? c.user.name : 'Manm') : 'Manm';
+    var icon = c.status === 'paid' ? '&#9989;' : c.status === 'pending' ? '&#9203;' : '&#10060;';
+    var iconClass = c.status === 'paid' ? 'paid' : c.status === 'pending' ? 'pending' : 'missed';
+    var div = document.createElement('div');
+    div.className = 'contrib-item';
+    div.innerHTML =
+      '<div class="contrib-left"><div class="contrib-icon ' + iconClass + '">' + icon + '</div><div><div class="contrib-name">' + userName + '</div><div class="contrib-date">' + new Date(c.createdAt || c.paidAt || '').toLocaleDateString('fr-FR') + '</div></div></div>' +
+      '<div class="contrib-amount ' + iconClass + '">' + formatHTG(c.amount || c.amountPaid) + '</div>';
+    list.appendChild(div);
+  });
+}
+
+async function loadPayouts(id) {
+  var list = document.getElementById('payoutsList');
+  var res = await API.solGetPayouts(id);
+  if (!res.success || !res.data || !res.data.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128184;</div><div class="empty-title">Pa gen pèman ankò</div><div class="empty-text">Pèman ap jenere apre premye sik la fini.</div></div>'; return; }
+  list.innerHTML = '';
+  res.data.forEach(p => {
+    var recipient = p.recipient ? (typeof p.recipient === 'object' ? p.recipient.name : 'Manm') : 'Manm';
+    var statusBg = p.status === 'completed' ? '#10B981' : p.status === 'pending' ? '#D97706' : '#6B7394';
+    var div = document.createElement('div');
+    div.className = 'contrib-item';
+    div.innerHTML =
+      '<div class="contrib-left"><div class="contrib-icon" style="background:' + statusBg + '20;color:' + statusBg + '">&#128176;</div><div><div class="contrib-name">' + recipient + '</div><div class="contrib-date">Sik #' + (p.cycleNumber || p.position || '?') + '</div></div></div>' +
+      '<div class="contrib-amount" style="color:' + statusBg + '">' + formatHTG(p.amount || p.totalCollected) + '</div>';
+    list.appendChild(div);
+  });
+}
+
+// CREATE GROUP
+async function createGroup() {
+  var name = document.getElementById('cName').value.trim();
+  if (!name) { toast('Tanpri mete non gwoup la', 'error'); return; }
+  var data = {
+    name: name,
+    contributionAmount: parseInt(document.getElementById('cAmount').value),
+    frequency: document.getElementById('cFrequency').value,
+    maxMembers: parseInt(document.getElementById('cMaxMembers').value),
+    groupType: document.getElementById('cType').value,
+    description: document.getElementById('cDesc').value.trim(),
+    gracePeriodDays: parseInt(document.getElementById('cGrace').value),
+    lateFeeEnabled: document.getElementById('cLateFee').value === 'yes',
+    lateFeeAmount: document.getElementById('cLateFee').value === 'yes' ? parseInt(document.getElementById('cLateFeeAmount').value) : 0
+  };
+  var res = await API.solCreateGroup(data);
+  if (res.success) {
+    toast('Gwoup kreye avèk siksè!', 'success');
+    document.getElementById('createForm').reset();
+    switchTab('my-groups');
+    if (res.data && res.data._id) openGroup(res.data._id);
+  } else {
+    toast(res.message || (res.errors && res.errors[0] && res.errors[0].msg) || 'Erè nan kreyasyon', 'error');
+  }
+}
+
+// JOIN BY CODE
+async function joinByCode() {
+  var code = document.getElementById('joinCode').value.trim().toUpperCase();
+  if (!code) { toast('Tanpri antre kòd envitasyon an', 'error'); return; }
+  var res = await API.solJoinByCode(code);
+  if (res.success) {
+    toast('Ou antre nan gwoup la!', 'success');
+    document.getElementById('joinCode').value = '';
+    loadMyGroups();
+  } else {
+    toast(res.message || 'Kòd pa valid oswa gwoup la plen', 'error');
+  }
+}
+
+// ADMIN ACTIONS
+async function publishGroup() {
+  if (!currentGroupId) return;
+  var res = await API.solPublish(currentGroupId);
+  if (res.success) { toast('Gwoup la pibliye!', 'success'); openGroup(currentGroupId); }
+  else toast(res.message || 'Erè', 'error');
+}
+
+async function startGroup() {
+  if (!currentGroupId) return;
+  var res = await API.solStartCycle(currentGroupId);
+  if (res.success) { toast('Sik la kòmanse!', 'success'); openGroup(currentGroupId); }
+  else toast(res.message || 'Erè', 'error');
+}
+
+async function pauseGroup() {
+  if (!currentGroupId) return;
+  var res = await API.solPause(currentGroupId);
+  if (res.success) { toast('Gwoup la an poz', 'success'); openGroup(currentGroupId); }
+  else toast(res.message || 'Erè', 'error');
+}
+
+// CONTRIBUTE
+function makeContribution() {
+  if (!currentGroup) return;
+  document.getElementById('contribAmount').value = currentGroup.contributionAmount;
+  document.getElementById('contributeModal').classList.add('open');
+}
+
+async function submitContribution() {
+  var data = {
+    amount: parseInt(document.getElementById('contribAmount').value),
+    paymentMethod: document.getElementById('contribMethod').value,
+    paymentReference: document.getElementById('contribRef').value.trim()
+  };
+  var res = await API.solContribute(currentGroupId, data);
+  closeModal('contributeModal');
+  if (res.success) {
+    toast('Kontribisyon anrejistre!', 'success');
+    loadContributions(currentGroupId);
+  } else {
+    toast(res.message || 'Erè nan kontribisyon', 'error');
+  }
+}
+
+// INVITE SHARING
+function copyInviteCode() {
+  var code = document.getElementById('inviteCodeDisplay').textContent;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(code);
+    toast('Kòd kopye: ' + code, 'success');
+  } else {
+    var inp = document.createElement('input');
+    inp.value = code;
+    document.body.appendChild(inp);
+    inp.select();
+    document.execCommand('copy');
+    inp.remove();
+    toast('Kòd kopye: ' + code, 'success');
+  }
+}
+
+function shareWhatsApp() {
+  var code = document.getElementById('inviteCodeDisplay').textContent;
+  var name = currentGroup ? currentGroup.name : 'Sòl';
+  var amount = currentGroup ? formatHTG(currentGroup.contributionAmount) : '';
+  var msg = 'Antre nan gwoup Sol mwen "' + name + '" (' + amount + ')!\nKòd: ' + code + '\n\nhttps://myplopplop.com/sol-dashboard.html?code=' + code;
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+}
+</script>
+</body>
+</html>
