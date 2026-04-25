@@ -271,6 +271,33 @@ body{font-family:var(--body);background:var(--off-white);color:var(--text);-webk
           <label>Montan frè reta (HTG)</label>
           <input type="number" id="cLateFeeAmount" value="50" min="0">
         </div>
+        <div style="margin:16px 0 8px;font-family:var(--heading);font-size:.95rem;font-weight:700;color:var(--dark)">Pwoteksyon</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Depo obligatwa?</label>
+            <select id="cDepositLock" onchange="document.getElementById('depositAmountGroup').style.display=this.value==='yes'?'block':'none'">
+              <option value="no">Non</option>
+              <option value="yes">Wi</option>
+            </select>
+          </div>
+          <div class="form-group" id="depositAmountGroup" style="display:none">
+            <label>Montan depo (HTG)</label>
+            <input type="number" id="cDepositAmount" value="500" min="100">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Bloke pèman si pa peye?</label>
+            <select id="cPayoutBlocking">
+              <option value="yes" selected>Wi (rekòmande)</option>
+              <option value="no">Non</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Eskò konfyans minimòm</label>
+            <input type="number" id="cMinTrust" value="0" min="0" max="100">
+          </div>
+        </div>
         <button type="submit" class="btn btn-gold btn-full" onclick="createGroup()">Kreye Gwoup la</button>
       </form>
     </div>
@@ -587,7 +614,11 @@ async function createGroup() {
     description: document.getElementById('cDesc').value.trim(),
     gracePeriodDays: parseInt(document.getElementById('cGrace').value),
     lateFeeEnabled: document.getElementById('cLateFee').value === 'yes',
-    lateFeeAmount: document.getElementById('cLateFee').value === 'yes' ? parseInt(document.getElementById('cLateFeeAmount').value) : 0
+    lateFeeAmount: document.getElementById('cLateFee').value === 'yes' ? parseInt(document.getElementById('cLateFeeAmount').value) : 0,
+    depositLockEnabled: document.getElementById('cDepositLock').value === 'yes',
+    depositLockAmount: document.getElementById('cDepositLock').value === 'yes' ? parseInt(document.getElementById('cDepositAmount').value) : 0,
+    payoutBlockingEnabled: document.getElementById('cPayoutBlocking').value === 'yes',
+    minTrustScore: parseInt(document.getElementById('cMinTrust').value) || 0
   };
   var res = await API.solCreateGroup(data);
   if (res.success) {
