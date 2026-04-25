@@ -855,10 +855,10 @@
 
     // ── Homepage: Diaspora ──
     'diaspora.title': {
-      fr: 'Soutenez votre Famille en Haïti',
-      en: 'Support Family in Haiti',
-      kr: 'Sipòte Fanmi nan Ayiti',
-      es: 'Apoye a su Familia en Haití'
+      fr: 'Soutenez votre Famille en Haïti <span>Depuis N\'importe Où</span>',
+      en: 'Support Your Family in Haiti <span>From Anywhere</span>',
+      kr: 'Sipòte Fanmi Ou nan Ayiti <span>Kèlkeswa Kote Ou Ye</span>',
+      es: 'Apoye a su Familia en Haití <span>Desde Cualquier Lugar</span>'
     },
     'diaspora.cta': {
       fr: 'Envoyer du Soutien',
@@ -895,6 +895,180 @@
       en: 'Customer support',
       kr: 'Sipò kliyan',
       es: 'Soporte al cliente'
+    },
+    'diaspora.title_span': {
+      fr: 'Depuis N\'importe Où',
+      en: 'From Anywhere',
+      kr: 'Kèlkeswa Kote Ou Ye',
+      es: 'Desde Cualquier Lugar'
+    },
+    'diaspora.get_started': {
+      fr: 'Commencer →',
+      en: 'Get Started →',
+      kr: 'Kòmanse →',
+      es: 'Comenzar →'
+    },
+    'diaspora.how_title': {
+      fr: 'Comment Ça Marche',
+      en: 'How It Works',
+      kr: 'Kijan Li Mache',
+      es: 'Cómo Funciona'
+    },
+    'diaspora.step1_title': {
+      fr: 'Ajouter un Destinataire',
+      en: 'Add Recipient',
+      kr: 'Ajoute Destinatè',
+      es: 'Agregar Destinatario'
+    },
+    'diaspora.step1_desc': {
+      fr: 'Enregistrez le nom, l\'adresse et le numéro de téléphone de votre proche en Haïti.',
+      en: 'Save your family member or friend\'s name, address, and phone number in Haiti.',
+      kr: 'Anrejistre non, adrès, ak nimewo telefòn fanmi oswa zanmi ou nan Ayiti.',
+      es: 'Guarde el nombre, dirección y número de teléfono de su familiar o amigo en Haití.'
+    },
+    'diaspora.step2_title': {
+      fr: 'Choisir un Magasin',
+      en: 'Choose a Store',
+      kr: 'Chwazi yon Magazen',
+      es: 'Elegir una Tienda'
+    },
+    'diaspora.step2_desc': {
+      fr: 'Parcourez les supermarchés, pharmacies et autres magasins vérifiés près de votre destinataire.',
+      en: 'Browse verified supermarkets, pharmacies, and other stores near your recipient.',
+      kr: 'Gade sipèmache, famasi, ak lòt magazen verifye tou pre destinatè ou a.',
+      es: 'Explore supermercados, farmacias y otras tiendas verificadas cerca de su destinatario.'
+    },
+    'diaspora.step3_title': {
+      fr: 'Payer par Carte',
+      en: 'Pay by Card',
+      kr: 'Peye ak Kat',
+      es: 'Pagar con Tarjeta'
+    },
+    'diaspora.step3_desc': {
+      fr: 'Payez en toute sécurité avec votre carte de crédit, débit, ou portefeuille San Cash depuis l\'étranger.',
+      en: 'Pay securely with your credit card, debit card, or San Cash wallet from abroad.',
+      kr: 'Peye an sekirite ak kat kredi, kat debi, oswa bous San Cash ou depi aletranje.',
+      es: 'Pague de forma segura con su tarjeta de crédito, débito, o billetera San Cash desde el extranjero.'
+    },
+    'diaspora.step4_title': {
+      fr: 'Ils Reçoivent la Livraison',
+      en: 'They Receive Delivery',
+      kr: 'Yo Resevwa Livrezon',
+      es: 'Ellos Reciben la Entrega'
+    },
+    'diaspora.step4_desc': {
+      fr: 'Votre destinataire reçoit les articles livrés à sa porte. Suivez en temps réel.',
+      en: 'Your recipient gets the items delivered right to their door. Track it in real time.',
+      kr: 'Destinatè ou a resevwa atik yo livre dirèkteman nan pòt li. Swiv li an tan reyèl.',
+      es: 'Su destinatario recibe los artículos entregados en su puerta. Rastreo en tiempo real.'
+    },
+    'diaspora.why_title': {
+      fr: 'Pourquoi les Familles Font Confiance à MyPlopPlop',
+      en: 'Why Families Trust MyPlopPlop',
+      kr: 'Poukisa Fanmi yo Fè Konfyans ak MyPlopPlop',
+      es: 'Por Qué las Familias Confían en MyPlopPlop'
+    },
+    'diaspora.trust1_desc': {
+      fr: 'Chaque magasin est vérifié. Vous savez exactement où va votre argent.',
+      en: 'Every store is vetted and verified. You know exactly where your money goes.',
+      kr: 'Chak magazen verifye. Ou konnen egzakteman kote lajan ou ale.',
+      es: 'Cada tienda está verificada. Usted sabe exactamente dónde va su dinero.'
+    },
+    'diaspora.trust2_desc': {
+      fr: 'Chiffrement bancaire pour protéger vos données de paiement. Payez en confiance.',
+      en: 'Bank-level encryption protects your payment details. Pay with confidence.',
+      kr: 'Kriptaj nivo bank pwoteje detay peman ou. Peye ak konfyans.',
+      es: 'Cifrado bancario protege sus datos de pago. Pague con confianza.'
+    },
+    'diaspora.trust3_desc': {
+      fr: 'Suivez chaque livraison du magasin à la porte. Sachez exactement quand elle arrive.',
+      en: 'Follow every delivery from store to door. Know exactly when it arrives.',
+      kr: 'Swiv chak livrezon depi magazen rive nan pòt. Konnen egzakteman kilè li rive.',
+      es: 'Siga cada entrega desde la tienda hasta la puerta. Sepa exactamente cuándo llega.'
+    },
+    'diaspora.trust4_desc': {
+      fr: 'Notre équipe parle anglais, français et créole. Nous sommes là pour vous aider.',
+      en: 'Our team speaks English, French, and Kreyol. We are here to help anytime.',
+      kr: 'Ekip nou an pale angle, fransè, ak kreyòl. Nou la pou ede ou nenpòt lè.',
+      es: 'Nuestro equipo habla inglés, francés y criollo. Estamos aquí para ayudar en cualquier momento.'
+    },
+    'diaspora.categories_title': {
+      fr: 'Catégories Essentielles',
+      en: 'Essential Categories',
+      kr: 'Kategori Esansyèl',
+      es: 'Categorías Esenciales'
+    },
+    'diaspora.categories_desc': {
+      fr: 'Les catégories les plus populaires pour soutenir votre famille',
+      en: 'The most popular categories for supporting family back home',
+      kr: 'Kategori ki pi popilè pou sipòte fanmi lakay',
+      es: 'Las categorías más populares para apoyar a la familia'
+    },
+    'diaspora.cat_super': {
+      fr: 'Supermarchés',
+      en: 'Supermarkets',
+      kr: 'Sipèmache',
+      es: 'Supermercados'
+    },
+    'diaspora.cat_super_desc': {
+      fr: 'Riz, haricots, huile, et tous les essentiels dont votre famille a besoin',
+      en: 'Rice, beans, oil, and all the essentials your family needs',
+      kr: 'Diri, pwa, lwil, ak tout bagay esansyèl fanmi ou bezwen',
+      es: 'Arroz, frijoles, aceite y todos los esenciales que su familia necesita'
+    },
+    'diaspora.cat_pharma': {
+      fr: 'Pharmacies',
+      en: 'Pharmacies',
+      kr: 'Famasi',
+      es: 'Farmacias'
+    },
+    'diaspora.cat_pharma_desc': {
+      fr: 'Médicaments, vitamines, premiers soins et produits de santé',
+      en: 'Medicine, vitamins, first aid, and health products',
+      kr: 'Medikaman, vitamin, premye swen, ak pwodwi sante',
+      es: 'Medicinas, vitaminas, primeros auxilios y productos de salud'
+    },
+    'diaspora.community_title': {
+      fr: 'Ce Que Dit Notre Communauté',
+      en: 'What Our Community Says',
+      kr: 'Sa Kominote Nou an Di',
+      es: 'Lo Que Dice Nuestra Comunidad'
+    },
+    'diaspora.testimonial1': {
+      fr: '"Je vis à Miami et ma mère est à Port-au-Prince. Avec MyPlopPlop, je peux lui envoyer des courses chaque semaine. Elle reçoit de la nourriture fraîche livrée à sa porte et je peux voir quand ça arrive. Ça a tout changé pour nous."',
+      en: '"I live in Miami and my mother is in Port-au-Prince. With MyPlopPlop, I can send her groceries every week. She gets fresh food delivered to her door and I can see when it arrives. This has changed everything for us."',
+      kr: '"Mwen ap viv nan Miami epi manman mwen nan Pòtoprens. Ak MyPlopPlop, mwen ka voye pwovizyon ba li chak semèn. Li resevwa manje fre livre nan pòt li epi mwen ka wè kilè li rive. Sa chanje tout bagay pou nou."',
+      es: '"Vivo en Miami y mi madre está en Puerto Príncipe. Con MyPlopPlop, puedo enviarle alimentos cada semana. Recibe comida fresca en su puerta y puedo ver cuándo llega. Esto lo ha cambiado todo para nosotros."'
+    },
+    'diaspora.testimonial2': {
+      fr: '"Mes parents vieillissent et je m\'inquiète qu\'ils aient assez de médicaments. Maintenant je peux commander chez Pharma Plus et savoir qu\'ils ont ce qu\'il faut. Le suivi me donne la tranquillité d\'esprit."',
+      en: '"My parents are getting older and I worry about them having enough medicine. Now I can order from Pharma Plus and know they have what they need. The tracking feature gives me peace of mind."',
+      kr: '"Paran mwen yo ap vin pi aje epi mwen enkyete pou yo gen ase medikaman. Kounye a mwen ka kòmande nan Pharma Plus epi konnen yo gen sa yo bezwen. Fonksyon swivi a ba mwen lapè nan tèt mwen."',
+      es: '"Mis padres están envejeciendo y me preocupa que tengan suficiente medicina. Ahora puedo pedir en Pharma Plus y saber que tienen lo que necesitan. El seguimiento me da tranquilidad."'
+    },
+    'diaspora.testimonial3': {
+      fr: '"Avant MyPlopPlop, j\'envoyais de l\'argent en espérant qu\'il soit dépensé pour l\'essentiel. Maintenant je choisis exactement ce que ma famille reçoit. Les magasins sont vérifiés, les prix sont justes, et la livraison est rapide."',
+      en: '"Before MyPlopPlop, I used to send money and hope it was spent on essentials. Now I pick exactly what my family gets. The stores are verified, prices are fair, and delivery is fast. Highly recommend!"',
+      kr: '"Anvan MyPlopPlop, mwen te konn voye lajan epi espere li depanse pou bagay esansyèl. Kounye a mwen chwazi egzakteman sa fanmi mwen resevwa. Magazen yo verifye, pri yo jis, epi livrezon an rapid. Mwen rekòmande li!"',
+      es: '"Antes de MyPlopPlop, enviaba dinero esperando que se gastara en lo esencial. Ahora elijo exactamente lo que recibe mi familia. Las tiendas están verificadas, los precios son justos y la entrega es rápida."'
+    },
+    'diaspora.ready_title': {
+      fr: 'Prêt à Soutenir Votre Famille ?',
+      en: 'Ready to Support Your Family?',
+      kr: 'Prè pou Sipòte Fanmi Ou?',
+      es: '¿Listo para Apoyar a su Familia?'
+    },
+    'diaspora.ready_desc': {
+      fr: 'Ajoutez votre premier destinataire et commencez à envoyer des essentiels aujourd\'hui. Ça ne prend qu\'une minute.',
+      en: 'Add your first recipient and start sending essentials today. It only takes a minute.',
+      kr: 'Ajoute premye destinatè ou epi kòmanse voye bagay esansyèl jodi a. Li pran sèlman yon minit.',
+      es: 'Agregue su primer destinatario y comience a enviar esenciales hoy. Solo toma un minuto.'
+    },
+    'diaspora.add_recipient': {
+      fr: 'Ajouter un Destinataire →',
+      en: 'Add a Recipient →',
+      kr: 'Ajoute yon Destinatè →',
+      es: 'Agregar un Destinatario →'
     },
 
     // ── Homepage: CTA / Join Network ──
