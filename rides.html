@@ -28,7 +28,7 @@
 .rides-hero {
     background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 50%, var(--primary-red) 100%);
     color: var(--white);
-    padding: var(--space-3xl) var(--content-padding) var(--space-2xl);
+    padding: var(--space-xl) var(--content-padding) var(--space-2xl);
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -121,23 +121,23 @@
 .hero-cta-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(210,16,52,0.6); }
 /* Secondary CTA - outlined, lighter weight */
 .hero-cta-secondary {
-    background: rgba(255,255,255,0.06);
-    color: var(--white);
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.95);
     padding: 14px 32px;
     border-radius: var(--radius-xl);
     font-family: var(--font-heading);
-    font-weight: 600;
+    font-weight: 700;
     font-size: var(--text-base);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-sm);
-    border: 1.5px solid rgba(255,255,255,0.3);
+    border: 1.5px solid rgba(255,255,255,0.45);
     transition: all var(--transition-fast);
     text-decoration: none;
     width: 100%;
 }
-.hero-cta-secondary:hover { background: rgba(255,255,255,0.12); transform: translateY(-1px); }
+.hero-cta-secondary:hover { background: rgba(255,255,255,0.15); transform: translateY(-1px); }
 
 /* ===== RIDE OPTIONS ===== */
 .ride-options {
@@ -687,7 +687,7 @@
 </header>
 
 <!-- MAIN -->
-<main class="main" style="margin-top: calc(var(--header-height) + 28px);">
+<main class="main" style="margin-top: calc(var(--header-height) + 28px);padding-top:0;">
 
 <!-- SECTION 1: HERO -->
 <section class="rides-hero">
@@ -695,11 +695,11 @@
         <img src="assets/img/msouwout-logo-full.png" alt="MsouWout" style="height:200px;max-width:90%;margin:0 auto var(--space-md);display:block;filter:drop-shadow(0 4px 16px rgba(0,0,0,0.3));">
         <div class="trust-strip">
             <span class="trust-icon">✅</span>
-            <span>Chofè verifye · GPS tracking · Peman nan app</span>
+            <span>Chofè verifye · Swivi GPS · Peman nan app</span>
         </div>
         <div class="hero-ctas">
             <a href="rides-request.html" class="hero-cta-primary">🚕 Mande yon Transpò</a>
-            <a href="driver.html" class="hero-cta-secondary">Travay ak MsouWout</a>
+            <a href="driver.html" class="hero-cta-secondary">🏍️ Travay ak MsouWout</a>
         </div>
     </div>
 </section>
@@ -1076,5 +1076,9 @@ document.getElementById('estimateBtn').addEventListener('click', () => {
 <script src="js/api.js"></script>
 <script src="js/i18n.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
+<!-- KOUTYE STICKY BAR -->
+<div style="position:fixed;bottom:0;left:0;right:0;background:linear-gradient(90deg,#00209F,#D21034);color:#fff;text-align:center;padding:13px 20px;z-index:999;font-weight:800;font-size:.9rem;box-shadow:0 -2px 12px rgba(0,0,0,.2);">
+  <a href="https://haitibiznis.com/koutye.html" style="color:#fff;text-decoration:none;">&#128176; Pa selman kondwi — touche plis kom Koutye</a>
+</div>
 </body>
 </html>
