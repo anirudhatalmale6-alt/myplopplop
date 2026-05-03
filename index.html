@@ -1948,7 +1948,10 @@ function setLang(lang) {
   const t = T[lang] || T.ht;
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (t[key]) el.textContent = t[key];
+    if (t[key]) {
+      if (key === 'hero_title') el.innerHTML = t[key];
+      else el.textContent = t[key];
+    }
   });
   document.querySelectorAll('[data-i18n-html]').forEach(el => {
     const key = el.getAttribute('data-i18n-html');
