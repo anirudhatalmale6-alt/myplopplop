@@ -219,37 +219,11 @@ body.mp-home {
 
 /* ═══ HERO ═══ */
 .mp-hero {
-  background: linear-gradient(160deg, var(--mp-navy) 0%, #0D1240 40%, #0A1855 70%, var(--mp-navy) 100%);
-  padding: 32px 20px 0;
+  background: linear-gradient(160deg, var(--mp-navy) 0%, #0D1240 50%, #0A1855 100%);
+  padding: 48px 20px 52px;
   text-align: center;
   position: relative;
   overflow: hidden;
-}
-.mp-hero-img {
-  max-width: 520px;
-  margin: 20px auto 0;
-  border-radius: 18px 18px 0 0;
-  overflow: hidden;
-  animation: fadeUp .6s .22s ease both;
-  position: relative;
-  z-index: 1;
-}
-.mp-hero-img img {
-  width: 100%;
-  display: block;
-  object-fit: cover;
-  max-height: 220px;
-  object-position: center 20%;
-}
-.mp-hero-img::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  background: linear-gradient(to top, #F5F7FA, transparent);
-  pointer-events: none;
 }
 .mp-hero::before {
   content: '';
@@ -258,7 +232,7 @@ body.mp-home {
   right: -80px;
   width: 320px;
   height: 320px;
-  background: radial-gradient(circle, rgba(210,16,52,.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(210,16,52,.12) 0%, transparent 70%);
   border-radius: 50%;
   animation: heroOrb1 8s ease-in-out infinite alternate;
 }
@@ -286,43 +260,74 @@ body.mp-home {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255,255,255,.08);
+  background: rgba(255,255,255,.06);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255,255,255,.1);
-  padding: 6px 16px;
+  padding: 8px 20px;
   border-radius: 100px;
-  font-size: .75rem;
-  font-weight: 600;
-  color: rgba(255,255,255,.7);
-  margin-bottom: 20px;
-  letter-spacing: .04em;
+  font-size: .8rem;
+  font-weight: 700;
+  color: rgba(255,255,255,.8);
+  margin-bottom: 28px;
+  letter-spacing: .05em;
   animation: fadeUp .6s ease both;
 }
 .mp-hero-flag span { font-size: 1.1rem; }
+.mp-hero-emoji {
+  font-size: 2.8rem;
+  display: block;
+  margin-bottom: 12px;
+  animation: fadeUp .5s .06s ease both;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,.3));
+}
 .mp-hero h1 {
   font-family: var(--mp-heading);
-  font-size: clamp(1.8rem, 7vw, 2.8rem);
+  font-size: clamp(2.2rem, 9vw, 3.2rem);
   font-weight: 800;
   color: #fff;
-  line-height: 1.05;
+  line-height: 1.08;
   letter-spacing: -.03em;
-  margin-bottom: 14px;
-  animation: fadeUp .6s .08s ease both;
-  background: linear-gradient(135deg, #fff 0%, #E8EDFF 50%, #fff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  margin-bottom: 6px;
+  animation: fadeUp .6s .1s ease both;
+}
+.mp-hero-jodi {
+  font-family: var(--mp-heading);
+  font-size: clamp(2.2rem, 9vw, 3.2rem);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.08;
+  letter-spacing: -.03em;
+  margin-bottom: 20px;
+  animation: fadeUp .6s .14s ease both;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.mp-hero-live {
+  width: 14px;
+  height: 14px;
+  background: #22C55E;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 12px rgba(34,197,94,.6);
+  animation: livePulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes livePulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(34,197,94,.5); transform: scale(1); }
+  50% { box-shadow: 0 0 20px rgba(34,197,94,.8); transform: scale(1.15); }
 }
 .mp-hero-sub {
   font-family: var(--mp-heading);
-  font-size: clamp(1rem, 2.8vw, 1.25rem);
-  color: rgba(255,255,255,.7);
+  font-size: clamp(1rem, 3vw, 1.3rem);
+  color: rgba(255,255,255,.55);
   line-height: 1.4;
   max-width: 400px;
   margin: 0 auto;
-  font-weight: 700;
-  letter-spacing: .02em;
-  animation: fadeUp .6s .15s ease both;
+  font-weight: 600;
+  letter-spacing: .06em;
+  animation: fadeUp .6s .18s ease both;
 }
 
 @keyframes fadeUp {
@@ -1182,9 +1187,9 @@ body.mp-home {
 
 /* ═══ RESPONSIVE ═══ */
 @media (min-width: 600px) {
-  .mp-hero { padding: 48px 24px 0; }
-  .mp-hero h1 { font-size: 2.6rem; }
-  .mp-hero-img img { max-height: 280px; }
+  .mp-hero { padding: 56px 24px 60px; }
+  .mp-hero h1 { font-size: 3rem; }
+  .mp-hero-jodi { font-size: 3rem; }
   .mp-actions-grid { gap: 14px; }
   .mp-trust-item { padding: 16px 14px; }
   .mp-trust-label { font-size: .72rem; }
@@ -1260,13 +1265,15 @@ body.mp-home {
   <div class="mp-hero-inner">
     <div class="mp-hero-flag">
       <span>🇭🇹</span>
-      <span data-i18n="hero_badge">PLATFÒM #1 NAN AYITI</span>
+      <span data-i18n="hero_badge">#1 AN AYITI</span>
     </div>
-    <h1 data-i18n="hero_title">FÈ LAJAN AK TELEFÒN OU JODI A</h1>
+    <span class="mp-hero-emoji">💸</span>
+    <h1 data-i18n="hero_title">FÈ LAJAN<br>AK TELEFÒN OU</h1>
+    <div class="mp-hero-jodi">
+      <span class="mp-hero-live"></span>
+      <span data-i18n="hero_jodi">JODI A</span>
+    </div>
     <p class="mp-hero-sub" data-i18n="hero_sub">Achte • Vann • Fè Kous • Touche</p>
-  </div>
-  <div class="mp-hero-img">
-    <img src="assets/img/hero-driver.jpg" alt="MyPlopPlop moto driver showing the app">
   </div>
 </section>
 
@@ -1612,8 +1619,9 @@ body.mp-home {
    ══════════════════════════════════════ */
 const T = {
   ht: {
-    hero_badge: 'PLATFÒM #1 NAN AYITI',
-    hero_title: 'FÈ LAJAN AK TELEFÒN OU JODI A',
+    hero_badge: '#1 AN AYITI',
+    hero_title: 'FÈ LAJAN<br>AK TELEFÒN OU',
+    hero_jodi: 'JODI A',
     hero_sub: 'Achte • Vann • Fè Kous • Touche',
     search_placeholder: 'Chèche magazen, pwodwi, sèvis...',
     search_btn: 'Chèche',
@@ -1690,8 +1698,9 @@ const T = {
     menu_help: 'Èd'
   },
   en: {
-    hero_badge: '#1 PLATFORM IN HAITI',
-    hero_title: 'MAKE MONEY WITH YOUR PHONE TODAY',
+    hero_badge: '#1 IN HAITI',
+    hero_title: 'MAKE MONEY<br>WITH YOUR PHONE',
+    hero_jodi: 'TODAY',
     hero_sub: 'Buy • Sell • Ride • Earn',
     search_placeholder: 'Search stores, products, services...',
     search_btn: 'Search',
@@ -1768,8 +1777,9 @@ const T = {
     menu_help: 'Help'
   },
   fr: {
-    hero_badge: 'PLATEFORME #1 EN HAÏTI',
-    hero_title: 'GAGNEZ DE L\'ARGENT AVEC VOTRE TÉLÉPHONE',
+    hero_badge: '#1 EN HAÏTI',
+    hero_title: 'GAGNEZ DE L\'ARGENT<br>AVEC VOTRE TÉLÉPHONE',
+    hero_jodi: 'AUJOURD\'HUI',
     hero_sub: 'Acheter • Vendre • Rouler • Gagner',
     search_placeholder: 'Rechercher magasins, produits, services...',
     search_btn: 'Chercher',
@@ -1846,8 +1856,9 @@ const T = {
     menu_help: 'Aide'
   },
   es: {
-    hero_badge: 'PLATAFORMA #1 EN HAITÍ',
-    hero_title: 'GANA DINERO CON TU TELÉFONO HOY',
+    hero_badge: '#1 EN HAITÍ',
+    hero_title: 'GANA DINERO<br>CON TU TELÉFONO',
+    hero_jodi: 'HOY',
     hero_sub: 'Comprar • Vender • Viajar • Ganar',
     search_placeholder: 'Buscar tiendas, productos, servicios...',
     search_btn: 'Buscar',
