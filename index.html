@@ -215,10 +215,36 @@ body.mp-home {
 /* ═══ HERO ═══ */
 .mp-hero {
   background: linear-gradient(160deg, var(--mp-navy) 0%, #0D1240 40%, #1A0A30 70%, var(--mp-navy) 100%);
-  padding: 40px 20px 48px;
+  padding: 32px 20px 0;
   text-align: center;
   position: relative;
   overflow: hidden;
+}
+.mp-hero-img {
+  max-width: 520px;
+  margin: 20px auto 0;
+  border-radius: 18px 18px 0 0;
+  overflow: hidden;
+  animation: fadeUp .6s .22s ease both;
+  position: relative;
+  z-index: 1;
+}
+.mp-hero-img img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  max-height: 220px;
+  object-position: center 20%;
+}
+.mp-hero-img::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to top, var(--mp-bg), transparent);
+  pointer-events: none;
 }
 .mp-hero::before {
   content: '';
@@ -302,10 +328,10 @@ body.mp-home {
 /* ═══ SEARCH ═══ */
 .mp-search {
   padding: 0 20px;
-  margin-top: -24px;
+  margin-top: -16px;
   position: relative;
   z-index: 10;
-  animation: fadeUp .6s .22s ease both;
+  animation: fadeUp .6s .28s ease both;
 }
 .mp-search-bar {
   display: flex;
@@ -1151,8 +1177,9 @@ body.mp-home {
 
 /* ═══ RESPONSIVE ═══ */
 @media (min-width: 600px) {
-  .mp-hero { padding: 56px 24px 56px; }
+  .mp-hero { padding: 48px 24px 0; }
   .mp-hero h1 { font-size: 2.6rem; }
+  .mp-hero-img img { max-height: 280px; }
   .mp-actions-grid { gap: 14px; }
   .mp-trust-item { padding: 16px 14px; }
   .mp-trust-label { font-size: .72rem; }
@@ -1232,6 +1259,9 @@ body.mp-home {
     </div>
     <h1 data-i18n="hero_title">FÈ LAJAN AK TELEFÒN OU JODI A</h1>
     <p class="mp-hero-sub" data-i18n="hero_sub">Achte • Vann • Fè Kous • Touche</p>
+  </div>
+  <div class="mp-hero-img">
+    <img src="assets/img/hero-driver.jpg" alt="MyPlopPlop moto driver showing the app">
   </div>
 </section>
 
