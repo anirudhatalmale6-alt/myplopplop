@@ -1,1142 +1,1845 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ht">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>MyPlopPlop — Premye Makètples Ayiti</title>
+<title>MyPlopPlop — Premye Makètples Ayiti 🇭🇹</title>
 <meta name="description" content="Kòmande nan restoran, sipèmache, famasi, kenkayri ak plis ankò. Livrezon nan tout Ayiti. Sipòte fanmi ak zanmi kèlkeswa kote ou ye.">
 <meta property="og:title" content="MyPlopPlop — Premye Makètples Ayiti">
 <meta property="og:description" content="Kòmande nan restoran, sipèmache, famasi ak plis ankò. Sipòte fanmi ak zanmi nan Ayiti kèlkeswa kote ou ye.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://myplopplop.com/assets/og-myplopplop.jpg?v=2">
+<meta property="og:image" content="https://myplopplop.com/assets/img/og-preview.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="https://myplopplop.com">
 <meta property="og:site_name" content="MyPlopPlop">
-<link rel="canonical" href="https://myplopplop.com/index.html">
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebApplication","name":"MyPlopPlop","url":"https://myplopplop.com","description":"Premye maketples Ayiti. Manje, livrezon, kous, sevis pwofesyonel.","applicationCategory":"ShoppingApplication","operatingSystem":"Web","offers":{"@type":"AggregateOffer","lowPrice":"0","priceCurrency":"HTG"},"provider":{"@type":"Organization","name":"HaitiBiznis","url":"https://haitibiznis.com"}}
-</script>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <link rel="shortcut icon" href="favicon.ico">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#00209F">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/variables.css">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/layout.css">
 <style>
-/* ===== HERO ===== */
-.hero {
-    background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 60%, var(--primary-red) 100%);
-    color: var(--white);
-    padding: var(--space-lg) var(--content-padding) var(--space-xl);
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-.hero::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -30%;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(210,16,52,0.2) 0%, transparent 70%);
-    border-radius: 50%;
-}
-.hero::after {
-    content: '';
-    position: absolute;
-    bottom: -40%;
-    left: -20%;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
-    border-radius: 50%;
-}
-.hero-content {
-    position: relative;
-    z-index: 1;
-    max-width: 600px;
-    margin: 0 auto;
-}
-.hero-logo {
-    margin: 0 auto var(--space-md);
-    background: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: none;
-}
-.hero h1 {
-    font-family: var(--font-heading);
-    font-size: 2rem;
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: var(--space-sm);
-    color: var(--white);
-}
-.hero h1 span { color: var(--primary-red); }
-.hero p {
-    font-size: var(--text-base);
-    opacity: 0.9;
-    margin-bottom: var(--space-lg);
-    line-height: 1.6;
-}
-.hero-search {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    background: var(--white);
-    border-radius: var(--radius-xl);
-    padding: 6px 6px 6px 16px;
-    box-shadow: var(--shadow-xl);
-    max-width: 460px;
-    margin: 0 auto;
-}
-.hero-search input {
-    flex: 1;
-    border: none;
-    background: none;
-    font-size: var(--text-sm);
-    color: var(--text-dark);
-    padding: 8px 0;
-}
-.hero-search input::placeholder { color: var(--gray-400); }
-.hero-search .search-btn {
-    background: var(--primary-red);
-    color: var(--white);
-    border: none;
-    padding: 10px 20px;
-    border-radius: var(--radius-lg);
-    font-weight: 600;
-    font-size: var(--text-sm);
-    cursor: pointer;
-    transition: background var(--transition-fast);
-    white-space: nowrap;
-}
-.hero-search .search-btn:hover { background: var(--primary-red-dark); }
+/* ══════════════════════════════════════════
+   MyPlopPlop Marketplace Homepage v3.0
+   "Tropical Commerce" — Caribbean premium
+   ══════════════════════════════════════════ */
 
-.hero-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    justify-content: center;
-    margin-top: var(--space-md);
-}
-.hero-tag {
-    padding: 4px 12px;
-    background: rgba(255,255,255,0.15);
-    border-radius: var(--radius-full);
-    font-size: var(--text-xs);
-    color: rgba(255,255,255,0.9);
-    backdrop-filter: blur(4px);
+:root {
+  --mp-navy: #0A0E27;
+  --mp-blue: #00209F;
+  --mp-red: #D21034;
+  --mp-red-glow: rgba(210,16,52,.35);
+  --mp-gold: #F5A623;
+  --mp-gold-glow: rgba(245,166,35,.3);
+  --mp-green: #00C853;
+  --mp-green-glow: rgba(0,200,83,.25);
+  --mp-orange: #FF6D00;
+  --mp-white: #FFFFFF;
+  --mp-cream: #FFF9F0;
+  --mp-bg: #F4F1EC;
+  --mp-text: #1A1A2E;
+  --mp-text-sub: #5A5A72;
+  --mp-border: #E8E4DE;
+  --mp-card: #FFFFFF;
+  --mp-heading: 'Bricolage Grotesque', system-ui, sans-serif;
+  --mp-body: 'DM Sans', system-ui, sans-serif;
+  --mp-mono: 'JetBrains Mono', monospace;
 }
 
-/* ===== CTA BUTTONS ===== */
-.hero-ctas {
-    display: flex;
-    gap: var(--space-md);
-    justify-content: center;
-    margin-top: var(--space-lg);
-}
-.cta-order {
-    background: #F31746;
-    color: #FFFFFF;
-    padding: 16px 28px;
-    border-radius: var(--radius-xl);
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: var(--text-base);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm);
-    box-shadow: 0 4px 14px rgba(243,23,70,0.4);
-    transition: all var(--transition-fast);
-}
-.cta-order:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(243,23,70,0.5); }
-.cta-support {
-    background: #FFC83D;
-    color: #0B2A8A;
-    padding: 16px 28px;
-    border-radius: var(--radius-xl);
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: var(--text-base);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm);
-    box-shadow: 0 4px 14px rgba(255,200,61,0.4);
-    transition: all var(--transition-fast);
-}
-.cta-support:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,200,61,0.5); }
-.cta-ride {
-    background: #1565FF;
-    color: #FFFFFF;
-    padding: 16px 28px;
-    border-radius: var(--radius-xl);
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: var(--text-base);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm);
-    box-shadow: 0 4px 14px rgba(21,101,255,0.35);
-    transition: all var(--transition-fast);
-}
-.cta-ride:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(21,101,255,0.5); }
-
-/* ===== REFERRAL HERO CTA ===== */
-.referral-hero-cta {
-    margin-top: 14px;
-    animation: fadeIn 0.6s ease 0.5s both;
-}
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-.referral-hero-inner {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: #E8540C;
-    border-radius: 50px;
-    padding: 8px 10px 8px 14px;
-    box-shadow: 0 2px 12px rgba(232,84,12,0.35);
-}
-.referral-hero-icon {
-    font-size: 1.1rem;
-    flex-shrink: 0;
-}
-.referral-hero-text {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    min-width: 0;
-}
-.referral-hero-text strong {
-    color: #fff;
-    font-size: 0.78rem;
-    font-weight: 700;
-    white-space: nowrap;
-}
-.referral-hero-text span {
-    display: none;
-}
-.referral-hero-btn {
-    background: #fff;
-    color: #0B2A8A;
-    border: none;
-    border-radius: 50px;
-    padding: 6px 14px;
-    font-weight: 700;
-    font-size: 0.75rem;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.2s;
-    flex-shrink: 0;
-}
-.referral-hero-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+/* Override base for homepage */
+body.mp-home {
+  font-family: var(--mp-body);
+  background: var(--mp-bg);
+  color: var(--mp-text);
+  padding-bottom: 72px;
+  overflow-x: hidden;
 }
 
-/* ===== MERCHANT CTA BANNER ===== */
-.merchant-cta-banner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(135deg, #065F46 0%, #10B981 100%);
-    border-radius: 14px;
-    padding: 16px 20px;
-    color: #fff;
-    text-decoration: none;
-    box-shadow: 0 4px 16px rgba(16,185,129,0.3);
-    transition: transform 0.2s, box-shadow 0.2s;
+/* ═══ LANG BAR ═══ */
+.mp-lang {
+  background: var(--mp-navy);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  gap: 2px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
 }
-.merchant-cta-banner:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(16,185,129,0.4);
+.mp-lang a {
+  color: rgba(255,255,255,.5);
+  font-size: .68rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all .2s;
+  letter-spacing: .03em;
+  font-family: var(--mp-body);
 }
-.merchant-cta-banner.msouwout-cta {
-    background: linear-gradient(135deg, #C2410C 0%, #E63A1E 100%);
-    box-shadow: 0 4px 16px rgba(230,58,30,0.3);
+.mp-lang a:hover { color: #fff; background: rgba(255,255,255,.08); }
+.mp-lang a.active { color: var(--mp-navy); background: var(--mp-gold); font-weight: 700; }
+
+/* ═══ NAV ═══ */
+.mp-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--mp-navy);
+  padding: 0 16px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.merchant-cta-banner.msouwout-cta:hover {
-    box-shadow: 0 6px 24px rgba(230,58,30,0.4);
+.mp-nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.merchant-cta-banner.sol-cta {
-    background: linear-gradient(135deg, #0A1F5C 0%, #00209F 100%);
-    box-shadow: 0 4px 16px rgba(10,31,92,0.3);
+.mp-nav-logo img {
+  height: 36px;
+  border-radius: 10px;
 }
-.merchant-cta-banner.sol-cta:hover {
-    box-shadow: 0 6px 24px rgba(10,31,92,0.4);
+.mp-nav-logo span {
+  font-family: var(--mp-heading);
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: #fff;
+  letter-spacing: -.02em;
 }
-.merchant-cta-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1;
-    min-width: 0;
+.mp-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.merchant-cta-icon {
-    font-size: 2rem;
-    flex-shrink: 0;
+.mp-nav-cart {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,.7);
+  border-radius: 12px;
+  transition: all .2s;
 }
-.merchant-cta-text {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+.mp-nav-cart:hover { background: rgba(255,255,255,.08); color: #fff; }
+.mp-nav-cart svg { width: 22px; height: 22px; }
+.mp-cart-badge {
+  position: absolute;
+  top: 4px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  background: var(--mp-red);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.merchant-cta-text strong {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #fff;
+.mp-menu-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,.7);
+  border-radius: 12px;
+  transition: all .2s;
 }
-.merchant-cta-text span {
-    font-size: 0.78rem;
-    color: rgba(255,255,255,0.85);
+.mp-menu-btn:hover { background: rgba(255,255,255,.08); color: #fff; }
+.mp-menu-btn svg { width: 24px; height: 24px; }
+
+/* Mobile menu overlay */
+.mp-mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 200;
+  background: rgba(10,14,39,.6);
+  backdrop-filter: blur(8px);
 }
-.merchant-cta-arrow {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #fff;
-    flex-shrink: 0;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255,255,255,0.2);
-    border-radius: 50%;
-    margin-left: 8px;
+.mp-mobile-menu.open { display: block; }
+.mp-menu-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100%;
+  background: var(--mp-navy);
+  padding: 20px;
+  animation: slideInRight .25s ease;
+}
+@keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+.mp-menu-close {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,.6);
+  margin-left: auto;
+  margin-bottom: 20px;
+  border-radius: 12px;
+}
+.mp-menu-close:hover { background: rgba(255,255,255,.08); }
+.mp-menu-panel a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255,255,255,.8);
+  padding: 14px 12px;
+  border-radius: 12px;
+  font-size: .92rem;
+  font-weight: 600;
+  transition: all .15s;
+}
+.mp-menu-panel a:hover { background: rgba(255,255,255,.06); color: #fff; }
+.mp-menu-panel a span.mi { font-size: 1.2rem; width: 28px; text-align: center; }
+
+/* ═══ HERO ═══ */
+.mp-hero {
+  background: linear-gradient(160deg, var(--mp-navy) 0%, #0D1240 40%, #1A0A30 70%, var(--mp-navy) 100%);
+  padding: 40px 20px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.mp-hero::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -80px;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(210,16,52,.15) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: heroOrb1 8s ease-in-out infinite alternate;
+}
+.mp-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  left: -60px;
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, rgba(245,166,35,.1) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: heroOrb2 10s ease-in-out infinite alternate;
+}
+@keyframes heroOrb1 { from { transform: translate(0,0) scale(1); } to { transform: translate(-30px,20px) scale(1.15); } }
+@keyframes heroOrb2 { from { transform: translate(0,0) scale(1); } to { transform: translate(20px,-15px) scale(1.1); } }
+
+.mp-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.mp-hero-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.1);
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: .75rem;
+  font-weight: 600;
+  color: rgba(255,255,255,.7);
+  margin-bottom: 20px;
+  letter-spacing: .04em;
+  animation: fadeUp .6s ease both;
+}
+.mp-hero-flag span { font-size: 1.1rem; }
+.mp-hero h1 {
+  font-family: var(--mp-heading);
+  font-size: clamp(1.8rem, 7vw, 2.8rem);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.05;
+  letter-spacing: -.03em;
+  margin-bottom: 14px;
+  animation: fadeUp .6s .08s ease both;
+}
+.mp-hero h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--mp-gold) 0%, #FFD97A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.mp-hero-sub {
+  font-size: clamp(.88rem, 2.2vw, 1.02rem);
+  color: rgba(255,255,255,.55);
+  line-height: 1.65;
+  max-width: 400px;
+  margin: 0 auto;
+  font-weight: 400;
+  animation: fadeUp .6s .15s ease both;
 }
 
-/* ===== CATEGORIES ===== */
-.categories-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-md);
-    padding: 0 var(--content-padding);
-}
-.category-card {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    padding: var(--space-lg) var(--space-md);
-    text-align: center;
-    box-shadow: var(--shadow-card);
-    transition: all var(--transition-fast);
-    cursor: pointer;
-    text-decoration: none;
-    display: block;
-}
-.category-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-.category-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    margin: 0 auto var(--space-sm);
-}
-.category-card h4 {
-    font-size: var(--text-sm);
-    font-weight: 600;
-    margin-bottom: 2px;
-}
-.category-card .count {
-    font-size: var(--text-xs);
-    color: var(--text-muted);
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== FEATURED STORES ===== */
-.store-card {
-    width: 260px;
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-card);
-    transition: all var(--transition-fast);
-    flex-shrink: 0;
-    cursor: pointer;
+/* ═══ SEARCH ═══ */
+.mp-search {
+  padding: 0 20px;
+  margin-top: -24px;
+  position: relative;
+  z-index: 10;
+  animation: fadeUp .6s .22s ease both;
 }
-.store-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-.store-img {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-    background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48px;
+.mp-search-bar {
+  display: flex;
+  align-items: center;
+  background: var(--mp-white);
+  border-radius: 16px;
+  padding: 5px 5px 5px 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.12), 0 1px 4px rgba(0,0,0,.06);
+  max-width: 520px;
+  margin: 0 auto;
+  border: 2px solid transparent;
+  transition: border-color .2s;
 }
-.store-info { padding: var(--space-md); }
-.store-name {
-    font-family: var(--font-heading);
-    font-weight: 600;
-    font-size: var(--text-base);
-    margin-bottom: 4px;
+.mp-search-bar:focus-within {
+  border-color: var(--mp-blue);
+  box-shadow: 0 8px 32px rgba(0,32,159,.12), 0 0 0 3px rgba(0,32,159,.06);
 }
-.store-meta {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-    margin-top: var(--space-sm);
+.mp-search-icon {
+  color: var(--mp-text-sub);
+  flex-shrink: 0;
+  margin-right: 10px;
 }
-.store-meta .dot { width: 3px; height: 3px; background: var(--gray-400); border-radius: 50%; }
-.verified-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    color: var(--primary-blue);
-    font-size: var(--text-xs);
-    font-weight: 500;
+.mp-search-icon svg { width: 20px; height: 20px; }
+.mp-search-bar input {
+  flex: 1;
+  padding: 12px 0;
+  font-size: .92rem;
+  color: var(--mp-text);
+  background: none;
+  font-family: var(--mp-body);
+  font-weight: 500;
 }
-
-/* ===== HOW IT WORKS ===== */
-.how-it-works {
-    background: var(--white);
+.mp-search-bar input::placeholder { color: #B0A89E; font-weight: 400; }
+.mp-search-btn {
+  background: var(--mp-red);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: .88rem;
+  font-weight: 700;
+  font-family: var(--mp-heading);
+  transition: all .2s;
+  flex-shrink: 0;
+  letter-spacing: -.01em;
 }
-.steps-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-lg);
-    padding: 0 var(--content-padding);
-}
-.step-card {
-    text-align: center;
-    padding: var(--space-lg) var(--space-md);
-}
-.step-number {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: var(--primary-red-light);
-    color: var(--primary-red);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: var(--text-xl);
-    margin: 0 auto var(--space-md);
-}
-.step-card h4 {
-    font-size: var(--text-base);
-    margin-bottom: var(--space-sm);
-}
-.step-card p {
-    font-size: var(--text-sm);
-    color: var(--text-muted);
-    line-height: 1.5;
+.mp-search-btn:hover {
+  background: #B00D2B;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px var(--mp-red-glow);
 }
 
-/* ===== DIASPORA SECTION ===== */
-.diaspora-section {
-    background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 100%);
-    color: var(--white);
-    position: relative;
-    overflow: hidden;
+/* ═══ PRIMARY ACTIONS ═══ */
+.mp-actions {
+  padding: 28px 16px 0;
+  max-width: 520px;
+  margin: 0 auto;
 }
-.diaspora-section::before {
-    content: '';
-    position: absolute;
-    top: 0; right: 0;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(210,16,52,0.15) 0%, transparent 70%);
-    border-radius: 50%;
-}
-.diaspora-inner {
-    padding: 0 var(--content-padding);
-    position: relative;
-    z-index: 1;
-}
-.diaspora-section h2 { color: var(--white); margin-bottom: var(--space-sm); }
-.diaspora-section p { opacity: 0.9; margin-bottom: var(--space-lg); line-height: 1.6; }
-.trust-items {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-md);
-    margin-bottom: var(--space-lg);
-}
-.trust-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    font-size: var(--text-sm);
-}
-.trust-icon {
-    width: 36px;
-    height: 36px;
-    background: rgba(255,255,255,0.1);
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
+.mp-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
-/* ===== PROMO BANNER ===== */
-.promo-banner {
-    background: linear-gradient(90deg, var(--primary-red) 0%, #e8244a 100%);
-    color: var(--white);
-    padding: var(--space-lg) var(--content-padding);
-    border-radius: var(--radius-xl);
-    margin: 0 var(--content-padding);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-md);
+.mp-act {
+  border-radius: 18px;
+  padding: 22px 18px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  transition: all .25s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
 }
-.promo-banner h3 { font-size: var(--text-lg); color: var(--white); }
-.promo-banner p { font-size: var(--text-sm); opacity: 0.9; margin-top: 4px; }
-.promo-banner .btn { background: var(--white); color: var(--primary-red); font-weight: 700; }
-
-/* ===== CTA SECTION ===== */
-.cta-section {
-    text-align: center;
-    padding: var(--space-3xl) var(--content-padding);
-}
-.cta-cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-md);
-    max-width: 600px;
-    margin: var(--space-lg) auto 0;
-}
-.cta-card {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    padding: var(--space-lg);
-    text-align: center;
-    box-shadow: var(--shadow-card);
-    transition: all var(--transition-fast);
-    text-decoration: none;
-}
-.cta-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-.cta-card .cta-icon { font-size: 36px; margin-bottom: var(--space-sm); }
-.cta-card h4 { font-size: var(--text-base); margin-bottom: 4px; }
-.cta-card p { font-size: var(--text-xs); color: var(--text-muted); }
-
-/* ===== FOOTER ===== */
-.footer {
-    background: var(--gray-900);
-    color: var(--gray-400);
-    padding: var(--space-2xl) var(--content-padding) var(--space-lg);
-}
-.footer-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-xl);
-    margin-bottom: var(--space-xl);
-}
-.footer-brand h3 {
-    font-family: var(--font-heading);
-    color: var(--white);
-    font-size: var(--text-xl);
-    margin-bottom: var(--space-sm);
-}
-.footer-brand h3 span { color: var(--primary-red); }
-.footer-brand p { font-size: var(--text-sm); line-height: 1.6; }
-.footer-col h5 {
-    color: var(--white);
-    font-size: var(--text-sm);
-    margin-bottom: var(--space-md);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-.footer-col a {
-    display: block;
-    font-size: var(--text-sm);
-    padding: 4px 0;
-    transition: color var(--transition-fast);
-}
-.footer-col a:hover { color: var(--white); }
-.footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: var(--space-md);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: var(--text-xs);
+.mp-act:hover { transform: translateY(-3px); }
+.mp-act::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  opacity: .15;
+  transform: translate(20px, -20px);
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 600px) {
-    .hero h1 { font-size: 1.6rem; }
-    .categories-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-sm); }
-    .category-card { padding: var(--space-md) var(--space-sm); }
-    .category-icon { width: 44px; height: 44px; font-size: 22px; }
-    .steps-grid { grid-template-columns: 1fr; gap: var(--space-md); }
-    .trust-items { grid-template-columns: 1fr; }
-    .hero-ctas { flex-direction: column; align-items: center; }
-    .cta-order, .cta-support, .cta-ride { width: 100%; max-width: 280px; justify-content: center; }
-    .promo-banner { flex-direction: column; text-align: center; }
-    .cta-cards { grid-template-columns: 1fr; }
+/* Customer - RED - spans full width */
+.mp-act-buy {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, var(--mp-red), #E8183F);
+  color: #fff;
+  padding: 26px 22px;
 }
-@media (min-width: 768px) {
-    .hero { padding: var(--space-3xl) var(--content-padding); }
-    .hero h1 { font-size: 2.5rem; }
-    .categories-grid { grid-template-columns: repeat(3, 1fr); }
-    .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
-    .store-card { width: 300px; }
+.mp-act-buy::after { background: rgba(255,255,255,.3); }
+.mp-act-buy:hover { box-shadow: 0 8px 28px var(--mp-red-glow); }
+
+/* Store Owners - GREEN - spans full width with special treatment */
+.mp-act-sell {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #00803A, var(--mp-green));
+  color: #fff;
+  padding: 26px 22px;
+  border: 2px solid rgba(245,166,35,.5);
+  box-shadow: 0 0 24px var(--mp-gold-glow), 0 4px 16px var(--mp-green-glow);
+  animation: vendorPulse 3s ease-in-out infinite;
 }
-@media (min-width: 1024px) {
-    .categories-grid { grid-template-columns: repeat(6, 1fr); }
+.mp-act-sell::after { background: rgba(255,255,255,.25); width: 100px; height: 100px; }
+.mp-act-sell:hover { box-shadow: 0 0 36px var(--mp-gold-glow), 0 8px 28px var(--mp-green-glow); }
+@keyframes vendorPulse {
+  0%, 100% { box-shadow: 0 0 24px var(--mp-gold-glow), 0 4px 16px var(--mp-green-glow); }
+  50% { box-shadow: 0 0 36px rgba(245,166,35,.45), 0 4px 20px rgba(0,200,83,.35); }
 }
-.install-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:999;background:linear-gradient(135deg,#00209F 0%,#D21034 100%);color:#fff;padding:14px 20px;box-shadow:0 -4px 20px rgba(0,0,0,.15);align-items:center;gap:12px}
-.install-banner.show{display:flex}
-.install-banner-text{flex:1;font-size:.82rem;font-weight:600}
-.install-banner-text small{display:block;font-size:.7rem;font-weight:400;opacity:.8;margin-top:2px}
-.install-banner-btn{background:#fff;color:#00209F;border:none;padding:10px 22px;border-radius:100px;font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap}
-.install-banner-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:1.2rem;cursor:pointer;padding:4px}
-.whatsapp-share {
-    position: fixed;
-    bottom: 80px;
-    left: 16px;
-    z-index: 998;
-    width: 52px;
-    height: 52px;
-    background: #25D366;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(37,211,102,0.4);
-    transition: transform 0.2s, box-shadow 0.2s;
-    text-decoration: none;
+.mp-act-sell .mp-act-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--mp-gold);
+  color: #1A0A00;
+  font-size: .6rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 100px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  font-family: var(--mp-heading);
 }
-.whatsapp-share:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 18px rgba(37,211,102,0.5);
+
+/* Delivery - BLUE */
+.mp-act-ride {
+  background: linear-gradient(135deg, var(--mp-blue), #1545CC);
+  color: #fff;
+}
+.mp-act-ride::after { background: rgba(255,255,255,.2); }
+.mp-act-ride:hover { box-shadow: 0 8px 28px rgba(0,32,159,.3); }
+
+/* Affiliate - ORANGE */
+.mp-act-earn {
+  background: linear-gradient(135deg, var(--mp-orange), #FF8F33);
+  color: #fff;
+}
+.mp-act-earn::after { background: rgba(255,255,255,.2); }
+.mp-act-earn:hover { box-shadow: 0 8px 28px rgba(255,109,0,.3); }
+
+.mp-act-emoji {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.15));
+}
+.mp-act-title {
+  font-family: var(--mp-heading);
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -.02em;
+  margin-bottom: 4px;
+}
+.mp-act-buy .mp-act-title { font-size: 1.2rem; }
+.mp-act-sell .mp-act-title { font-size: 1.15rem; }
+.mp-act-desc {
+  font-size: .78rem;
+  opacity: .75;
+  line-height: 1.45;
+  font-weight: 400;
+}
+.mp-act-sell .mp-act-desc { opacity: .85; }
+.mp-act-arrow {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255,255,255,.15);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: all .2s;
+}
+.mp-act:hover .mp-act-arrow { background: rgba(255,255,255,.25); transform: translateX(2px); }
+.mp-act-arrow svg { width: 16px; height: 16px; }
+
+.mp-act-sub-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+.mp-act-sub-btn {
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: .82rem;
+  font-weight: 700;
+  font-family: var(--mp-heading);
+  transition: all .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: -.01em;
+}
+.mp-act-buy .mp-act-sub-btn:first-child {
+  background: #fff;
+  color: var(--mp-red);
+}
+.mp-act-buy .mp-act-sub-btn:first-child:hover { background: #FFE8EC; }
+.mp-act-buy .mp-act-sub-btn:last-child {
+  background: rgba(255,255,255,.15);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.2);
+}
+.mp-act-buy .mp-act-sub-btn:last-child:hover { background: rgba(255,255,255,.25); }
+
+/* ═══ TRUST STRIP ═══ */
+.mp-trust {
+  padding: 20px 16px;
+  margin-top: 24px;
+}
+.mp-trust-inner {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  max-width: 520px;
+  margin: 0 auto;
+  background: var(--mp-white);
+  border-radius: 14px;
+  border: 1px solid var(--mp-border);
+  padding: 0;
+}
+.mp-trust-inner::-webkit-scrollbar { display: none; }
+.mp-trust-item {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 14px 10px;
+  gap: 4px;
+  border-right: 1px solid var(--mp-border);
+}
+.mp-trust-item:last-child { border-right: none; }
+.mp-trust-icon {
+  width: 28px;
+  height: 28px;
+  background: #E8FFF0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .85rem;
+  margin-bottom: 2px;
+}
+.mp-trust-label {
+  font-size: .65rem;
+  font-weight: 700;
+  color: var(--mp-text);
+  line-height: 1.3;
+  letter-spacing: -.01em;
+}
+
+/* ═══ CATEGORIES ═══ */
+.mp-cats {
+  padding: 28px 16px 0;
+}
+.mp-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 520px;
+  margin: 0 auto 14px;
+}
+.mp-section-title {
+  font-family: var(--mp-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--mp-text);
+  letter-spacing: -.02em;
+}
+.mp-section-more {
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--mp-blue);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.mp-cats-scroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 4px 0 4px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.mp-cats-scroll::-webkit-scrollbar { display: none; }
+.mp-cat {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 12px;
+  min-width: 80px;
+  background: var(--mp-white);
+  border-radius: 16px;
+  border: 1.5px solid var(--mp-border);
+  transition: all .2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.mp-cat:hover {
+  border-color: var(--mp-blue);
+  background: rgba(0,32,159,.03);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,32,159,.08);
+}
+.mp-cat-icon {
+  width: 44px;
+  height: 44px;
+  background: var(--mp-cream);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+.mp-cat-name {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--mp-text);
+  text-align: center;
+  letter-spacing: -.01em;
+}
+
+/* ═══ FEATURED / TABS ═══ */
+.mp-featured {
+  padding: 32px 16px 0;
+}
+.mp-tabs {
+  display: flex;
+  gap: 4px;
+  max-width: 520px;
+  margin: 0 auto 16px;
+  background: var(--mp-white);
+  border-radius: 12px;
+  padding: 4px;
+  border: 1px solid var(--mp-border);
+}
+.mp-tab {
+  flex: 1;
+  padding: 10px 8px;
+  border-radius: 10px;
+  font-size: .78rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--mp-text-sub);
+  transition: all .2s;
+  font-family: var(--mp-heading);
+  cursor: pointer;
+  letter-spacing: -.01em;
+}
+.mp-tab.active {
+  background: var(--mp-navy);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(10,14,39,.2);
+}
+.mp-tab:hover:not(.active) { background: var(--mp-cream); color: var(--mp-text); }
+
+.mp-tab-content { display: none; }
+.mp-tab-content.active { display: block; }
+
+.mp-products-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.mp-product {
+  background: var(--mp-white);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--mp-border);
+  transition: all .25s;
+  text-decoration: none;
+  color: inherit;
+}
+.mp-product:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  border-color: transparent;
+}
+.mp-product-img {
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, var(--mp-cream) 0%, #EDE8E0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  position: relative;
+}
+.mp-product-tag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: var(--mp-red);
+  color: #fff;
+  font-size: .6rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: .03em;
+}
+.mp-product-info {
+  padding: 12px;
+}
+.mp-product-store {
+  font-size: .65rem;
+  font-weight: 600;
+  color: var(--mp-text-sub);
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.mp-product-name {
+  font-family: var(--mp-heading);
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--mp-text);
+  line-height: 1.25;
+  margin-bottom: 6px;
+  letter-spacing: -.01em;
+}
+.mp-product-price {
+  font-family: var(--mp-mono);
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--mp-red);
+}
+.mp-product-old-price {
+  font-size: .72rem;
+  color: var(--mp-text-sub);
+  text-decoration: line-through;
+  margin-left: 6px;
+}
+
+/* Store cards */
+.mp-stores-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 4px 0;
+}
+.mp-stores-scroll::-webkit-scrollbar { display: none; }
+.mp-store {
+  flex-shrink: 0;
+  width: 160px;
+  background: var(--mp-white);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--mp-border);
+  transition: all .25s;
+  text-decoration: none;
+  color: inherit;
+}
+.mp-store:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+}
+.mp-store-cover {
+  height: 70px;
+  background: linear-gradient(135deg, var(--mp-blue), #1545CC);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+}
+.mp-store-info {
+  padding: 12px;
+  text-align: center;
+}
+.mp-store-name {
+  font-family: var(--mp-heading);
+  font-size: .82rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.mp-store-cat {
+  font-size: .68rem;
+  color: var(--mp-text-sub);
+}
+.mp-store-rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  margin-top: 6px;
+  font-size: .7rem;
+  font-weight: 600;
+  color: var(--mp-gold);
+}
+
+/* ═══ DELIVERY SECTION ═══ */
+.mp-delivery {
+  padding: 32px 16px 0;
+}
+.mp-delivery-card {
+  max-width: 520px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, var(--mp-navy) 0%, #141B52 100%);
+  border-radius: 20px;
+  padding: 28px 22px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.mp-delivery-card::before {
+  content: '';
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(0,32,159,.4), transparent 70%);
+  border-radius: 50%;
+}
+.mp-delivery-text {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+}
+.mp-delivery-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.mp-delivery-logo img {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+}
+.mp-delivery-logo span {
+  font-family: var(--mp-heading);
+  font-weight: 700;
+  font-size: .82rem;
+  color: rgba(255,255,255,.7);
+}
+.mp-delivery-title {
+  font-family: var(--mp-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  letter-spacing: -.02em;
+  margin-bottom: 6px;
+}
+.mp-delivery-desc {
+  font-size: .8rem;
+  color: rgba(255,255,255,.5);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+.mp-delivery-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--mp-blue);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: .82rem;
+  font-weight: 700;
+  font-family: var(--mp-heading);
+  transition: all .2s;
+}
+.mp-delivery-btn:hover { background: #1545CC; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,32,159,.4); }
+.mp-delivery-vehicles {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.mp-vehicle {
+  width: 56px;
+  height: 56px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+}
+
+/* ═══ SOCIAL PROOF ═══ */
+.mp-proof {
+  padding: 28px 16px 0;
+}
+.mp-proof-inner {
+  display: flex;
+  gap: 12px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.mp-proof-stat {
+  flex: 1;
+  background: var(--mp-white);
+  border-radius: 14px;
+  border: 1px solid var(--mp-border);
+  padding: 16px 12px;
+  text-align: center;
+}
+.mp-proof-num {
+  font-family: var(--mp-heading);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--mp-text);
+  letter-spacing: -.02em;
+}
+.mp-proof-label {
+  font-size: .68rem;
+  font-weight: 600;
+  color: var(--mp-text-sub);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+.mp-proof-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.mp-proof-dot.green { background: var(--mp-green); }
+.mp-proof-dot.red { background: var(--mp-red); }
+.mp-proof-dot.blue { background: var(--mp-blue); }
+
+/* ═══ VENDOR CTA SECTION ═══ */
+.mp-vendor-cta {
+  padding: 32px 16px 24px;
+}
+.mp-vendor-card {
+  max-width: 520px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #FFF9F0, #FFF3E0);
+  border: 2px solid rgba(245,166,35,.3);
+  border-radius: 20px;
+  padding: 28px 22px;
+  text-align: center;
+}
+.mp-vendor-card h3 {
+  font-family: var(--mp-heading);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--mp-text);
+  margin-bottom: 8px;
+  letter-spacing: -.02em;
+}
+.mp-vendor-card p {
+  font-size: .85rem;
+  color: var(--mp-text-sub);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.mp-vendor-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #00803A, var(--mp-green));
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-family: var(--mp-heading);
+  font-size: .95rem;
+  font-weight: 800;
+  transition: all .25s;
+  box-shadow: 0 4px 16px var(--mp-green-glow);
+  letter-spacing: -.01em;
+}
+.mp-vendor-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,200,83,.35);
+}
+.mp-vendor-free {
+  display: block;
+  margin-top: 10px;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--mp-text-sub);
+}
+
+/* ═══ WHATSAPP FAB ═══ */
+.mp-whatsapp {
+  position: fixed;
+  bottom: 84px;
+  right: 16px;
+  z-index: 90;
+  width: 56px;
+  height: 56px;
+  background: #25D366;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(37,211,102,.4);
+  transition: all .25s;
+  animation: waPulse 3s ease-in-out infinite;
+}
+.mp-whatsapp:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 8px 28px rgba(37,211,102,.5);
+}
+.mp-whatsapp svg { width: 28px; height: 28px; }
+@keyframes waPulse {
+  0%, 100% { box-shadow: 0 4px 16px rgba(37,211,102,.4); }
+  50% { box-shadow: 0 4px 24px rgba(37,211,102,.6); }
+}
+.mp-wa-tooltip {
+  position: absolute;
+  right: 64px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--mp-navy);
+  color: #fff;
+  font-size: .72rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 10px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .2s;
+}
+.mp-whatsapp:hover .mp-wa-tooltip { opacity: 1; }
+
+/* ═══ BOTTOM NAV ═══ */
+.mp-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--mp-white);
+  border-top: 1px solid var(--mp-border);
+  padding: 6px 0 env(safe-area-inset-bottom, 6px);
+  display: flex;
+}
+.mp-bottom a {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 0;
+  color: var(--mp-text-sub);
+  font-size: .62rem;
+  font-weight: 700;
+  transition: color .15s;
+  text-decoration: none;
+  letter-spacing: .02em;
+}
+.mp-bottom a.active { color: var(--mp-red); }
+.mp-bottom a:hover { color: var(--mp-text); }
+.mp-bottom svg { width: 22px; height: 22px; }
+.mp-bottom .nav-dot {
+  width: 4px;
+  height: 4px;
+  background: var(--mp-red);
+  border-radius: 50%;
+  position: absolute;
+  top: 4px;
+  right: calc(50% - 14px);
+}
+
+/* ═══ FOOTER SPACER ═══ */
+.mp-footer {
+  padding: 20px 16px 8px;
+  text-align: center;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.mp-footer-text {
+  font-size: .68rem;
+  color: var(--mp-text-sub);
+  line-height: 1.6;
+}
+.mp-footer-text a { color: var(--mp-blue); font-weight: 600; }
+
+/* ═══ RESPONSIVE ═══ */
+@media (min-width: 600px) {
+  .mp-hero { padding: 56px 24px 56px; }
+  .mp-hero h1 { font-size: 2.6rem; }
+  .mp-actions-grid { gap: 14px; }
+  .mp-act-buy, .mp-act-sell { padding: 30px 26px; }
+  .mp-trust-item { padding: 16px 14px; }
+  .mp-trust-label { font-size: .72rem; }
+}
+
+/* ═══ STAGGER ANIMATIONS ═══ */
+.mp-stagger { animation: fadeUp .5s ease both; }
+.mp-stagger:nth-child(1) { animation-delay: .05s; }
+.mp-stagger:nth-child(2) { animation-delay: .1s; }
+.mp-stagger:nth-child(3) { animation-delay: .15s; }
+.mp-stagger:nth-child(4) { animation-delay: .2s; }
+.mp-stagger:nth-child(5) { animation-delay: .25s; }
+.mp-stagger:nth-child(6) { animation-delay: .3s; }
+
+/* Scroll reveal */
+.mp-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .5s ease, transform .5s ease;
+}
+.mp-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>
 </head>
-<body>
+<body class="mp-home">
 
-<!-- TOP BAR -->
-<div class="top-bar">
-    <div class="flex items-center gap-sm">
-        <span>📍 Port-au-Prince</span>
-        <span style="opacity:0.5">|</span>
-        <a href="#" data-i18n="topbar.change_location">Change location</a>
-    </div>
-    <div class="flex items-center" style="gap:4px;flex-wrap:wrap;">
-        <a href="#" data-lang="fr">🇫🇷 Français</a>
-        <a href="#" data-lang="en">🇬🇧 English</a>
-        <a href="#" data-lang="kr">🇭🇹 Kreyòl</a>
-        <a href="#" data-lang="es">🇪🇸 Español</a>
-    </div>
+<!-- ═══ LANGUAGE BAR ═══ -->
+<div class="mp-lang">
+  <a class="active" onclick="setLang('ht')">🇭🇹 Kreyòl</a>
+  <a onclick="setLang('en')">🇺🇸 English</a>
+  <a onclick="setLang('fr')">🇫🇷 Français</a>
+  <a onclick="setLang('es')">🇪🇸 Español</a>
 </div>
 
-<!-- HEADER -->
-<header class="header">
-    <div class="header-inner">
-        <a href="index.html" class="header-logo">
-            <img src="assets/myplopplop-icon.png" alt="MyPlopPlop" style="height:40px;">
-        </a>
-
-        <div class="header-actions">
-            <a href="shop.html" class="header-icon" title="Search">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            </a>
-            <a href="cart.html" class="header-icon" title="Cart">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-                <span class="header-badge">2</span>
-            </a>
-            <a href="login.html" class="header-icon" title="Account">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            </a>
-        </div>
-    </div>
-</header>
-
-<!-- MAIN -->
-<main class="main">
-
-<!-- HERO -->
-<section class="hero">
-    <div class="hero-content">
-        <div class="hero-logo" style="background:none;box-shadow:none;width:auto;height:auto;"><img src="assets/myplopplop-logo-full.png?v=70" alt="MyPlopPlop" style="height:200px;max-width:95%;filter:drop-shadow(0 4px 16px rgba(0,0,0,0.3));"></div>
-        <h1 data-i18n="hero.title">Haiti's First<br><span>Marketplace</span></h1>
-        <p data-i18n="hero.description">Order from restaurants, supermarkets, hardware stores, pharmacies, wholesale and retail shops. Support family and friends in Haiti from anywhere.</p>
-
-        <div class="hero-search">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            <input type="text" placeholder="Search stores, products, or categories..." data-i18n-placeholder="hero.search_placeholder">
-            <button class="search-btn" data-i18n="btn.search">Search</button>
-        </div>
-
-        <div style="text-align:center;margin:var(--space-md) 0;">
-            <a href="login.html#signup" class="btn" style="display:inline-block;background:#FFFFFF;color:#0B2A8A;font-weight:800;font-size:1.1rem;padding:16px 44px;border-radius:100px;box-shadow:0 4px 14px rgba(0,0,0,0.15);text-decoration:none;letter-spacing:0.5px;" data-i18n="btn.signup_free">Sign Up For Free</a>
-        </div>
-
-        <div class="hero-ctas">
-            <a href="shop.html" class="cta-order">
-                <span>🛒</span> <span data-i18n="btn.order_now">Kòmande Kounye a</span>
-            </a>
-            <a href="diaspora.html" class="cta-support">
-                <span>❤️</span> <span data-i18n="btn.support_family">Sipòte Fanmiw</span>
-            </a>
-            <a href="https://msouwout.com" class="cta-ride">
-                <img src="assets/msouwout-icon.png" alt="MsouWout" style="height:24px;vertical-align:middle;margin-right:4px;"> <span data-i18n="btn.ride_taxi">Mande Taxi/Moto An Sekirite</span>
-            </a>
-        </div>
-
-        <!-- REFERRAL INVITE BUTTON -->
-        <div class="referral-hero-cta" id="referralHeroCta">
-            <div class="referral-hero-inner">
-                <span class="referral-hero-icon">💰</span>
-                <div class="referral-hero-text">
-                    <strong data-i18n="ref.hero_title">Earn Cash 💰</strong>
-                    <span data-i18n="ref.hero_sub">Invite friends and earn 10% on every transaction!</span>
-                </div>
-                <button class="referral-hero-btn" onclick="shareReferral()" data-i18n="ref.hero_btn">Share Now</button>
-            </div>
-        </div>
-
-        <div class="hero-tags">
-            <span class="hero-tag" data-i18n="tag.restaurants">🍽️ Restaurants</span>
-            <span class="hero-tag" data-i18n="tag.supermarkets">🛒 Supermarchés</span>
-            <span class="hero-tag" data-i18n="tag.hardware">🔧 Quincailleries</span>
-            <span class="hero-tag" data-i18n="tag.pharmacies">💊 Pharmacies</span>
-            <span class="hero-tag" data-i18n="tag.wholesale">📦 Grossistes</span>
-            <span class="hero-tag" data-i18n="tag.retail">🏬 Détaillants</span>
-        </div>
-    </div>
-</section>
-
-<!-- MERCHANT CTA (visible right away) -->
-<section class="section" style="padding-bottom:0;">
-    <div class="container" style="display:flex;flex-direction:column;gap:12px;">
-        <a href="store-designer.html" class="merchant-cta-banner" id="merchantCtaBanner">
-            <div class="merchant-cta-left">
-                <span class="merchant-cta-icon">🏪</span>
-                <div class="merchant-cta-text">
-                    <strong data-i18n="merchant.cta_title">Ou gen yon biznis? Vann sou MyPlopPlop!</strong>
-                    <span data-i18n="merchant.cta_sub">Mete boutik ou gratis. Kòmanse vann nan kèk minit.</span>
-                </div>
-            </div>
-            <span class="merchant-cta-arrow">→</span>
-        </a>
-        <a href="https://msouwout.com" class="merchant-cta-banner msouwout-cta" id="msouwoutCtaBanner">
-            <div class="merchant-cta-left">
-                <span class="merchant-cta-icon">🚕</span>
-                <div class="merchant-cta-text">
-                    <strong data-i18n="msouwout.cta_title">MsouWout — Taxi & Livrezon</strong>
-                    <span data-i18n="msouwout.cta_sub">Mande kous ou oswa livrezon an sekirite.</span>
-                </div>
-            </div>
-            <span class="merchant-cta-arrow">→</span>
-        </a>
-        <a href="sol.html" class="merchant-cta-banner sol-cta" id="solCtaBanner">
-            <div class="merchant-cta-left">
-                <img src="assets/sol-icon.png" alt="Sòl" style="width:56px;height:56px;border-radius:12px;flex-shrink:0">
-                <div class="merchant-cta-text">
-                    <strong data-i18n="sol.cta_title">Sòl — Lajan Kolektif Dijital</strong>
-                    <span data-i18n="sol.cta_sub">Ekonomize ansanm. Antre nan yon Sòl jodi a.</span>
-                </div>
-            </div>
-            <span class="merchant-cta-arrow">→</span>
-        </a>
-    </div>
-</section>
-
-<!-- CATEGORIES -->
-<section class="section">
-    <div class="container">
-        <div class="section-header">
-            <h3 class="section-title" data-i18n="categories.title">Categories</h3>
-            <a href="shop.html" class="section-link" data-i18n="btn.see_all">See all →</a>
-        </div>
-    </div>
-    <div class="categories-grid" id="categoriesGrid"></div>
-</section>
-
-<!-- PROMO BANNER -->
-<section class="section" style="padding-top:0;">
-    <div class="promo-banner">
-        <div>
-            <h3 data-i18n="promo.title">🎉 15% off your first delivery!</h3>
-            <p data-i18n-html="promo.desc">Use code: <strong>FIRST15</strong> at checkout.</p>
-        </div>
-        <a href="shop.html" class="btn" data-i18n="btn.order_now">Order Now</a>
-    </div>
-</section>
-
-<!-- FEATURED STORES -->
-<section class="section" style="padding-top:0;">
-    <div class="container">
-        <div class="section-header">
-            <h3 class="section-title" data-i18n="merchants.title">Featured Merchants</h3>
-            <a href="shop.html" class="section-link" data-i18n="btn.see_all">See all →</a>
-        </div>
-    </div>
-    <div class="h-scroll" id="featuredStores" style="padding-left: var(--content-padding); padding-right: var(--content-padding);"></div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="section how-it-works">
-    <div class="container">
-        <div class="section-header" style="justify-content:center;">
-            <h3 class="section-title" data-i18n="how.title">How It Works</h3>
-        </div>
-    </div>
-    <div class="steps-grid">
-        <div class="step-card">
-            <div class="step-number">1</div>
-            <h4 data-i18n="how.step1">Browse & Choose</h4>
-            <p data-i18n="how.step1_desc">Browse restaurants, supermarkets, pharmacies and more near you.</p>
-        </div>
-        <div class="step-card">
-            <div class="step-number">2</div>
-            <h4 data-i18n="how.step2">Place Order</h4>
-            <p data-i18n="how.step2_desc">Pay with San Cash wallet, credit card, or debit card. Quick and secure.</p>
-        </div>
-        <div class="step-card">
-            <div class="step-number">3</div>
-            <h4 data-i18n="how.step3">Fast Delivery</h4>
-            <p data-i18n="how.step3_desc">Track your delivery in real time. Your rider brings it right to your door.</p>
-        </div>
-    </div>
-</section>
-
-<!-- REFERRAL PROGRAM -->
-<section class="section" style="padding-top:0;">
-    <div class="container">
-        <div style="background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%); border-radius: 16px; padding: 32px 24px; color: white; text-align: center;">
-            <h3 style="font-size: 1.4rem; margin-bottom: 8px;" data-i18n="ref.title">Earn Cash 💰 with Referrals!</h3>
-            <p style="opacity: 0.9; margin-bottom: 20px; font-size: 0.95rem;" data-i18n-html="ref.desc">Become an ambassador! Earn <strong>10% on every package</strong> and <strong>10% on platform fees</strong> from people you refer!</p>
-            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;">
-                <div style="background: rgba(255,255,255,0.15); border-radius: 12px; padding: 16px; flex: 1; min-width: 130px;">
-                    <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 4px;">10%</div>
-                    <div style="font-size: 0.85rem; font-weight: 600;" data-i18n="ref.card1_title">48HoursReady Packages</div>
-                    <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 4px;" data-i18n="ref.card1_desc">Earn 10% on every package purchased by someone you referred!</div>
-                </div>
-                <div style="background: rgba(255,255,255,0.15); border-radius: 12px; padding: 16px; flex: 1; min-width: 130px;">
-                    <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 4px;">10%</div>
-                    <div style="font-size: 0.85rem; font-weight: 600;" data-i18n="ref.card2_title">Platform Fees</div>
-                    <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 4px;" data-i18n="ref.card2_desc">Earn 10% on all platform fees from your referrals for 3 months!</div>
-                </div>
-            </div>
-            <button onclick="shareReferral()" class="btn" style="background: #FF6B35; color: white; font-weight: 700; padding: 14px 32px; border-radius: 50px; font-size: 1rem; margin-right: 8px; cursor:pointer; border:none;">🔗 Share My Referral Link</button>
-            <a href="help.html" class="btn" style="background: white; color: #1E3A8A; font-weight: 700; padding: 12px 28px; border-radius: 50px;" data-i18n="ref.learn_more">Learn More</a>
-        </div>
-    </div>
-</section>
-
-<!-- SOL (ROSCA) MONEY POOL -->
-<section class="section" style="padding-top:0;">
-    <div class="container">
-        <div style="background: linear-gradient(135deg, #0A1F5C 0%, #00209F 100%); border-radius: 16px; padding: 32px 24px; color: white; text-align: center; position: relative; overflow: hidden;">
-            <div style="position:absolute;top:-20px;right:-20px;font-size:6rem;opacity:0.08;transform:rotate(15deg);">&#128176;</div>
-            <div style="display:inline-block;background:rgba(255,255,255,0.2);border-radius:100px;padding:6px 16px;font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;" data-i18n="sol.badge">New Feature</div>
-            <h3 style="font-size: 1.6rem; margin-bottom: 8px; font-weight: 800;" data-i18n="sol.title">Sòl - Digital Money Pool</h3>
-            <p style="opacity: 0.9; margin-bottom: 24px; font-size: 0.95rem; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6;" data-i18n="sol.desc">The traditional Haitian Sòl (ROSCA) is now digital on MyPlopPlop! Save together with friends, family, or your community. Everyone contributes, everyone wins.</p>
-
-            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px;">
-                <div style="background: rgba(255,255,255,0.15); border-radius: 14px; padding: 20px 16px; flex: 1; min-width: 140px; text-align: center;">
-                    <div style="font-size: 2rem; margin-bottom: 8px;">&#129309;</div>
-                    <div style="font-size: 0.9rem; font-weight: 700; margin-bottom: 4px;" data-i18n="sol.s1_title">Create a Group</div>
-                    <div style="font-size: 0.75rem; opacity: 0.8; line-height: 1.5;" data-i18n="sol.s1_desc">Start a Sòl with 5-20 members. Set the contribution amount and frequency (weekly or monthly).</div>
-                </div>
-                <div style="background: rgba(255,255,255,0.15); border-radius: 14px; padding: 20px 16px; flex: 1; min-width: 140px; text-align: center;">
-                    <div style="font-size: 2rem; margin-bottom: 8px;">&#128178;</div>
-                    <div style="font-size: 0.9rem; font-weight: 700; margin-bottom: 4px;" data-i18n="sol.s2_title">Everyone Contributes</div>
-                    <div style="font-size: 0.75rem; opacity: 0.8; line-height: 1.5;" data-i18n="sol.s2_desc">Each member pays their share on time. Transparent tracking so everyone can see the pool balance.</div>
-                </div>
-                <div style="background: rgba(255,255,255,0.15); border-radius: 14px; padding: 20px 16px; flex: 1; min-width: 140px; text-align: center;">
-                    <div style="font-size: 2rem; margin-bottom: 8px;">&#127881;</div>
-                    <div style="font-size: 0.9rem; font-weight: 700; margin-bottom: 4px;" data-i18n="sol.s3_title">Take Your Turn</div>
-                    <div style="font-size: 0.75rem; opacity: 0.8; line-height: 1.5;" data-i18n="sol.s3_desc">Each round, one member receives the full pot. Spend it on MyPlopPlop or cash out!</div>
-                </div>
-            </div>
-
-            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;">
-                <div style="background: rgba(255,255,255,0.2); border-radius: 10px; padding: 10px 16px; font-size: 0.78rem; font-weight: 600;">
-                    <span style="margin-right: 4px;">&#128274;</span> <span data-i18n="sol.f1">Secure & Transparent</span>
-                </div>
-                <div style="background: rgba(255,255,255,0.2); border-radius: 10px; padding: 10px 16px; font-size: 0.78rem; font-weight: 600;">
-                    <span style="margin-right: 4px;">&#128202;</span> <span data-i18n="sol.f2">Track Every Payment</span>
-                </div>
-                <div style="background: rgba(255,255,255,0.2); border-radius: 10px; padding: 10px 16px; font-size: 0.78rem; font-weight: 600;">
-                    <span style="margin-right: 4px;">&#127760;</span> <span data-i18n="sol.f3">Diaspora Welcome</span>
-                </div>
-            </div>
-
-            <a href="sol.html" class="btn" style="background: white; color: #0A1F5C; font-weight: 700; padding: 14px 32px; border-radius: 50px; font-size: 0.95rem;" data-i18n="sol.cta">Join a Sòl Today</a>
-        </div>
-    </div>
-</section>
-
-<!-- DIASPORA SUPPORT -->
-<section class="section diaspora-section">
-    <div class="diaspora-inner">
-        <h2 data-i18n="diaspora.title">Support Family in Haiti</h2>
-        <p data-i18n="diaspora.desc">Living abroad? Buy groceries, medicine, and essentials for your family and friends in Haiti. They receive the delivery, you handle the payment from anywhere in the world.</p>
-        <div class="trust-items">
-            <div class="trust-item">
-                <div class="trust-icon">✅</div>
-                <span data-i18n="diaspora.trust1">Verified merchants</span>
-            </div>
-            <div class="trust-item">
-                <div class="trust-icon">🔒</div>
-                <span data-i18n="diaspora.trust2">Secure checkout</span>
-            </div>
-            <div class="trust-item">
-                <div class="trust-icon">📍</div>
-                <span data-i18n="diaspora.trust3">Real-time tracking</span>
-            </div>
-            <div class="trust-item">
-                <div class="trust-icon">💬</div>
-                <span data-i18n="diaspora.trust4">Customer support</span>
-            </div>
-        </div>
-        <a href="diaspora.html" class="btn btn-red btn-lg btn-round" data-i18n="diaspora.cta">Send Support Now ❤️</a>
-    </div>
-</section>
-
-<!-- MERCHANT / RIDER CTAs -->
-<section class="section cta-section">
-    <h3 data-i18n="cta.title">Join the MyPlopPlop Network</h3>
-    <p class="text-muted" style="max-width:500px;margin:var(--space-sm) auto 0;" data-i18n="cta.subtitle">Grow your business or earn as a delivery rider</p>
-    <div class="cta-cards">
-        <a href="merchant/dashboard.html" class="cta-card">
-            <div class="cta-icon">🏪</div>
-            <h4 data-i18n="cta.merchant">Become a Merchant</h4>
-            <p data-i18n="cta.merchant_desc">List your store and reach thousands of customers</p>
-        </a>
-        <a href="rider/dashboard.html" class="cta-card">
-            <div class="cta-icon">🏍️</div>
-            <h4 data-i18n="cta.rider">Become a Rider</h4>
-            <p data-i18n="cta.rider_desc">Deliver orders and earn on your own schedule</p>
-        </a>
-    </div>
-</section>
-
-</main>
-
-<!-- FOOTER -->
-<footer class="footer">
-    <div class="container">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <img src="assets/myplopplop-icon.png" alt="MyPlopPlop" style="height:50px;margin-bottom:var(--space-sm);">
-                <p>Haiti's First Marketplace. From restaurants to hardware stores, we connect you with the best merchants across Haiti.</p>
-            </div>
-            <div class="footer-col">
-                <h5>Shop</h5>
-                <a href="shop.html">All Stores</a>
-                <a href="category.html?cat=restaurants">Restaurants</a>
-                <a href="category.html?cat=supermarkets">Supermarkets</a>
-                <a href="category.html?cat=pharmacies">Pharmacies</a>
-            </div>
-            <div class="footer-col">
-                <h5>Account</h5>
-                <a href="orders.html">My Orders</a>
-                <a href="wallet.html">San Cash</a>
-                <a href="recipients.html">Recipients</a>
-                <a href="help.html">Help Center</a>
-            </div>
-            <div class="footer-col">
-                <h5>Partners</h5>
-                <a href="merchant/dashboard.html">Merchants</a>
-                <a href="rider/dashboard.html">Riders</a>
-                <a href="#">About Us</a>
-                <a href="contact.html">Contact</a>
-            </div>
-        </div>
-        <div class="footer-bottom" style="flex-wrap:wrap;gap:var(--space-sm);">
-            <span data-i18n="footer.copyright">&copy; 2026 MyPlopPlop. All rights reserved.</span>
-            <div style="display:flex;gap:var(--space-md);">
-                <a href="privacy.html" style="color:var(--gray-400);">Privacy Policy</a>
-                <a href="terms.html" style="color:var(--gray-400);">Terms of Service</a>
-            </div>
-            <span>Powered by <a href="https://48hoursready.com" style="color:var(--white);font-weight:600;">48HoursReady.com</a></span>
-        </div>
-    </div>
-</footer>
-
-<!-- WhatsApp Share -->
-<a href="#" class="whatsapp-share" id="waShare" title="Share on WhatsApp" onclick="event.preventDefault();window.open('https://wa.me/?text='+encodeURIComponent(document.title+' '+window.location.href),'_blank');">
-    <svg viewBox="0 0 24 24" width="28" height="28" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.612.638l4.584-1.167A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.243 0-4.344-.665-6.084-1.823l-.43-.288-2.998.763.801-2.928-.319-.472A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-</a>
-
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav">
-    <a href="index.html" class="bottom-nav-item active">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-        <span data-i18n="nav.home">Home</span>
+<!-- ═══ NAVIGATION ═══ -->
+<nav class="mp-nav">
+  <a href="/" class="mp-nav-logo">
+    <img src="assets/myplopplop-logo-nav.png" alt="MyPlopPlop">
+    <span>MyPlopPlop</span>
+  </a>
+  <div class="mp-nav-right">
+    <a href="cart.html" class="mp-nav-cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="mp-cart-badge" style="display:none">0</span>
     </a>
-    <a href="shop.html" class="bottom-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <span data-i18n="nav.search">Search</span>
-    </a>
-    <a href="cart.html" class="bottom-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-        <span class="nav-badge">2</span>
-        <span data-i18n="nav.cart">Cart</span>
-    </a>
-    <a href="orders.html" class="bottom-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        <span data-i18n="nav.orders">Orders</span>
-    </a>
-    <a href="login.html" class="bottom-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <span data-i18n="nav.account">Account</span>
-    </a>
+    <button class="mp-menu-btn" onclick="document.getElementById('mobileMenu').classList.add('open')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
 </nav>
 
-<script src="js/mock-data.js"></script>
-<script>
-// Render categories (language-aware)
-function getCatName(cat) {
-    var lang = localStorage.getItem('myplopplop_lang') || 'kr';
-    if (lang === 'kr') return cat.nameKr || cat.name;
-    if (lang === 'fr') return cat.nameFr || cat.name;
-    if (lang === 'es') return cat.nameEs || cat.name;
-    return cat.name;
-}
-function getStoresLabel(count) {
-    var lang = localStorage.getItem('myplopplop_lang') || 'kr';
-    var labels = { kr: 'boutik', fr: 'boutiques', es: 'tiendas', en: 'stores' };
-    return count + ' ' + (labels[lang] || 'stores');
-}
-function renderCategories() {
-    var grid = document.getElementById('categoriesGrid');
-    grid.innerHTML = '';
-    MOCK.CATEGORIES.forEach(function(cat) {
-        grid.innerHTML += '<a href="category.html?cat=' + cat.id + '" class="category-card">'
-            + '<div class="category-icon" style="background:' + cat.color + '15;">' + cat.icon + '</div>'
-            + '<h4>' + getCatName(cat) + '</h4>'
-            + '<span class="count">' + getStoresLabel(cat.count) + '</span>'
-            + '</a>';
-    });
-}
-renderCategories();
-// Re-render on language change
-document.querySelectorAll('[data-lang]').forEach(function(btn) {
-    btn.addEventListener('click', function() { setTimeout(renderCategories, 100); });
-});
-
-// Render featured stores
-function renderFeatured() {
-    var featured = document.getElementById('featuredStores');
-    var lang = localStorage.getItem('myplopplop_lang') || 'kr';
-    var deliveryLabel = { kr: 'livrezon', fr: 'livraison', es: 'entrega', en: 'delivery' };
-    var freeLabel = { kr: 'Livrezon gratis', fr: 'Livraison gratuite', es: 'Entrega gratis', en: 'Free delivery' };
-    var verifiedLabel = { kr: '✓ Verifye', fr: '✓ Vérifié', es: '✓ Verificado', en: '✓ Verified' };
-    featured.innerHTML = '';
-    MOCK.STORES.filter(function(s) { return s.featured; }).forEach(function(store) {
-        var cat = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
-        var catName = cat ? getCatName(cat) : '';
-        var delText = store.deliveryFee === 0 ? (freeLabel[lang] || freeLabel.en) : MOCK.formatHTG(store.deliveryFee) + ' ' + (deliveryLabel[lang] || deliveryLabel.en);
-        featured.innerHTML += '<a href="store.html?id=' + store.id + '" class="store-card">'
-            + '<div class="store-img">' + (cat ? cat.icon : '🏪') + '</div>'
-            + '<div class="store-info">'
-            + '<div class="flex items-center justify-between">'
-            + '<span class="store-name">' + store.name + '</span>'
-            + (store.verified ? '<span class="verified-badge">' + (verifiedLabel[lang] || verifiedLabel.en) + '</span>' : '')
-            + '</div>'
-            + '<div class="flex items-center gap-xs" style="margin-top:4px;">'
-            + '<span class="badge badge-gray">' + catName + '</span>'
-            + '</div>'
-            + '<div class="store-meta">'
-            + '<span>⭐ ' + store.rating + '</span>'
-            + '<span class="dot"></span>'
-            + '<span>' + store.eta + ' min</span>'
-            + '<span class="dot"></span>'
-            + '<span>' + delText + '</span>'
-            + '</div></div></a>';
-    });
-}
-renderFeatured();
-document.querySelectorAll('[data-lang]').forEach(function(btn) {
-    btn.addEventListener('click', function() { setTimeout(renderFeatured, 100); });
-});
-</script>
-
-<script src="js/api.js?v=67"></script>
-<script src="js/i18n.js?v=67"></script>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
-
-<div class="install-banner" id="installBanner">
-  <div class="install-banner-text" data-i18n="install_text">Installer MyPlopPlop<small>Ajouter à votre écran d'accueil</small></div>
-  <button class="install-banner-btn" id="installBtn" data-i18n="install_btn">Installer</button>
-  <button class="install-banner-close" id="installClose">&times;</button>
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="mp-mobile-menu" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="mp-menu-panel">
+    <button class="mp-menu-close" onclick="document.getElementById('mobileMenu').classList.remove('open')">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <a href="shop.html"><span class="mi">🛒</span> <span data-i18n="menu_shop">Boutik</span></a>
+    <a href="diaspora.html"><span class="mi">❤️</span> <span data-i18n="menu_support">Sipòte Fanmi</span></a>
+    <a href="merchant/register.html"><span class="mi">🏪</span> <span data-i18n="menu_sell">Vann sou MyPlopPlop</span></a>
+    <a href="https://msouwout.com"><span class="mi">🚗</span> <span data-i18n="menu_delivery">MsouWout Livrezon</span></a>
+    <a href="https://haitibiznis.com/koutye.html"><span class="mi">💰</span> <span data-i18n="menu_earn">Touche Lajan</span></a>
+    <a href="orders.html"><span class="mi">📦</span> <span data-i18n="menu_orders">Kòmand Mwen</span></a>
+    <a href="login.html"><span class="mi">👤</span> <span data-i18n="menu_account">Kont Mwen</span></a>
+    <a href="help.html"><span class="mi">💬</span> <span data-i18n="menu_help">Èd</span></a>
+  </div>
 </div>
 
-<script>
-var deferredPrompt=null;
-var iBanner=document.getElementById('installBanner');
-var iBtn=document.getElementById('installBtn');
-var iClose=document.getElementById('installClose');
-window.addEventListener('beforeinstallprompt',function(e){
-  e.preventDefault();deferredPrompt=e;iBanner.classList.add('show');
-});
-iBtn.addEventListener('click',function(){
-  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(function(){iBanner.classList.remove('show');deferredPrompt=null})}
-});
-iClose.addEventListener('click',function(){iBanner.classList.remove('show');sessionStorage.setItem('mpp_install_dismissed','1')});
-setTimeout(function(){
-  if(!deferredPrompt&&!sessionStorage.getItem('mpp_install_dismissed')&&!window.matchMedia('(display-mode: standalone)').matches){
-    iBanner.classList.add('show');
-    iBtn.addEventListener('click',function(){
-      var isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent);
-      if(isIOS){alert('Tap the Share button, then "Add to Home Screen"')}
-      else{alert('Tap the menu (⋮), then "Install app"')}
-      iBanner.classList.remove('show');
-    },{once:true});
-  }
-},3000);
-</script>
+<!-- ═══ HERO ═══ -->
+<section class="mp-hero">
+  <div class="mp-hero-inner">
+    <div class="mp-hero-flag">
+      <span>🇭🇹</span>
+      <span data-i18n="hero_badge">PREMYE MARKETPLACE AYITI</span>
+    </div>
+    <h1 data-i18n-html="hero_title">Premye <em>Marketplace</em> Ayiti</h1>
+    <p class="mp-hero-sub" data-i18n="hero_sub">Kòmande nan restoran, sipèmache, famasi, angwo ak detay. Sipòte fanmi w nenpòt kote ou ye.</p>
+  </div>
+</section>
 
-<script>
-// ─── REFERRAL SHARING ─────────────────────────────────────────────
-function shareReferral() {
-  var refCode = localStorage.getItem('mpp_ref_code');
-  if (!refCode) {
-    refCode = 'MPP' + Math.random().toString(36).substring(2, 8).toUpperCase();
-    localStorage.setItem('mpp_ref_code', refCode);
-  }
-  var shareUrl = 'https://myplopplop.com/?ref=' + refCode;
-  var shareText = 'Join MyPlopPlop - Haiti\'s first marketplace! Order from supermarkets, pharmacies, hardware stores & more. Use my link and we both earn: ' + shareUrl;
-
-  if (navigator.share) {
-    navigator.share({
-      title: 'MyPlopPlop - Haiti\'s Marketplace',
-      text: shareText,
-      url: shareUrl
-    }).catch(function(){});
-  } else {
-    navigator.clipboard.writeText(shareUrl).then(function() {
-      showRefToast('Link copied! Share it with friends to earn 3%');
-    }).catch(function() {
-      prompt('Copy your referral link:', shareUrl);
-    });
-  }
-}
-function showRefToast(msg) {
-  var toast = document.createElement('div');
-  toast.textContent = msg;
-  toast.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#1E3A8A;color:#fff;padding:14px 24px;border-radius:50px;font-size:0.9rem;font-weight:600;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,0.3);animation:fadeIn 0.3s ease';
-  document.body.appendChild(toast);
-  setTimeout(function(){ toast.remove(); }, 3000);
-}
-</script>
-<!-- KOUTYE STICKY BAR -->
-<div style="position:fixed;bottom:0;left:0;right:0;background:linear-gradient(90deg,#00209F,#D21034);color:#fff;text-align:center;padding:13px 20px;z-index:999;font-weight:800;font-size:.9rem;box-shadow:0 -2px 12px rgba(0,0,0,.2);">
-  <a href="https://haitibiznis.com/koutye.html" style="color:#fff;text-decoration:none;" data-i18n="sticky_koutye">&#128176; Invite machann — touche sou chak tranzaksyon</a>
+<!-- ═══ SEARCH ═══ -->
+<div class="mp-search">
+  <div class="mp-search-bar">
+    <div class="mp-search-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </div>
+    <input type="text" data-i18n-placeholder="search_placeholder" placeholder="Chèche magazen, pwodwi, sèvis..." oninput="handleSearch(this.value)">
+    <button class="mp-search-btn" data-i18n="search_btn">Chèche</button>
+  </div>
 </div>
+
+<!-- ═══ PRIMARY ACTIONS ═══ -->
+<section class="mp-actions">
+  <div class="mp-actions-grid">
+
+    <!-- BUY — Full width, most prominent -->
+    <div class="mp-act mp-act-buy mp-stagger">
+      <span class="mp-act-emoji">🛒</span>
+      <div class="mp-act-title" data-i18n="act_buy_title">Kòmande Kounye a</div>
+      <div class="mp-act-desc" data-i18n="act_buy_desc">Restoran, sipèmache, famasi ak plis ankò</div>
+      <div class="mp-act-sub-btns">
+        <a href="shop.html" class="mp-act-sub-btn" data-i18n="act_buy_shop">🛍️ Wè Boutik</a>
+        <a href="diaspora.html" class="mp-act-sub-btn" data-i18n="act_buy_support">❤️ Sipòte Fanmi w</a>
+      </div>
+    </div>
+
+    <!-- SELL — Full width, golden glow, growth engine -->
+    <a href="merchant/register.html" class="mp-act mp-act-sell mp-stagger">
+      <span class="mp-act-badge" data-i18n="act_sell_badge">GRATIS</span>
+      <span class="mp-act-emoji">🏪</span>
+      <div class="mp-act-title" data-i18n="act_sell_title">Vann sou MyPlopPlop</div>
+      <div class="mp-act-desc" data-i18n="act_sell_desc">0 HTG pou kòmanse. Ou peye sèlman lè ou vann.</div>
+      <div class="mp-act-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+    </a>
+
+    <!-- DELIVERY — half width -->
+    <a href="https://msouwout.com" class="mp-act mp-act-ride mp-stagger">
+      <span class="mp-act-emoji">🚗</span>
+      <div class="mp-act-title" data-i18n="act_ride_title">Livrezon Rapid</div>
+      <div class="mp-act-desc" data-i18n="act_ride_desc">Ak MsouWout</div>
+      <div class="mp-act-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+    </a>
+
+    <!-- EARN — half width -->
+    <a href="https://haitibiznis.com/koutye.html" class="mp-act mp-act-earn mp-stagger">
+      <span class="mp-act-emoji">💰</span>
+      <div class="mp-act-title" data-i18n="act_earn_title">Touche Lajan</div>
+      <div class="mp-act-desc" data-i18n="act_earn_desc">Enskri Gratis</div>
+      <div class="mp-act-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ═══ TRUST STRIP ═══ -->
+<section class="mp-trust mp-reveal">
+  <div class="mp-trust-inner">
+    <div class="mp-trust-item">
+      <div class="mp-trust-icon">🔒</div>
+      <div class="mp-trust-label" data-i18n="trust_pay">Peman Sekirize</div>
+    </div>
+    <div class="mp-trust-item">
+      <div class="mp-trust-icon">✅</div>
+      <div class="mp-trust-label" data-i18n="trust_driver">Chofè Verifye</div>
+    </div>
+    <div class="mp-trust-item">
+      <div class="mp-trust-icon">🏪</div>
+      <div class="mp-trust-label" data-i18n="trust_biz">Biznis Verifye</div>
+    </div>
+    <div class="mp-trust-item">
+      <div class="mp-trust-icon">💬</div>
+      <div class="mp-trust-label" data-i18n="trust_wa">Sipò WhatsApp</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CATEGORIES ═══ -->
+<section class="mp-cats mp-reveal">
+  <div class="mp-section-head">
+    <h2 class="mp-section-title" data-i18n="cats_title">Kategori</h2>
+    <a href="shop.html" class="mp-section-more" data-i18n="cats_more">Tout →</a>
+  </div>
+  <div class="mp-cats-scroll">
+    <a href="shop.html?cat=restaurant" class="mp-cat mp-stagger">
+      <div class="mp-cat-icon">🍽️</div>
+      <div class="mp-cat-name" data-i18n="cat_resto">Restoran</div>
+    </a>
+    <a href="shop.html?cat=supermarket" class="mp-cat mp-stagger">
+      <div class="mp-cat-icon">🛒</div>
+      <div class="mp-cat-name" data-i18n="cat_super">Sipèmache</div>
+    </a>
+    <a href="shop.html?cat=hardware" class="mp-cat mp-stagger">
+      <div class="mp-cat-icon">🔧</div>
+      <div class="mp-cat-name" data-i18n="cat_hardware">Kenkayri</div>
+    </a>
+    <a href="shop.html?cat=pharmacy" class="mp-cat mp-stagger">
+      <div class="mp-cat-icon">💊</div>
+      <div class="mp-cat-name" data-i18n="cat_pharma">Famasi</div>
+    </a>
+    <a href="shop.html?cat=wholesale" class="mp-cat mp-stagger">
+      <div class="mp-cat-icon">📦</div>
+      <div class="mp-cat-name" data-i18n="cat_wholesale">Angwo</div>
+    </a>
+    <a href="shop.html?cat=retail" class="mp-cat mp-stagger">
+      <div class="mp-cat-icon">🏬</div>
+      <div class="mp-cat-name" data-i18n="cat_retail">Detay</div>
+    </a>
+  </div>
+</section>
+
+<!-- ═══ FEATURED SECTION ═══ -->
+<section class="mp-featured mp-reveal">
+  <div class="mp-section-head">
+    <h2 class="mp-section-title" data-i18n="feat_title">Dekouvri</h2>
+  </div>
+
+  <div class="mp-tabs">
+    <button class="mp-tab active" onclick="switchTab('stores')" data-i18n="tab_stores">Top Magazen</button>
+    <button class="mp-tab" onclick="switchTab('products')" data-i18n="tab_products">Popilè</button>
+    <button class="mp-tab" onclick="switchTab('promos')" data-i18n="tab_promos">Pwomosyon</button>
+  </div>
+
+  <!-- Tab: Top Stores -->
+  <div id="tab-stores" class="mp-tab-content active">
+    <div class="mp-stores-scroll">
+      <a href="shop.html" class="mp-store">
+        <div class="mp-store-cover" style="background:linear-gradient(135deg,#D21034,#FF4466)">🍗</div>
+        <div class="mp-store-info">
+          <div class="mp-store-name">Kay Griye</div>
+          <div class="mp-store-cat" data-i18n="store_cat_resto">Restoran</div>
+          <div class="mp-store-rating">⭐ 4.8</div>
+        </div>
+      </a>
+      <a href="shop.html" class="mp-store">
+        <div class="mp-store-cover" style="background:linear-gradient(135deg,#00803A,#00C853)">🥑</div>
+        <div class="mp-store-info">
+          <div class="mp-store-name">Mache Frè</div>
+          <div class="mp-store-cat" data-i18n="store_cat_super">Sipèmache</div>
+          <div class="mp-store-rating">⭐ 4.6</div>
+        </div>
+      </a>
+      <a href="shop.html" class="mp-store">
+        <div class="mp-store-cover" style="background:linear-gradient(135deg,#00209F,#1545CC)">💊</div>
+        <div class="mp-store-info">
+          <div class="mp-store-name">Famasi Santé</div>
+          <div class="mp-store-cat" data-i18n="store_cat_pharma">Famasi</div>
+          <div class="mp-store-rating">⭐ 4.9</div>
+        </div>
+      </a>
+      <a href="shop.html" class="mp-store">
+        <div class="mp-store-cover" style="background:linear-gradient(135deg,#F5A623,#FFD97A)">🔩</div>
+        <div class="mp-store-info">
+          <div class="mp-store-name">Tout Bagay</div>
+          <div class="mp-store-cat" data-i18n="store_cat_hardware">Kenkayri</div>
+          <div class="mp-store-rating">⭐ 4.5</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Tab: Popular Products -->
+  <div id="tab-products" class="mp-tab-content">
+    <div class="mp-products-grid">
+      <a href="shop.html" class="mp-product">
+        <div class="mp-product-img">🍚</div>
+        <div class="mp-product-info">
+          <div class="mp-product-store">Mache Frè</div>
+          <div class="mp-product-name" data-i18n="prod_rice">Diri Blan 25lb</div>
+          <div class="mp-product-price">750 HTG</div>
+        </div>
+      </a>
+      <a href="shop.html" class="mp-product">
+        <div class="mp-product-img">🍗<span class="mp-product-tag">POPILÈ</span></div>
+        <div class="mp-product-info">
+          <div class="mp-product-store">Kay Griye</div>
+          <div class="mp-product-name" data-i18n="prod_chicken">Poul Griye Konplè</div>
+          <div class="mp-product-price">500 HTG</div>
+        </div>
+      </a>
+      <a href="shop.html" class="mp-product">
+        <div class="mp-product-img">💊</div>
+        <div class="mp-product-info">
+          <div class="mp-product-store">Famasi Santé</div>
+          <div class="mp-product-name" data-i18n="prod_med">Paracetamol 500mg</div>
+          <div class="mp-product-price">125 HTG</div>
+        </div>
+      </a>
+      <a href="shop.html" class="mp-product">
+        <div class="mp-product-img">🥤<span class="mp-product-tag">NOU</span></div>
+        <div class="mp-product-info">
+          <div class="mp-product-store">Mache Frè</div>
+          <div class="mp-product-name" data-i18n="prod_juice">Ji Natirèl Mango</div>
+          <div class="mp-product-price">200 HTG</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Tab: Promos -->
+  <div id="tab-promos" class="mp-tab-content">
+    <div class="mp-products-grid">
+      <a href="shop.html" class="mp-product">
+        <div class="mp-product-img" style="background:linear-gradient(135deg,#FFE8EC,#FFF0F3)">🎉<span class="mp-product-tag">-20%</span></div>
+        <div class="mp-product-info">
+          <div class="mp-product-store">Kay Griye</div>
+          <div class="mp-product-name" data-i18n="promo_platter">Plato Fanmi</div>
+          <div class="mp-product-price">800 HTG <span class="mp-product-old-price">1000 HTG</span></div>
+        </div>
+      </a>
+      <a href="shop.html" class="mp-product">
+        <div class="mp-product-img" style="background:linear-gradient(135deg,#E8FFF0,#F0FFF4)">🧴<span class="mp-product-tag">-15%</span></div>
+        <div class="mp-product-info">
+          <div class="mp-product-store">Famasi Santé</div>
+          <div class="mp-product-name" data-i18n="promo_vitamin">Vitamin C Pack</div>
+          <div class="mp-product-price">340 HTG <span class="mp-product-old-price">400 HTG</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DELIVERY SECTION ═══ -->
+<section class="mp-delivery mp-reveal">
+  <div class="mp-delivery-card">
+    <div class="mp-delivery-text">
+      <div class="mp-delivery-logo">
+        <img src="assets/msouwout-icon.png" alt="MsouWout">
+        <span>MsouWout</span>
+      </div>
+      <div class="mp-delivery-title" data-i18n="del_title">Livrezon rapid atravè MsouWout</div>
+      <div class="mp-delivery-desc" data-i18n="del_desc">Resevwa kòmand ou rapid ak sekirite. Moto ak machin disponib.</div>
+      <a href="https://msouwout.com" class="mp-delivery-btn" data-i18n="del_btn">Mande Livrezon →</a>
+    </div>
+    <div class="mp-delivery-vehicles">
+      <div class="mp-vehicle">🏍️</div>
+      <div class="mp-vehicle">🚗</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SOCIAL PROOF ═══ -->
+<section class="mp-proof mp-reveal">
+  <div class="mp-proof-inner">
+    <div class="mp-proof-stat">
+      <div class="mp-proof-num"><span class="mp-proof-dot green"></span>200+</div>
+      <div class="mp-proof-label" data-i18n="proof_koutye">Koutye Aktif</div>
+    </div>
+    <div class="mp-proof-stat">
+      <div class="mp-proof-num"><span class="mp-proof-dot red"></span>50+</div>
+      <div class="mp-proof-label" data-i18n="proof_biz">Biznis Aktif</div>
+    </div>
+    <div class="mp-proof-stat">
+      <div class="mp-proof-num"><span class="mp-proof-dot blue"></span>24/7</div>
+      <div class="mp-proof-label" data-i18n="proof_driver">Chofè Disponib</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ VENDOR CTA (REPEAT) ═══ -->
+<section class="mp-vendor-cta mp-reveal">
+  <div class="mp-vendor-card">
+    <h3 data-i18n="vcta_title">🔥 Kreye Boutik Ou Jodi a</h3>
+    <p data-i18n="vcta_desc">Rejwenn plizyè biznis ki deja ap vann sou MyPlopPlop. Pa gen frè pou kòmanse — ou peye sèlman lè kliyan achte.</p>
+    <a href="merchant/register.html" class="mp-vendor-btn" data-i18n="vcta_btn">🏪 Enskri Gratis Kounye a</a>
+    <span class="mp-vendor-free" data-i18n="vcta_free">0 HTG pou kòmanse • Pa gen risk</span>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="mp-footer">
+  <p class="mp-footer-text">
+    © 2026 MyPlopPlop · <a href="privacy.html">Privacy</a> · <a href="help.html">Help</a><br>
+    <span data-i18n="footer_powered">Yon platfòm HaitiBiznis</span> 🇭🇹
+  </p>
+</div>
+
+<!-- ═══ WHATSAPP FAB ═══ -->
+<a href="https://wa.me/50946859702?text=Bonjou%2C%20mwen%20bezwen%20%C3%A8d%20ak%20MyPlopPlop" target="_blank" class="mp-whatsapp" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span class="mp-wa-tooltip" data-i18n="wa_tooltip">Bezwen èd? Pale ak nou</span>
+</a>
+
+<!-- ═══ BOTTOM NAV ═══ -->
+<nav class="mp-bottom">
+  <a href="/" class="active" style="position:relative">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span data-i18n="nav_home">Akèy</span>
+  </a>
+  <a href="shop.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <span data-i18n="nav_search">Chèche</span>
+  </a>
+  <a href="cart.html" style="position:relative">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    <span data-i18n="nav_cart">Panye</span>
+  </a>
+  <a href="orders.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+    <span data-i18n="nav_orders">Kòmand</span>
+  </a>
+  <a href="login.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span data-i18n="nav_account">Kont</span>
+  </a>
+</nav>
+
+<script>
+/* ══════════════════════════════════════
+   i18n SYSTEM
+   ══════════════════════════════════════ */
+const T = {
+  ht: {
+    hero_badge: 'PREMYE MARKETPLACE AYITI',
+    hero_title: 'Premye <em>Marketplace</em> Ayiti',
+    hero_sub: 'Kòmande nan restoran, sipèmache, famasi, angwo ak detay. Sipòte fanmi w nenpòt kote ou ye.',
+    search_placeholder: 'Chèche magazen, pwodwi, sèvis...',
+    search_btn: 'Chèche',
+    act_buy_title: 'Kòmande Kounye a',
+    act_buy_desc: 'Restoran, sipèmache, famasi ak plis ankò',
+    act_buy_shop: '🛍️ Wè Boutik',
+    act_buy_support: '❤️ Sipòte Fanmi w',
+    act_sell_badge: 'GRATIS',
+    act_sell_title: 'Vann sou MyPlopPlop',
+    act_sell_desc: '0 HTG pou kòmanse. Ou peye sèlman lè ou vann.',
+    act_ride_title: 'Livrezon Rapid',
+    act_ride_desc: 'Ak MsouWout',
+    act_earn_title: 'Touche Lajan',
+    act_earn_desc: 'Enskri Gratis',
+    trust_pay: 'Peman Sekirize',
+    trust_driver: 'Chofè Verifye',
+    trust_biz: 'Biznis Verifye',
+    trust_wa: 'Sipò WhatsApp',
+    cats_title: 'Kategori',
+    cats_more: 'Tout →',
+    cat_resto: 'Restoran',
+    cat_super: 'Sipèmache',
+    cat_hardware: 'Kenkayri',
+    cat_pharma: 'Famasi',
+    cat_wholesale: 'Angwo',
+    cat_retail: 'Detay',
+    feat_title: 'Dekouvri',
+    tab_stores: 'Top Magazen',
+    tab_products: 'Popilè',
+    tab_promos: 'Pwomosyon',
+    store_cat_resto: 'Restoran',
+    store_cat_super: 'Sipèmache',
+    store_cat_pharma: 'Famasi',
+    store_cat_hardware: 'Kenkayri',
+    prod_rice: 'Diri Blan 25lb',
+    prod_chicken: 'Poul Griye Konplè',
+    prod_med: 'Paracetamol 500mg',
+    prod_juice: 'Ji Natirèl Mango',
+    promo_platter: 'Plato Fanmi',
+    promo_vitamin: 'Vitamin C Pack',
+    del_title: 'Livrezon rapid atravè MsouWout',
+    del_desc: 'Resevwa kòmand ou rapid ak sekirite. Moto ak machin disponib.',
+    del_btn: 'Mande Livrezon →',
+    proof_koutye: 'Koutye Aktif',
+    proof_biz: 'Biznis Aktif',
+    proof_driver: 'Chofè Disponib',
+    vcta_title: '🔥 Kreye Boutik Ou Jodi a',
+    vcta_desc: 'Rejwenn plizyè biznis ki deja ap vann sou MyPlopPlop. Pa gen frè pou kòmanse — ou peye sèlman lè kliyan achte.',
+    vcta_btn: '🏪 Enskri Gratis Kounye a',
+    vcta_free: '0 HTG pou kòmanse • Pa gen risk',
+    footer_powered: 'Yon platfòm HaitiBiznis',
+    wa_tooltip: 'Bezwen èd? Pale ak nou',
+    nav_home: 'Akèy',
+    nav_search: 'Chèche',
+    nav_cart: 'Panye',
+    nav_orders: 'Kòmand',
+    nav_account: 'Kont',
+    menu_shop: 'Boutik',
+    menu_support: 'Sipòte Fanmi',
+    menu_sell: 'Vann sou MyPlopPlop',
+    menu_delivery: 'MsouWout Livrezon',
+    menu_earn: 'Touche Lajan',
+    menu_orders: 'Kòmand Mwen',
+    menu_account: 'Kont Mwen',
+    menu_help: 'Èd'
+  },
+  en: {
+    hero_badge: 'HAITI\'S FIRST MARKETPLACE',
+    hero_title: 'Haiti\'s First <em>Marketplace</em>',
+    hero_sub: 'Order from restaurants, supermarkets, pharmacies, wholesale and retail. Support your family anywhere you are.',
+    search_placeholder: 'Search stores, products, services...',
+    search_btn: 'Search',
+    act_buy_title: 'Order Now',
+    act_buy_desc: 'Restaurants, supermarkets, pharmacies and more',
+    act_buy_shop: '🛍️ Browse Shops',
+    act_buy_support: '❤️ Support Family',
+    act_sell_badge: 'FREE',
+    act_sell_title: 'Sell on MyPlopPlop',
+    act_sell_desc: '0 HTG to start. You only pay when you sell.',
+    act_ride_title: 'Fast Delivery',
+    act_ride_desc: 'Via MsouWout',
+    act_earn_title: 'Earn Money',
+    act_earn_desc: 'Sign Up Free',
+    trust_pay: 'Secure Payment',
+    trust_driver: 'Verified Drivers',
+    trust_biz: 'Verified Business',
+    trust_wa: 'WhatsApp Support',
+    cats_title: 'Categories',
+    cats_more: 'All →',
+    cat_resto: 'Restaurant',
+    cat_super: 'Supermarket',
+    cat_hardware: 'Hardware',
+    cat_pharma: 'Pharmacy',
+    cat_wholesale: 'Wholesale',
+    cat_retail: 'Retail',
+    feat_title: 'Discover',
+    tab_stores: 'Top Stores',
+    tab_products: 'Popular',
+    tab_promos: 'Promotions',
+    store_cat_resto: 'Restaurant',
+    store_cat_super: 'Supermarket',
+    store_cat_pharma: 'Pharmacy',
+    store_cat_hardware: 'Hardware',
+    prod_rice: 'White Rice 25lb',
+    prod_chicken: 'Full Grilled Chicken',
+    prod_med: 'Paracetamol 500mg',
+    prod_juice: 'Natural Mango Juice',
+    promo_platter: 'Family Platter',
+    promo_vitamin: 'Vitamin C Pack',
+    del_title: 'Fast delivery via MsouWout',
+    del_desc: 'Receive your order quickly and safely. Moto and car available.',
+    del_btn: 'Request Delivery →',
+    proof_koutye: 'Active Affiliates',
+    proof_biz: 'Active Businesses',
+    proof_driver: 'Drivers Available',
+    vcta_title: '🔥 Create Your Store Today',
+    vcta_desc: 'Join businesses already selling on MyPlopPlop. No fees to start — you only pay when customers buy.',
+    vcta_btn: '🏪 Sign Up Free Now',
+    vcta_free: '0 HTG to start • No risk',
+    footer_powered: 'A HaitiBiznis platform',
+    wa_tooltip: 'Need help? Talk to us',
+    nav_home: 'Home',
+    nav_search: 'Search',
+    nav_cart: 'Cart',
+    nav_orders: 'Orders',
+    nav_account: 'Account',
+    menu_shop: 'Shop',
+    menu_support: 'Support Family',
+    menu_sell: 'Sell on MyPlopPlop',
+    menu_delivery: 'MsouWout Delivery',
+    menu_earn: 'Earn Money',
+    menu_orders: 'My Orders',
+    menu_account: 'My Account',
+    menu_help: 'Help'
+  },
+  fr: {
+    hero_badge: 'PREMIER MARKETPLACE D\'HAÏTI',
+    hero_title: 'Premier <em>Marketplace</em> d\'Haïti',
+    hero_sub: 'Commandez dans les restaurants, supermarchés, pharmacies, en gros et au détail. Soutenez votre famille où que vous soyez.',
+    search_placeholder: 'Rechercher magasins, produits, services...',
+    search_btn: 'Chercher',
+    act_buy_title: 'Commander Maintenant',
+    act_buy_desc: 'Restaurants, supermarchés, pharmacies et plus',
+    act_buy_shop: '🛍️ Voir Boutiques',
+    act_buy_support: '❤️ Soutenir Famille',
+    act_sell_badge: 'GRATUIT',
+    act_sell_title: 'Vendez sur MyPlopPlop',
+    act_sell_desc: '0 HTG pour commencer. Vous payez seulement quand vous vendez.',
+    act_ride_title: 'Livraison Rapide',
+    act_ride_desc: 'Via MsouWout',
+    act_earn_title: 'Gagner de l\'Argent',
+    act_earn_desc: 'Inscription Gratuite',
+    trust_pay: 'Paiement Sécurisé',
+    trust_driver: 'Chauffeurs Vérifiés',
+    trust_biz: 'Commerce Vérifié',
+    trust_wa: 'Support WhatsApp',
+    cats_title: 'Catégories',
+    cats_more: 'Tout →',
+    cat_resto: 'Restaurant',
+    cat_super: 'Supermarché',
+    cat_hardware: 'Quincaillerie',
+    cat_pharma: 'Pharmacie',
+    cat_wholesale: 'En Gros',
+    cat_retail: 'Détail',
+    feat_title: 'Découvrir',
+    tab_stores: 'Top Magasins',
+    tab_products: 'Populaire',
+    tab_promos: 'Promotions',
+    store_cat_resto: 'Restaurant',
+    store_cat_super: 'Supermarché',
+    store_cat_pharma: 'Pharmacie',
+    store_cat_hardware: 'Quincaillerie',
+    prod_rice: 'Riz Blanc 25lb',
+    prod_chicken: 'Poulet Grillé Complet',
+    prod_med: 'Paracétamol 500mg',
+    prod_juice: 'Jus Mangue Naturel',
+    promo_platter: 'Plateau Famille',
+    promo_vitamin: 'Pack Vitamine C',
+    del_title: 'Livraison rapide via MsouWout',
+    del_desc: 'Recevez votre commande rapidement et en sécurité. Moto et voiture disponibles.',
+    del_btn: 'Demander Livraison →',
+    proof_koutye: 'Affiliés Actifs',
+    proof_biz: 'Commerces Actifs',
+    proof_driver: 'Chauffeurs Disponibles',
+    vcta_title: '🔥 Créez Votre Boutique Aujourd\'hui',
+    vcta_desc: 'Rejoignez les commerces qui vendent déjà sur MyPlopPlop. Pas de frais pour commencer — vous payez seulement quand les clients achètent.',
+    vcta_btn: '🏪 Inscription Gratuite',
+    vcta_free: '0 HTG pour commencer • Sans risque',
+    footer_powered: 'Une plateforme HaitiBiznis',
+    wa_tooltip: 'Besoin d\'aide? Parlez-nous',
+    nav_home: 'Accueil',
+    nav_search: 'Chercher',
+    nav_cart: 'Panier',
+    nav_orders: 'Commandes',
+    nav_account: 'Compte',
+    menu_shop: 'Boutique',
+    menu_support: 'Soutenir Famille',
+    menu_sell: 'Vendre sur MyPlopPlop',
+    menu_delivery: 'MsouWout Livraison',
+    menu_earn: 'Gagner de l\'Argent',
+    menu_orders: 'Mes Commandes',
+    menu_account: 'Mon Compte',
+    menu_help: 'Aide'
+  },
+  es: {
+    hero_badge: 'PRIMER MARKETPLACE DE HAITÍ',
+    hero_title: 'Primer <em>Marketplace</em> de Haití',
+    hero_sub: 'Ordena en restaurantes, supermercados, farmacias, al por mayor y al detalle. Apoya a tu familia desde donde estés.',
+    search_placeholder: 'Buscar tiendas, productos, servicios...',
+    search_btn: 'Buscar',
+    act_buy_title: 'Ordenar Ahora',
+    act_buy_desc: 'Restaurantes, supermercados, farmacias y más',
+    act_buy_shop: '🛍️ Ver Tiendas',
+    act_buy_support: '❤️ Apoyar Familia',
+    act_sell_badge: 'GRATIS',
+    act_sell_title: 'Vende en MyPlopPlop',
+    act_sell_desc: '0 HTG para empezar. Solo pagas cuando vendes.',
+    act_ride_title: 'Entrega Rápida',
+    act_ride_desc: 'Vía MsouWout',
+    act_earn_title: 'Ganar Dinero',
+    act_earn_desc: 'Registro Gratis',
+    trust_pay: 'Pago Seguro',
+    trust_driver: 'Conductores Verificados',
+    trust_biz: 'Negocios Verificados',
+    trust_wa: 'Soporte WhatsApp',
+    cats_title: 'Categorías',
+    cats_more: 'Todo →',
+    cat_resto: 'Restaurante',
+    cat_super: 'Supermercado',
+    cat_hardware: 'Ferretería',
+    cat_pharma: 'Farmacia',
+    cat_wholesale: 'Al Por Mayor',
+    cat_retail: 'Al Detalle',
+    feat_title: 'Descubrir',
+    tab_stores: 'Top Tiendas',
+    tab_products: 'Popular',
+    tab_promos: 'Promociones',
+    store_cat_resto: 'Restaurante',
+    store_cat_super: 'Supermercado',
+    store_cat_pharma: 'Farmacia',
+    store_cat_hardware: 'Ferretería',
+    prod_rice: 'Arroz Blanco 25lb',
+    prod_chicken: 'Pollo a la Parrilla',
+    prod_med: 'Paracetamol 500mg',
+    prod_juice: 'Jugo Natural de Mango',
+    promo_platter: 'Plato Familiar',
+    promo_vitamin: 'Pack Vitamina C',
+    del_title: 'Entrega rápida vía MsouWout',
+    del_desc: 'Recibe tu pedido rápido y seguro. Moto y auto disponibles.',
+    del_btn: 'Pedir Entrega →',
+    proof_koutye: 'Afiliados Activos',
+    proof_biz: 'Negocios Activos',
+    proof_driver: 'Conductores Disponibles',
+    vcta_title: '🔥 Crea Tu Tienda Hoy',
+    vcta_desc: 'Únete a los negocios que ya venden en MyPlopPlop. Sin costo para empezar — solo pagas cuando los clientes compran.',
+    vcta_btn: '🏪 Registro Gratis Ahora',
+    vcta_free: '0 HTG para empezar • Sin riesgo',
+    footer_powered: 'Una plataforma HaitiBiznis',
+    wa_tooltip: '¿Necesitas ayuda? Háblanos',
+    nav_home: 'Inicio',
+    nav_search: 'Buscar',
+    nav_cart: 'Carrito',
+    nav_orders: 'Pedidos',
+    nav_account: 'Cuenta',
+    menu_shop: 'Tienda',
+    menu_support: 'Apoyar Familia',
+    menu_sell: 'Vender en MyPlopPlop',
+    menu_delivery: 'MsouWout Entrega',
+    menu_earn: 'Ganar Dinero',
+    menu_orders: 'Mis Pedidos',
+    menu_account: 'Mi Cuenta',
+    menu_help: 'Ayuda'
+  }
+};
+
+let currentLang = localStorage.getItem('mp-lang') || 'ht';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('mp-lang', lang);
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.mp-lang a').forEach(a => a.classList.remove('active'));
+  document.querySelector(`.mp-lang a[onclick*="${lang}"]`).classList.add('active');
+
+  const t = T[lang] || T.ht;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key]) el.textContent = t[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (t[key]) el.innerHTML = t[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (t[key]) el.placeholder = t[key];
+  });
+}
+
+/* ═══ TABS ═══ */
+function switchTab(tab) {
+  document.querySelectorAll('.mp-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.mp-tab-content').forEach(c => c.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+/* ═══ SEARCH ═══ */
+function handleSearch(val) {
+  if (val.length > 2) {
+    window.location.href = 'shop.html?q=' + encodeURIComponent(val);
+  }
+}
+
+/* ═══ SCROLL REVEAL ═══ */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.mp-reveal').forEach(el => observer.observe(el));
+
+/* Init language on load */
+setLang(currentLang);
+</script>
 </body>
 </html>
