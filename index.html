@@ -1268,7 +1268,7 @@ body.mp-home {
       <span data-i18n="hero_badge">#1 AN AYITI</span>
     </div>
     <span class="mp-hero-emoji">💸</span>
-    <h1 data-i18n="hero_title">FÈ LAJAN<br>AK TELEFÒN OU</h1>
+    <h1><span data-i18n="hero_line1">FÈ LAJAN</span><br><span data-i18n="hero_line2">AK TELEFÒN OU</span></h1>
     <div class="mp-hero-jodi">
       <span class="mp-hero-live"></span>
       <span data-i18n="hero_jodi">JODI A</span>
@@ -1620,7 +1620,8 @@ body.mp-home {
 const T = {
   ht: {
     hero_badge: '#1 AN AYITI',
-    hero_title: 'FÈ LAJAN<br>AK TELEFÒN OU',
+    hero_line1: 'FÈ LAJAN',
+    hero_line2: 'AK TELEFÒN OU',
     hero_jodi: 'JODI A',
     hero_sub: 'Achte • Vann • Fè Kous • Touche',
     search_placeholder: 'Chèche magazen, pwodwi, sèvis...',
@@ -1699,7 +1700,8 @@ const T = {
   },
   en: {
     hero_badge: '#1 IN HAITI',
-    hero_title: 'MAKE MONEY<br>WITH YOUR PHONE',
+    hero_line1: 'MAKE MONEY',
+    hero_line2: 'WITH YOUR PHONE',
     hero_jodi: 'TODAY',
     hero_sub: 'Buy • Sell • Ride • Earn',
     search_placeholder: 'Search stores, products, services...',
@@ -1778,7 +1780,8 @@ const T = {
   },
   fr: {
     hero_badge: '#1 EN HAÏTI',
-    hero_title: 'GAGNEZ DE L\'ARGENT<br>AVEC VOTRE TÉLÉPHONE',
+    hero_line1: 'GAGNEZ DE L\'ARGENT',
+    hero_line2: 'AVEC VOTRE TÉLÉPHONE',
     hero_jodi: 'AUJOURD\'HUI',
     hero_sub: 'Acheter • Vendre • Rouler • Gagner',
     search_placeholder: 'Rechercher magasins, produits, services...',
@@ -1857,7 +1860,8 @@ const T = {
   },
   es: {
     hero_badge: '#1 EN HAITÍ',
-    hero_title: 'GANA DINERO<br>CON TU TELÉFONO',
+    hero_line1: 'GANA DINERO',
+    hero_line2: 'CON TU TELÉFONO',
     hero_jodi: 'HOY',
     hero_sub: 'Comprar • Vender • Viajar • Ganar',
     search_placeholder: 'Buscar tiendas, productos, servicios...',
@@ -1948,10 +1952,7 @@ function setLang(lang) {
   const t = T[lang] || T.ht;
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (t[key]) {
-      if (key === 'hero_title') el.innerHTML = t[key];
-      else el.textContent = t[key];
-    }
+    if (t[key]) el.textContent = t[key];
   });
   document.querySelectorAll('[data-i18n-html]').forEach(el => {
     const key = el.getAttribute('data-i18n-html');
