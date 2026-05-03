@@ -41,19 +41,18 @@
 :root {
   --mp-navy: #0A0E27;
   --mp-blue: #00209F;
+  --mp-blue-light: #1545CC;
+  --mp-blue-glow: rgba(0,32,159,.35);
   --mp-red: #D21034;
+  --mp-red-dark: #B00D2B;
   --mp-red-glow: rgba(210,16,52,.35);
-  --mp-gold: #F5A623;
-  --mp-gold-glow: rgba(245,166,35,.3);
-  --mp-green: #00C853;
-  --mp-green-glow: rgba(0,200,83,.25);
-  --mp-orange: #FF6D00;
   --mp-white: #FFFFFF;
-  --mp-cream: #FFF9F0;
-  --mp-bg: #F4F1EC;
+  --mp-bg: #F5F7FA;
+  --mp-bg-blue: #E8EDFF;
+  --mp-bg-red: #FFE8EC;
   --mp-text: #1A1A2E;
   --mp-text-sub: #5A5A72;
-  --mp-border: #E8E4DE;
+  --mp-border: #E0E4ED;
   --mp-card: #FFFFFF;
   --mp-heading: 'Bricolage Grotesque', system-ui, sans-serif;
   --mp-body: 'DM Sans', system-ui, sans-serif;
@@ -92,7 +91,7 @@ body.mp-home {
   font-family: var(--mp-body);
 }
 .mp-lang a:hover { color: #fff; background: rgba(255,255,255,.08); }
-.mp-lang a.active { color: var(--mp-navy); background: var(--mp-gold); font-weight: 700; }
+.mp-lang a.active { color: #fff; background: var(--mp-red); font-weight: 700; }
 
 /* ═══ NAV ═══ */
 .mp-nav {
@@ -220,7 +219,7 @@ body.mp-home {
 
 /* ═══ HERO ═══ */
 .mp-hero {
-  background: linear-gradient(160deg, var(--mp-navy) 0%, #0D1240 40%, #1A0A30 70%, var(--mp-navy) 100%);
+  background: linear-gradient(160deg, var(--mp-navy) 0%, #0D1240 40%, #0A1855 70%, var(--mp-navy) 100%);
   padding: 32px 20px 0;
   text-align: center;
   position: relative;
@@ -249,7 +248,7 @@ body.mp-home {
   left: 0;
   right: 0;
   height: 60px;
-  background: linear-gradient(to top, var(--mp-bg), transparent);
+  background: linear-gradient(to top, #F5F7FA, transparent);
   pointer-events: none;
 }
 .mp-hero::before {
@@ -270,7 +269,7 @@ body.mp-home {
   left: -60px;
   width: 240px;
   height: 240px;
-  background: radial-gradient(circle, rgba(245,166,35,.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0,32,159,.1) 0%, transparent 70%);
   border-radius: 50%;
   animation: heroOrb2 10s ease-in-out infinite alternate;
 }
@@ -309,7 +308,7 @@ body.mp-home {
   letter-spacing: -.03em;
   margin-bottom: 14px;
   animation: fadeUp .6s .08s ease both;
-  background: linear-gradient(135deg, var(--mp-gold) 0%, #FFD97A 50%, var(--mp-gold) 100%);
+  background: linear-gradient(135deg, #fff 0%, #E8EDFF 50%, #fff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -456,21 +455,21 @@ body.mp-home {
   50% { box-shadow: 0 4px 24px rgba(0,32,159,.45), 0 0 20px rgba(0,32,159,.2); }
 }
 
-/* Sell - GREEN */
+/* Sell - NAVY BLUE */
 .mp-act-sell {
-  background: linear-gradient(135deg, #00803A, var(--mp-green));
+  background: linear-gradient(135deg, #0A1855, #162470);
   color: #fff;
 }
 .mp-act-sell::after { background: rgba(255,255,255,.25); }
-.mp-act-sell:hover { box-shadow: 0 8px 28px var(--mp-green-glow); }
+.mp-act-sell:hover { box-shadow: 0 8px 28px rgba(10,24,85,.4); }
 
-/* Earn - ORANGE */
+/* Earn - DARK RED */
 .mp-act-earn {
-  background: linear-gradient(135deg, var(--mp-orange), #FF8F33);
+  background: linear-gradient(135deg, var(--mp-red-dark), #C41230);
   color: #fff;
 }
 .mp-act-earn::after { background: rgba(255,255,255,.2); }
-.mp-act-earn:hover { box-shadow: 0 8px 28px rgba(255,109,0,.3); }
+.mp-act-earn:hover { box-shadow: 0 8px 28px rgba(176,13,43,.4); }
 
 .mp-act-emoji {
   font-size: 1.6rem;
@@ -590,10 +589,10 @@ body.mp-home {
 .mp-howit-inner {
   max-width: 520px;
   margin: 0 auto;
-  background: linear-gradient(135deg, #FFF9F0, #FFF3E0);
+  background: linear-gradient(135deg, #EEF1FF, #E8EDFF);
   border-radius: 20px;
   padding: 28px 22px;
-  border: 1px solid rgba(245,166,35,.2);
+  border: 1px solid rgba(0,32,159,.12);
 }
 .mp-howit-title {
   font-family: var(--mp-heading);
@@ -617,8 +616,8 @@ body.mp-home {
 .mp-howit-num {
   width: 44px;
   height: 44px;
-  background: var(--mp-navy);
-  color: var(--mp-gold);
+  background: var(--mp-red);
+  color: #fff;
   border-radius: 14px;
   display: flex;
   align-items: center;
@@ -683,7 +682,7 @@ body.mp-home {
 .mp-trust-icon {
   width: 28px;
   height: 28px;
-  background: #E8FFF0;
+  background: var(--mp-bg-blue);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -760,7 +759,7 @@ body.mp-home {
 .mp-cat-icon {
   width: 44px;
   height: 44px;
-  background: var(--mp-cream);
+  background: var(--mp-bg-blue);
   border-radius: 14px;
   display: flex;
   align-items: center;
@@ -807,7 +806,7 @@ body.mp-home {
   color: #fff;
   box-shadow: 0 2px 8px rgba(10,14,39,.2);
 }
-.mp-tab:hover:not(.active) { background: var(--mp-cream); color: var(--mp-text); }
+.mp-tab:hover:not(.active) { background: var(--mp-bg-blue); color: var(--mp-text); }
 
 .mp-tab-content { display: none; }
 .mp-tab-content.active { display: block; }
@@ -835,7 +834,7 @@ body.mp-home {
 }
 .mp-product-img {
   aspect-ratio: 1;
-  background: linear-gradient(135deg, var(--mp-cream) 0%, #EDE8E0 100%);
+  background: linear-gradient(135deg, var(--mp-bg-blue) 0%, #DCE3FF 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -944,7 +943,7 @@ body.mp-home {
   margin-top: 6px;
   font-size: .7rem;
   font-weight: 600;
-  color: var(--mp-gold);
+  color: var(--mp-red);
 }
 
 /* ═══ SOCIAL PROOF / TESTIMONIALS ═══ */
@@ -983,7 +982,7 @@ body.mp-home {
   border-radius: 50%;
   flex-shrink: 0;
 }
-.mp-testimonial-dot.green { background: var(--mp-green); box-shadow: 0 0 8px var(--mp-green-glow); }
+.mp-testimonial-dot.green { background: var(--mp-blue); box-shadow: 0 0 8px var(--mp-blue-glow); }
 .mp-testimonial-dot.red { background: var(--mp-red); box-shadow: 0 0 8px var(--mp-red-glow); }
 .mp-testimonial-dot.blue { background: var(--mp-blue); box-shadow: 0 0 8px rgba(0,32,159,.3); }
 .mp-testimonial-text {
@@ -1002,8 +1001,8 @@ body.mp-home {
 .mp-vendor-card {
   max-width: 520px;
   margin: 0 auto;
-  background: linear-gradient(135deg, #FFF9F0, #FFF3E0);
-  border: 2px solid rgba(245,166,35,.3);
+  background: linear-gradient(135deg, #FFE8EC, #FFF0F2);
+  border: 2px solid rgba(210,16,52,.15);
   border-radius: 20px;
   padding: 28px 22px;
   text-align: center;
@@ -1026,7 +1025,7 @@ body.mp-home {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, #00803A, var(--mp-green));
+  background: linear-gradient(135deg, var(--mp-red), #E8183F);
   color: #fff;
   padding: 14px 28px;
   border-radius: 14px;
@@ -1034,12 +1033,12 @@ body.mp-home {
   font-size: .95rem;
   font-weight: 800;
   transition: all .25s;
-  box-shadow: 0 4px 16px var(--mp-green-glow);
+  box-shadow: 0 4px 16px var(--mp-red-glow);
   letter-spacing: -.01em;
 }
 .mp-vendor-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(0,200,83,.35);
+  box-shadow: 0 8px 28px rgba(210,16,52,.35);
 }
 .mp-vendor-free {
   display: block;
@@ -1114,7 +1113,7 @@ body.mp-home {
   cursor: pointer;
 }
 .mp-wa-popup-option:last-child { border-bottom: none; }
-.mp-wa-popup-option:hover { background: var(--mp-cream); }
+.mp-wa-popup-option:hover { background: var(--mp-bg-blue); }
 
 /* WhatsApp popup overlay for closing on outside click */
 .mp-wa-overlay {
