@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Kreye Boutik Ou — MyPlopPlop</title>
+<meta name="description" content="Kreye boutik ou gratis sou MyPlopPlop. Kòmanse vann jodi a.">
+<meta property="og:title" content="Kreye Boutik Ou — MyPlopPlop">
+<meta property="og:description" content="Kreye boutik ou gratis sou MyPlopPlop. Kòmanse vann jodi a.">
+<meta property="og:image" content="https://myplopplop.com/assets/img/og-preview.jpg">
+<meta property="og:url" content="https://myplopplop.com/merchant/register.html">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#00209F;--blue-dark:#001A7A;--blue-light:#E8EDFF;
+  --red:#D21034;--red-dark:#B00D2B;--red-light:#FFE8EC;
+  --navy:#0A0E27;--white:#FFFFFF;--bg:#F5F7FA;
+  --text:#1A1A2E;--text-sub:#5A5A72;--border:#E0E4ED;
+  --heading:'Bricolage Grotesque',system-ui,sans-serif;
+  --body:'DM Sans',system-ui,sans-serif;
+}
+body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* Top bar */
+.top-bar{background:var(--navy);padding:0;display:flex;align-items:center;justify-content:center;height:34px;gap:2px}
+.top-bar a{color:rgba(255,255,255,.5);font-size:.68rem;font-weight:600;padding:5px 12px;border-radius:100px;cursor:pointer;transition:all .2s;font-family:var(--body)}
+.top-bar a:hover{color:#fff;background:rgba(255,255,255,.08)}
+.top-bar a.active{color:#fff;background:var(--red);font-weight:700}
+
+/* Nav */
+.nav{background:var(--navy);padding:0 16px;height:56px;display:flex;align-items:center;gap:12px}
+.nav-back{width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);border-radius:12px;text-decoration:none;transition:all .2s}
+.nav-back:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-back svg{width:22px;height:22px}
+.nav-title{font-family:var(--heading);font-weight:700;font-size:1rem;color:#fff;letter-spacing:-.02em}
+
+/* Hero stripe */
+.hero-stripe{height:4px;display:flex}
+.hero-stripe .s-blue{flex:1;background:var(--blue)}
+.hero-stripe .s-red{flex:1;background:var(--red)}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,var(--navy),#0D1240);padding:32px 20px 36px;text-align:center}
+.hero-emoji{font-size:2.4rem;margin-bottom:12px;display:block;filter:drop-shadow(0 4px 8px rgba(0,0,0,.3))}
+.hero h1{font-family:var(--heading);font-size:1.6rem;font-weight:800;color:#fff;line-height:1.15;letter-spacing:-.03em;margin-bottom:8px}
+.hero p{font-size:.88rem;color:rgba(255,255,255,.6);line-height:1.5;max-width:340px;margin:0 auto}
+
+/* Benefits */
+.benefits{display:flex;gap:0;margin:-20px 16px 0;position:relative;z-index:2;background:var(--white);border-radius:14px;border:1px solid var(--border);overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.benefit{flex:1;text-align:center;padding:14px 8px;border-right:1px solid var(--border)}
+.benefit:last-child{border-right:none}
+.benefit-icon{width:32px;height:32px;background:var(--blue-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.9rem;margin:0 auto 6px}
+.benefit-text{font-size:.65rem;font-weight:700;color:var(--text);line-height:1.3}
+
+/* Form */
+.form-wrap{max-width:520px;margin:24px auto 0;padding:0 16px 100px}
+.form-card{background:var(--white);border-radius:18px;padding:24px 20px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.form-title{font-family:var(--heading);font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:4px;letter-spacing:-.02em}
+.form-subtitle{font-size:.82rem;color:var(--text-sub);margin-bottom:20px;line-height:1.5}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:-.01em}
+.field label .req{color:var(--red);margin-left:2px}
+.field input,.field select,.field textarea{width:100%;padding:13px 16px;border-radius:12px;border:1.5px solid var(--border);font-family:var(--body);font-size:.9rem;color:var(--text);background:var(--bg);transition:all .2s;-webkit-appearance:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,32,159,.08);background:var(--white);outline:none}
+.field input::placeholder,.field textarea::placeholder{color:#B0A89E}
+.field textarea{resize:vertical;min-height:80px}
+.field select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235A5A72' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field-hint{font-size:.7rem;color:var(--text-sub);margin-top:4px}
+
+/* Submit */
+.submit-btn{width:100%;padding:16px;border-radius:14px;background:var(--red);color:#fff;font-family:var(--heading);font-size:1rem;font-weight:800;border:none;cursor:pointer;transition:all .25s;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(210,16,52,.3);margin-top:20px}
+.submit-btn:hover{background:var(--red-dark);transform:translateY(-2px);box-shadow:0 8px 24px rgba(210,16,52,.4)}
+.submit-btn:active{transform:translateY(0)}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+/* Success state */
+.success-msg{display:none;text-align:center;padding:32px 20px}
+.success-msg.show{display:block}
+.success-icon{width:64px;height:64px;background:var(--blue);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 16px;box-shadow:0 4px 16px rgba(0,32,159,.3)}
+.success-msg h2{font-family:var(--heading);font-size:1.3rem;font-weight:800;color:var(--text);margin-bottom:8px}
+.success-msg p{font-size:.88rem;color:var(--text-sub);line-height:1.6;margin-bottom:20px}
+.success-wa{display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;padding:14px 28px;border-radius:14px;font-weight:700;font-size:.92rem;text-decoration:none;transition:all .25s;box-shadow:0 4px 16px rgba(37,211,102,.3)}
+.success-wa:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,211,102,.4)}
+.success-home{display:block;margin-top:14px;color:var(--blue);font-size:.85rem;font-weight:600;text-decoration:none}
+
+/* Footer nav */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--white);border-top:1px solid var(--border);padding:6px 0 env(safe-area-inset-bottom,6px);display:flex}
+.bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0;color:var(--text-sub);font-size:.62rem;font-weight:700;text-decoration:none;transition:color .15s}
+.bottom-nav a.active{color:var(--red)}
+.bottom-nav a:hover{color:var(--text)}
+.bottom-nav svg{width:22px;height:22px}
+
+@media(min-width:600px){
+  .hero h1{font-size:1.8rem}
+  .form-card{padding:28px 24px}
+}
+</style>
+</head>
+<body>
+
+<!-- Language Bar -->
+<div class="top-bar">
+  <a class="active" onclick="setLang('ht')">🇭🇹 Kreyòl</a>
+  <a onclick="setLang('en')">🇺🇸 English</a>
+  <a onclick="setLang('fr')">🇫🇷 Français</a>
+  <a onclick="setLang('es')">🇪🇸 Español</a>
+</div>
+
+<!-- Nav -->
+<nav class="nav">
+  <a href="../index.html" class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </a>
+  <span class="nav-title" data-i18n="nav_title">Kreye Boutik Ou</span>
+</nav>
+<div class="hero-stripe"><div class="s-blue"></div><div class="s-red"></div></div>
+
+<!-- Hero -->
+<section class="hero">
+  <span class="hero-emoji">🏪</span>
+  <h1 data-i18n="hero_h1">Kòmanse Vann sou MyPlopPlop</h1>
+  <p data-i18n="hero_p">Enskri gratis, ajoute pwodwi ou, epi kòmanse resevwa kòmand jodi a.</p>
+</section>
+
+<!-- Benefits -->
+<div class="benefits">
+  <div class="benefit">
+    <div class="benefit-icon">💰</div>
+    <div class="benefit-text" data-i18n="b1">0 HTG pou kòmanse</div>
+  </div>
+  <div class="benefit">
+    <div class="benefit-icon">📱</div>
+    <div class="benefit-text" data-i18n="b2">Jere ak telefòn</div>
+  </div>
+  <div class="benefit">
+    <div class="benefit-icon">🚀</div>
+    <div class="benefit-text" data-i18n="b3">Lanse nan 5 minit</div>
+  </div>
+</div>
+
+<!-- Registration Form -->
+<div class="form-wrap">
+  <div class="form-card" id="formCard">
+    <div class="form-title" data-i18n="form_title">Enfòmasyon Boutik Ou</div>
+    <div class="form-subtitle" data-i18n="form_sub">Ranpli fòm sa a pou kreye boutik ou gratis.</div>
+
+    <form id="registerForm" onsubmit="return handleSubmit(event)">
+      <div class="field">
+        <label data-i18n="lbl_name">Non Boutik<span class="req">*</span></label>
+        <input type="text" id="storeName" required data-i18n-placeholder="ph_name" placeholder="Ex: Kay Griye, Boutik Marie...">
+      </div>
+
+      <div class="field">
+        <label data-i18n="lbl_category">Kategori<span class="req">*</span></label>
+        <select id="storeCategory" required>
+          <option value="" data-i18n="cat_select">-- Chwazi kategori --</option>
+          <option value="restoran" data-i18n="cat_rest">🍽️ Restoran / Manje</option>
+          <option value="sipemache" data-i18n="cat_groc">🛒 Sipèmache / Makèt</option>
+          <option value="famasi" data-i18n="cat_pharm">💊 Famasi</option>
+          <option value="rad" data-i18n="cat_cloth">👕 Rad / Mòd</option>
+          <option value="elektwonik" data-i18n="cat_elec">📱 Elektwonik</option>
+          <option value="bote" data-i18n="cat_beauty">💄 Bote / Swen Pèsonèl</option>
+          <option value="mezon" data-i18n="cat_home">🏠 Atik Mezon</option>
+          <option value="lot" data-i18n="cat_other">📦 Lòt</option>
+        </select>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label data-i18n="lbl_owner">Non Pwopriyetè<span class="req">*</span></label>
+          <input type="text" id="ownerName" required data-i18n-placeholder="ph_owner" placeholder="Non konplè ou">
+        </div>
+        <div class="field">
+          <label data-i18n="lbl_phone">Telefòn<span class="req">*</span></label>
+          <input type="tel" id="phone" required placeholder="+509 XXXX XXXX">
+        </div>
+      </div>
+
+      <div class="field">
+        <label data-i18n="lbl_whatsapp">Nimewo WhatsApp</label>
+        <input type="tel" id="whatsapp" data-i18n-placeholder="ph_wa" placeholder="Menm nimewo oswa yon lòt">
+        <div class="field-hint" data-i18n="hint_wa">Kliyan ap kontakte ou sou WhatsApp</div>
+      </div>
+
+      <div class="field">
+        <label data-i18n="lbl_location">Lokasyon / Adrès<span class="req">*</span></label>
+        <input type="text" id="location" required data-i18n-placeholder="ph_loc" placeholder="Ex: Delmas 32, Petyonvil, Okap...">
+      </div>
+
+      <div class="field">
+        <label data-i18n="lbl_desc">Deskripsyon Boutik</label>
+        <textarea id="storeDesc" data-i18n-placeholder="ph_desc" placeholder="Dekri sa ou vann oswa sèvis ou ofri..."></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <span data-i18n="btn_submit">🏪 Kreye Boutik Mwen</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- Success message -->
+  <div class="success-msg" id="successMsg">
+    <div class="success-icon">✅</div>
+    <h2 data-i18n="suc_title">Boutik Ou Kreye!</h2>
+    <p data-i18n="suc_desc">Nou resevwa demann ou. Ekip MyPlopPlop ap kontakte ou sou WhatsApp pou aktive boutik ou.</p>
+    <a id="waLink" href="#" target="_blank" class="success-wa">💬 <span data-i18n="suc_wa">Kontakte Nou sou WhatsApp</span></a>
+    <a href="../index.html" class="success-home" data-i18n="suc_home">&larr; Retounen sou MyPlopPlop</a>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav">
+  <a href="../index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span data-i18n="nav_home">Akèy</span>
+  </a>
+  <a href="../shop.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <span data-i18n="nav_search">Chèche</span>
+  </a>
+  <a href="../cart.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    <span data-i18n="nav_cart">Panye</span>
+  </a>
+  <a href="../orders.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    <span data-i18n="nav_orders">Kòmand</span>
+  </a>
+  <a href="../login.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span data-i18n="nav_account">Kont</span>
+  </a>
+</nav>
+
+<script>
+const WA_NUMBER = '50941902005';
+
+const T = {
+  ht: {
+    nav_title:'Kreye Boutik Ou',hero_h1:'Kòmanse Vann sou MyPlopPlop',hero_p:'Enskri gratis, ajoute pwodwi ou, epi kòmanse resevwa kòmand jodi a.',
+    b1:'0 HTG pou kòmanse',b2:'Jere ak telefòn',b3:'Lanse nan 5 minit',
+    form_title:'Enfòmasyon Boutik Ou',form_sub:'Ranpli fòm sa a pou kreye boutik ou gratis.',
+    lbl_name:'Non Boutik',lbl_category:'Kategori',lbl_owner:'Non Pwopriyetè',lbl_phone:'Telefòn',lbl_whatsapp:'Nimewo WhatsApp',lbl_location:'Lokasyon / Adrès',lbl_desc:'Deskripsyon Boutik',
+    ph_name:'Ex: Kay Griye, Boutik Marie...',ph_owner:'Non konplè ou',ph_wa:'Menm nimewo oswa yon lòt',ph_loc:'Ex: Delmas 32, Petyonvil, Okap...',ph_desc:'Dekri sa ou vann oswa sèvis ou ofri...',
+    hint_wa:'Kliyan ap kontakte ou sou WhatsApp',
+    cat_select:'-- Chwazi kategori --',cat_rest:'🍽️ Restoran / Manje',cat_groc:'🛒 Sipèmache / Makèt',cat_pharm:'💊 Famasi',cat_cloth:'👕 Rad / Mòd',cat_elec:'📱 Elektwonik',cat_beauty:'💄 Bote / Swen Pèsonèl',cat_home:'🏠 Atik Mezon',cat_other:'📦 Lòt',
+    btn_submit:'🏪 Kreye Boutik Mwen',
+    suc_title:'Boutik Ou Kreye!',suc_desc:'Nou resevwa demann ou. Ekip MyPlopPlop ap kontakte ou sou WhatsApp pou aktive boutik ou.',suc_wa:'Kontakte Nou sou WhatsApp',suc_home:'← Retounen sou MyPlopPlop',
+    nav_home:'Akèy',nav_search:'Chèche',nav_cart:'Panye',nav_orders:'Kòmand',nav_account:'Kont'
+  },
+  en: {
+    nav_title:'Create Your Store',hero_h1:'Start Selling on MyPlopPlop',hero_p:'Register for free, add your products, and start receiving orders today.',
+    b1:'$0 to start',b2:'Manage from phone',b3:'Launch in 5 min',
+    form_title:'Your Store Info',form_sub:'Fill out this form to create your free store.',
+    lbl_name:'Store Name',lbl_category:'Category',lbl_owner:'Owner Name',lbl_phone:'Phone',lbl_whatsapp:'WhatsApp Number',lbl_location:'Location / Address',lbl_desc:'Store Description',
+    ph_name:'Ex: Kay Griye, Boutik Marie...',ph_owner:'Your full name',ph_wa:'Same number or a different one',ph_loc:'Ex: Delmas 32, Petionville, Cap-Haitien...',ph_desc:'Describe what you sell or services you offer...',
+    hint_wa:'Customers will contact you on WhatsApp',
+    cat_select:'-- Choose category --',cat_rest:'🍽️ Restaurant / Food',cat_groc:'🛒 Grocery / Market',cat_pharm:'💊 Pharmacy',cat_cloth:'👕 Clothing / Fashion',cat_elec:'📱 Electronics',cat_beauty:'💄 Beauty / Personal Care',cat_home:'🏠 Home Goods',cat_other:'📦 Other',
+    btn_submit:'🏪 Create My Store',
+    suc_title:'Your Store is Created!',suc_desc:'We received your request. The MyPlopPlop team will contact you on WhatsApp to activate your store.',suc_wa:'Contact Us on WhatsApp',suc_home:'← Back to MyPlopPlop',
+    nav_home:'Home',nav_search:'Search',nav_cart:'Cart',nav_orders:'Orders',nav_account:'Account'
+  },
+  fr: {
+    nav_title:'Créer Votre Boutique',hero_h1:'Commencez à Vendre sur MyPlopPlop',hero_p:'Inscrivez-vous gratuitement, ajoutez vos produits et commencez à recevoir des commandes.',
+    b1:'0 HTG pour commencer',b2:'Gérer depuis le téléphone',b3:'Lancer en 5 min',
+    form_title:'Infos de Votre Boutique',form_sub:'Remplissez ce formulaire pour créer votre boutique gratuite.',
+    lbl_name:'Nom de la Boutique',lbl_category:'Catégorie',lbl_owner:'Nom du Propriétaire',lbl_phone:'Téléphone',lbl_whatsapp:'Numéro WhatsApp',lbl_location:'Emplacement / Adresse',lbl_desc:'Description de la Boutique',
+    ph_name:'Ex: Kay Griye, Boutik Marie...',ph_owner:'Votre nom complet',ph_wa:'Même numéro ou un autre',ph_loc:'Ex: Delmas 32, Pétionville, Cap-Haïtien...',ph_desc:'Décrivez ce que vous vendez ou les services que vous offrez...',
+    hint_wa:'Les clients vous contacteront sur WhatsApp',
+    cat_select:'-- Choisir catégorie --',cat_rest:'🍽️ Restaurant / Nourriture',cat_groc:'🛒 Supermarché / Marché',cat_pharm:'💊 Pharmacie',cat_cloth:'👕 Vêtements / Mode',cat_elec:'📱 Électronique',cat_beauty:'💄 Beauté / Soins',cat_home:'🏠 Articles Maison',cat_other:'📦 Autre',
+    btn_submit:'🏪 Créer Ma Boutique',
+    suc_title:'Votre Boutique est Créée!',suc_desc:'Nous avons reçu votre demande. L\'équipe MyPlopPlop vous contactera sur WhatsApp pour activer votre boutique.',suc_wa:'Contactez-nous sur WhatsApp',suc_home:'← Retour à MyPlopPlop',
+    nav_home:'Accueil',nav_search:'Recherche',nav_cart:'Panier',nav_orders:'Commandes',nav_account:'Compte'
+  },
+  es: {
+    nav_title:'Crear Tu Tienda',hero_h1:'Empieza a Vender en MyPlopPlop',hero_p:'Regístrate gratis, agrega tus productos y comienza a recibir pedidos hoy.',
+    b1:'$0 para empezar',b2:'Gestiona desde el celular',b3:'Lanza en 5 min',
+    form_title:'Info de Tu Tienda',form_sub:'Completa este formulario para crear tu tienda gratis.',
+    lbl_name:'Nombre de Tienda',lbl_category:'Categoría',lbl_owner:'Nombre del Dueño',lbl_phone:'Teléfono',lbl_whatsapp:'Número WhatsApp',lbl_location:'Ubicación / Dirección',lbl_desc:'Descripción de la Tienda',
+    ph_name:'Ex: Kay Griye, Boutik Marie...',ph_owner:'Tu nombre completo',ph_wa:'Mismo número u otro',ph_loc:'Ex: Delmas 32, Petionville, Cap-Haitien...',ph_desc:'Describe lo que vendes o los servicios que ofreces...',
+    hint_wa:'Los clientes te contactarán en WhatsApp',
+    cat_select:'-- Elegir categoría --',cat_rest:'🍽️ Restaurante / Comida',cat_groc:'🛒 Supermercado / Mercado',cat_pharm:'💊 Farmacia',cat_cloth:'👕 Ropa / Moda',cat_elec:'📱 Electrónica',cat_beauty:'💄 Belleza / Cuidado Personal',cat_home:'🏠 Artículos del Hogar',cat_other:'📦 Otro',
+    btn_submit:'🏪 Crear Mi Tienda',
+    suc_title:'Tu Tienda Está Creada!',suc_desc:'Recibimos tu solicitud. El equipo de MyPlopPlop te contactará en WhatsApp para activar tu tienda.',suc_wa:'Contáctanos en WhatsApp',suc_home:'← Volver a MyPlopPlop',
+    nav_home:'Inicio',nav_search:'Buscar',nav_cart:'Carrito',nav_orders:'Pedidos',nav_account:'Cuenta'
+  }
+};
+
+let currentLang = localStorage.getItem('mp-lang') || 'ht';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('mp-lang', lang);
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.top-bar a').forEach(a => a.classList.remove('active'));
+  document.querySelector(`.top-bar a[onclick*="${lang}"]`).classList.add('active');
+  const t = T[lang] || T.ht;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key]) el.textContent = t[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (t[key]) el.placeholder = t[key];
+  });
+}
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const name = document.getElementById('storeName').value.trim();
+  const cat = document.getElementById('storeCategory').value;
+  const owner = document.getElementById('ownerName').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const wa = document.getElementById('whatsapp').value.trim() || phone;
+  const loc = document.getElementById('location').value.trim();
+  const desc = document.getElementById('storeDesc').value.trim();
+
+  const msg = `🏪 NOUVO BOUTIK - MyPlopPlop\n\nNon Boutik: ${name}\nKategori: ${cat}\nPwopriyetè: ${owner}\nTelefòn: ${phone}\nWhatsApp: ${wa}\nLokasyon: ${loc}\nDeskripsyon: ${desc || 'N/A'}`;
+
+  const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+  document.getElementById('waLink').href = waUrl;
+
+  document.getElementById('formCard').style.display = 'none';
+  document.getElementById('successMsg').classList.add('show');
+
+  window.open(waUrl, '_blank');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  return false;
+}
+
+setLang(currentLang);
+</script>
+</body>
+</html>
