@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>MyPlopPlop — Premye Makètples Ayiti 🇭🇹</title>
-<meta name="description" content="Kòmande nan restoran, sipèmache, famasi, kenkayri ak plis ankò. Livrezon nan tout Ayiti. Sipòte fanmi ak zanmi kèlkeswa kote ou ye.">
+<meta name="description" content="Fè lajan ak telefòn ou jodi a. Achte, vann, fè kous, touche komisyon. Platfòm #1 nan Ayiti.">
 <meta property="og:title" content="MyPlopPlop — Premye Makètples Ayiti">
-<meta property="og:description" content="Kòmande nan restoran, sipèmache, famasi ak plis ankò. Sipòte fanmi ak zanmi nan Ayiti kèlkeswa kote ou ye.">
+<meta property="og:description" content="Fè lajan ak telefòn ou jodi a. Achte, vann, fè kous, touche komisyon. Platfòm #1 nan Ayiti.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://myplopplop.com/assets/img/og-preview.jpg">
 <meta property="og:image:width" content="1200">
@@ -28,7 +28,7 @@
 <link rel="stylesheet" href="css/layout.css">
 <style>
 /* ══════════════════════════════════════════
-   MyPlopPlop Marketplace Homepage v3.0
+   MyPlopPlop Marketplace Homepage v4.0
    "Tropical Commerce" — Caribbean premium
    ══════════════════════════════════════════ */
 
@@ -277,21 +277,20 @@ body.mp-home {
   letter-spacing: -.03em;
   margin-bottom: 14px;
   animation: fadeUp .6s .08s ease both;
-}
-.mp-hero h1 em {
-  font-style: normal;
-  background: linear-gradient(135deg, var(--mp-gold) 0%, #FFD97A 100%);
+  background: linear-gradient(135deg, var(--mp-gold) 0%, #FFD97A 50%, var(--mp-gold) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 .mp-hero-sub {
-  font-size: clamp(.88rem, 2.2vw, 1.02rem);
-  color: rgba(255,255,255,.55);
-  line-height: 1.65;
+  font-family: var(--mp-heading);
+  font-size: clamp(1rem, 2.8vw, 1.25rem);
+  color: rgba(255,255,255,.7);
+  line-height: 1.4;
   max-width: 400px;
   margin: 0 auto;
-  font-weight: 400;
+  font-weight: 700;
+  letter-spacing: .02em;
   animation: fadeUp .6s .15s ease both;
 }
 
@@ -364,6 +363,15 @@ body.mp-home {
   max-width: 520px;
   margin: 0 auto;
 }
+.mp-actions-heading {
+  font-family: var(--mp-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--mp-text);
+  letter-spacing: -.02em;
+  text-align: center;
+  margin-bottom: 16px;
+}
 .mp-actions-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -395,56 +403,36 @@ body.mp-home {
   transform: translate(20px, -20px);
 }
 
-/* Customer - RED - spans full width */
+/* Buy - RED */
 .mp-act-buy {
-  grid-column: 1 / -1;
   background: linear-gradient(135deg, var(--mp-red), #E8183F);
   color: #fff;
-  padding: 26px 22px;
 }
 .mp-act-buy::after { background: rgba(255,255,255,.3); }
 .mp-act-buy:hover { box-shadow: 0 8px 28px var(--mp-red-glow); }
 
-/* Store Owners - GREEN - spans full width with special treatment */
-.mp-act-sell {
-  grid-column: 1 / -1;
-  background: linear-gradient(135deg, #00803A, var(--mp-green));
-  color: #fff;
-  padding: 26px 22px;
-  border: 2px solid rgba(245,166,35,.5);
-  box-shadow: 0 0 24px var(--mp-gold-glow), 0 4px 16px var(--mp-green-glow);
-  animation: vendorPulse 3s ease-in-out infinite;
-}
-.mp-act-sell::after { background: rgba(255,255,255,.25); width: 100px; height: 100px; }
-.mp-act-sell:hover { box-shadow: 0 0 36px var(--mp-gold-glow), 0 8px 28px var(--mp-green-glow); }
-@keyframes vendorPulse {
-  0%, 100% { box-shadow: 0 0 24px var(--mp-gold-glow), 0 4px 16px var(--mp-green-glow); }
-  50% { box-shadow: 0 0 36px rgba(245,166,35,.45), 0 4px 20px rgba(0,200,83,.35); }
-}
-.mp-act-sell .mp-act-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: var(--mp-gold);
-  color: #1A0A00;
-  font-size: .6rem;
-  font-weight: 800;
-  padding: 3px 10px;
-  border-radius: 100px;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  font-family: var(--mp-heading);
-}
-
-/* Delivery - BLUE */
+/* Ride - BLUE - top priority with pulse */
 .mp-act-ride {
   background: linear-gradient(135deg, var(--mp-blue), #1545CC);
   color: #fff;
+  animation: ridePulse 2.5s ease-in-out infinite;
 }
 .mp-act-ride::after { background: rgba(255,255,255,.2); }
-.mp-act-ride:hover { box-shadow: 0 8px 28px rgba(0,32,159,.3); }
+.mp-act-ride:hover { box-shadow: 0 8px 28px rgba(0,32,159,.4); }
+@keyframes ridePulse {
+  0%, 100% { box-shadow: 0 4px 16px rgba(0,32,159,.25); }
+  50% { box-shadow: 0 4px 24px rgba(0,32,159,.45), 0 0 20px rgba(0,32,159,.2); }
+}
 
-/* Affiliate - ORANGE */
+/* Sell - GREEN */
+.mp-act-sell {
+  background: linear-gradient(135deg, #00803A, var(--mp-green));
+  color: #fff;
+}
+.mp-act-sell::after { background: rgba(255,255,255,.25); }
+.mp-act-sell:hover { box-shadow: 0 8px 28px var(--mp-green-glow); }
+
+/* Earn - ORANGE */
 .mp-act-earn {
   background: linear-gradient(135deg, var(--mp-orange), #FF8F33);
   color: #fff;
@@ -466,15 +454,12 @@ body.mp-home {
   letter-spacing: -.02em;
   margin-bottom: 4px;
 }
-.mp-act-buy .mp-act-title { font-size: 1.2rem; }
-.mp-act-sell .mp-act-title { font-size: 1.15rem; }
 .mp-act-desc {
   font-size: .78rem;
   opacity: .75;
   line-height: 1.45;
   font-weight: 400;
 }
-.mp-act-sell .mp-act-desc { opacity: .85; }
 .mp-act-arrow {
   position: absolute;
   bottom: 16px;
@@ -492,34 +477,145 @@ body.mp-home {
 .mp-act:hover .mp-act-arrow { background: rgba(255,255,255,.25); transform: translateX(2px); }
 .mp-act-arrow svg { width: 16px; height: 16px; }
 
-.mp-act-sub-btns {
-  display: flex;
-  gap: 8px;
-  margin-top: 14px;
+/* ═══ RIDE-HAILING BANNER ═══ */
+.mp-ride-banner {
+  padding: 24px 16px 0;
+  max-width: 520px;
+  margin: 0 auto;
 }
-.mp-act-sub-btn {
-  padding: 10px 18px;
-  border-radius: 12px;
-  font-size: .82rem;
-  font-weight: 700;
+.mp-ride-card {
+  background: linear-gradient(135deg, var(--mp-navy) 0%, #141B52 100%);
+  border-radius: 20px;
+  padding: 28px 22px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgba(0,32,159,.4);
+}
+.mp-ride-card::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(0,32,159,.3), transparent 70%);
+  border-radius: 50%;
+}
+.mp-ride-emoji {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+.mp-ride-title {
   font-family: var(--mp-heading);
-  transition: all .2s;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  letter-spacing: -.02em;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+.mp-ride-desc {
+  font-size: .82rem;
+  color: rgba(255,255,255,.55);
+  line-height: 1.5;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+.mp-ride-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  letter-spacing: -.01em;
-}
-.mp-act-buy .mp-act-sub-btn:first-child {
-  background: #fff;
-  color: var(--mp-red);
-}
-.mp-act-buy .mp-act-sub-btn:first-child:hover { background: #FFE8EC; }
-.mp-act-buy .mp-act-sub-btn:last-child {
-  background: rgba(255,255,255,.15);
+  gap: 8px;
+  background: var(--mp-blue);
   color: #fff;
-  border: 1px solid rgba(255,255,255,.2);
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-family: var(--mp-heading);
+  font-size: .95rem;
+  font-weight: 800;
+  transition: all .25s;
+  box-shadow: 0 4px 16px rgba(0,32,159,.35);
+  letter-spacing: -.01em;
+  position: relative;
+  z-index: 1;
 }
-.mp-act-buy .mp-act-sub-btn:last-child:hover { background: rgba(255,255,255,.25); }
+.mp-ride-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,32,159,.5);
+  background: #1545CC;
+}
+
+/* ═══ HOW IT WORKS ═══ */
+.mp-howit {
+  padding: 32px 16px 0;
+}
+.mp-howit-inner {
+  max-width: 520px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #FFF9F0, #FFF3E0);
+  border-radius: 20px;
+  padding: 28px 22px;
+  border: 1px solid rgba(245,166,35,.2);
+}
+.mp-howit-title {
+  font-family: var(--mp-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--mp-text);
+  text-align: center;
+  letter-spacing: -.02em;
+  margin-bottom: 24px;
+}
+.mp-howit-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.mp-howit-step {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.mp-howit-num {
+  width: 44px;
+  height: 44px;
+  background: var(--mp-navy);
+  color: var(--mp-gold);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mp-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.mp-howit-text {
+  flex: 1;
+}
+.mp-howit-label {
+  font-family: var(--mp-heading);
+  font-size: .95rem;
+  font-weight: 800;
+  color: var(--mp-text);
+  letter-spacing: -.01em;
+  margin-bottom: 2px;
+}
+.mp-howit-desc {
+  font-size: .78rem;
+  color: var(--mp-text-sub);
+  line-height: 1.4;
+}
+.mp-howit-emoji {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
 
 /* ═══ TRUST STRIP ═══ */
 .mp-trust {
@@ -819,146 +915,53 @@ body.mp-home {
   color: var(--mp-gold);
 }
 
-/* ═══ DELIVERY SECTION ═══ */
-.mp-delivery {
-  padding: 32px 16px 0;
-}
-.mp-delivery-card {
-  max-width: 520px;
-  margin: 0 auto;
-  background: linear-gradient(135deg, var(--mp-navy) 0%, #141B52 100%);
-  border-radius: 20px;
-  padding: 28px 22px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-.mp-delivery-card::before {
-  content: '';
-  position: absolute;
-  top: -30px;
-  right: -30px;
-  width: 160px;
-  height: 160px;
-  background: radial-gradient(circle, rgba(0,32,159,.4), transparent 70%);
-  border-radius: 50%;
-}
-.mp-delivery-text {
-  position: relative;
-  z-index: 1;
-  flex: 1;
-}
-.mp-delivery-logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-.mp-delivery-logo img {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-}
-.mp-delivery-logo span {
-  font-family: var(--mp-heading);
-  font-weight: 700;
-  font-size: .82rem;
-  color: rgba(255,255,255,.7);
-}
-.mp-delivery-title {
-  font-family: var(--mp-heading);
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: #fff;
-  line-height: 1.2;
-  letter-spacing: -.02em;
-  margin-bottom: 6px;
-}
-.mp-delivery-desc {
-  font-size: .8rem;
-  color: rgba(255,255,255,.5);
-  line-height: 1.5;
-  margin-bottom: 14px;
-}
-.mp-delivery-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--mp-blue);
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 12px;
-  font-size: .82rem;
-  font-weight: 700;
-  font-family: var(--mp-heading);
-  transition: all .2s;
-}
-.mp-delivery-btn:hover { background: #1545CC; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,32,159,.4); }
-.mp-delivery-vehicles {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex-shrink: 0;
-}
-.mp-vehicle {
-  width: 56px;
-  height: 56px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.6rem;
-}
-
-/* ═══ SOCIAL PROOF ═══ */
+/* ═══ SOCIAL PROOF / TESTIMONIALS ═══ */
 .mp-proof {
   padding: 28px 16px 0;
 }
+.mp-proof-title {
+  font-family: var(--mp-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--mp-text);
+  letter-spacing: -.02em;
+  text-align: center;
+  max-width: 520px;
+  margin: 0 auto 14px;
+}
 .mp-proof-inner {
   display: flex;
+  flex-direction: column;
   gap: 12px;
   max-width: 520px;
   margin: 0 auto;
 }
-.mp-proof-stat {
-  flex: 1;
+.mp-testimonial {
   background: var(--mp-white);
-  border-radius: 14px;
+  border-radius: 16px;
   border: 1px solid var(--mp-border);
-  padding: 16px 12px;
-  text-align: center;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
-.mp-proof-num {
-  font-family: var(--mp-heading);
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: var(--mp-text);
-  letter-spacing: -.02em;
-}
-.mp-proof-label {
-  font-size: .68rem;
-  font-weight: 600;
-  color: var(--mp-text-sub);
-  margin-top: 2px;
-  line-height: 1.3;
-}
-.mp-proof-dot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
+.mp-testimonial-dot {
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  margin-right: 4px;
-  vertical-align: middle;
+  flex-shrink: 0;
 }
-.mp-proof-dot.green { background: var(--mp-green); }
-.mp-proof-dot.red { background: var(--mp-red); }
-.mp-proof-dot.blue { background: var(--mp-blue); }
+.mp-testimonial-dot.green { background: var(--mp-green); box-shadow: 0 0 8px var(--mp-green-glow); }
+.mp-testimonial-dot.red { background: var(--mp-red); box-shadow: 0 0 8px var(--mp-red-glow); }
+.mp-testimonial-dot.blue { background: var(--mp-blue); box-shadow: 0 0 8px rgba(0,32,159,.3); }
+.mp-testimonial-text {
+  font-family: var(--mp-heading);
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--mp-text);
+  line-height: 1.3;
+  letter-spacing: -.01em;
+}
 
 /* ═══ VENDOR CTA SECTION ═══ */
 .mp-vendor-cta {
@@ -1014,12 +1017,14 @@ body.mp-home {
   color: var(--mp-text-sub);
 }
 
-/* ═══ WHATSAPP FAB ═══ */
-.mp-whatsapp {
+/* ═══ WHATSAPP FAB + POPUP ═══ */
+.mp-wa-container {
   position: fixed;
   bottom: 84px;
   right: 16px;
   z-index: 90;
+}
+.mp-whatsapp {
   width: 56px;
   height: 56px;
   background: #25D366;
@@ -1031,6 +1036,8 @@ body.mp-home {
   box-shadow: 0 4px 16px rgba(37,211,102,.4);
   transition: all .25s;
   animation: waPulse 3s ease-in-out infinite;
+  cursor: pointer;
+  border: none;
 }
 .mp-whatsapp:hover {
   transform: scale(1.08) translateY(-2px);
@@ -1041,23 +1048,53 @@ body.mp-home {
   0%, 100% { box-shadow: 0 4px 16px rgba(37,211,102,.4); }
   50% { box-shadow: 0 4px 24px rgba(37,211,102,.6); }
 }
-.mp-wa-tooltip {
+
+.mp-wa-popup {
+  display: none;
   position: absolute;
-  right: 64px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: var(--mp-navy);
-  color: #fff;
-  font-size: .72rem;
-  font-weight: 600;
-  padding: 8px 14px;
-  border-radius: 10px;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity .2s;
+  bottom: 66px;
+  right: 0;
+  width: 260px;
+  background: var(--mp-white);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.18), 0 1px 4px rgba(0,0,0,.08);
+  overflow: hidden;
+  animation: fadeUp .25s ease both;
 }
-.mp-whatsapp:hover .mp-wa-tooltip { opacity: 1; }
+.mp-wa-popup.open { display: block; }
+.mp-wa-popup-head {
+  background: #25D366;
+  color: #fff;
+  padding: 12px 16px;
+  font-family: var(--mp-heading);
+  font-size: .82rem;
+  font-weight: 700;
+}
+.mp-wa-popup-option {
+  display: block;
+  padding: 14px 16px;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--mp-text);
+  border-bottom: 1px solid var(--mp-border);
+  transition: background .15s;
+  text-decoration: none;
+  cursor: pointer;
+}
+.mp-wa-popup-option:last-child { border-bottom: none; }
+.mp-wa-popup-option:hover { background: var(--mp-cream); }
+
+/* WhatsApp popup overlay for closing on outside click */
+.mp-wa-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 89;
+}
+.mp-wa-overlay.open { display: block; }
 
 /* ═══ BOTTOM NAV ═══ */
 .mp-bottom {
@@ -1117,7 +1154,6 @@ body.mp-home {
   .mp-hero { padding: 56px 24px 56px; }
   .mp-hero h1 { font-size: 2.6rem; }
   .mp-actions-grid { gap: 14px; }
-  .mp-act-buy, .mp-act-sell { padding: 30px 26px; }
   .mp-trust-item { padding: 16px 14px; }
   .mp-trust-label { font-size: .72rem; }
 }
@@ -1192,10 +1228,10 @@ body.mp-home {
   <div class="mp-hero-inner">
     <div class="mp-hero-flag">
       <span>🇭🇹</span>
-      <span data-i18n="hero_badge">PREMYE MARKETPLACE AYITI</span>
+      <span data-i18n="hero_badge">PLATFÒM #1 NAN AYITI</span>
     </div>
-    <h1 data-i18n-html="hero_title">Premye <em>Marketplace</em> Ayiti</h1>
-    <p class="mp-hero-sub" data-i18n="hero_sub">Kòmande nan restoran, sipèmache, famasi, angwo ak detay. Sipòte fanmi w nenpòt kote ou ye.</p>
+    <h1 data-i18n="hero_title">FÈ LAJAN AK TELEFÒN OU JODI A</h1>
+    <p class="mp-hero-sub" data-i18n="hero_sub">Achte • Vann • Fè Kous • Touche</p>
   </div>
 </section>
 
@@ -1210,46 +1246,86 @@ body.mp-home {
   </div>
 </div>
 
-<!-- ═══ PRIMARY ACTIONS ═══ -->
+<!-- ═══ PRIMARY ACTIONS — 2x2 GRID ═══ -->
 <section class="mp-actions">
+  <h2 class="mp-actions-heading" data-i18n="actions_heading">Chwazi sa ou vle fè</h2>
   <div class="mp-actions-grid">
 
-    <!-- BUY — Full width, most prominent -->
-    <div class="mp-act mp-act-buy mp-stagger">
+    <!-- BUY — Red — top-left -->
+    <a href="shop.html" class="mp-act mp-act-buy mp-stagger">
       <span class="mp-act-emoji">🛒</span>
-      <div class="mp-act-title" data-i18n="act_buy_title">Kòmande Kounye a</div>
-      <div class="mp-act-desc" data-i18n="act_buy_desc">Restoran, sipèmache, famasi ak plis ankò</div>
-      <div class="mp-act-sub-btns">
-        <a href="shop.html" class="mp-act-sub-btn" data-i18n="act_buy_shop">🛍️ Wè Boutik</a>
-        <a href="diaspora.html" class="mp-act-sub-btn" data-i18n="act_buy_support">❤️ Sipòte Fanmi w</a>
-      </div>
-    </div>
-
-    <!-- SELL — Full width, golden glow, growth engine -->
-    <a href="merchant/register.html" class="mp-act mp-act-sell mp-stagger">
-      <span class="mp-act-badge" data-i18n="act_sell_badge">GRATIS</span>
-      <span class="mp-act-emoji">🏪</span>
-      <div class="mp-act-title" data-i18n="act_sell_title">Vann sou MyPlopPlop</div>
-      <div class="mp-act-desc" data-i18n="act_sell_desc">0 HTG pou kòmanse. Ou peye sèlman lè ou vann.</div>
+      <div class="mp-act-title" data-i18n="act_buy_title">Achte</div>
+      <div class="mp-act-desc" data-i18n="act_buy_desc">Restoran, sipèmache, famasi</div>
       <div class="mp-act-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
     </a>
 
-    <!-- DELIVERY — half width -->
+    <!-- RIDE — Blue — top-right (TOP PRIORITY, has pulse) -->
     <a href="https://msouwout.com" class="mp-act mp-act-ride mp-stagger">
       <span class="mp-act-emoji">🚗</span>
-      <div class="mp-act-title" data-i18n="act_ride_title">Livrezon Rapid</div>
-      <div class="mp-act-desc" data-i18n="act_ride_desc">Ak MsouWout</div>
+      <div class="mp-act-title" data-i18n="act_ride_title">Fè Kous</div>
+      <div class="mp-act-desc" data-i18n="act_ride_desc">Taxi ak moto an sekirite</div>
       <div class="mp-act-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
     </a>
 
-    <!-- EARN — half width -->
+    <!-- SELL — Green — bottom-left -->
+    <a href="merchant/register.html" class="mp-act mp-act-sell mp-stagger">
+      <span class="mp-act-emoji">🏪</span>
+      <div class="mp-act-title" data-i18n="act_sell_title">Vann</div>
+      <div class="mp-act-desc" data-i18n="act_sell_desc">Kreye boutik ou gratis</div>
+      <div class="mp-act-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+    </a>
+
+    <!-- EARN — Orange — bottom-right -->
     <a href="https://haitibiznis.com/koutye.html" class="mp-act mp-act-earn mp-stagger">
       <span class="mp-act-emoji">💰</span>
-      <div class="mp-act-title" data-i18n="act_earn_title">Touche Lajan</div>
-      <div class="mp-act-desc" data-i18n="act_earn_desc">Enskri Gratis</div>
+      <div class="mp-act-title" data-i18n="act_earn_title">Vin Koutye</div>
+      <div class="mp-act-desc" data-i18n="act_earn_desc">Touche komisyon chak jou</div>
       <div class="mp-act-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
     </a>
 
+  </div>
+</section>
+
+<!-- ═══ RIDE-HAILING BANNER ═══ -->
+<section class="mp-ride-banner mp-reveal">
+  <div class="mp-ride-card">
+    <span class="mp-ride-emoji">🚗</span>
+    <div class="mp-ride-title" data-i18n="ride_title">Mande Taxi/Moto An Sekirite</div>
+    <div class="mp-ride-desc" data-i18n="ride_desc">Chofè verifye • Repons rapid • Pri jis</div>
+    <a href="https://msouwout.com" class="mp-ride-btn" data-i18n="ride_btn">Mande Kous Kounye a</a>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section class="mp-howit mp-reveal">
+  <div class="mp-howit-inner">
+    <h2 class="mp-howit-title" data-i18n="howit_title">Kijan sa mache?</h2>
+    <div class="mp-howit-steps">
+      <div class="mp-howit-step">
+        <div class="mp-howit-num">1</div>
+        <div class="mp-howit-text">
+          <div class="mp-howit-label" data-i18n="howit_step1_title">Enskri gratis</div>
+          <div class="mp-howit-desc" data-i18n="howit_step1_desc">Kreye kont ou an 30 segonn</div>
+        </div>
+        <div class="mp-howit-emoji">📱</div>
+      </div>
+      <div class="mp-howit-step">
+        <div class="mp-howit-num">2</div>
+        <div class="mp-howit-text">
+          <div class="mp-howit-label" data-i18n="howit_step2_title">Chwazi sa ou vle fè</div>
+          <div class="mp-howit-desc" data-i18n="howit_step2_desc">Achte, vann, fè kous oswa touche</div>
+        </div>
+        <div class="mp-howit-emoji">✨</div>
+      </div>
+      <div class="mp-howit-step">
+        <div class="mp-howit-num">3</div>
+        <div class="mp-howit-text">
+          <div class="mp-howit-label" data-i18n="howit_step3_title">Kòmanse touche</div>
+          <div class="mp-howit-desc" data-i18n="howit_step3_desc">Kòmanse fè lajan menm jodi a</div>
+        </div>
+        <div class="mp-howit-emoji">💰</div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1420,48 +1496,30 @@ body.mp-home {
   </div>
 </section>
 
-<!-- ═══ DELIVERY SECTION ═══ -->
-<section class="mp-delivery mp-reveal">
-  <div class="mp-delivery-card">
-    <div class="mp-delivery-text">
-      <div class="mp-delivery-logo">
-        <img src="assets/msouwout-icon.png" alt="MsouWout">
-        <span>MsouWout</span>
-      </div>
-      <div class="mp-delivery-title" data-i18n="del_title">Livrezon rapid atravè MsouWout</div>
-      <div class="mp-delivery-desc" data-i18n="del_desc">Resevwa kòmand ou rapid ak sekirite. Moto ak machin disponib.</div>
-      <a href="https://msouwout.com" class="mp-delivery-btn" data-i18n="del_btn">Mande Livrezon →</a>
-    </div>
-    <div class="mp-delivery-vehicles">
-      <div class="mp-vehicle">🏍️</div>
-      <div class="mp-vehicle">🚗</div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ SOCIAL PROOF ═══ -->
+<!-- ═══ SOCIAL PROOF / TESTIMONIALS ═══ -->
 <section class="mp-proof mp-reveal">
+  <h2 class="mp-proof-title" data-i18n="proof_title">Moun k ap reyisi</h2>
   <div class="mp-proof-inner">
-    <div class="mp-proof-stat">
-      <div class="mp-proof-num"><span class="mp-proof-dot green"></span>200+</div>
-      <div class="mp-proof-label" data-i18n="proof_koutye">Koutye Aktif</div>
+    <div class="mp-testimonial">
+      <span class="mp-testimonial-dot green"></span>
+      <div class="mp-testimonial-text" data-i18n="proof_t1">Jean (Delmas) touche 1,500 HTG/jou</div>
     </div>
-    <div class="mp-proof-stat">
-      <div class="mp-proof-num"><span class="mp-proof-dot red"></span>50+</div>
-      <div class="mp-proof-label" data-i18n="proof_biz">Biznis Aktif</div>
+    <div class="mp-testimonial">
+      <span class="mp-testimonial-dot red"></span>
+      <div class="mp-testimonial-text" data-i18n="proof_t2">Marie vann plis ak MyPlopPlop</div>
     </div>
-    <div class="mp-proof-stat">
-      <div class="mp-proof-num"><span class="mp-proof-dot blue"></span>24/7</div>
-      <div class="mp-proof-label" data-i18n="proof_driver">Chofè Disponib</div>
+    <div class="mp-testimonial">
+      <span class="mp-testimonial-dot blue"></span>
+      <div class="mp-testimonial-text" data-i18n="proof_t3">Pierre fè 3 kous pa jou</div>
     </div>
   </div>
 </section>
 
-<!-- ═══ VENDOR CTA (REPEAT) ═══ -->
+<!-- ═══ VENDOR CTA ═══ -->
 <section class="mp-vendor-cta mp-reveal">
   <div class="mp-vendor-card">
-    <h3 data-i18n="vcta_title">🔥 Kreye Boutik Ou Jodi a</h3>
-    <p data-i18n="vcta_desc">Rejwenn plizyè biznis ki deja ap vann sou MyPlopPlop. Pa gen frè pou kòmanse — ou peye sèlman lè kliyan achte.</p>
+    <h3 data-i18n="vcta_title">Ou Gen Biznis? Vann sou MyPlopPlop!</h3>
+    <p data-i18n="vcta_desc">Rejwenn machann ki deja ap vann. 0 HTG pou kòmanse.</p>
     <a href="merchant/register.html" class="mp-vendor-btn" data-i18n="vcta_btn">🏪 Enskri Gratis Kounye a</a>
     <span class="mp-vendor-free" data-i18n="vcta_free">0 HTG pou kòmanse • Pa gen risk</span>
   </div>
@@ -1475,11 +1533,19 @@ body.mp-home {
   </p>
 </div>
 
-<!-- ═══ WHATSAPP FAB ═══ -->
-<a href="https://wa.me/50946859702?text=Bonjou%2C%20mwen%20bezwen%20%C3%A8d%20ak%20MyPlopPlop" target="_blank" class="mp-whatsapp" aria-label="WhatsApp">
-  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-  <span class="mp-wa-tooltip" data-i18n="wa_tooltip">Bezwen èd? Pale ak nou</span>
-</a>
+<!-- ═══ WHATSAPP FAB + POPUP ═══ -->
+<div class="mp-wa-overlay" id="waOverlay" onclick="closeWaPopup()"></div>
+<div class="mp-wa-container">
+  <div class="mp-wa-popup" id="waPopup">
+    <div class="mp-wa-popup-head" data-i18n="wa_popup_head">Ki sa ou bezwen?</div>
+    <a href="https://wa.me/50946859702?text=%F0%9F%92%B0%20Mwen%20vle%20k%C3%B2manse%20f%C3%A8%20lajan" target="_blank" class="mp-wa-popup-option" data-i18n="wa_opt_earn">💰 Mwen vle kòmanse fè lajan</a>
+    <a href="https://wa.me/50946859702?text=%F0%9F%9A%97%20Mwen%20vle%20vin%20chof%C3%A8" target="_blank" class="mp-wa-popup-option" data-i18n="wa_opt_drive">🚗 Mwen vle vin chofè</a>
+    <a href="https://wa.me/50946859702?text=%F0%9F%8F%AA%20Mwen%20gen%20biznis" target="_blank" class="mp-wa-popup-option" data-i18n="wa_opt_biz">🏪 Mwen gen biznis</a>
+  </div>
+  <button class="mp-whatsapp" onclick="toggleWaPopup()" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </button>
+</div>
 
 <!-- ═══ BOTTOM NAV ═══ -->
 <nav class="mp-bottom">
@@ -1507,26 +1573,34 @@ body.mp-home {
 
 <script>
 /* ══════════════════════════════════════
-   i18n SYSTEM
+   i18n SYSTEM — v4.0
    ══════════════════════════════════════ */
 const T = {
   ht: {
-    hero_badge: 'PREMYE MARKETPLACE AYITI',
-    hero_title: 'Premye <em>Marketplace</em> Ayiti',
-    hero_sub: 'Kòmande nan restoran, sipèmache, famasi, angwo ak detay. Sipòte fanmi w nenpòt kote ou ye.',
+    hero_badge: 'PLATFÒM #1 NAN AYITI',
+    hero_title: 'FÈ LAJAN AK TELEFÒN OU JODI A',
+    hero_sub: 'Achte • Vann • Fè Kous • Touche',
     search_placeholder: 'Chèche magazen, pwodwi, sèvis...',
     search_btn: 'Chèche',
-    act_buy_title: 'Kòmande Kounye a',
-    act_buy_desc: 'Restoran, sipèmache, famasi ak plis ankò',
-    act_buy_shop: '🛍️ Wè Boutik',
-    act_buy_support: '❤️ Sipòte Fanmi w',
-    act_sell_badge: 'GRATIS',
-    act_sell_title: 'Vann sou MyPlopPlop',
-    act_sell_desc: '0 HTG pou kòmanse. Ou peye sèlman lè ou vann.',
-    act_ride_title: 'Livrezon Rapid',
-    act_ride_desc: 'Ak MsouWout',
-    act_earn_title: 'Touche Lajan',
-    act_earn_desc: 'Enskri Gratis',
+    actions_heading: 'Chwazi sa ou vle fè',
+    act_buy_title: 'Achte',
+    act_buy_desc: 'Restoran, sipèmache, famasi',
+    act_ride_title: 'Fè Kous',
+    act_ride_desc: 'Taxi ak moto an sekirite',
+    act_sell_title: 'Vann',
+    act_sell_desc: 'Kreye boutik ou gratis',
+    act_earn_title: 'Vin Koutye',
+    act_earn_desc: 'Touche komisyon chak jou',
+    ride_title: 'Mande Taxi/Moto An Sekirite',
+    ride_desc: 'Chofè verifye • Repons rapid • Pri jis',
+    ride_btn: 'Mande Kous Kounye a',
+    howit_title: 'Kijan sa mache?',
+    howit_step1_title: 'Enskri gratis',
+    howit_step1_desc: 'Kreye kont ou an 30 segonn',
+    howit_step2_title: 'Chwazi sa ou vle fè',
+    howit_step2_desc: 'Achte, vann, fè kous oswa touche',
+    howit_step3_title: 'Kòmanse touche',
+    howit_step3_desc: 'Kòmanse fè lajan menm jodi a',
     trust_pay: 'Peman Sekirize',
     trust_driver: 'Chofè Verifye',
     trust_biz: 'Biznis Verifye',
@@ -1553,18 +1627,19 @@ const T = {
     prod_juice: 'Ji Natirèl Mango',
     promo_platter: 'Plato Fanmi',
     promo_vitamin: 'Vitamin C Pack',
-    del_title: 'Livrezon rapid atravè MsouWout',
-    del_desc: 'Resevwa kòmand ou rapid ak sekirite. Moto ak machin disponib.',
-    del_btn: 'Mande Livrezon →',
-    proof_koutye: 'Koutye Aktif',
-    proof_biz: 'Biznis Aktif',
-    proof_driver: 'Chofè Disponib',
-    vcta_title: '🔥 Kreye Boutik Ou Jodi a',
-    vcta_desc: 'Rejwenn plizyè biznis ki deja ap vann sou MyPlopPlop. Pa gen frè pou kòmanse — ou peye sèlman lè kliyan achte.',
+    proof_title: 'Moun k ap reyisi',
+    proof_t1: 'Jean (Delmas) touche 1,500 HTG/jou',
+    proof_t2: 'Marie vann plis ak MyPlopPlop',
+    proof_t3: 'Pierre fè 3 kous pa jou',
+    vcta_title: 'Ou Gen Biznis? Vann sou MyPlopPlop!',
+    vcta_desc: 'Rejwenn machann ki deja ap vann. 0 HTG pou kòmanse.',
     vcta_btn: '🏪 Enskri Gratis Kounye a',
     vcta_free: '0 HTG pou kòmanse • Pa gen risk',
     footer_powered: 'Yon platfòm HaitiBiznis',
-    wa_tooltip: 'Bezwen èd? Pale ak nou',
+    wa_popup_head: 'Ki sa ou bezwen?',
+    wa_opt_earn: '💰 Mwen vle kòmanse fè lajan',
+    wa_opt_drive: '🚗 Mwen vle vin chofè',
+    wa_opt_biz: '🏪 Mwen gen biznis',
     nav_home: 'Akèy',
     nav_search: 'Chèche',
     nav_cart: 'Panye',
@@ -1580,22 +1655,30 @@ const T = {
     menu_help: 'Èd'
   },
   en: {
-    hero_badge: 'HAITI\'S FIRST MARKETPLACE',
-    hero_title: 'Haiti\'s First <em>Marketplace</em>',
-    hero_sub: 'Order from restaurants, supermarkets, pharmacies, wholesale and retail. Support your family anywhere you are.',
+    hero_badge: '#1 PLATFORM IN HAITI',
+    hero_title: 'MAKE MONEY WITH YOUR PHONE TODAY',
+    hero_sub: 'Buy • Sell • Ride • Earn',
     search_placeholder: 'Search stores, products, services...',
     search_btn: 'Search',
-    act_buy_title: 'Order Now',
-    act_buy_desc: 'Restaurants, supermarkets, pharmacies and more',
-    act_buy_shop: '🛍️ Browse Shops',
-    act_buy_support: '❤️ Support Family',
-    act_sell_badge: 'FREE',
-    act_sell_title: 'Sell on MyPlopPlop',
-    act_sell_desc: '0 HTG to start. You only pay when you sell.',
-    act_ride_title: 'Fast Delivery',
-    act_ride_desc: 'Via MsouWout',
-    act_earn_title: 'Earn Money',
-    act_earn_desc: 'Sign Up Free',
+    actions_heading: 'Choose what you want to do',
+    act_buy_title: 'Buy',
+    act_buy_desc: 'Restaurants, supermarkets, pharmacies',
+    act_ride_title: 'Get a Ride',
+    act_ride_desc: 'Safe taxi and moto rides',
+    act_sell_title: 'Sell',
+    act_sell_desc: 'Create your store for free',
+    act_earn_title: 'Become an Affiliate',
+    act_earn_desc: 'Earn commissions every day',
+    ride_title: 'Request a Safe Taxi/Moto',
+    ride_desc: 'Verified drivers • Fast response • Fair prices',
+    ride_btn: 'Request a Ride Now',
+    howit_title: 'How does it work?',
+    howit_step1_title: 'Sign up free',
+    howit_step1_desc: 'Create your account in 30 seconds',
+    howit_step2_title: 'Choose what to do',
+    howit_step2_desc: 'Buy, sell, ride or earn',
+    howit_step3_title: 'Start earning',
+    howit_step3_desc: 'Start making money today',
     trust_pay: 'Secure Payment',
     trust_driver: 'Verified Drivers',
     trust_biz: 'Verified Business',
@@ -1622,18 +1705,19 @@ const T = {
     prod_juice: 'Natural Mango Juice',
     promo_platter: 'Family Platter',
     promo_vitamin: 'Vitamin C Pack',
-    del_title: 'Fast delivery via MsouWout',
-    del_desc: 'Receive your order quickly and safely. Moto and car available.',
-    del_btn: 'Request Delivery →',
-    proof_koutye: 'Active Affiliates',
-    proof_biz: 'Active Businesses',
-    proof_driver: 'Drivers Available',
-    vcta_title: '🔥 Create Your Store Today',
-    vcta_desc: 'Join businesses already selling on MyPlopPlop. No fees to start — you only pay when customers buy.',
+    proof_title: 'People succeeding',
+    proof_t1: 'Jean (Delmas) earns 1,500 HTG/day',
+    proof_t2: 'Marie sells more with MyPlopPlop',
+    proof_t3: 'Pierre does 3 rides per day',
+    vcta_title: 'Got a Business? Sell on MyPlopPlop!',
+    vcta_desc: 'Join merchants already selling. 0 HTG to start.',
     vcta_btn: '🏪 Sign Up Free Now',
     vcta_free: '0 HTG to start • No risk',
     footer_powered: 'A HaitiBiznis platform',
-    wa_tooltip: 'Need help? Talk to us',
+    wa_popup_head: 'What do you need?',
+    wa_opt_earn: '💰 I want to start earning money',
+    wa_opt_drive: '🚗 I want to become a driver',
+    wa_opt_biz: '🏪 I have a business',
     nav_home: 'Home',
     nav_search: 'Search',
     nav_cart: 'Cart',
@@ -1649,22 +1733,30 @@ const T = {
     menu_help: 'Help'
   },
   fr: {
-    hero_badge: 'PREMIER MARKETPLACE D\'HAÏTI',
-    hero_title: 'Premier <em>Marketplace</em> d\'Haïti',
-    hero_sub: 'Commandez dans les restaurants, supermarchés, pharmacies, en gros et au détail. Soutenez votre famille où que vous soyez.',
+    hero_badge: 'PLATEFORME #1 EN HAÏTI',
+    hero_title: 'GAGNEZ DE L\'ARGENT AVEC VOTRE TÉLÉPHONE',
+    hero_sub: 'Acheter • Vendre • Rouler • Gagner',
     search_placeholder: 'Rechercher magasins, produits, services...',
     search_btn: 'Chercher',
-    act_buy_title: 'Commander Maintenant',
-    act_buy_desc: 'Restaurants, supermarchés, pharmacies et plus',
-    act_buy_shop: '🛍️ Voir Boutiques',
-    act_buy_support: '❤️ Soutenir Famille',
-    act_sell_badge: 'GRATUIT',
-    act_sell_title: 'Vendez sur MyPlopPlop',
-    act_sell_desc: '0 HTG pour commencer. Vous payez seulement quand vous vendez.',
-    act_ride_title: 'Livraison Rapide',
-    act_ride_desc: 'Via MsouWout',
-    act_earn_title: 'Gagner de l\'Argent',
-    act_earn_desc: 'Inscription Gratuite',
+    actions_heading: 'Choisissez ce que vous voulez faire',
+    act_buy_title: 'Acheter',
+    act_buy_desc: 'Restaurants, supermarchés, pharmacies',
+    act_ride_title: 'Faire une Course',
+    act_ride_desc: 'Taxi et moto en sécurité',
+    act_sell_title: 'Vendre',
+    act_sell_desc: 'Créez votre boutique gratuitement',
+    act_earn_title: 'Devenir Affilié',
+    act_earn_desc: 'Gagnez des commissions chaque jour',
+    ride_title: 'Demandez un Taxi/Moto en Sécurité',
+    ride_desc: 'Chauffeurs vérifiés • Réponse rapide • Prix justes',
+    ride_btn: 'Demander une Course',
+    howit_title: 'Comment ça marche?',
+    howit_step1_title: 'Inscription gratuite',
+    howit_step1_desc: 'Créez votre compte en 30 secondes',
+    howit_step2_title: 'Choisissez quoi faire',
+    howit_step2_desc: 'Acheter, vendre, rouler ou gagner',
+    howit_step3_title: 'Commencez à gagner',
+    howit_step3_desc: 'Commencez à gagner de l\'argent dès aujourd\'hui',
     trust_pay: 'Paiement Sécurisé',
     trust_driver: 'Chauffeurs Vérifiés',
     trust_biz: 'Commerce Vérifié',
@@ -1691,18 +1783,19 @@ const T = {
     prod_juice: 'Jus Mangue Naturel',
     promo_platter: 'Plateau Famille',
     promo_vitamin: 'Pack Vitamine C',
-    del_title: 'Livraison rapide via MsouWout',
-    del_desc: 'Recevez votre commande rapidement et en sécurité. Moto et voiture disponibles.',
-    del_btn: 'Demander Livraison →',
-    proof_koutye: 'Affiliés Actifs',
-    proof_biz: 'Commerces Actifs',
-    proof_driver: 'Chauffeurs Disponibles',
-    vcta_title: '🔥 Créez Votre Boutique Aujourd\'hui',
-    vcta_desc: 'Rejoignez les commerces qui vendent déjà sur MyPlopPlop. Pas de frais pour commencer — vous payez seulement quand les clients achètent.',
+    proof_title: 'Ceux qui réussissent',
+    proof_t1: 'Jean (Delmas) gagne 1 500 HTG/jour',
+    proof_t2: 'Marie vend plus avec MyPlopPlop',
+    proof_t3: 'Pierre fait 3 courses par jour',
+    vcta_title: 'Vous avez un commerce? Vendez sur MyPlopPlop!',
+    vcta_desc: 'Rejoignez les marchands qui vendent déjà. 0 HTG pour commencer.',
     vcta_btn: '🏪 Inscription Gratuite',
     vcta_free: '0 HTG pour commencer • Sans risque',
     footer_powered: 'Une plateforme HaitiBiznis',
-    wa_tooltip: 'Besoin d\'aide? Parlez-nous',
+    wa_popup_head: 'De quoi avez-vous besoin?',
+    wa_opt_earn: '💰 Je veux commencer à gagner de l\'argent',
+    wa_opt_drive: '🚗 Je veux devenir chauffeur',
+    wa_opt_biz: '🏪 J\'ai un commerce',
     nav_home: 'Accueil',
     nav_search: 'Chercher',
     nav_cart: 'Panier',
@@ -1718,22 +1811,30 @@ const T = {
     menu_help: 'Aide'
   },
   es: {
-    hero_badge: 'PRIMER MARKETPLACE DE HAITÍ',
-    hero_title: 'Primer <em>Marketplace</em> de Haití',
-    hero_sub: 'Ordena en restaurantes, supermercados, farmacias, al por mayor y al detalle. Apoya a tu familia desde donde estés.',
+    hero_badge: 'PLATAFORMA #1 EN HAITÍ',
+    hero_title: 'GANA DINERO CON TU TELÉFONO HOY',
+    hero_sub: 'Comprar • Vender • Viajar • Ganar',
     search_placeholder: 'Buscar tiendas, productos, servicios...',
     search_btn: 'Buscar',
-    act_buy_title: 'Ordenar Ahora',
-    act_buy_desc: 'Restaurantes, supermercados, farmacias y más',
-    act_buy_shop: '🛍️ Ver Tiendas',
-    act_buy_support: '❤️ Apoyar Familia',
-    act_sell_badge: 'GRATIS',
-    act_sell_title: 'Vende en MyPlopPlop',
-    act_sell_desc: '0 HTG para empezar. Solo pagas cuando vendes.',
-    act_ride_title: 'Entrega Rápida',
-    act_ride_desc: 'Vía MsouWout',
-    act_earn_title: 'Ganar Dinero',
-    act_earn_desc: 'Registro Gratis',
+    actions_heading: 'Elige lo que quieres hacer',
+    act_buy_title: 'Comprar',
+    act_buy_desc: 'Restaurantes, supermercados, farmacias',
+    act_ride_title: 'Pedir Viaje',
+    act_ride_desc: 'Taxi y moto seguros',
+    act_sell_title: 'Vender',
+    act_sell_desc: 'Crea tu tienda gratis',
+    act_earn_title: 'Ser Afiliado',
+    act_earn_desc: 'Gana comisiones cada día',
+    ride_title: 'Pide un Taxi/Moto Seguro',
+    ride_desc: 'Conductores verificados • Respuesta rápida • Precio justo',
+    ride_btn: 'Pedir Viaje Ahora',
+    howit_title: '¿Cómo funciona?',
+    howit_step1_title: 'Regístrate gratis',
+    howit_step1_desc: 'Crea tu cuenta en 30 segundos',
+    howit_step2_title: 'Elige qué hacer',
+    howit_step2_desc: 'Comprar, vender, viajar o ganar',
+    howit_step3_title: 'Empieza a ganar',
+    howit_step3_desc: 'Empieza a ganar dinero hoy mismo',
     trust_pay: 'Pago Seguro',
     trust_driver: 'Conductores Verificados',
     trust_biz: 'Negocios Verificados',
@@ -1760,18 +1861,19 @@ const T = {
     prod_juice: 'Jugo Natural de Mango',
     promo_platter: 'Plato Familiar',
     promo_vitamin: 'Pack Vitamina C',
-    del_title: 'Entrega rápida vía MsouWout',
-    del_desc: 'Recibe tu pedido rápido y seguro. Moto y auto disponibles.',
-    del_btn: 'Pedir Entrega →',
-    proof_koutye: 'Afiliados Activos',
-    proof_biz: 'Negocios Activos',
-    proof_driver: 'Conductores Disponibles',
-    vcta_title: '🔥 Crea Tu Tienda Hoy',
-    vcta_desc: 'Únete a los negocios que ya venden en MyPlopPlop. Sin costo para empezar — solo pagas cuando los clientes compran.',
+    proof_title: 'Gente que triunfa',
+    proof_t1: 'Jean (Delmas) gana 1,500 HTG/día',
+    proof_t2: 'Marie vende más con MyPlopPlop',
+    proof_t3: 'Pierre hace 3 viajes al día',
+    vcta_title: '¿Tienes un negocio? ¡Vende en MyPlopPlop!',
+    vcta_desc: 'Únete a los vendedores que ya venden. 0 HTG para empezar.',
     vcta_btn: '🏪 Registro Gratis Ahora',
     vcta_free: '0 HTG para empezar • Sin riesgo',
     footer_powered: 'Una plataforma HaitiBiznis',
-    wa_tooltip: '¿Necesitas ayuda? Háblanos',
+    wa_popup_head: '¿Qué necesitas?',
+    wa_opt_earn: '💰 Quiero empezar a ganar dinero',
+    wa_opt_drive: '🚗 Quiero ser conductor',
+    wa_opt_biz: '🏪 Tengo un negocio',
     nav_home: 'Inicio',
     nav_search: 'Buscar',
     nav_cart: 'Carrito',
@@ -1825,6 +1927,23 @@ function handleSearch(val) {
   if (val.length > 2) {
     window.location.href = 'shop.html?q=' + encodeURIComponent(val);
   }
+}
+
+/* ═══ WHATSAPP POPUP ═══ */
+function toggleWaPopup() {
+  var popup = document.getElementById('waPopup');
+  var overlay = document.getElementById('waOverlay');
+  if (popup.classList.contains('open')) {
+    popup.classList.remove('open');
+    overlay.classList.remove('open');
+  } else {
+    popup.classList.add('open');
+    overlay.classList.add('open');
+  }
+}
+function closeWaPopup() {
+  document.getElementById('waPopup').classList.remove('open');
+  document.getElementById('waOverlay').classList.remove('open');
 }
 
 /* ═══ SCROLL REVEAL ═══ */
