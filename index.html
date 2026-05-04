@@ -1220,6 +1220,22 @@ body.mp-home {
   .mp-trust-item { padding: 16px 14px; }
   .mp-trust-label { font-size: .72rem; }
 }
+@media (min-width: 700px) {
+  .mp-hero { padding: 48px 32px 0; display: flex; align-items: center; justify-content: center; gap: 32px; text-align: left; }
+  .mp-hero-inner { margin: 0; flex: 1; max-width: 480px; }
+  .mp-hero-jodi { justify-content: flex-start; }
+  .mp-hero-sub { margin: 0; }
+  .mp-hero-img { flex: 1; max-width: 480px; margin: 0; border-radius: 18px 18px 0 0; }
+  .mp-hero-img img { max-height: 340px; }
+}
+@media (min-width: 1024px) {
+  .mp-hero { padding: 56px 48px 0; gap: 48px; }
+  .mp-hero-inner { max-width: 520px; }
+  .mp-hero-img { max-width: 560px; }
+  .mp-hero-img img { max-height: 400px; }
+  .mp-hero h1 { font-size: 3.4rem; }
+  .mp-hero-jodi { font-size: 3.4rem; }
+}
 
 /* ═══ STAGGER ANIMATIONS ═══ */
 .mp-stagger { animation: fadeUp .5s ease both; }
