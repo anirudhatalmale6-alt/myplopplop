@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta property="og:image" content="https://myplopplop.com/assets/og-myplopplop.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<link rel="canonical" href="https://myplopplop.com/order-status.html">
+<title>Estati Kòmand — MyPlopPlop</title>
+<meta name="description" content="Track your MyPlopPlop marketplace order status and delivery.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/layout.css">
+<style>
+.os-page {
+    padding: 0 0 calc(var(--bottom-nav-height) + 40px);
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+/* Status Banner */
+.os-banner {
+    padding: var(--space-xl) var(--content-padding) var(--space-lg);
+    text-align: center;
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+}
+.os-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 100%);
+    z-index: 0;
+}
+.os-banner.paid::before { background: linear-gradient(135deg, #059669, #047857); }
+.os-banner.preparing::before { background: linear-gradient(135deg, #D97706, #B45309); }
+.os-banner.delivery::before { background: linear-gradient(135deg, var(--primary-blue), #001876); }
+.os-banner.delivered::before { background: linear-gradient(135deg, #059669, #047857); }
+.os-banner.released::before { background: linear-gradient(135deg, #059669, #047857); }
+.os-banner.disputed::before { background: linear-gradient(135deg, #DC2626, #991B1B); }
+.os-banner.refunded::before { background: linear-gradient(135deg, #6B7280, #4B5563); }
+.os-banner > * { position: relative; z-index: 1; }
+.os-banner-icon {
+    font-size: 40px;
+    margin-bottom: var(--space-sm);
+    display: block;
+}
+.os-banner-status {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+.os-banner-sub {
+    font-size: var(--text-sm);
+    opacity: 0.85;
+}
+.os-ref {
+    display: inline-block;
+    margin-top: var(--space-sm);
+    background: rgba(255,255,255,0.15);
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--text-xs);
+    letter-spacing: 0.5px;
+}
+
+/* Vertical Stepper */
+.os-stepper {
+    margin: var(--space-md) var(--content-padding);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-lg);
+}
+.os-stepper-title {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-base);
+    margin-bottom: var(--space-md);
+}
+.os-step {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    position: relative;
+    padding-bottom: var(--space-lg);
+}
+.os-step:last-child { padding-bottom: 0; }
+.os-step-track {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+.os-step-dot {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+.os-step.done .os-step-dot {
+    background: var(--success);
+    color: var(--white);
+}
+.os-step.active .os-step-dot {
+    background: var(--primary-blue);
+    color: var(--white);
+    box-shadow: 0 0 0 4px rgba(0,32,159,0.2);
+    animation: osPulse 2s ease-in-out infinite;
+}
+@keyframes osPulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(0,32,159,0.2); }
+    50% { box-shadow: 0 0 0 8px rgba(0,32,159,0.1); }
+}
+.os-step-line {
+    width: 2px;
+    flex: 1;
+    min-height: 20px;
+    background: var(--gray-200);
+    margin-top: 4px;
+}
+.os-step.done .os-step-line { background: var(--success); }
+.os-step:last-child .os-step-line { display: none; }
+.os-step-content { padding-top: 4px; flex: 1; }
+.os-step-label {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--gray-400);
+}
+.os-step.done .os-step-label { color: var(--text-dark); }
+.os-step.active .os-step-label { color: var(--primary-blue); font-weight: 600; }
+.os-step-time {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* Escrow Info */
+.os-escrow {
+    margin: var(--space-md) var(--content-padding);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+}
+.os-escrow-header {
+    padding: var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    border-bottom: 1px solid var(--gray-100);
+}
+.os-escrow-header svg {
+    width: 20px;
+    height: 20px;
+    color: var(--primary-blue);
+    flex-shrink: 0;
+}
+.os-escrow-header span {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-sm);
+}
+.os-escrow-body {
+    padding: var(--space-md);
+}
+.os-escrow-bar {
+    height: 8px;
+    background: var(--gray-200);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: var(--space-sm);
+}
+.os-escrow-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    background: var(--primary-blue);
+    transition: width 0.6s ease;
+}
+.os-escrow-fill.released { background: var(--success); }
+.os-escrow-fill.disputed { background: var(--error); }
+.os-escrow-text {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+.os-escrow-text strong {
+    color: var(--text-dark);
+}
+
+/* Driver Card */
+.os-driver {
+    margin: var(--space-md) var(--content-padding);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+.os-driver-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-blue-light), var(--primary-red-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+.os-driver-info { flex: 1; }
+.os-driver-name {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-base);
+}
+.os-driver-meta {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+.os-driver-call {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--success-light);
+    color: var(--success);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.os-driver-call:hover { background: var(--success); color: var(--white); }
+.os-driver-call svg { width: 20px; height: 20px; }
+
+/* Order Summary */
+.os-summary {
+    margin: var(--space-md) var(--content-padding);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+}
+.os-summary-header {
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--gray-100);
+}
+.os-summary-header h4 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-base);
+    margin: 0;
+}
+.os-summary-store {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.os-items { padding: var(--space-md); }
+.os-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm) 0;
+}
+.os-item:not(:last-child) {
+    border-bottom: 1px solid var(--gray-100);
+}
+.os-item-name { font-size: var(--text-sm); }
+.os-item-qty {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+.os-item-price {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    white-space: nowrap;
+}
+.os-totals {
+    padding: var(--space-md);
+    background: var(--gray-50);
+    border-top: 1px solid var(--gray-200);
+}
+.os-total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--text-sm);
+    padding: 3px 0;
+}
+.os-total-row.final {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    padding-top: var(--space-sm);
+    margin-top: var(--space-sm);
+    border-top: 1px solid var(--gray-300);
+}
+
+/* Action Buttons */
+.os-actions {
+    margin: var(--space-md) var(--content-padding);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+.os-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: 14px var(--space-md);
+    border-radius: var(--radius-md);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+.os-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+.os-btn-confirm {
+    background: var(--success);
+    color: var(--white);
+}
+.os-btn-confirm:hover { background: #059669; }
+.os-btn-dispute {
+    background: var(--white);
+    color: var(--error);
+    border: 1px solid var(--gray-200);
+}
+.os-btn-dispute:hover { background: var(--error-light); }
+.os-btn-whatsapp {
+    background: #25D366;
+    color: var(--white);
+}
+.os-btn-whatsapp:hover { background: #1DA851; }
+.os-btn-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* PIN Modal */
+.os-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: var(--content-padding);
+}
+.os-modal-overlay.show { display: flex; }
+.os-modal {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    box-shadow: var(--shadow-xl);
+    animation: osModalIn 0.3s ease;
+}
+@keyframes osModalIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+.os-modal h3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+}
+.os-modal p {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-lg);
+}
+.os-pin-input {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    margin-bottom: var(--space-lg);
+}
+.os-pin-input input {
+    width: 52px;
+    height: 56px;
+    border: 2px solid var(--gray-300);
+    border-radius: var(--radius-md);
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+.os-pin-input input:focus {
+    border-color: var(--primary-blue);
+}
+.os-modal-btns {
+    display: flex;
+    gap: var(--space-sm);
+}
+.os-modal-btns button {
+    flex: 1;
+    padding: 12px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+.os-modal-cancel {
+    background: var(--gray-100);
+    color: var(--text-dark);
+}
+.os-modal-submit {
+    background: var(--success);
+    color: var(--white);
+}
+.os-modal-submit:hover { background: #059669; }
+.os-pin-error {
+    color: var(--error);
+    font-size: var(--text-xs);
+    margin-top: calc(-1 * var(--space-md));
+    margin-bottom: var(--space-md);
+    display: none;
+}
+
+/* Dispute Modal */
+.os-dispute-textarea {
+    width: 100%;
+    min-height: 100px;
+    border: 2px solid var(--gray-300);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    resize: vertical;
+    outline: none;
+    margin-bottom: var(--space-lg);
+}
+.os-dispute-textarea:focus { border-color: var(--error); }
+.os-modal-dispute-btn {
+    background: var(--error) !important;
+    color: var(--white) !important;
+}
+
+/* Loading State */
+.os-loading {
+    text-align: center;
+    padding: 80px var(--content-padding);
+}
+.os-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--gray-200);
+    border-top-color: var(--primary-blue);
+    border-radius: 50%;
+    animation: osSpin 0.8s linear infinite;
+    margin: 0 auto var(--space-md);
+}
+@keyframes osSpin { to { transform: rotate(360deg); } }
+.os-loading-text {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+/* Error State */
+.os-error {
+    text-align: center;
+    padding: 80px var(--content-padding);
+}
+.os-error-icon {
+    font-size: 48px;
+    margin-bottom: var(--space-md);
+}
+.os-error h3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-sm);
+}
+.os-error p {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-lg);
+}
+.os-error a {
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--primary-blue);
+    color: var(--white);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--text-sm);
+}
+
+/* Toast */
+.os-toast {
+    position: fixed;
+    bottom: calc(var(--bottom-nav-height) + 16px);
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--gray-800);
+    color: var(--white);
+    padding: 12px 24px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    z-index: 2000;
+    transition: transform 0.3s ease;
+    white-space: nowrap;
+}
+.os-toast.show { transform: translateX(-50%) translateY(0); }
+.os-toast.success { background: var(--success); }
+.os-toast.error { background: var(--error); }
+
+@media (min-width: 768px) {
+    .os-page { padding-bottom: var(--space-xl); }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="flex items-center gap-sm">
+        <span>📍 Port-au-Prince</span>
+        <span style="opacity:0.5">|</span>
+        <a href="#">Change location</a>
+    </div>
+    <div class="flex items-center" style="gap:4px;flex-wrap:wrap;">
+        <a href="#" class="lang-btn" data-lang="ht">🇭🇹 Kreyol</a>
+        <a href="#" class="lang-btn" data-lang="fr">🇫🇷 Fran.</a>
+        <a href="#" class="lang-btn" data-lang="en">🇬🇧 Eng</a>
+        <a href="#" class="lang-btn" data-lang="es">🇪🇸 Esp</a>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="header" style="top: 28px;">
+    <div class="header-inner">
+        <a href="index.html" class="header-logo">
+            <img src="assets/myplopplop-icon.png" alt="MyPlopPlop" style="height:40px;">
+        </a>
+        <div class="header-actions">
+            <a href="shop.html" class="header-icon" title="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </a>
+            <a href="cart.html" class="header-icon" title="Cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+            </a>
+            <a href="login.html" class="header-icon" title="Account">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN -->
+<main class="main" style="margin-top: calc(var(--header-height) + 28px);">
+    <div class="os-page" id="osPage">
+        <div class="os-loading" id="osLoading">
+            <div class="os-loading-spinner"></div>
+            <div class="os-loading-text" data-i18n="os_loading">Ap chaje kòmand ou...</div>
+        </div>
+    </div>
+</main>
+
+<!-- PIN Confirmation Modal -->
+<div class="os-modal-overlay" id="pinModal">
+    <div class="os-modal">
+        <h3 data-i18n="os_pin_title">Antre PIN Livrezon</h3>
+        <p data-i18n="os_pin_desc">Chofè a ba ou yon kòd 4 chif. Antre li pou konfime ou resevwa kòmand lan.</p>
+        <div class="os-pin-input" id="pinInputs">
+            <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+            <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+            <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+            <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+        </div>
+        <div class="os-pin-error" id="pinError" data-i18n="os_pin_wrong">PIN pa kòrèk. Eseye ankò.</div>
+        <div class="os-modal-btns">
+            <button class="os-modal-cancel" onclick="closePinModal()" data-i18n="os_cancel">Anile</button>
+            <button class="os-modal-submit" onclick="submitPin()" data-i18n="os_confirm_btn">Konfime</button>
+        </div>
+    </div>
+</div>
+
+<!-- Dispute Modal -->
+<div class="os-modal-overlay" id="disputeModal">
+    <div class="os-modal">
+        <h3 data-i18n="os_dispute_title">Rapòte yon Pwoblèm</h3>
+        <p data-i18n="os_dispute_desc">Eksplike pwoblèm nan. Ekip nou ap revize sa a epi lajan ou rete an sekirite.</p>
+        <textarea class="os-dispute-textarea" id="disputeReason" placeholder="Dekri pwoblèm nan..." data-i18n-placeholder="os_dispute_placeholder"></textarea>
+        <div class="os-modal-btns">
+            <button class="os-modal-cancel" onclick="closeDisputeModal()" data-i18n="os_cancel">Anile</button>
+            <button class="os-modal-dispute-btn" onclick="submitDispute()" data-i18n="os_dispute_send">Voye Rapò</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="os-toast" id="osToast"></div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span data-i18n="nav_home">Akèy</span>
+    </a>
+    <a href="shop.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span data-i18n="nav_search">Chèche</span>
+    </a>
+    <a href="cart.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        <span data-i18n="nav_cart">Panye</span>
+    </a>
+    <a href="orders.html" class="bottom-nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span data-i18n="nav_orders">Kòmand</span>
+    </a>
+    <a href="login.html" class="bottom-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span data-i18n="nav_account">Kont</span>
+    </a>
+</nav>
+
+<script>
+var API_URL = 'https://haitibiznis-api.onrender.com';
+
+var i18n = {
+    ht: {
+        os_loading: 'Ap chaje kòmand ou...',
+        os_not_found_title: 'Kòmand pa jwenn',
+        os_not_found_text: 'Nou pa ka jwenn kòmand sa a. Verifye referans lan.',
+        os_no_ref_title: 'Pa gen referans',
+        os_no_ref_text: 'Pa gen referans kòmand nan URL la.',
+        os_view_orders: 'Gade Kòmand Mwen',
+        os_progress: 'Pwogrè Kòmand',
+        os_step_pending: 'Peman an atant',
+        os_step_paid: 'Peye',
+        os_step_confirmed: 'Vandè konfime',
+        os_step_preparing: 'Ap prepare',
+        os_step_ready: 'Prè pou pran',
+        os_step_picked: 'Chofè pran li',
+        os_step_onway: 'Sou wout',
+        os_step_delivered: 'Livre',
+        os_step_received: 'Kliyan konfime',
+        os_step_released: 'Lajan lage',
+        os_escrow_title: 'Pwoteksyon Lajan',
+        os_escrow_held: 'Lajan ou an sekirite. Apre ou konfime livrezon, lajan ap lage bay vandè a apre peryòd verifikasyon an.',
+        os_escrow_released: 'Lajan te lage bay vandè a ak chofè a avèk siksè.',
+        os_escrow_disputed: 'Lajan jele. Ekip sipò ap revize dosye a.',
+        os_escrow_auto: 'Lajan ap lage otomatikman:',
+        os_driver: 'Chofè Ou',
+        os_summary: 'Rezime Kòmand',
+        os_store: 'Magazen',
+        os_subtotal: 'Soutotal',
+        os_platform_fee: 'Frè platfòm',
+        os_delivery_fee: 'Frè livrezon',
+        os_total: 'Total',
+        os_payment: 'Peman',
+        os_confirm_delivery: 'Konfime Mwen Resevwa Li',
+        os_report_issue: 'Rapòte yon Pwoblèm',
+        os_contact_store: 'Kontakte Magazen',
+        os_pin_title: 'Antre PIN Livrezon',
+        os_pin_desc: 'Chofè a ba ou yon kòd 4 chif. Antre li pou konfime ou resevwa kòmand lan.',
+        os_pin_wrong: 'PIN pa kòrèk. Eseye ankò.',
+        os_cancel: 'Anile',
+        os_confirm_btn: 'Konfime',
+        os_dispute_title: 'Rapòte yon Pwoblèm',
+        os_dispute_desc: 'Eksplike pwoblèm nan. Ekip nou ap revize sa a epi lajan ou rete an sekirite.',
+        os_dispute_placeholder: 'Dekri pwoblèm nan...',
+        os_dispute_send: 'Voye Rapò',
+        os_status_pending: 'An Atant Peman',
+        os_status_paid: 'Peye',
+        os_status_confirmed: 'Vandè Konfime',
+        os_status_preparing: 'Ap Prepare',
+        os_status_ready: 'Prè pou Pran',
+        os_status_picked: 'Pran',
+        os_status_onway: 'Sou Wout',
+        os_status_delivered: 'Livre',
+        os_status_received: 'Ou Konfime',
+        os_status_released: 'Lajan Lage',
+        os_status_disputed: 'An Diskisyon',
+        os_status_refunded: 'Ranbouse',
+        os_sub_pending: 'Ap tann peman ou...',
+        os_sub_paid: 'Peman konfime. Vandè ap trete kòmand ou.',
+        os_sub_confirmed: 'Vandè aksepte kòmand ou.',
+        os_sub_preparing: 'Yo ap prepare kòmand ou kounye a.',
+        os_sub_ready: 'Kòmand ou prè. Chofè ap vini pran li.',
+        os_sub_picked: 'Chofè pran kòmand ou.',
+        os_sub_onway: 'Kòmand ou sou wout!',
+        os_sub_delivered: 'Kòmand ou livre. Konfime resepsyon.',
+        os_sub_received: 'Mèsi! Lajan ap lage apre verifikasyon.',
+        os_sub_released: 'Tout bagay konplete. Mèsi!',
+        os_sub_disputed: 'Ekip sipò ap revize dosye a.',
+        os_sub_refunded: 'Yo ranbouse lajan ou.',
+        nav_home: 'Akèy',
+        nav_search: 'Chèche',
+        nav_cart: 'Panye',
+        nav_orders: 'Kòmand',
+        nav_account: 'Kont'
+    },
+    fr: {
+        os_loading: 'Chargement de votre commande...',
+        os_not_found_title: 'Commande introuvable',
+        os_not_found_text: 'Nous ne trouvons pas cette commande. Verifiez la reference.',
+        os_no_ref_title: 'Pas de reference',
+        os_no_ref_text: 'Aucune reference de commande dans l\'URL.',
+        os_view_orders: 'Voir Mes Commandes',
+        os_progress: 'Progression',
+        os_step_pending: 'Paiement en attente',
+        os_step_paid: 'Paye',
+        os_step_confirmed: 'Vendeur confirme',
+        os_step_preparing: 'En preparation',
+        os_step_ready: 'Pret a recuperer',
+        os_step_picked: 'Recupere par le livreur',
+        os_step_onway: 'En route',
+        os_step_delivered: 'Livre',
+        os_step_received: 'Client confirme',
+        os_step_released: 'Fonds liberes',
+        os_escrow_title: 'Protection du Paiement',
+        os_escrow_held: 'Votre argent est en securite. Apres confirmation de livraison, les fonds seront liberes au vendeur.',
+        os_escrow_released: 'Les fonds ont ete liberes au vendeur et au livreur avec succes.',
+        os_escrow_disputed: 'Fonds geles. L\'equipe de support examine le dossier.',
+        os_escrow_auto: 'Liberation automatique des fonds:',
+        os_driver: 'Votre Livreur',
+        os_summary: 'Resume de Commande',
+        os_store: 'Magasin',
+        os_subtotal: 'Sous-total',
+        os_platform_fee: 'Frais de plateforme',
+        os_delivery_fee: 'Frais de livraison',
+        os_total: 'Total',
+        os_payment: 'Paiement',
+        os_confirm_delivery: 'Confirmer la Reception',
+        os_report_issue: 'Signaler un Probleme',
+        os_contact_store: 'Contacter le Magasin',
+        os_pin_title: 'Entrez le PIN de Livraison',
+        os_pin_desc: 'Le livreur vous a donne un code a 4 chiffres. Entrez-le pour confirmer la reception.',
+        os_pin_wrong: 'PIN incorrect. Reessayez.',
+        os_cancel: 'Annuler',
+        os_confirm_btn: 'Confirmer',
+        os_dispute_title: 'Signaler un Probleme',
+        os_dispute_desc: 'Decrivez le probleme. Notre equipe va l\'examiner et votre argent reste en securite.',
+        os_dispute_placeholder: 'Decrivez le probleme...',
+        os_dispute_send: 'Envoyer le Rapport',
+        os_status_pending: 'En Attente de Paiement',
+        os_status_paid: 'Paye',
+        os_status_confirmed: 'Vendeur Confirme',
+        os_status_preparing: 'En Preparation',
+        os_status_ready: 'Pret a Recuperer',
+        os_status_picked: 'Recupere',
+        os_status_onway: 'En Route',
+        os_status_delivered: 'Livre',
+        os_status_received: 'Confirme',
+        os_status_released: 'Fonds Liberes',
+        os_status_disputed: 'En Litige',
+        os_status_refunded: 'Rembourse',
+        os_sub_pending: 'En attente de votre paiement...',
+        os_sub_paid: 'Paiement confirme. Le vendeur traite votre commande.',
+        os_sub_confirmed: 'Le vendeur a accepte votre commande.',
+        os_sub_preparing: 'Votre commande est en cours de preparation.',
+        os_sub_ready: 'Votre commande est prete. Un livreur vient la chercher.',
+        os_sub_picked: 'Le livreur a pris votre commande.',
+        os_sub_onway: 'Votre commande est en route!',
+        os_sub_delivered: 'Votre commande est livree. Confirmez la reception.',
+        os_sub_received: 'Merci! Les fonds seront liberes apres verification.',
+        os_sub_released: 'Tout est complete. Merci!',
+        os_sub_disputed: 'L\'equipe de support examine le dossier.',
+        os_sub_refunded: 'Votre argent a ete rembourse.',
+        nav_home: 'Accueil',
+        nav_search: 'Chercher',
+        nav_cart: 'Panier',
+        nav_orders: 'Commandes',
+        nav_account: 'Compte'
+    },
+    en: {
+        os_loading: 'Loading your order...',
+        os_not_found_title: 'Order not found',
+        os_not_found_text: 'We couldn\'t find this order. Check the reference.',
+        os_no_ref_title: 'No reference',
+        os_no_ref_text: 'No order reference in the URL.',
+        os_view_orders: 'View My Orders',
+        os_progress: 'Order Progress',
+        os_step_pending: 'Payment pending',
+        os_step_paid: 'Paid',
+        os_step_confirmed: 'Seller confirmed',
+        os_step_preparing: 'Preparing',
+        os_step_ready: 'Ready for pickup',
+        os_step_picked: 'Picked up',
+        os_step_onway: 'On the way',
+        os_step_delivered: 'Delivered',
+        os_step_received: 'Customer confirmed',
+        os_step_released: 'Funds released',
+        os_escrow_title: 'Payment Protection',
+        os_escrow_held: 'Your money is safe. After delivery confirmation, funds will be released to the seller after the verification period.',
+        os_escrow_released: 'Funds have been released to the seller and driver successfully.',
+        os_escrow_disputed: 'Funds frozen. Support team is reviewing the case.',
+        os_escrow_auto: 'Automatic fund release:',
+        os_driver: 'Your Driver',
+        os_summary: 'Order Summary',
+        os_store: 'Store',
+        os_subtotal: 'Subtotal',
+        os_platform_fee: 'Platform fee',
+        os_delivery_fee: 'Delivery fee',
+        os_total: 'Total',
+        os_payment: 'Payment',
+        os_confirm_delivery: 'Confirm I Received It',
+        os_report_issue: 'Report an Issue',
+        os_contact_store: 'Contact Store',
+        os_pin_title: 'Enter Delivery PIN',
+        os_pin_desc: 'The driver gave you a 4-digit code. Enter it to confirm you received your order.',
+        os_pin_wrong: 'Wrong PIN. Try again.',
+        os_cancel: 'Cancel',
+        os_confirm_btn: 'Confirm',
+        os_dispute_title: 'Report an Issue',
+        os_dispute_desc: 'Describe the problem. Our team will review it and your money stays safe.',
+        os_dispute_placeholder: 'Describe the issue...',
+        os_dispute_send: 'Send Report',
+        os_status_pending: 'Awaiting Payment',
+        os_status_paid: 'Paid',
+        os_status_confirmed: 'Seller Confirmed',
+        os_status_preparing: 'Preparing',
+        os_status_ready: 'Ready for Pickup',
+        os_status_picked: 'Picked Up',
+        os_status_onway: 'On the Way',
+        os_status_delivered: 'Delivered',
+        os_status_received: 'Confirmed',
+        os_status_released: 'Funds Released',
+        os_status_disputed: 'Disputed',
+        os_status_refunded: 'Refunded',
+        os_sub_pending: 'Waiting for your payment...',
+        os_sub_paid: 'Payment confirmed. Seller is processing your order.',
+        os_sub_confirmed: 'Seller has accepted your order.',
+        os_sub_preparing: 'Your order is being prepared now.',
+        os_sub_ready: 'Your order is ready. A driver is picking it up.',
+        os_sub_picked: 'Driver has picked up your order.',
+        os_sub_onway: 'Your order is on its way!',
+        os_sub_delivered: 'Your order is delivered. Confirm receipt.',
+        os_sub_received: 'Thanks! Funds will release after verification.',
+        os_sub_released: 'All complete. Thank you!',
+        os_sub_disputed: 'Support team is reviewing the case.',
+        os_sub_refunded: 'Your money has been refunded.',
+        nav_home: 'Home',
+        nav_search: 'Search',
+        nav_cart: 'Cart',
+        nav_orders: 'Orders',
+        nav_account: 'Account'
+    },
+    es: {
+        os_loading: 'Cargando tu pedido...',
+        os_not_found_title: 'Pedido no encontrado',
+        os_not_found_text: 'No encontramos este pedido. Verifica la referencia.',
+        os_no_ref_title: 'Sin referencia',
+        os_no_ref_text: 'No hay referencia de pedido en la URL.',
+        os_view_orders: 'Ver Mis Pedidos',
+        os_progress: 'Progreso del Pedido',
+        os_step_pending: 'Pago pendiente',
+        os_step_paid: 'Pagado',
+        os_step_confirmed: 'Vendedor confirmo',
+        os_step_preparing: 'Preparando',
+        os_step_ready: 'Listo para recoger',
+        os_step_picked: 'Recogido',
+        os_step_onway: 'En camino',
+        os_step_delivered: 'Entregado',
+        os_step_received: 'Cliente confirmo',
+        os_step_released: 'Fondos liberados',
+        os_escrow_title: 'Proteccion de Pago',
+        os_escrow_held: 'Tu dinero esta seguro. Despues de confirmar la entrega, los fondos se liberaran al vendedor.',
+        os_escrow_released: 'Los fondos han sido liberados al vendedor y conductor exitosamente.',
+        os_escrow_disputed: 'Fondos congelados. El equipo de soporte esta revisando el caso.',
+        os_escrow_auto: 'Liberacion automatica de fondos:',
+        os_driver: 'Tu Conductor',
+        os_summary: 'Resumen del Pedido',
+        os_store: 'Tienda',
+        os_subtotal: 'Subtotal',
+        os_platform_fee: 'Tarifa de plataforma',
+        os_delivery_fee: 'Tarifa de envio',
+        os_total: 'Total',
+        os_payment: 'Pago',
+        os_confirm_delivery: 'Confirmar que lo Recibi',
+        os_report_issue: 'Reportar un Problema',
+        os_contact_store: 'Contactar Tienda',
+        os_pin_title: 'Ingresa el PIN de Entrega',
+        os_pin_desc: 'El conductor te dio un codigo de 4 digitos. Ingresalo para confirmar que recibiste tu pedido.',
+        os_pin_wrong: 'PIN incorrecto. Intenta de nuevo.',
+        os_cancel: 'Cancelar',
+        os_confirm_btn: 'Confirmar',
+        os_dispute_title: 'Reportar un Problema',
+        os_dispute_desc: 'Describe el problema. Nuestro equipo lo revisara y tu dinero esta seguro.',
+        os_dispute_placeholder: 'Describe el problema...',
+        os_dispute_send: 'Enviar Reporte',
+        os_status_pending: 'Esperando Pago',
+        os_status_paid: 'Pagado',
+        os_status_confirmed: 'Vendedor Confirmo',
+        os_status_preparing: 'Preparando',
+        os_status_ready: 'Listo para Recoger',
+        os_status_picked: 'Recogido',
+        os_status_onway: 'En Camino',
+        os_status_delivered: 'Entregado',
+        os_status_received: 'Confirmado',
+        os_status_released: 'Fondos Liberados',
+        os_status_disputed: 'En Disputa',
+        os_status_refunded: 'Reembolsado',
+        os_sub_pending: 'Esperando tu pago...',
+        os_sub_paid: 'Pago confirmado. El vendedor esta procesando tu pedido.',
+        os_sub_confirmed: 'El vendedor ha aceptado tu pedido.',
+        os_sub_preparing: 'Tu pedido se esta preparando ahora.',
+        os_sub_ready: 'Tu pedido esta listo. Un conductor va a recogerlo.',
+        os_sub_picked: 'El conductor recogio tu pedido.',
+        os_sub_onway: 'Tu pedido esta en camino!',
+        os_sub_delivered: 'Tu pedido fue entregado. Confirma la recepcion.',
+        os_sub_received: 'Gracias! Los fondos se liberaran despues de la verificacion.',
+        os_sub_released: 'Todo completo. Gracias!',
+        os_sub_disputed: 'El equipo de soporte esta revisando el caso.',
+        os_sub_refunded: 'Tu dinero ha sido reembolsado.',
+        nav_home: 'Inicio',
+        nav_search: 'Buscar',
+        nav_cart: 'Carrito',
+        nav_orders: 'Pedidos',
+        nav_account: 'Cuenta'
+    }
+};
+
+var currentLang = localStorage.getItem('mp_lang') || 'ht';
+var currentOrder = null;
+
+function t(key) {
+    return (i18n[currentLang] && i18n[currentLang][key]) || (i18n.ht[key]) || key;
+}
+
+function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('mp_lang', lang);
+    document.querySelectorAll('.lang-btn').forEach(function(b) {
+        b.style.fontWeight = b.dataset.lang === lang ? '700' : '400';
+        b.style.opacity = b.dataset.lang === lang ? '1' : '0.7';
+    });
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        el.textContent = t(el.dataset.i18n);
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+        el.placeholder = t(el.dataset['i18nPlaceholder']);
+    });
+    if (currentOrder) renderOrder(currentOrder);
+}
+
+document.querySelectorAll('.lang-btn').forEach(function(b) {
+    b.addEventListener('click', function(e) {
+        e.preventDefault();
+        setLang(b.dataset.lang);
+    });
+});
+
+var STEPS = [
+    { key: 'pending_payment', icon: '💳', i18n: 'os_step_pending' },
+    { key: 'paid', icon: '✅', i18n: 'os_step_paid' },
+    { key: 'seller_confirmed', icon: '🤝', i18n: 'os_step_confirmed' },
+    { key: 'preparing', icon: '👨‍🍳', i18n: 'os_step_preparing' },
+    { key: 'ready_for_pickup', icon: '📦', i18n: 'os_step_ready' },
+    { key: 'picked_up', icon: '🏍️', i18n: 'os_step_picked' },
+    { key: 'on_the_way', icon: '🛵', i18n: 'os_step_onway' },
+    { key: 'delivered', icon: '🏠', i18n: 'os_step_delivered' },
+    { key: 'confirmed_received', icon: '👍', i18n: 'os_step_received' },
+    { key: 'funds_released', icon: '💰', i18n: 'os_step_released' }
+];
+
+function formatHTG(amount) {
+    if (!amount && amount !== 0) return '0 HTG';
+    return Number(amount).toLocaleString('fr-HT') + ' HTG';
+}
+
+function formatTime(dateStr) {
+    if (!dateStr) return '';
+    var d = new Date(dateStr);
+    return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return '';
+    var d = new Date(dateStr);
+    return d.toLocaleDateString('fr-HT', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function getStepIndex(status) {
+    var idx = STEPS.findIndex(function(s) { return s.key === status; });
+    return idx >= 0 ? idx : -1;
+}
+
+function getBannerClass(status) {
+    if (status === 'pending_payment') return '';
+    if (status === 'paid' || status === 'seller_confirmed') return 'paid';
+    if (status === 'preparing' || status === 'ready_for_pickup') return 'preparing';
+    if (status === 'picked_up' || status === 'on_the_way') return 'delivery';
+    if (status === 'delivered' || status === 'confirmed_received' || status === 'funds_released') return 'delivered';
+    if (status === 'disputed') return 'disputed';
+    if (status === 'refunded') return 'refunded';
+    return '';
+}
+
+function getStatusIcon(status) {
+    var icons = {
+        pending_payment: '💳', paid: '✅', seller_confirmed: '🤝',
+        preparing: '👨‍🍳', ready_for_pickup: '📦', picked_up: '🏍️',
+        on_the_way: '🛵', delivered: '🏠', confirmed_received: '👍',
+        funds_released: '💰', disputed: '⚠️', refunded: '↩️', cancelled: '❌'
+    };
+    return icons[status] || '📋';
+}
+
+function showToast(msg, type) {
+    var el = document.getElementById('osToast');
+    el.textContent = msg;
+    el.className = 'os-toast show ' + (type || '');
+    setTimeout(function() { el.className = 'os-toast'; }, 3000);
+}
+
+function renderOrder(order) {
+    var page = document.getElementById('osPage');
+    var currentIdx = getStepIndex(order.status);
+    var isTerminal = ['disputed', 'refunded', 'cancelled'].indexOf(order.status) >= 0;
+
+    var html = '';
+
+    // Banner
+    html += '<div class="os-banner ' + getBannerClass(order.status) + '">';
+    html += '<span class="os-banner-icon">' + getStatusIcon(order.status) + '</span>';
+    html += '<div class="os-banner-status">' + t('os_status_' + order.status.replace('pending_payment','pending').replace('seller_confirmed','confirmed').replace('ready_for_pickup','ready').replace('picked_up','picked').replace('on_the_way','onway').replace('confirmed_received','received').replace('funds_released','released')) + '</div>';
+    html += '<div class="os-banner-sub">' + t('os_sub_' + order.status.replace('pending_payment','pending').replace('seller_confirmed','confirmed').replace('ready_for_pickup','ready').replace('picked_up','picked').replace('on_the_way','onway').replace('confirmed_received','received').replace('funds_released','released')) + '</div>';
+    html += '<span class="os-ref">' + order.referenceId + '</span>';
+    html += '</div>';
+
+    // Stepper (only for non-terminal statuses)
+    if (!isTerminal) {
+        html += '<div class="os-stepper">';
+        html += '<div class="os-stepper-title">' + t('os_progress') + '</div>';
+        for (var i = 0; i < STEPS.length; i++) {
+            var step = STEPS[i];
+            var isDone = i < currentIdx;
+            var isActive = i === currentIdx;
+            var cls = isDone ? 'done' : (isActive ? 'active' : '');
+
+            var timeStr = '';
+            if ((isDone || isActive) && order.statusHistory) {
+                var hist = order.statusHistory.find(function(h) { return h.status === step.key; });
+                if (hist) timeStr = formatTime(hist.at);
+            }
+
+            html += '<div class="os-step ' + cls + '">';
+            html += '<div class="os-step-track">';
+            html += '<div class="os-step-dot">' + (isDone ? '&#10003;' : step.icon) + '</div>';
+            if (i < STEPS.length - 1) html += '<div class="os-step-line"></div>';
+            html += '</div>';
+            html += '<div class="os-step-content">';
+            html += '<div class="os-step-label">' + t(step.i18n) + '</div>';
+            if (timeStr) html += '<div class="os-step-time">' + timeStr + '</div>';
+            html += '</div></div>';
+        }
+        html += '</div>';
+    }
+
+    // Escrow Info
+    var escrowPct = 0;
+    var escrowMsg = t('os_escrow_held');
+    var escrowFillClass = '';
+    if (order.status === 'pending_payment') { escrowPct = 0; }
+    else if (order.payoutStatus === 'released' || order.status === 'funds_released') {
+        escrowPct = 100; escrowMsg = t('os_escrow_released'); escrowFillClass = 'released';
+    } else if (order.status === 'disputed') {
+        escrowPct = 50; escrowMsg = t('os_escrow_disputed'); escrowFillClass = 'disputed';
+    } else if (order.status === 'refunded') {
+        escrowPct = 0; escrowMsg = t('os_sub_refunded');
+    } else {
+        escrowPct = Math.min(80, (currentIdx / (STEPS.length - 1)) * 80 + 10);
+    }
+
+    html += '<div class="os-escrow">';
+    html += '<div class="os-escrow-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>' + t('os_escrow_title') + '</span></div>';
+    html += '<div class="os-escrow-body">';
+    html += '<div class="os-escrow-bar"><div class="os-escrow-fill ' + escrowFillClass + '" style="width:' + escrowPct + '%"></div></div>';
+    html += '<div class="os-escrow-text">' + escrowMsg;
+    if (order.autoReleaseAt && order.status !== 'funds_released' && order.status !== 'disputed') {
+        html += '<br><strong>' + t('os_escrow_auto') + '</strong> ' + formatDate(order.autoReleaseAt) + ' ' + formatTime(order.autoReleaseAt);
+    }
+    html += '</div></div></div>';
+
+    // Driver Card
+    if (order.driver && order.driver.name) {
+        html += '<div class="os-driver">';
+        html += '<div class="os-driver-avatar">🏍️</div>';
+        html += '<div class="os-driver-info"><div class="os-driver-name">' + order.driver.name + '</div>';
+        html += '<div class="os-driver-meta">' + t('os_driver') + (order.driver.vehicle ? ' - ' + order.driver.vehicle : '') + '</div></div>';
+        if (order.driver.phone) {
+            html += '<a href="tel:' + order.driver.phone + '" class="os-driver-call"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>';
+        }
+        html += '</div>';
+    }
+
+    // Order Summary
+    html += '<div class="os-summary">';
+    html += '<div class="os-summary-header"><h4>' + t('os_summary') + '</h4>';
+    if (order.store && order.store.name) {
+        html += '<div class="os-summary-store">🏪 ' + t('os_store') + ': ' + order.store.name + '</div>';
+    }
+    html += '</div>';
+    html += '<div class="os-items">';
+    if (order.items && order.items.length) {
+        order.items.forEach(function(item) {
+            html += '<div class="os-item"><div><div class="os-item-name">' + (item.emoji || '') + ' ' + item.name + '</div>';
+            html += '<div class="os-item-qty">x' + (item.qty || 1) + '</div></div>';
+            html += '<div class="os-item-price">' + formatHTG(item.price * (item.qty || 1)) + '</div></div>';
+        });
+    }
+    html += '</div>';
+    html += '<div class="os-totals">';
+    html += '<div class="os-total-row"><span>' + t('os_subtotal') + '</span><span>' + formatHTG(order.subtotal) + '</span></div>';
+    html += '<div class="os-total-row"><span>' + t('os_platform_fee') + '</span><span>' + formatHTG(order.platformFee) + '</span></div>';
+    if (order.deliveryFee) {
+        html += '<div class="os-total-row"><span>' + t('os_delivery_fee') + '</span><span>' + formatHTG(order.deliveryFee) + '</span></div>';
+    }
+    html += '<div class="os-total-row final"><span>' + t('os_total') + '</span><span>' + formatHTG(order.totalAmount) + '</span></div>';
+    html += '<div class="os-total-row" style="font-size:11px;color:var(--text-muted);"><span>' + t('os_payment') + '</span><span>' + (order.paymentMethod || '').toUpperCase() + '</span></div>';
+    html += '</div></div>';
+
+    // Action Buttons
+    html += '<div class="os-actions">';
+    if (order.status === 'pending_payment' && order.paymentUrl) {
+        html += '<a href="' + order.paymentUrl + '" class="os-btn os-btn-confirm">';
+        html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>';
+        html += t('os_status_pending') + '</a>';
+    }
+    if (order.status === 'delivered') {
+        html += '<button class="os-btn os-btn-confirm" onclick="openPinModal()">';
+        html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+        html += t('os_confirm_delivery') + '</button>';
+        html += '<button class="os-btn os-btn-dispute" onclick="openDisputeModal()">';
+        html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+        html += t('os_report_issue') + '</button>';
+    }
+    if (order.store && order.store.whatsapp) {
+        html += '<a href="https://wa.me/' + order.store.whatsapp + '?text=Kòmand ' + order.referenceId + '" target="_blank" class="os-btn os-btn-whatsapp">';
+        html += '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>';
+        html += t('os_contact_store') + '</a>';
+    }
+    html += '</div>';
+
+    page.innerHTML = html;
+}
+
+function openPinModal() {
+    document.getElementById('pinModal').classList.add('show');
+    document.getElementById('pinError').style.display = 'none';
+    var inputs = document.querySelectorAll('#pinInputs input');
+    inputs.forEach(function(inp) { inp.value = ''; });
+    inputs[0].focus();
+}
+
+function closePinModal() {
+    document.getElementById('pinModal').classList.remove('show');
+}
+
+function openDisputeModal() {
+    document.getElementById('disputeModal').classList.add('show');
+    document.getElementById('disputeReason').value = '';
+}
+
+function closeDisputeModal() {
+    document.getElementById('disputeModal').classList.remove('show');
+}
+
+// PIN input auto-advance
+document.querySelectorAll('#pinInputs input').forEach(function(inp, idx, arr) {
+    inp.addEventListener('input', function() {
+        inp.value = inp.value.replace(/[^0-9]/g, '');
+        if (inp.value && idx < arr.length - 1) arr[idx + 1].focus();
+    });
+    inp.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && !inp.value && idx > 0) arr[idx - 1].focus();
+    });
+});
+
+async function submitPin() {
+    var inputs = document.querySelectorAll('#pinInputs input');
+    var pin = '';
+    inputs.forEach(function(inp) { pin += inp.value; });
+    if (pin.length !== 4) {
+        document.getElementById('pinError').style.display = 'block';
+        return;
+    }
+
+    try {
+        var res = await fetch(API_URL + '/api/orders/' + currentOrder.referenceId + '/confirm-received', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pin: pin })
+        });
+        var data = await res.json();
+        if (data.success) {
+            closePinModal();
+            showToast(data.message || t('os_sub_received'), 'success');
+            loadOrder();
+        } else {
+            document.getElementById('pinError').style.display = 'block';
+        }
+    } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+    }
+}
+
+async function submitDispute() {
+    var reason = document.getElementById('disputeReason').value.trim();
+    if (!reason) return;
+
+    try {
+        var res = await fetch(API_URL + '/api/orders/' + currentOrder.referenceId + '/dispute', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reason: reason })
+        });
+        var data = await res.json();
+        if (data.success) {
+            closeDisputeModal();
+            showToast(data.message || t('os_sub_disputed'), 'success');
+            loadOrder();
+        } else {
+            showToast(data.error || 'Error', 'error');
+        }
+    } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+    }
+}
+
+async function loadOrder() {
+    var params = new URLSearchParams(window.location.search);
+    var ref = params.get('ref');
+
+    if (!ref) {
+        document.getElementById('osPage').innerHTML =
+            '<div class="os-error"><div class="os-error-icon">🔍</div>' +
+            '<h3>' + t('os_no_ref_title') + '</h3>' +
+            '<p>' + t('os_no_ref_text') + '</p>' +
+            '<a href="orders.html">' + t('os_view_orders') + '</a></div>';
+        return;
+    }
+
+    try {
+        var res = await fetch(API_URL + '/api/orders/verify?ref=' + encodeURIComponent(ref));
+        var data = await res.json();
+
+        if (!data.order) {
+            document.getElementById('osPage').innerHTML =
+                '<div class="os-error"><div class="os-error-icon">📋</div>' +
+                '<h3>' + t('os_not_found_title') + '</h3>' +
+                '<p>' + t('os_not_found_text') + '</p>' +
+                '<a href="orders.html">' + t('os_view_orders') + '</a></div>';
+            return;
+        }
+
+        currentOrder = data.order;
+        renderOrder(currentOrder);
+    } catch (err) {
+        document.getElementById('osPage').innerHTML =
+            '<div class="os-error"><div class="os-error-icon">⚠️</div>' +
+            '<h3>Error</h3><p>' + err.message + '</p>' +
+            '<a href="orders.html">' + t('os_view_orders') + '</a></div>';
+    }
+}
+
+// Init
+setLang(currentLang);
+loadOrder();
+
+// Auto-refresh for active orders
+setInterval(function() {
+    if (currentOrder && ['pending_payment','paid','seller_confirmed','preparing','ready_for_pickup','picked_up','on_the_way','delivered'].indexOf(currentOrder.status) >= 0) {
+        loadOrder();
+    }
+}, 15000);
+</script>
+
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
+</body>
+</html>
