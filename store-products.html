@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta property="og:title" content="MyPlopPlop - Jere Pwodwi">
-<meta property="og:description" content="Ajoute ak jere pwodwi nan boutik ou sou MyPlopPlop.">
+<meta property="og:description" content="Ajoute ak jere pwodwi nan magazen / antrepriz ou sou MyPlopPlop.">
 <meta property="og:image" content="https://myplopplop.com/assets/og-myplopplop.jpg?v=2">
 <meta property="og:url" content="https://myplopplop.com/store-products.html">
 <meta property="og:type" content="website">
@@ -1210,7 +1210,7 @@ body {
     <div class="hero-badge">🏪 <span data-i18n="hero.badge">Store Onboarding</span></div>
     <h1 data-i18n="hero.title">
       Build Your Store Inventory
-      <span class="alt-lang" data-i18n="hero.title_alt">Kreye Envantè Boutik Ou</span>
+      <span class="alt-lang" data-i18n="hero.title_alt">Kreye Envantè Magazen / Antrepriz Ou</span>
     </h1>
     <p data-i18n="hero.subtitle">Select products from our catalog, set your prices, and your store is ready to go!</p>
     <div class="progress-pill">
@@ -1409,10 +1409,10 @@ body {
 // ─── TRANSLATIONS ──────────────────────────────────────────────────────────
 const TRANSLATIONS = {
   'page.title':       { fr:'Créer Votre Inventaire — MyPlopPlop', en:'Build Your Inventory — MyPlopPlop', ht:'Kreye Envantè Ou — MyPlopPlop', es:'Crear Su Inventario — MyPlopPlop' },
-  'hero.badge':       { fr:'Intégration Boutique', en:'Store Onboarding', ht:'Konfigirasyon Boutik', es:'Configuración de Tienda' },
-  'hero.title':       { fr:'Créez Votre Inventaire', en:'Build Your Store Inventory', ht:'Kreye Envantè Boutik Ou', es:'Crea Tu Inventario' },
-  'hero.title_alt':   { fr:'Kreye Envantè Boutik Ou', en:'Kreye Envantè Boutik Ou', ht:'Build Your Store Inventory', es:'Kreye Envantè Boutik Ou' },
-  'hero.subtitle':    { fr:'Sélectionnez les produits de notre catalogue, fixez vos prix, et votre boutique est prête!', en:'Select products from our catalog, set your prices, and your store is ready to go!', ht:'Chwazi pwodui nan katalòg nou, mete pri ou, epi boutik ou a pral pare!', es:'Selecciona productos de nuestro catálogo, establece tus precios, ¡y tu tienda estará lista!' },
+  'hero.badge':       { fr:'Intégration Boutique', en:'Store Onboarding', ht:'Konfigirasyon Magazen / Antrepriz', es:'Configuración de Tienda' },
+  'hero.title':       { fr:'Créez Votre Inventaire', en:'Build Your Store Inventory', ht:'Kreye Envantè Magazen / Antrepriz Ou', es:'Crea Tu Inventario' },
+  'hero.title_alt':   { fr:'Kreye Envantè Magazen / Antrepriz Ou', en:'Kreye Envantè Magazen / Antrepriz Ou', ht:'Build Your Store Inventory', es:'Kreye Envantè Magazen / Antrepriz Ou' },
+  'hero.subtitle':    { fr:'Sélectionnez les produits de notre catalogue, fixez vos prix, et votre boutique est prête!', en:'Select products from our catalog, set your prices, and your store is ready to go!', ht:'Chwazi pwodui nan katalòg nou, mete pri ou, epi magazen / antrepriz ou a pral pare!', es:'Selecciona productos de nuestro catálogo, establece tus precios, ¡y tu tienda estará lista!' },
   'progress.label':   { fr:'Produits sélectionnés:', en:'Products selected:', ht:'Pwodui chwazi:', es:'Productos seleccionados:' },
   'search.placeholder': { fr:'Rechercher des produits…', en:'Search products…', ht:'Chèche pwodui…', es:'Buscar productos…' },
   'btn.selected':     { fr:'Sélectionnés', en:'Selected', ht:'Chwazi', es:'Seleccionados' },
@@ -1448,7 +1448,7 @@ const TRANSLATIONS = {
   'deselectall':      { fr:'Tout désélectionner', en:'Deselect All', ht:'Deseleksyone Tout', es:'Deseleccionar Todo' },
   'eco.part_of':      { fr:"Fait partie de l'Écosystème HaitiBiznis", en:'Part of the HaitiBiznis Ecosystem', ht:'Fè pati Ekosistèm HaitiBiznis', es:'Parte del Ecosistema HaitiBiznis' },
   // Store type selector
-  'storetype.heading':     { fr:'Choisissez Votre Type de Boutique', en:'Choose Your Store Type', ht:'Chwazi Tip Boutik Ou', es:'Elige el Tipo de Tienda' },
+  'storetype.heading':     { fr:'Choisissez Votre Type de Boutique', en:'Choose Your Store Type', ht:'Chwazi Tip Magazen / Antrepriz Ou', es:'Elige el Tipo de Tienda' },
   'storetype.supermarket': { fr:'Supermarché', en:'Supermarket', ht:'Sipèmaché', es:'Supermercado' },
   'storetype.hardware':    { fr:'Quincaillerie', en:'Hardware Store', ht:'Kenkayri', es:'Ferretería' },
   'storetype.pharmacy':    { fr:'Pharmacie', en:'Pharmacy', ht:'Famasi', es:'Farmacia' },
@@ -1665,7 +1665,7 @@ async function selectStoreType(storeType, cardEl) {
     const msg = lang === 'fr'
       ? `Vous avez ${selCount} produit(s) sélectionné(s). Changer de type de boutique effacera ces sélections. Continuer?`
       : lang === 'ht'
-        ? `Ou gen ${selCount} pwodui chwazi. Chanje tip boutik ap efase seleksyon sa yo. Kontinye?`
+        ? `Ou gen ${selCount} pwodui chwazi. Chanje tip magazen / antrepriz ap efase seleksyon sa yo. Kontinye?`
         : lang === 'es'
           ? `Tienes ${selCount} producto(s) seleccionado(s). Cambiar de tienda borrará estas selecciones. ¿Continuar?`
           : `You have ${selCount} selected product(s). Switching store type will clear these selections. Continue?`;
