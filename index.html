@@ -220,7 +220,7 @@ body.mp-home {
 /* ═══ HERO ═══ */
 .mp-hero {
   background: linear-gradient(160deg, var(--mp-navy) 0%, #0D1240 50%, #0A1855 100%);
-  padding: 48px 20px 52px;
+  padding: 32px 20px 0;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -328,6 +328,32 @@ body.mp-home {
   font-weight: 600;
   letter-spacing: .06em;
   animation: fadeUp .6s .18s ease both;
+}
+.mp-hero-img {
+  max-width: 520px;
+  margin: 20px auto 0;
+  border-radius: 18px 18px 0 0;
+  overflow: hidden;
+  animation: fadeUp .6s .22s ease both;
+  position: relative;
+  z-index: 1;
+}
+.mp-hero-img img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  max-height: 220px;
+  object-position: center 20%;
+}
+.mp-hero-img::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to top, #F5F7FA, transparent);
+  pointer-events: none;
 }
 
 @keyframes fadeUp {
@@ -1187,7 +1213,7 @@ body.mp-home {
 
 /* ═══ RESPONSIVE ═══ */
 @media (min-width: 600px) {
-  .mp-hero { padding: 56px 24px 60px; }
+  .mp-hero { padding: 40px 24px 0; }
   .mp-hero h1 { font-size: 3rem; }
   .mp-hero-jodi { font-size: 3rem; }
   .mp-actions-grid { gap: 14px; }
@@ -1249,7 +1275,7 @@ body.mp-home {
     <button class="mp-menu-close" onclick="document.getElementById('mobileMenu').classList.remove('open')">
       <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
-    <a href="shop.html"><span class="mi">🛒</span> <span data-i18n="menu_shop">Boutik</span></a>
+    <a href="shop.html"><span class="mi">🛒</span> <span data-i18n="menu_shop">Magazen</span></a>
     <a href="diaspora.html"><span class="mi">❤️</span> <span data-i18n="menu_support">Sipòte Fanmi</span></a>
     <a href="merchant/register.html"><span class="mi">🏪</span> <span data-i18n="menu_sell">Vann sou MyPlopPlop</span></a>
     <a href="https://msouwout.com"><span class="mi">🚗</span> <span data-i18n="menu_delivery">MsouWout Livrezon</span></a>
@@ -1274,6 +1300,9 @@ body.mp-home {
       <span data-i18n="hero_jodi">JODI A</span>
     </div>
     <p class="mp-hero-sub" data-i18n="hero_sub">Achte • Vann • Fè Kous • Touche</p>
+  </div>
+  <div class="mp-hero-img">
+    <img src="assets/img/hero-driver.jpg" alt="MyPlopPlop moto driver showing the app">
   </div>
 </section>
 
@@ -1313,7 +1342,7 @@ body.mp-home {
     <a href="merchant/register.html" class="mp-act mp-act-sell mp-stagger">
       <span class="mp-act-emoji">🏪</span>
       <div class="mp-act-title" data-i18n="act_sell_title">Vann</div>
-      <div class="mp-act-desc" data-i18n="act_sell_desc">Kreye boutik ou gratis</div>
+      <div class="mp-act-desc" data-i18n="act_sell_desc">Kreye magazen ou gratis</div>
       <div class="mp-act-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
     </a>
 
@@ -1632,7 +1661,7 @@ const T = {
     act_ride_title: 'Fè Kous',
     act_ride_desc: 'Taxi ak moto an sekirite',
     act_sell_title: 'Vann',
-    act_sell_desc: 'Kreye boutik ou gratis',
+    act_sell_desc: 'Kreye magazen ou gratis',
     act_earn_title: 'Vin Koutye',
     act_earn_desc: 'Touche komisyon chak jou',
     ride_title: 'Mande Taxi/Moto An Sekirite',
@@ -1689,7 +1718,7 @@ const T = {
     nav_cart: 'Panye',
     nav_orders: 'Kòmand',
     nav_account: 'Kont',
-    menu_shop: 'Boutik',
+    menu_shop: 'Magazen',
     menu_support: 'Sipòte Fanmi',
     menu_sell: 'Vann sou MyPlopPlop',
     menu_delivery: 'MsouWout Livrezon',

@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Kreye Boutik Ou — MyPlopPlop</title>
-<meta name="description" content="Kreye boutik ou gratis sou MyPlopPlop. Kòmanse vann jodi a.">
-<meta property="og:title" content="Kreye Boutik Ou — MyPlopPlop">
-<meta property="og:description" content="Kreye boutik ou gratis sou MyPlopPlop. Kòmanse vann jodi a.">
+<title>Kreye Magazen Ou — MyPlopPlop</title>
+<meta name="description" content="Kreye magazen ou gratis sou MyPlopPlop. Kòmanse vann jodi a.">
+<meta property="og:title" content="Kreye Magazen Ou — MyPlopPlop">
+<meta property="og:description" content="Kreye magazen ou gratis sou MyPlopPlop. Kòmanse vann jodi a.">
 <meta property="og:image" content="https://myplopplop.com/assets/img/og-preview.jpg">
 <meta property="og:url" content="https://myplopplop.com/merchant/register.html">
 <meta property="og:type" content="website">
@@ -120,7 +120,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:1
   <a href="../index.html" class="nav-back">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
   </a>
-  <span class="nav-title" data-i18n="nav_title">Kreye Boutik Ou</span>
+  <span class="nav-title" data-i18n="nav_title">Kreye Magazen Ou</span>
 </nav>
 <div class="hero-stripe"><div class="s-blue"></div><div class="s-red"></div></div>
 
@@ -150,13 +150,13 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:1
 <!-- Registration Form -->
 <div class="form-wrap">
   <div class="form-card" id="formCard">
-    <div class="form-title" data-i18n="form_title">Enfòmasyon Boutik Ou</div>
-    <div class="form-subtitle" data-i18n="form_sub">Ranpli fòm sa a pou kreye boutik ou gratis.</div>
+    <div class="form-title" data-i18n="form_title">Enfòmasyon Magazen Ou</div>
+    <div class="form-subtitle" data-i18n="form_sub">Ranpli fòm sa a pou kreye magazen ou gratis.</div>
 
     <form id="registerForm" onsubmit="return handleSubmit(event)">
       <div class="field">
-        <label data-i18n="lbl_name">Non Boutik<span class="req">*</span></label>
-        <input type="text" id="storeName" required data-i18n-placeholder="ph_name" placeholder="Ex: Kay Griye, Boutik Marie...">
+        <label data-i18n="lbl_name">Non Magazen<span class="req">*</span></label>
+        <input type="text" id="storeName" required data-i18n-placeholder="ph_name" placeholder="Ex: Kay Griye, Magazen Marie...">
       </div>
 
       <div class="field">
@@ -197,12 +197,12 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:1
       </div>
 
       <div class="field">
-        <label data-i18n="lbl_desc">Deskripsyon Boutik</label>
+        <label data-i18n="lbl_desc">Deskripsyon Magazen</label>
         <textarea id="storeDesc" data-i18n-placeholder="ph_desc" placeholder="Dekri sa ou vann oswa sèvis ou ofri..."></textarea>
       </div>
 
       <button type="submit" class="submit-btn" id="submitBtn">
-        <span data-i18n="btn_submit">🏪 Kreye Boutik Mwen</span>
+        <span data-i18n="btn_submit">🏪 Kreye Magazen Mwen</span>
       </button>
     </form>
   </div>
@@ -210,8 +210,8 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:1
   <!-- Success message -->
   <div class="success-msg" id="successMsg">
     <div class="success-icon">✅</div>
-    <h2 data-i18n="suc_title">Boutik Ou Kreye!</h2>
-    <p data-i18n="suc_desc">Nou resevwa demann ou. Ekip MyPlopPlop ap kontakte ou sou WhatsApp pou aktive boutik ou.</p>
+    <h2 data-i18n="suc_title">Magazen Ou Kreye!</h2>
+    <p data-i18n="suc_desc">Nou resevwa demann ou. Ekip MyPlopPlop ap kontakte ou sou WhatsApp pou aktive magazen ou.</p>
     <a id="waLink" href="#" target="_blank" class="success-wa">💬 <span data-i18n="suc_wa">Kontakte Nou sou WhatsApp</span></a>
     <a href="../index.html" class="success-home" data-i18n="suc_home">&larr; Retounen sou MyPlopPlop</a>
   </div>
@@ -246,15 +246,15 @@ const WA_NUMBER = '50941902005';
 
 const T = {
   ht: {
-    nav_title:'Kreye Boutik Ou',hero_h1:'Kòmanse Vann sou MyPlopPlop',hero_p:'Enskri gratis, ajoute pwodwi ou, epi kòmanse resevwa kòmand jodi a.',
+    nav_title:'Kreye Magazen Ou',hero_h1:'Kòmanse Vann sou MyPlopPlop',hero_p:'Enskri gratis, ajoute pwodwi ou, epi kòmanse resevwa kòmand jodi a.',
     b1:'0 HTG pou kòmanse',b2:'Jere ak telefòn',b3:'Lanse nan 5 minit',
-    form_title:'Enfòmasyon Boutik Ou',form_sub:'Ranpli fòm sa a pou kreye boutik ou gratis.',
-    lbl_name:'Non Boutik',lbl_category:'Kategori',lbl_owner:'Non Pwopriyetè',lbl_phone:'Telefòn',lbl_whatsapp:'Nimewo WhatsApp',lbl_location:'Lokasyon / Adrès',lbl_desc:'Deskripsyon Boutik',
-    ph_name:'Ex: Kay Griye, Boutik Marie...',ph_owner:'Non konplè ou',ph_wa:'Menm nimewo oswa yon lòt',ph_loc:'Ex: Delmas 32, Petyonvil, Okap...',ph_desc:'Dekri sa ou vann oswa sèvis ou ofri...',
+    form_title:'Enfòmasyon Magazen Ou',form_sub:'Ranpli fòm sa a pou kreye magazen ou gratis.',
+    lbl_name:'Non Magazen',lbl_category:'Kategori',lbl_owner:'Non Pwopriyetè',lbl_phone:'Telefòn',lbl_whatsapp:'Nimewo WhatsApp',lbl_location:'Lokasyon / Adrès',lbl_desc:'Deskripsyon Magazen',
+    ph_name:'Ex: Kay Griye, Magazen Marie...',ph_owner:'Non konplè ou',ph_wa:'Menm nimewo oswa yon lòt',ph_loc:'Ex: Delmas 32, Petyonvil, Okap...',ph_desc:'Dekri sa ou vann oswa sèvis ou ofri...',
     hint_wa:'Kliyan ap kontakte ou sou WhatsApp',
     cat_select:'-- Chwazi kategori --',cat_rest:'🍽️ Restoran / Manje',cat_groc:'🛒 Sipèmache / Makèt',cat_pharm:'💊 Famasi',cat_cloth:'👕 Rad / Mòd',cat_elec:'📱 Elektwonik',cat_beauty:'💄 Bote / Swen Pèsonèl',cat_home:'🏠 Atik Mezon',cat_other:'📦 Lòt',
-    btn_submit:'🏪 Kreye Boutik Mwen',
-    suc_title:'Boutik Ou Kreye!',suc_desc:'Nou resevwa demann ou. Ekip MyPlopPlop ap kontakte ou sou WhatsApp pou aktive boutik ou.',suc_wa:'Kontakte Nou sou WhatsApp',suc_home:'← Retounen sou MyPlopPlop',
+    btn_submit:'🏪 Kreye Magazen Mwen',
+    suc_title:'Magazen Ou Kreye!',suc_desc:'Nou resevwa demann ou. Ekip MyPlopPlop ap kontakte ou sou WhatsApp pou aktive magazen ou.',suc_wa:'Kontakte Nou sou WhatsApp',suc_home:'← Retounen sou MyPlopPlop',
     nav_home:'Akèy',nav_search:'Chèche',nav_cart:'Panye',nav_orders:'Kòmand',nav_account:'Kont'
   },
   en: {
@@ -262,7 +262,7 @@ const T = {
     b1:'$0 to start',b2:'Manage from phone',b3:'Launch in 5 min',
     form_title:'Your Store Info',form_sub:'Fill out this form to create your free store.',
     lbl_name:'Store Name',lbl_category:'Category',lbl_owner:'Owner Name',lbl_phone:'Phone',lbl_whatsapp:'WhatsApp Number',lbl_location:'Location / Address',lbl_desc:'Store Description',
-    ph_name:'Ex: Kay Griye, Boutik Marie...',ph_owner:'Your full name',ph_wa:'Same number or a different one',ph_loc:'Ex: Delmas 32, Petionville, Cap-Haitien...',ph_desc:'Describe what you sell or services you offer...',
+    ph_name:'Ex: Kay Griye, Magazen Marie...',ph_owner:'Your full name',ph_wa:'Same number or a different one',ph_loc:'Ex: Delmas 32, Petionville, Cap-Haitien...',ph_desc:'Describe what you sell or services you offer...',
     hint_wa:'Customers will contact you on WhatsApp',
     cat_select:'-- Choose category --',cat_rest:'🍽️ Restaurant / Food',cat_groc:'🛒 Grocery / Market',cat_pharm:'💊 Pharmacy',cat_cloth:'👕 Clothing / Fashion',cat_elec:'📱 Electronics',cat_beauty:'💄 Beauty / Personal Care',cat_home:'🏠 Home Goods',cat_other:'📦 Other',
     btn_submit:'🏪 Create My Store',
@@ -274,7 +274,7 @@ const T = {
     b1:'0 HTG pour commencer',b2:'Gérer depuis le téléphone',b3:'Lancer en 5 min',
     form_title:'Infos de Votre Boutique',form_sub:'Remplissez ce formulaire pour créer votre boutique gratuite.',
     lbl_name:'Nom de la Boutique',lbl_category:'Catégorie',lbl_owner:'Nom du Propriétaire',lbl_phone:'Téléphone',lbl_whatsapp:'Numéro WhatsApp',lbl_location:'Emplacement / Adresse',lbl_desc:'Description de la Boutique',
-    ph_name:'Ex: Kay Griye, Boutik Marie...',ph_owner:'Votre nom complet',ph_wa:'Même numéro ou un autre',ph_loc:'Ex: Delmas 32, Pétionville, Cap-Haïtien...',ph_desc:'Décrivez ce que vous vendez ou les services que vous offrez...',
+    ph_name:'Ex: Kay Griye, Magazen Marie...',ph_owner:'Votre nom complet',ph_wa:'Même numéro ou un autre',ph_loc:'Ex: Delmas 32, Pétionville, Cap-Haïtien...',ph_desc:'Décrivez ce que vous vendez ou les services que vous offrez...',
     hint_wa:'Les clients vous contacteront sur WhatsApp',
     cat_select:'-- Choisir catégorie --',cat_rest:'🍽️ Restaurant / Nourriture',cat_groc:'🛒 Supermarché / Marché',cat_pharm:'💊 Pharmacie',cat_cloth:'👕 Vêtements / Mode',cat_elec:'📱 Électronique',cat_beauty:'💄 Beauté / Soins',cat_home:'🏠 Articles Maison',cat_other:'📦 Autre',
     btn_submit:'🏪 Créer Ma Boutique',
@@ -286,7 +286,7 @@ const T = {
     b1:'$0 para empezar',b2:'Gestiona desde el celular',b3:'Lanza en 5 min',
     form_title:'Info de Tu Tienda',form_sub:'Completa este formulario para crear tu tienda gratis.',
     lbl_name:'Nombre de Tienda',lbl_category:'Categoría',lbl_owner:'Nombre del Dueño',lbl_phone:'Teléfono',lbl_whatsapp:'Número WhatsApp',lbl_location:'Ubicación / Dirección',lbl_desc:'Descripción de la Tienda',
-    ph_name:'Ex: Kay Griye, Boutik Marie...',ph_owner:'Tu nombre completo',ph_wa:'Mismo número u otro',ph_loc:'Ex: Delmas 32, Petionville, Cap-Haitien...',ph_desc:'Describe lo que vendes o los servicios que ofreces...',
+    ph_name:'Ex: Kay Griye, Magazen Marie...',ph_owner:'Tu nombre completo',ph_wa:'Mismo número u otro',ph_loc:'Ex: Delmas 32, Petionville, Cap-Haitien...',ph_desc:'Describe lo que vendes o los servicios que ofreces...',
     hint_wa:'Los clientes te contactarán en WhatsApp',
     cat_select:'-- Elegir categoría --',cat_rest:'🍽️ Restaurante / Comida',cat_groc:'🛒 Supermercado / Mercado',cat_pharm:'💊 Farmacia',cat_cloth:'👕 Ropa / Moda',cat_elec:'📱 Electrónica',cat_beauty:'💄 Belleza / Cuidado Personal',cat_home:'🏠 Artículos del Hogar',cat_other:'📦 Otro',
     btn_submit:'🏪 Crear Mi Tienda',
@@ -324,7 +324,7 @@ function handleSubmit(e) {
   const loc = document.getElementById('location').value.trim();
   const desc = document.getElementById('storeDesc').value.trim();
 
-  const msg = `🏪 NOUVO BOUTIK - MyPlopPlop\n\nNon Boutik: ${name}\nKategori: ${cat}\nPwopriyetè: ${owner}\nTelefòn: ${phone}\nWhatsApp: ${wa}\nLokasyon: ${loc}\nDeskripsyon: ${desc || 'N/A'}`;
+  const msg = `🏪 NOUVO MAGAZEN - MyPlopPlop\n\nNon Magazen: ${name}\nKategori: ${cat}\nPwopriyetè: ${owner}\nTelefòn: ${phone}\nWhatsApp: ${wa}\nLokasyon: ${loc}\nDeskripsyon: ${desc || 'N/A'}`;
 
   const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
   document.getElementById('waLink').href = waUrl;
