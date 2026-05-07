@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /merchant/
+Disallow: /rider/
+
+Sitemap: https://myplopplop.com/sitemap.xml
