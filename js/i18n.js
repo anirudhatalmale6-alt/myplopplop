@@ -11,6 +11,26 @@
 
   var translations = {
 
+    // ── Store Page Tabs ──
+    'store.products': {
+      fr: 'Produits',
+      en: 'Products',
+      kr: 'Pwodwi',
+      es: 'Productos'
+    },
+    'store.about': {
+      fr: 'À Propos',
+      en: 'About',
+      kr: 'Enfòmasyon',
+      es: 'Acerca de'
+    },
+    'store.reviews': {
+      fr: 'Avis',
+      en: 'Reviews',
+      kr: 'Kòmantè',
+      es: 'Reseñas'
+    },
+
     // ── Top Bar ──
     'topbar.change_location': {
       fr: 'Changer de lieu',
@@ -1264,6 +1284,43 @@
     'Wholesale': { fr: 'Grossiste', kr: 'Angwo', es: 'Mayorista' },
     'Retail': { fr: 'Détaillant', kr: 'Detay', es: 'Minorista' },
     'Store': { fr: 'Magasin', kr: 'Magazen', es: 'Tienda' },
+
+    // Product categories (from mock data)
+    'Medicine': { fr: 'Médicaments', kr: 'Medikaman', es: 'Medicinas' },
+    'Health': { fr: 'Santé', kr: 'Sante', es: 'Salud' },
+    'Supplements': { fr: 'Suppléments', kr: 'Sipleman', es: 'Suplementos' },
+    'Main Dishes': { fr: 'Plats Principaux', kr: 'Pla Prensipal', es: 'Platos Principales' },
+    'Soups': { fr: 'Soupes', kr: 'Soup', es: 'Sopas' },
+    'Drinks': { fr: 'Boissons', kr: 'Bwason', es: 'Bebidas' },
+    'Desserts': { fr: 'Desserts', kr: 'Desè', es: 'Postres' },
+    'Seafood': { fr: 'Fruits de Mer', kr: 'Fwi Lanmè', es: 'Mariscos' },
+    'Starters': { fr: 'Entrées', kr: 'Antre', es: 'Entradas' },
+    'Staples': { fr: 'Produits de Base', kr: 'Pwodwi Baz', es: 'Productos Básicos' },
+    'Produce': { fr: 'Fruits et Légumes', kr: 'Fwi ak Legim', es: 'Frutas y Verduras' },
+    'Beverages': { fr: 'Boissons', kr: 'Bwason', es: 'Bebidas' },
+    'Construction': { fr: 'Construction', kr: 'Konstriksyon', es: 'Construcción' },
+    'Paint': { fr: 'Peinture', kr: 'Penti', es: 'Pintura' },
+    'Tools': { fr: 'Outils', kr: 'Zouti', es: 'Herramientas' },
+    'Pharmacies': { fr: 'Pharmacies', kr: 'Famasi', es: 'Farmacias' },
+    'Restaurants': { fr: 'Restaurants', kr: 'Restoran', es: 'Restaurantes' },
+    'Supermarkets': { fr: 'Supermarchés', kr: 'Sipèmache', es: 'Supermercados' },
+    'Hardware Stores': { fr: 'Quincailleries', kr: 'Kenkayri', es: 'Ferreterías' },
+    'Clothing': { fr: 'Vêtements', kr: 'Rad', es: 'Ropa' },
+    'Electronics': { fr: 'Électronique', kr: 'Elektwonik', es: 'Electrónica' },
+    'Beauty': { fr: 'Beauté', kr: 'Bote', es: 'Belleza' },
+    'Other': { fr: 'Autre', kr: 'Lòt', es: 'Otro' },
+    'Transactions': { fr: 'Transactions', kr: 'Tranzaksyon', es: 'Transacciones' },
+    'Transaction History': { fr: 'Historique des Transactions', kr: 'Istwa Tranzaksyon', es: 'Historial de Transacciones' },
+    'Pending': { fr: 'En attente', kr: 'An atant', es: 'Pendiente' },
+    'Completed': { fr: 'Terminé', kr: 'Fini', es: 'Completado' },
+    'Cancelled': { fr: 'Annulé', kr: 'Anile', es: 'Cancelado' },
+    'Order placed': { fr: 'Commande passée', kr: 'Kòmand pase', es: 'Pedido realizado' },
+    'Preparing': { fr: 'En préparation', kr: 'Ap prepare', es: 'Preparando' },
+    'On the way': { fr: 'En route', kr: 'Sou wout', es: 'En camino' },
+    'Delivered': { fr: 'Livré', kr: 'Livre', es: 'Entregado' },
+    'Payment Method': { fr: 'Mode de Paiement', kr: 'Metòd Peman', es: 'Método de Pago' },
+    'Order Total': { fr: 'Total Commande', kr: 'Total Kòmand', es: 'Total del Pedido' },
+    'items': { fr: 'articles', kr: 'atik', es: 'artículos' },
 
     // Diaspora
     'Support Family in Haiti': { fr: 'Soutenez votre Famille en Haïti', kr: 'Sipòte Fanmi nan Ayiti', es: 'Apoye a su Familia en Haití' },

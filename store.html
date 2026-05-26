@@ -669,9 +669,9 @@
 <!-- TABS -->
 <div class="store-tabs">
     <div class="tabs">
-        <div class="tab active" data-tab="products">Products</div>
-        <div class="tab" data-tab="about">About</div>
-        <div class="tab" data-tab="reviews">Reviews</div>
+        <div class="tab active" data-tab="products" data-i18n="store.products">Products</div>
+        <div class="tab" data-tab="about" data-i18n="store.about">About</div>
+        <div class="tab" data-tab="reviews" data-i18n="store.reviews">Reviews</div>
     </div>
 </div>
 
@@ -1364,6 +1364,9 @@ updateCartUI();
 
 <script src="/js/api.js"></script>
 <script src="/js/i18n.js"></script>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
+<script>
+if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}
+if(window.MyPlopPlopI18n){window.MyPlopPlopI18n.applyTranslations();}
+</script>
 </body>
 </html>
