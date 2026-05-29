@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta property="og:image" content="https://myplopplop.com/assets/og-myplopplop.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<title>Inventory — Merchant | MyPlopPlop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="../favicon.ico">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/layout.css">
+<style>
+.page-content {
+    padding: var(--space-md) var(--content-padding);
+    padding-bottom: calc(var(--bottom-nav-height) + var(--space-lg));
+}
+.page-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}
+.page-top h1 {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+}
+.action-row {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+.action-row .btn { font-size: 11px; padding: 7px 14px; }
+
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+.stat-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    border: 1px solid var(--gray-200);
+    transition: box-shadow var(--transition-fast);
+}
+.stat-card:hover { box-shadow: var(--shadow-sm); }
+.stat-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-sm);
+    font-size: 18px;
+}
+.stat-icon.blue { background: var(--primary-blue-light); }
+.stat-icon.green { background: var(--success-light); }
+.stat-icon.yellow { background: var(--warning-light); }
+.stat-icon.red { background: var(--error-light); }
+.stat-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+.stat-value {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--text-dark);
+}
+.inv-value {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-md);
+    padding: 10px var(--space-md);
+    background: linear-gradient(135deg, var(--primary-blue-light), rgba(0,32,159,.06));
+    border-radius: var(--radius-md);
+    font-weight: 500;
+}
+.inv-value strong {
+    color: var(--primary-blue);
+    font-family: var(--font-heading);
+    font-weight: 700;
+}
+
+.alert-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 10px var(--space-md);
+    background: var(--warning-light);
+    border: 1px solid rgba(245,158,11,.25);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-md);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: #92400E;
+    flex-wrap: wrap;
+}
+.alert-banner .btn { margin-left: auto; font-size: 11px; padding: 5px 12px; }
+
+.filters-bar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+.search-row {
+    display: flex;
+    gap: var(--space-sm);
+}
+.search-row .search-bar { flex: 1; }
+.search-row select {
+    padding: 8px 12px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--gray-700);
+    background: var(--white);
+    min-width: 100px;
+}
+.stock-filters {
+    display: flex;
+    gap: var(--space-xs);
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+}
+.stock-filters::-webkit-scrollbar { display: none; }
+.stock-pill {
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--gray-600);
+    background: var(--gray-100);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border: none;
+}
+.stock-pill:hover { background: var(--gray-200); }
+.stock-pill.active { background: var(--primary-red); color: var(--white); }
+
+.inv-list { margin-bottom: var(--space-md); }
+.inv-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+    margin-bottom: var(--space-sm);
+    transition: box-shadow var(--transition-fast);
+}
+.inv-item:hover { box-shadow: var(--shadow-sm); }
+.inv-check {
+    width: 20px;
+    height: 20px;
+    border-radius: var(--radius-xs);
+    border: 2px solid var(--gray-300);
+    cursor: pointer;
+    flex-shrink: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: all var(--transition-fast);
+    position: relative;
+}
+.inv-check:checked {
+    background: var(--primary-blue);
+    border-color: var(--primary-blue);
+}
+.inv-check:checked::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    width: 5px;
+    height: 9px;
+    border: solid var(--white);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+.inv-info { flex: 1; min-width: 0; }
+.inv-name {
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--text-dark);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.inv-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    flex-wrap: wrap;
+}
+.inv-meta .badge { font-size: 10px; padding: 2px 8px; }
+.inv-price {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-sm);
+    color: var(--primary-red);
+}
+.inv-stock-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
+}
+.inv-qty-input {
+    width: 64px;
+    padding: 6px 8px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-align: center;
+    color: var(--text-dark);
+    transition: border-color var(--transition-fast);
+}
+.inv-qty-input:focus { border-color: var(--primary-blue); outline: none; }
+.inv-qty-input.low { border-color: var(--warning); background: var(--warning-light); }
+.inv-qty-input.out { border-color: var(--error); background: var(--error-light); }
+.inv-unit {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+.inv-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.inv-status.in { background: var(--success-light); color: #065F46; }
+.inv-status.low { background: var(--warning-light); color: #92400E; }
+.inv-status.out { background: var(--error-light); color: #991B1B; }
+.inv-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+.inv-status.in::before { background: var(--success); }
+.inv-status.low::before { background: var(--warning); }
+.inv-status.out::before { background: var(--error); }
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    padding: var(--space-sm) 0;
+}
+.pagination .btn { padding: 6px 14px; font-size: var(--text-xs); }
+.pag-btns { display: flex; gap: var(--space-xs); }
+
+.bulk-bar {
+    position: fixed;
+    bottom: var(--bottom-nav-height);
+    left: 0;
+    right: 0;
+    background: var(--primary-blue);
+    color: var(--white);
+    padding: 10px var(--content-padding);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    z-index: 999;
+    transform: translateY(100%);
+    transition: transform var(--transition-normal);
+    box-shadow: 0 -4px 20px rgba(0,0,0,.15);
+}
+.bulk-bar.show { transform: translateY(0); }
+.bulk-bar .count { font-weight: 700; font-size: var(--text-sm); }
+.bulk-bar .btn {
+    padding: 6px 14px;
+    font-size: 11px;
+    background: var(--white);
+    color: var(--primary-blue);
+    font-weight: 700;
+}
+.bulk-bar .btn.danger { background: var(--error); color: var(--white); }
+
+.msouwout-card {
+    background: linear-gradient(135deg, #0C1B3A 0%, var(--primary-blue) 100%);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    color: var(--white);
+    margin-bottom: var(--space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+}
+.msouwout-card h3 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    margin-bottom: 4px;
+}
+.msouwout-card p {
+    font-size: var(--text-sm);
+    opacity: .8;
+}
+.msouwout-card .btn {
+    margin-left: auto;
+    background: #25D366;
+    color: var(--white);
+    font-weight: 700;
+    white-space: nowrap;
+}
+.msouwout-card .btn:hover { background: #1EBE5A; }
+.msouwout-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    background: rgba(255,255,255,.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.upload-zone {
+    border: 2px dashed var(--gray-300);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    margin-bottom: var(--space-md);
+}
+.upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--primary-blue);
+    background: var(--primary-blue-light);
+}
+.upload-zone svg { margin: 0 auto var(--space-sm); color: var(--gray-400); }
+.upload-zone p { font-size: var(--text-sm); color: var(--text-muted); margin-bottom: var(--space-sm); }
+.upload-zone .file-name {
+    font-weight: 600;
+    color: var(--primary-blue);
+    font-size: var(--text-sm);
+    display: none;
+}
+.upload-zone.has-file .file-name { display: block; }
+.upload-zone.has-file p:first-of-type { display: none; }
+.upload-zone.has-file svg { color: var(--primary-blue); }
+.upload-results { margin-top: var(--space-md); }
+.upload-results .result-line {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 8px 0;
+    font-size: var(--text-sm);
+    font-weight: 500;
+}
+.result-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.result-dot.green { background: var(--success); }
+.result-dot.blue { background: var(--info); }
+.result-dot.red { background: var(--error); }
+.error-list {
+    max-height: 150px;
+    overflow-y: auto;
+    padding: var(--space-sm);
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    color: var(--error);
+    margin-top: var(--space-sm);
+}
+.error-list div { padding: 3px 0; }
+
+.template-preview {
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    padding: var(--space-sm) var(--space-md);
+    font-family: monospace;
+    font-size: 10px;
+    color: var(--gray-600);
+    overflow-x: auto;
+    white-space: nowrap;
+    margin-bottom: var(--space-md);
+    border: 1px solid var(--gray-200);
+}
+
+.alert-section { margin-bottom: var(--space-md); }
+.alert-section h3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+.alert-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-xs);
+    font-size: var(--text-sm);
+}
+.alert-item.warn { background: var(--warning-light); }
+.alert-item.danger { background: var(--error-light); }
+.alert-item .name { flex: 1; font-weight: 500; }
+.alert-item .qty {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-sm);
+}
+.alert-item .restock-input {
+    width: 56px;
+    padding: 4px 6px;
+    border: 1.5px solid var(--gray-300);
+    border-radius: var(--radius-xs);
+    font-size: var(--text-xs);
+    text-align: center;
+    display: none;
+}
+.alert-item .restock-input.show { display: block; }
+.alert-item .btn { padding: 4px 10px; font-size: 10px; }
+
+.loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    border-radius: var(--radius-lg);
+}
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--gray-200);
+    border-top-color: var(--primary-red);
+    border-radius: 50%;
+    animation: spin .6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.modal-title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-md);
+}
+
+.merchant-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--bottom-nav-height);
+    background: var(--white);
+    border-top: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 1000;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.merchant-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 12px;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--gray-400);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    position: relative;
+}
+.merchant-nav-item svg { width: 24px; height: 24px; }
+.merchant-nav-item.active { color: var(--primary-red); }
+
+.select-all-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) 0;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.empty-state {
+    text-align: center;
+    padding: var(--space-3xl) var(--space-lg);
+}
+.empty-state .icon { font-size: 48px; margin-bottom: var(--space-md); }
+.empty-state h3 { margin-bottom: var(--space-sm); font-family: var(--font-heading); font-weight: 700; }
+.empty-state p { color: var(--text-muted); font-size: var(--text-sm); margin-bottom: var(--space-lg); }
+
+@media (min-width: 768px) {
+    .stat-grid { grid-template-columns: repeat(4, 1fr); }
+    .filters-bar { flex-direction: row; align-items: center; }
+    .search-row { flex: 1; }
+}
+
+@media (min-width: 1024px) {
+    .merchant-nav { display: none; }
+    .page-content { padding-bottom: var(--space-lg); }
+    .dashboard-content { max-width: 1000px; }
+    .bulk-bar { bottom: 0; }
+    .inv-list {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--gray-200);
+        overflow: hidden;
+    }
+    .inv-item {
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid var(--gray-100);
+        margin-bottom: 0;
+    }
+    .inv-item:last-child { border-bottom: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div style="display:flex;align-items:center;gap:var(--space-sm);">
+        <span>Merchant Portal</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:var(--space-md);">
+        <a href="../index.html">View Storefront</a>
+        <a href="#" data-lang="ht" class="active" onclick="setLang('ht')">🇭🇹 Kreyòl</a>
+        <a href="#" data-lang="fr" onclick="setLang('fr')">🇫🇷 Français</a>
+        <a href="#" data-lang="en" onclick="setLang('en')">🇬🇧 English</a>
+        <a href="#" data-lang="es" onclick="setLang('es')">🇪🇸 Español</a>
+    </div>
+</div>
+
+<header class="header" style="top:28px;">
+    <div class="header-inner">
+        <a href="../index.html" class="header-logo">
+            <img src="../assets/myplopplop-icon.png" alt="MyPlopPlop" style="height:40px;">
+        </a>
+        <div class="header-actions">
+            <a href="#" class="header-icon" title="Notifications">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            </a>
+            <a href="settings.html" class="header-icon" title="Settings">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09"/></svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<main class="main" style="margin-top:calc(var(--header-height) + 28px);">
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div style="padding:0 var(--space-lg) var(--space-lg);">
+                <div style="display:flex;align-items:center;gap:var(--space-sm);">
+                    <div id="sidebarIcon" style="width:40px;height:40px;border-radius:var(--radius-md);background:linear-gradient(135deg,var(--primary-red-light),var(--primary-blue-light));display:flex;align-items:center;justify-content:center;font-size:20px;">🏪</div>
+                    <div>
+                        <div id="sidebarName" style="font-weight:700;font-size:var(--text-base);">Loading...</div>
+                        <div style="font-size:var(--text-xs);color:var(--success);font-weight:500;">Online</div>
+                    </div>
+                </div>
+            </div>
+            <a href="dashboard.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                Dashboard
+            </a>
+            <a href="orders.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                Orders
+            </a>
+            <a href="products.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                Products
+            </a>
+            <a href="inventory.html" class="sidebar-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                <span data-i18n="nav_inventory">Envantè</span>
+            </a>
+            <a href="wallet.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                Wallet
+            </a>
+            <a href="settings.html" class="sidebar-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09"/></svg>
+                Settings
+            </a>
+        </aside>
+
+        <div class="dashboard-content">
+            <div class="page-content">
+
+                <div class="page-top">
+                    <h1 data-i18n="page_title">Envantè</h1>
+                    <div class="action-row">
+                        <button class="btn btn-red btn-sm" onclick="openModal('upload')" data-i18n="btn_upload">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            Upload CSV/XLSX
+                        </button>
+                        <button class="btn btn-white btn-sm" onclick="exportCSV()" data-i18n="btn_export">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Export
+                        </button>
+                        <button class="btn btn-white btn-sm" onclick="downloadTemplate()" data-i18n="btn_template">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            Template
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stat-grid" id="statsGrid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">📦</div>
+                        <div class="stat-label" data-i18n="stat_total">Total Pwodwi</div>
+                        <div class="stat-value" id="statTotal">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">✅</div>
+                        <div class="stat-label" data-i18n="stat_instock">An Stòk</div>
+                        <div class="stat-value" id="statInStock">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon yellow">⚠️</div>
+                        <div class="stat-label" data-i18n="stat_low">Stòk Ba</div>
+                        <div class="stat-value" id="statLow">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red">🚫</div>
+                        <div class="stat-label" data-i18n="stat_out">Pa Gen Stòk</div>
+                        <div class="stat-value" id="statOut">-</div>
+                    </div>
+                </div>
+
+                <div class="inv-value" id="invValue" style="display:none;">
+                    <span data-i18n="inv_value">Valè Total Envantè:</span> <strong id="invValueAmt">0 HTG</strong>
+                </div>
+
+                <div class="alert-banner" id="alertBanner" style="display:none;">
+                    <span>⚠️</span>
+                    <span id="alertText"></span>
+                    <button class="btn btn-white btn-sm" onclick="openModal('alerts')" data-i18n="btn_view_alerts">Wè Alèt</button>
+                </div>
+
+                <div class="filters-bar">
+                    <div class="search-row">
+                        <div class="search-bar">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            <input type="text" id="searchInput" data-i18n-placeholder="search_placeholder" placeholder="Chèche pwodwi..." oninput="debounceSearch()">
+                        </div>
+                        <select id="catFilter" onchange="loadProducts()">
+                            <option value="" data-i18n="filter_all_cat">Tout Kategori</option>
+                        </select>
+                        <select id="sortFilter" onchange="loadProducts()">
+                            <option value="updated" data-i18n="sort_updated">Dènye Modifye</option>
+                            <option value="name" data-i18n="sort_name">Non</option>
+                            <option value="price" data-i18n="sort_price">Pri</option>
+                            <option value="stock" data-i18n="sort_stock">Kantite Stòk</option>
+                        </select>
+                    </div>
+                    <div class="stock-filters">
+                        <button class="stock-pill active" data-stock="all" onclick="setStockFilter(this)" data-i18n="filter_all">Tout</button>
+                        <button class="stock-pill" data-stock="inStock" onclick="setStockFilter(this)" data-i18n="filter_instock">An Stòk</button>
+                        <button class="stock-pill" data-stock="lowStock" onclick="setStockFilter(this)" data-i18n="filter_low">Stòk Ba</button>
+                        <button class="stock-pill" data-stock="outOfStock" onclick="setStockFilter(this)" data-i18n="filter_out">Pa Gen Stòk</button>
+                    </div>
+                </div>
+
+                <div class="select-all-row">
+                    <input type="checkbox" class="inv-check" id="selectAll" onchange="toggleSelectAll()">
+                    <span data-i18n="select_all">Chwazi Tout</span>
+                </div>
+
+                <div class="inv-list" id="invList" style="position:relative;min-height:100px;"></div>
+
+                <div class="pagination" id="pagination" style="display:none;">
+                    <span id="pagInfo"></span>
+                    <div class="pag-btns">
+                        <button class="btn btn-white btn-sm" id="prevBtn" onclick="changePage(-1)" disabled>&laquo;</button>
+                        <button class="btn btn-white btn-sm" id="nextBtn" onclick="changePage(1)">&raquo;</button>
+                    </div>
+                </div>
+
+                <div class="msouwout-card">
+                    <div class="msouwout-icon">🚛</div>
+                    <div style="flex:1;min-width:0;">
+                        <h3>MsouWout Delivery</h3>
+                        <p data-i18n="msouwout_desc">Bezwen restoke? Kòmande livrezon atravè MsouWout</p>
+                    </div>
+                    <a href="#" id="msouwoutBtn" class="btn btn-sm" target="_blank" data-i18n="btn_msouwout">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2.546 21.2a1 1 0 0 0 1.254 1.254l4.032-.892A9.955 9.955 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+                        Mande Pickup
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- UPLOAD MODAL -->
+<div class="modal-overlay" id="uploadModal">
+    <div class="modal">
+        <div class="modal-handle"></div>
+        <h2 class="modal-title" data-i18n="upload_title">Upload Envantè</h2>
+
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <p data-i18n="upload_drag">Trennen fichye CSV oswa XLSX la isit la</p>
+            <p class="file-name" id="fileName"></p>
+            <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display:none;" onchange="onFileSelect(this)">
+        </div>
+
+        <div class="template-preview">
+            name, price, category, description, stockQuantity, unit, comparePrice, inStock
+        </div>
+
+        <div style="display:flex;gap:var(--space-sm);margin-bottom:var(--space-md);">
+            <a href="#" onclick="downloadTemplate();return false;" style="font-size:var(--text-sm);color:var(--primary-blue);font-weight:600;" data-i18n="upload_download_tmpl">Telechaje Template</a>
+        </div>
+
+        <div class="upload-results" id="uploadResults" style="display:none;"></div>
+
+        <div style="display:flex;gap:var(--space-sm);">
+            <button class="btn btn-white btn-full" onclick="closeModal('upload')" data-i18n="btn_cancel">Anile</button>
+            <button class="btn btn-red btn-full" id="uploadBtn" onclick="doUpload()" disabled data-i18n="btn_upload_go">Upload</button>
+        </div>
+    </div>
+</div>
+
+<!-- ALERTS MODAL -->
+<div class="modal-overlay" id="alertsModal">
+    <div class="modal">
+        <div class="modal-handle"></div>
+        <h2 class="modal-title" data-i18n="alerts_title">Alèt Envantè</h2>
+        <div id="alertsContent"></div>
+        <button class="btn btn-white btn-full" onclick="closeModal('alerts')" style="margin-top:var(--space-md);" data-i18n="btn_close">Fèmen</button>
+    </div>
+</div>
+
+<!-- BULK STOCK MODAL -->
+<div class="modal-overlay" id="bulkModal">
+    <div class="modal">
+        <div class="modal-handle"></div>
+        <h2 class="modal-title" data-i18n="bulk_title">Mete Ajou Stòk</h2>
+        <div class="input-group">
+            <label data-i18n="bulk_qty_label">Nouvo kantite stòk pou tout pwodwi chwazi yo</label>
+            <input class="input" type="number" id="bulkQtyInput" min="0" placeholder="0">
+        </div>
+        <div style="display:flex;gap:var(--space-sm);">
+            <button class="btn btn-white btn-full" onclick="closeModal('bulk')" data-i18n="btn_cancel">Anile</button>
+            <button class="btn btn-red btn-full" onclick="doBulkUpdate()" data-i18n="btn_apply">Aplike</button>
+        </div>
+    </div>
+</div>
+
+<!-- BULK EDIT BAR -->
+<div class="bulk-bar" id="bulkBar">
+    <span class="count" id="bulkCount">0</span>
+    <div style="display:flex;gap:var(--space-xs);">
+        <button class="btn btn-sm" onclick="openModal('bulk')" data-i18n="btn_update_stock">Mete Ajou Stòk</button>
+        <button class="btn btn-sm danger" onclick="markOutOfStock()" data-i18n="btn_mark_out">Pa Gen Stòk</button>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- BOTTOM NAV -->
+<nav class="merchant-nav">
+    <a href="dashboard.html" class="merchant-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span>Dashboard</span>
+    </a>
+    <a href="orders.html" class="merchant-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Orders</span>
+    </a>
+    <a href="inventory.html" class="merchant-nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        <span data-i18n="nav_inventory">Envantè</span>
+    </a>
+    <a href="products.html" class="merchant-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span>Products</span>
+    </a>
+    <a href="settings.html" class="merchant-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09"/></svg>
+        <span>Settings</span>
+    </a>
+</nav>
+
+<script>
+const BASE_URL = 'https://myplopplop-api.onrender.com';
+let storeId = null;
+let storeName = '';
+let currentPage = 1;
+let totalPages = 1;
+let selectedIds = new Set();
+let searchTimer = null;
+let currentLang = localStorage.getItem('pp_lang') || 'ht';
+
+const T = {
+    ht: {
+        page_title: 'Envantè',
+        nav_inventory: 'Envantè',
+        btn_upload: 'Upload CSV/XLSX',
+        btn_export: 'Export',
+        btn_template: 'Template',
+        stat_total: 'Total Pwodwi',
+        stat_instock: 'An Stòk',
+        stat_low: 'Stòk Ba',
+        stat_out: 'Pa Gen Stòk',
+        inv_value: 'Valè Total Envantè:',
+        btn_view_alerts: 'Wè Alèt',
+        search_placeholder: 'Chèche pwodwi...',
+        filter_all_cat: 'Tout Kategori',
+        sort_updated: 'Dènye Modifye',
+        sort_name: 'Non',
+        sort_price: 'Pri',
+        sort_stock: 'Kantite Stòk',
+        filter_all: 'Tout',
+        filter_instock: 'An Stòk',
+        filter_low: 'Stòk Ba',
+        filter_out: 'Pa Gen Stòk',
+        select_all: 'Chwazi Tout',
+        upload_title: 'Upload Envantè',
+        upload_drag: 'Trennen fichye CSV oswa XLSX la isit la',
+        upload_download_tmpl: 'Telechaje Template',
+        btn_cancel: 'Anile',
+        btn_upload_go: 'Upload',
+        btn_close: 'Fèmen',
+        alerts_title: 'Alèt Envantè',
+        bulk_title: 'Mete Ajou Stòk',
+        bulk_qty_label: 'Nouvo kantite stòk pou tout pwodwi chwazi yo',
+        btn_apply: 'Aplike',
+        btn_update_stock: 'Mete Ajou Stòk',
+        btn_mark_out: 'Pa Gen Stòk',
+        msouwout_desc: 'Bezwen restoke? Kòmande livrezon atravè MsouWout',
+        btn_msouwout: 'Mande Pickup',
+        alert_low: 'Stòk Ba',
+        alert_out: 'Pa Gen Stòk',
+        alert_text: '{low} atik stòk ba, {out} atik pa gen stòk',
+        items_selected: '{n} atik chwazi',
+        showing: 'Montre {a}-{b} nan {t}',
+        empty_title: 'Pa gen pwodwi',
+        empty_desc: 'Upload yon fichye CSV pou ajoute envantè ou',
+        upload_success: 'Upload fini: {c} kreye, {u} mete ajou',
+        upload_errors: '{n} erè',
+        toast_updated: 'Stòk mete ajou',
+        toast_export: 'Ap telechaje CSV...',
+        toast_error: 'Erè - eseye ankò',
+        restock: 'Restoke',
+        save: 'Sove',
+        created: 'Kreye',
+        updated: 'Mete Ajou',
+        errors: 'Erè'
+    },
+    fr: {
+        page_title: 'Inventaire',
+        nav_inventory: 'Inventaire',
+        btn_upload: 'Upload CSV/XLSX',
+        btn_export: 'Exporter',
+        btn_template: 'Modèle',
+        stat_total: 'Total Produits',
+        stat_instock: 'En Stock',
+        stat_low: 'Stock Bas',
+        stat_out: 'Rupture',
+        inv_value: 'Valeur Totale:',
+        btn_view_alerts: 'Voir Alertes',
+        search_placeholder: 'Rechercher un produit...',
+        filter_all_cat: 'Toutes Catégories',
+        sort_updated: 'Dernière Modif.',
+        sort_name: 'Nom',
+        sort_price: 'Prix',
+        sort_stock: 'Quantité',
+        filter_all: 'Tous',
+        filter_instock: 'En Stock',
+        filter_low: 'Stock Bas',
+        filter_out: 'Rupture',
+        select_all: 'Tout Sélectionner',
+        upload_title: 'Upload Inventaire',
+        upload_drag: 'Glissez un fichier CSV ou XLSX ici',
+        upload_download_tmpl: 'Télécharger le Modèle',
+        btn_cancel: 'Annuler',
+        btn_upload_go: 'Upload',
+        btn_close: 'Fermer',
+        alerts_title: 'Alertes Inventaire',
+        bulk_title: 'Mettre à Jour Stock',
+        bulk_qty_label: 'Nouvelle quantité pour tous les produits sélectionnés',
+        btn_apply: 'Appliquer',
+        btn_update_stock: 'Mettre à Jour',
+        btn_mark_out: 'Marquer Rupture',
+        msouwout_desc: 'Besoin de réapprovisionner? Commandez via MsouWout',
+        btn_msouwout: 'Demander Pickup',
+        alert_low: 'Stock Bas',
+        alert_out: 'Rupture de Stock',
+        alert_text: '{low} articles stock bas, {out} articles en rupture',
+        items_selected: '{n} articles sélectionnés',
+        showing: 'Affichage {a}-{b} sur {t}',
+        empty_title: 'Aucun produit',
+        empty_desc: 'Uploadez un fichier CSV pour ajouter votre inventaire',
+        upload_success: 'Upload terminé: {c} créés, {u} mis à jour',
+        upload_errors: '{n} erreurs',
+        toast_updated: 'Stock mis à jour',
+        toast_export: 'Téléchargement CSV...',
+        toast_error: 'Erreur - réessayez',
+        restock: 'Réappro.',
+        save: 'Enregistrer',
+        created: 'Créés',
+        updated: 'Mis à jour',
+        errors: 'Erreurs'
+    },
+    en: {
+        page_title: 'Inventory',
+        nav_inventory: 'Inventory',
+        btn_upload: 'Upload CSV/XLSX',
+        btn_export: 'Export',
+        btn_template: 'Template',
+        stat_total: 'Total Products',
+        stat_instock: 'In Stock',
+        stat_low: 'Low Stock',
+        stat_out: 'Out of Stock',
+        inv_value: 'Total Inventory Value:',
+        btn_view_alerts: 'View Alerts',
+        search_placeholder: 'Search products...',
+        filter_all_cat: 'All Categories',
+        sort_updated: 'Last Updated',
+        sort_name: 'Name',
+        sort_price: 'Price',
+        sort_stock: 'Stock Qty',
+        filter_all: 'All',
+        filter_instock: 'In Stock',
+        filter_low: 'Low Stock',
+        filter_out: 'Out of Stock',
+        select_all: 'Select All',
+        upload_title: 'Upload Inventory',
+        upload_drag: 'Drag a CSV or XLSX file here',
+        upload_download_tmpl: 'Download Template',
+        btn_cancel: 'Cancel',
+        btn_upload_go: 'Upload',
+        btn_close: 'Close',
+        alerts_title: 'Inventory Alerts',
+        bulk_title: 'Update Stock',
+        bulk_qty_label: 'New stock quantity for all selected products',
+        btn_apply: 'Apply',
+        btn_update_stock: 'Update Stock',
+        btn_mark_out: 'Mark Out of Stock',
+        msouwout_desc: 'Need restocking? Order delivery through MsouWout',
+        btn_msouwout: 'Request Pickup',
+        alert_low: 'Low Stock',
+        alert_out: 'Out of Stock',
+        alert_text: '{low} items low stock, {out} items out of stock',
+        items_selected: '{n} items selected',
+        showing: 'Showing {a}-{b} of {t}',
+        empty_title: 'No products',
+        empty_desc: 'Upload a CSV file to add your inventory',
+        upload_success: 'Upload complete: {c} created, {u} updated',
+        upload_errors: '{n} errors',
+        toast_updated: 'Stock updated',
+        toast_export: 'Downloading CSV...',
+        toast_error: 'Error - try again',
+        restock: 'Restock',
+        save: 'Save',
+        created: 'Created',
+        updated: 'Updated',
+        errors: 'Errors'
+    },
+    es: {
+        page_title: 'Inventario',
+        nav_inventory: 'Inventario',
+        btn_upload: 'Subir CSV/XLSX',
+        btn_export: 'Exportar',
+        btn_template: 'Plantilla',
+        stat_total: 'Total Productos',
+        stat_instock: 'En Stock',
+        stat_low: 'Stock Bajo',
+        stat_out: 'Agotado',
+        inv_value: 'Valor Total del Inventario:',
+        btn_view_alerts: 'Ver Alertas',
+        search_placeholder: 'Buscar productos...',
+        filter_all_cat: 'Todas las Categorías',
+        sort_updated: 'Última Modif.',
+        sort_name: 'Nombre',
+        sort_price: 'Precio',
+        sort_stock: 'Cantidad',
+        filter_all: 'Todos',
+        filter_instock: 'En Stock',
+        filter_low: 'Stock Bajo',
+        filter_out: 'Agotado',
+        select_all: 'Seleccionar Todo',
+        upload_title: 'Subir Inventario',
+        upload_drag: 'Arrastra un archivo CSV o XLSX aquí',
+        upload_download_tmpl: 'Descargar Plantilla',
+        btn_cancel: 'Cancelar',
+        btn_upload_go: 'Subir',
+        btn_close: 'Cerrar',
+        alerts_title: 'Alertas de Inventario',
+        bulk_title: 'Actualizar Stock',
+        bulk_qty_label: 'Nueva cantidad para todos los productos seleccionados',
+        btn_apply: 'Aplicar',
+        btn_update_stock: 'Actualizar Stock',
+        btn_mark_out: 'Marcar Agotado',
+        msouwout_desc: '¿Necesita reabastecer? Pida entrega por MsouWout',
+        btn_msouwout: 'Solicitar Pickup',
+        alert_low: 'Stock Bajo',
+        alert_out: 'Agotado',
+        alert_text: '{low} artículos stock bajo, {out} artículos agotados',
+        items_selected: '{n} artículos seleccionados',
+        showing: 'Mostrando {a}-{b} de {t}',
+        empty_title: 'Sin productos',
+        empty_desc: 'Suba un archivo CSV para agregar su inventario',
+        upload_success: 'Subida completa: {c} creados, {u} actualizados',
+        upload_errors: '{n} errores',
+        toast_updated: 'Stock actualizado',
+        toast_export: 'Descargando CSV...',
+        toast_error: 'Error - intente de nuevo',
+        restock: 'Reabastecer',
+        save: 'Guardar',
+        created: 'Creados',
+        updated: 'Actualizados',
+        errors: 'Errores'
+    }
+};
+
+function t(key, vars) {
+    let s = (T[currentLang] && T[currentLang][key]) || (T.ht[key]) || key;
+    if (vars) Object.keys(vars).forEach(k => { s = s.replace('{' + k + '}', vars[k]); });
+    return s;
+}
+
+function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('pp_lang', lang);
+    document.querySelectorAll('[data-lang]').forEach(el => el.classList.remove('active'));
+    document.querySelector('[data-lang="'+lang+'"]')?.classList.add('active');
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        el.textContent = t(key);
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+    });
+}
+
+function getToken() { return localStorage.getItem('pp_token'); }
+
+async function api(method, path, body) {
+    const opts = { method, headers: {} };
+    const token = getToken();
+    if (token) opts.headers['Authorization'] = 'Bearer ' + token;
+    if (body && !(body instanceof FormData)) {
+        opts.headers['Content-Type'] = 'application/json';
+        opts.body = JSON.stringify(body);
+    } else if (body) {
+        opts.body = body;
+    }
+    const res = await fetch(BASE_URL + path, opts);
+    if (path.includes('/export')) return res;
+    return res.json();
+}
+
+function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+function openModal(type) {
+    document.getElementById(type + 'Modal').classList.add('show');
+    if (type === 'alerts') loadAlerts();
+}
+
+function closeModal(type) {
+    document.getElementById(type + 'Modal').classList.remove('show');
+}
+
+['uploadModal', 'alertsModal', 'bulkModal'].forEach(id => {
+    document.getElementById(id).addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('show');
+    });
+});
+
+function showLoading(container) {
+    const ov = document.createElement('div');
+    ov.className = 'loading-overlay';
+    ov.innerHTML = '<div class="spinner"></div>';
+    container.style.position = 'relative';
+    container.appendChild(ov);
+    return ov;
+}
+
+async function init() {
+    setLang(currentLang);
+    const data = await api('GET', '/api/stores/merchant/my-store');
+    if (data.success && data.data && data.data.store) {
+        storeId = data.data.store._id;
+        storeName = data.data.store.name;
+        document.getElementById('sidebarName').textContent = storeName;
+        document.getElementById('msouwoutBtn').href = 'https://wa.me/50941902005?text=' +
+            encodeURIComponent('Bonjou! Mwen bezwen livrezon pou restoke biznis mwen: ' + storeName);
+        loadDashboard();
+        loadProducts();
+        buildCategoryFilter(data.data.products || []);
+    } else {
+        document.getElementById('invList').innerHTML =
+            '<div class="empty-state"><div class="icon">🏪</div><h3>' + t('empty_title') +
+            '</h3><p>You need to create a store first.</p></div>';
+    }
+}
+
+function buildCategoryFilter(products) {
+    const cats = new Set();
+    products.forEach(p => { if (p.category) cats.add(p.category); });
+    const sel = document.getElementById('catFilter');
+    cats.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        sel.appendChild(opt);
+    });
+}
+
+async function loadDashboard() {
+    const data = await api('GET', '/api/inventory/' + storeId + '/dashboard');
+    if (!data.success) return;
+    const d = data.data;
+    document.getElementById('statTotal').textContent = d.totalProducts;
+    document.getElementById('statInStock').textContent = d.totalInStock;
+    document.getElementById('statLow').textContent = d.lowStockProducts;
+    document.getElementById('statOut').textContent = d.totalOutOfStock;
+
+    if (d.totalValue > 0) {
+        document.getElementById('invValue').style.display = '';
+        document.getElementById('invValueAmt').textContent =
+            d.totalValue.toLocaleString() + ' HTG';
+    }
+
+    if (d.lowStockProducts > 0 || d.totalOutOfStock > 0) {
+        document.getElementById('alertBanner').style.display = '';
+        document.getElementById('alertText').textContent =
+            t('alert_text', { low: d.lowStockProducts, out: d.totalOutOfStock });
+    }
+}
+
+async function loadProducts() {
+    const list = document.getElementById('invList');
+    const loader = showLoading(list);
+
+    const search = document.getElementById('searchInput').value;
+    const category = document.getElementById('catFilter').value;
+    const sortBy = document.getElementById('sortFilter').value;
+    const stockStatus = document.querySelector('.stock-pill.active')?.dataset.stock || 'all';
+
+    const params = new URLSearchParams({
+        page: currentPage,
+        limit: 20,
+        sortBy
+    });
+    if (search) params.set('search', search);
+    if (category) params.set('category', category);
+    if (stockStatus !== 'all') params.set('stockStatus', stockStatus);
+
+    const data = await api('GET', '/api/inventory/' + storeId + '/products?' + params);
+    loader.remove();
+
+    if (!data.success || !data.data.length) {
+        list.innerHTML = '<div class="empty-state"><div class="icon">📦</div><h3>' +
+            t('empty_title') + '</h3><p>' + t('empty_desc') + '</p></div>';
+        document.getElementById('pagination').style.display = 'none';
+        return;
+    }
+
+    totalPages = data.pagination.pages;
+    const total = data.pagination.total;
+    const start = (currentPage - 1) * 20 + 1;
+    const end = Math.min(currentPage * 20, total);
+
+    list.innerHTML = data.data.map(p => {
+        const qty = p.stockQuantity;
+        const isLow = qty > 0 && qty < 10;
+        const isOut = qty === 0;
+        const unlimited = qty === -1;
+        const statusClass = isOut ? 'out' : isLow ? 'low' : 'in';
+        const statusText = isOut ? t('stat_out') : isLow ? t('stat_low') : t('stat_instock');
+        const qtyClass = isOut ? 'out' : isLow ? 'low' : '';
+
+        return `<div class="inv-item" data-id="${p._id}">
+            <input type="checkbox" class="inv-check" data-pid="${p._id}" onchange="onCheckChange()">
+            <div class="inv-info">
+                <div class="inv-name">${esc(p.name)}</div>
+                <div class="inv-meta">
+                    <span class="inv-price">${p.price.toLocaleString()} HTG</span>
+                    ${p.category ? '<span class="badge badge-gray">' + esc(p.category) + '</span>' : ''}
+                    <span class="inv-status ${statusClass}">${statusText}</span>
+                </div>
+            </div>
+            <div class="inv-stock-col">
+                <input type="number" class="inv-qty-input ${qtyClass}" value="${unlimited ? '' : qty}"
+                    placeholder="${unlimited ? '∞' : ''}" min="0"
+                    data-pid="${p._id}" data-orig="${qty}" onchange="onQtyChange(this)">
+                <span class="inv-unit">${p.unit || 'piece'}</span>
+            </div>
+        </div>`;
+    }).join('');
+
+    document.getElementById('pagination').style.display = '';
+    document.getElementById('pagInfo').textContent = t('showing', { a: start, b: end, t: total });
+    document.getElementById('prevBtn').disabled = currentPage <= 1;
+    document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+
+    selectedIds.clear();
+    document.getElementById('selectAll').checked = false;
+    updateBulkBar();
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function setStockFilter(el) {
+    document.querySelectorAll('.stock-pill').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    currentPage = 1;
+    loadProducts();
+}
+
+function debounceSearch() {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => { currentPage = 1; loadProducts(); }, 400);
+}
+
+function changePage(dir) {
+    currentPage += dir;
+    loadProducts();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleSelectAll() {
+    const checked = document.getElementById('selectAll').checked;
+    document.querySelectorAll('.inv-check[data-pid]').forEach(cb => {
+        cb.checked = checked;
+        if (checked) selectedIds.add(cb.dataset.pid);
+        else selectedIds.delete(cb.dataset.pid);
+    });
+    updateBulkBar();
+}
+
+function onCheckChange() {
+    selectedIds.clear();
+    document.querySelectorAll('.inv-check[data-pid]:checked').forEach(cb => {
+        selectedIds.add(cb.dataset.pid);
+    });
+    updateBulkBar();
+}
+
+function updateBulkBar() {
+    const bar = document.getElementById('bulkBar');
+    if (selectedIds.size > 0) {
+        bar.classList.add('show');
+        document.getElementById('bulkCount').textContent =
+            t('items_selected', { n: selectedIds.size });
+    } else {
+        bar.classList.remove('show');
+    }
+}
+
+async function onQtyChange(input) {
+    const pid = input.dataset.pid;
+    const orig = parseInt(input.dataset.orig);
+    const val = parseInt(input.value);
+    if (isNaN(val) || val === orig) return;
+
+    const updates = [{ productId: pid, stockQuantity: val, inStock: val > 0 }];
+    const data = await api('PUT', '/api/inventory/' + storeId + '/bulk-update', { updates });
+    if (data.success) {
+        input.dataset.orig = val;
+        input.className = 'inv-qty-input' + (val === 0 ? ' out' : val < 10 ? ' low' : '');
+        const statusEl = input.closest('.inv-item').querySelector('.inv-status');
+        if (statusEl) {
+            statusEl.className = 'inv-status ' + (val === 0 ? 'out' : val < 10 ? 'low' : 'in');
+            statusEl.textContent = val === 0 ? t('stat_out') : val < 10 ? t('stat_low') : t('stat_instock');
+        }
+        showToast(t('toast_updated'));
+        loadDashboard();
+    } else {
+        showToast(t('toast_error'));
+        input.value = orig;
+    }
+}
+
+async function doBulkUpdate() {
+    const qty = parseInt(document.getElementById('bulkQtyInput').value);
+    if (isNaN(qty)) return;
+    const updates = Array.from(selectedIds).map(id => ({
+        productId: id, stockQuantity: qty, inStock: qty > 0
+    }));
+    const data = await api('PUT', '/api/inventory/' + storeId + '/bulk-update', { updates });
+    if (data.success) {
+        showToast(t('toast_updated'));
+        closeModal('bulk');
+        selectedIds.clear();
+        updateBulkBar();
+        loadProducts();
+        loadDashboard();
+    } else {
+        showToast(t('toast_error'));
+    }
+}
+
+async function markOutOfStock() {
+    const updates = Array.from(selectedIds).map(id => ({
+        productId: id, stockQuantity: 0, inStock: false
+    }));
+    const data = await api('PUT', '/api/inventory/' + storeId + '/bulk-update', { updates });
+    if (data.success) {
+        showToast(t('toast_updated'));
+        selectedIds.clear();
+        updateBulkBar();
+        loadProducts();
+        loadDashboard();
+    } else {
+        showToast(t('toast_error'));
+    }
+}
+
+const uploadZone = document.getElementById('uploadZone');
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+uploadZone.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadZone.classList.remove('drag-over');
+    if (e.dataTransfer.files.length) {
+        document.getElementById('fileInput').files = e.dataTransfer.files;
+        onFileSelect(document.getElementById('fileInput'));
+    }
+});
+
+function onFileSelect(input) {
+    if (!input.files.length) return;
+    const file = input.files[0];
+    document.getElementById('fileName').textContent = file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+    uploadZone.classList.add('has-file');
+    document.getElementById('uploadBtn').disabled = false;
+    document.getElementById('uploadResults').style.display = 'none';
+}
+
+async function doUpload() {
+    const input = document.getElementById('fileInput');
+    if (!input.files.length) return;
+
+    const btn = document.getElementById('uploadBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;"></div>';
+
+    const fd = new FormData();
+    fd.append('file', input.files[0]);
+
+    const data = await api('POST', '/api/inventory/' + storeId + '/upload', fd);
+
+    btn.innerHTML = t('btn_upload_go');
+    btn.disabled = false;
+
+    const results = document.getElementById('uploadResults');
+    results.style.display = '';
+
+    if (data.success) {
+        let html = '<div class="result-line"><span class="result-dot green"></span> ' +
+            t('created') + ': <strong>' + data.created + '</strong></div>';
+        html += '<div class="result-line"><span class="result-dot blue"></span> ' +
+            t('updated') + ': <strong>' + data.updated + '</strong></div>';
+        if (data.errors && data.errors.length) {
+            html += '<div class="result-line"><span class="result-dot red"></span> ' +
+                t('errors') + ': <strong>' + data.errors.length + '</strong></div>';
+            html += '<div class="error-list">';
+            data.errors.forEach(e => { html += '<div>Row ' + e.row + ': ' + esc(e.message) + '</div>'; });
+            html += '</div>';
+        }
+        results.innerHTML = html;
+        showToast(t('upload_success', { c: data.created, u: data.updated }));
+        loadProducts();
+        loadDashboard();
+    } else {
+        results.innerHTML = '<div class="result-line"><span class="result-dot red"></span> ' +
+            esc(data.message || t('toast_error')) + '</div>';
+    }
+}
+
+async function loadAlerts() {
+    const content = document.getElementById('alertsContent');
+    content.innerHTML = '<div style="text-align:center;padding:var(--space-lg);"><div class="spinner"></div></div>';
+
+    const data = await api('GET', '/api/inventory/' + storeId + '/alerts');
+    if (!data.success) { content.innerHTML = '<p>' + t('toast_error') + '</p>'; return; }
+
+    let html = '';
+    if (data.data.lowStock.length) {
+        html += '<div class="alert-section"><h3><span style="color:var(--warning);">⚠️</span> ' +
+            t('alert_low') + ' (' + data.data.lowStockCount + ')</h3>';
+        data.data.lowStock.forEach(p => {
+            html += `<div class="alert-item warn">
+                <span class="name">${esc(p.name)}</span>
+                <span class="qty">${p.stockQuantity}</span>
+                <input type="number" class="restock-input" min="0" data-pid="${p._id}">
+                <button class="btn btn-white btn-sm" onclick="toggleRestock(this)">${t('restock')}</button>
+            </div>`;
+        });
+        html += '</div>';
+    }
+    if (data.data.outOfStock.length) {
+        html += '<div class="alert-section"><h3><span style="color:var(--error);">🚫</span> ' +
+            t('alert_out') + ' (' + data.data.outOfStockCount + ')</h3>';
+        data.data.outOfStock.forEach(p => {
+            html += `<div class="alert-item danger">
+                <span class="name">${esc(p.name)}</span>
+                <span class="qty">0</span>
+                <input type="number" class="restock-input" min="1" data-pid="${p._id}">
+                <button class="btn btn-white btn-sm" onclick="toggleRestock(this)">${t('restock')}</button>
+            </div>`;
+        });
+        html += '</div>';
+    }
+    if (!html) html = '<p style="text-align:center;color:var(--text-muted);">No alerts</p>';
+    content.innerHTML = html;
+}
+
+async function toggleRestock(btn) {
+    const item = btn.closest('.alert-item');
+    const input = item.querySelector('.restock-input');
+    if (!input.classList.contains('show')) {
+        input.classList.add('show');
+        input.focus();
+        btn.textContent = t('save');
+        return;
+    }
+    const val = parseInt(input.value);
+    if (isNaN(val) || val < 0) return;
+    const pid = input.dataset.pid;
+    const data = await api('PUT', '/api/inventory/' + storeId + '/bulk-update', {
+        updates: [{ productId: pid, stockQuantity: val, inStock: val > 0 }]
+    });
+    if (data.success) {
+        item.querySelector('.qty').textContent = val;
+        input.classList.remove('show');
+        btn.textContent = t('restock');
+        showToast(t('toast_updated'));
+        loadDashboard();
+    }
+}
+
+async function exportCSV() {
+    showToast(t('toast_export'));
+    const res = await api('GET', '/api/inventory/' + storeId + '/export');
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'inventory_' + Date.now() + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function downloadTemplate() {
+    window.location.href = BASE_URL + '/api/inventory/template';
+}
+
+init();
+</script>
+
+<script src="/js/api.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
+</body>
+</html>
