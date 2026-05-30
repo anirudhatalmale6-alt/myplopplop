@@ -11,6 +11,15 @@ const CATEGORIES = [
 
 const STORES = [
     {
+        id: 'royal-pop-shop', name: 'Royal Pop Shop', category: 'retail',
+        image: 'assets/royal-pop-logo.jpg', rating: 5.0, reviews: 28, deliveryFee: 0, eta: '21 days',
+        open: true, verified: true, featured: true,
+        description: 'Luxury & collectible watches. SWATCH × Audemars Piguet Royal Pop — $800 USD.',
+        address: 'International Shipping',
+        customLink: 'partners/royal-pop-shop.html',
+        products: []
+    },
+    {
         id: 'resto-1', name: 'Lakay Kreyòl', category: 'restaurants',
         image: '', rating: 4.8, reviews: 142, deliveryFee: 150, eta: '25-35',
         open: true, verified: true, featured: true,
