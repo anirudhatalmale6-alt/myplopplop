@@ -333,6 +333,57 @@ select.input {
     .upload-row { grid-template-columns: 1fr; }
 }
 
+/* ===== A/C Onboarding Toggle ===== */
+.ac-onboard-toggle {
+    padding: 12px 14px;
+    background: var(--gray-50);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--gray-200);
+}
+.ac-check-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-dark);
+}
+.ac-check-label input { display: none; }
+.ac-check-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: all .2s;
+}
+.ac-check-label input:checked ~ .ac-check-box {
+    background: #2196F3;
+    box-shadow: 0 2px 8px rgba(33,150,243,.35);
+}
+.ac-onboard-note {
+    font-size: 12px;
+    color: var(--gray-400);
+    margin-top: 6px;
+    padding-left: 46px;
+}
+
+/* ===== Video Upload ===== */
+.video-upload-icon {
+    font-size: 32px;
+    margin-bottom: var(--space-sm);
+}
+.video-note {
+    font-size: 12px;
+    color: var(--gray-400);
+    margin-top: 6px;
+    font-style: italic;
+}
+
 /* ===== Upload Status ===== */
 .upload-status {
     display: inline-flex;
@@ -1202,6 +1253,17 @@ select.input {
                         <option>8+</option>
                     </select>
                 </div>
+                <div class="input-group">
+                    <label>Air Conditioning (A/C)</label>
+                    <div class="ac-onboard-toggle">
+                        <label class="ac-check-label">
+                            <input type="checkbox" id="carAC">
+                            <span class="ac-check-box">❄️</span>
+                            <span>Wi, machin mwen gen A/C</span>
+                        </label>
+                        <div class="ac-onboard-note">Machin ak A/C resevwa plis kous ak pi bon tarif</div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1225,6 +1287,22 @@ select.input {
                 <div class="file-name"></div>
                 <input type="file" accept="image/*,.pdf" hidden onchange="handleUpload(this)">
             </div>
+        </div>
+
+        <div class="input-group">
+            <label>Vehicle Condition Video <span class="required">*</span></label>
+            <div class="upload-area video-upload-area" onclick="this.querySelector('input').click()" id="videoUploadArea">
+                <div class="video-upload-icon">🎥</div>
+                <div class="upload-text">Record or upload a short video</div>
+                <div class="upload-formats">Walk around your vehicle (max 5 seconds, MP4/MOV, max 10MB)</div>
+                <div class="file-name" id="videoFileName"></div>
+                <div class="video-preview" id="videoPreview" style="display:none;">
+                    <video id="videoPlayer" style="width:100%;border-radius:8px;max-height:200px;" controls></video>
+                </div>
+                <div class="video-error" id="videoError" style="display:none;color:#E63946;font-size:12px;margin-top:8px;font-weight:600;"></div>
+                <input type="file" accept="video/*" hidden onchange="handleVideoUpload(this)">
+            </div>
+            <div class="video-note">Montre kondisyon machin/moto ou pou kliyan yo ka wè li an bon eta</div>
         </div>
 
         <div class="step-actions">
@@ -1626,6 +1704,43 @@ function handleUpload(input) {
         if (svgEl) {
             svgEl.innerHTML = '<polyline points="20 6 9 17 4 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
         }
+    }
+}
+
+function handleVideoUpload(input) {
+    var area = input.closest('.upload-area');
+    var errEl = document.getElementById('videoError');
+    var previewEl = document.getElementById('videoPreview');
+    var playerEl = document.getElementById('videoPlayer');
+    var nameEl = document.getElementById('videoFileName');
+    errEl.style.display = 'none';
+    previewEl.style.display = 'none';
+
+    if (input.files && input.files[0]) {
+        var file = input.files[0];
+        if (file.size > 10 * 1024 * 1024) {
+            errEl.textContent = 'Video twò gwo! Maksimòm 10MB.';
+            errEl.style.display = 'block';
+            input.value = '';
+            return;
+        }
+        var url = URL.createObjectURL(file);
+        playerEl.src = url;
+        playerEl.onloadedmetadata = function() {
+            if (playerEl.duration > 10) {
+                errEl.textContent = 'Video twò long! Maksimòm 5 segonn. (' + Math.round(playerEl.duration) + 's detected)';
+                errEl.style.display = 'block';
+                previewEl.style.display = 'none';
+                input.value = '';
+                URL.revokeObjectURL(url);
+                return;
+            }
+            area.classList.add('has-file');
+            nameEl.textContent = file.name + ' (' + playerEl.duration.toFixed(1) + 's)';
+            previewEl.style.display = 'block';
+            var iconEl = area.querySelector('.video-upload-icon');
+            if (iconEl) iconEl.textContent = '✅';
+        };
     }
 }
 

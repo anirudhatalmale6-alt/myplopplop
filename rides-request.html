@@ -175,6 +175,71 @@
     margin-top: 6px;
 }
 
+/* A/C Option */
+.ac-option {
+    margin: 12px var(--content-padding) 0;
+    background: var(--white);
+    border-radius: 14px;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    animation: fadeIn .3s ease;
+}
+.ac-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.ac-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--text-dark);
+}
+.ac-icon { font-size: 1.2rem; }
+.ac-note {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+.toggle-switch {
+    position: relative;
+    width: 48px;
+    height: 26px;
+    display: inline-block;
+}
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #ccc;
+    border-radius: 26px;
+    cursor: pointer;
+    transition: .3s;
+}
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: .3s;
+}
+.toggle-switch input:checked + .toggle-slider {
+    background: #2196F3;
+}
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(22px);
+}
+
 /* Section Container */
 .ride-section {
     padding: 0 var(--content-padding);
@@ -898,6 +963,21 @@
             </div>
         </div>
 
+        <!-- A/C OPTION (for car/SUV only) -->
+        <div class="ac-option" id="acOption" style="display:none;">
+            <div class="ac-toggle-row">
+                <div class="ac-label">
+                    <span class="ac-icon">❄️</span>
+                    <span>Klimatizasyon (A/C)</span>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="acToggle" onchange="toggleAC()">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="ac-note" id="acNote">San A/C — pi bon pri</div>
+        </div>
+
         <!-- 3. PICKUP & DROPOFF FORM -->
         <div class="ride-section">
             <div class="ride-section-title">📍 Kote depa ak destinasyon</div>
@@ -1099,8 +1179,22 @@
         document.querySelectorAll('.ride-type-card').forEach(c => c.classList.remove('selected'));
         card.classList.add('selected');
         selectedType = card.dataset.type;
+        var acEl = document.getElementById('acOption');
+        if (selectedType === 'car' || selectedType === 'suv' || selectedType === 'armored') {
+            acEl.style.display = 'block';
+        } else {
+            acEl.style.display = 'none';
+            document.getElementById('acToggle').checked = false;
+            toggleAC();
+        }
         updateFare();
-        updateFare();
+    };
+
+    window.toggleAC = function() {
+        var on = document.getElementById('acToggle').checked;
+        document.getElementById('acNote').textContent = on
+            ? 'Ak A/C — machin fre ak konfo'
+            : 'San A/C — pi bon pri';
     };
 
     // ===== SEAT SELECTION =====
