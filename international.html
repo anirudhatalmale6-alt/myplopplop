@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop International — MyPlopPlop</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg-light);color:var(--text-dark);min-height:100vh;padding-bottom:80px}
+
+/* Top bar */
+.topbar{background:var(--primary-blue);color:#fff;padding:12px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+.topbar a{color:#fff;text-decoration:none;font-size:0.85rem;opacity:0.9}
+.topbar a:hover{opacity:1}
+.topbar-title{font-family:'Poppins',sans-serif;font-weight:700;font-size:1rem;flex:1}
+
+/* Hero */
+.intl-hero{background:linear-gradient(135deg,#00209F 0%,#001247 40%,#D21034 100%);padding:40px 20px 32px;text-align:center;color:#fff}
+.intl-hero h1{font-family:'Poppins',sans-serif;font-size:1.8rem;font-weight:800;margin-bottom:8px}
+.intl-hero p{opacity:0.9;font-size:0.95rem;max-width:500px;margin:0 auto}
+
+/* Country selector */
+.country-grid{display:flex;gap:12px;justify-content:center;padding:24px 20px;flex-wrap:wrap}
+.country-card{background:#fff;border-radius:16px;padding:20px 28px;text-align:center;cursor:pointer;border:2px solid var(--gray-200);transition:all 0.2s;min-width:140px;position:relative}
+.country-card:hover{border-color:var(--primary-blue);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,32,159,0.12)}
+.country-card.active{border-color:var(--primary-blue);background:var(--primary-blue-light)}
+.country-card.coming-soon{opacity:0.5;cursor:default}
+.country-card .flag{font-size:2.5rem;margin-bottom:8px;display:block}
+.country-card .cname{font-weight:600;font-size:0.95rem;color:var(--text-dark)}
+.country-card .cstores{font-size:0.8rem;color:var(--text-muted);margin-top:4px}
+.coming-badge{position:absolute;top:-8px;right:-8px;background:var(--warning);color:#fff;font-size:0.65rem;font-weight:700;padding:3px 8px;border-radius:20px}
+
+/* Section container */
+.section{max-width:900px;margin:0 auto;padding:0 16px}
+.section-title{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.2rem;padding:20px 0 12px;display:flex;align-items:center;gap:8px}
+
+/* Store list */
+.store-list{display:grid;gap:12px;padding-bottom:16px}
+.store-item{background:#fff;border-radius:14px;padding:16px;display:flex;gap:14px;align-items:center;cursor:pointer;border:2px solid transparent;transition:all 0.2s}
+.store-item:hover{border-color:var(--primary-blue-light);box-shadow:0 4px 16px rgba(0,0,0,0.06)}
+.store-item.active{border-color:var(--primary-blue);background:var(--primary-blue-light)}
+.store-logo{width:56px;height:56px;border-radius:12px;background:var(--gray-100);display:flex;align-items:center;justify-content:center;font-size:1.5rem;overflow:hidden;flex-shrink:0}
+.store-logo img{width:100%;height:100%;object-fit:cover}
+.store-info{flex:1;min-width:0}
+.store-info h3{font-size:0.95rem;font-weight:600;margin-bottom:2px}
+.store-info .store-meta{font-size:0.8rem;color:var(--text-muted);display:flex;gap:12px;flex-wrap:wrap}
+.store-products-count{background:var(--primary-blue-light);color:var(--primary-blue);font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:20px}
+
+/* Product grid */
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding-bottom:24px}
+.product-card{background:#fff;border-radius:14px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all 0.2s}
+.product-card:hover{border-color:var(--primary-blue-light);box-shadow:0 4px 16px rgba(0,0,0,0.08)}
+.product-card.in-cart{border-color:var(--success)}
+.product-img{height:140px;background:var(--gray-100);display:flex;align-items:center;justify-content:center;font-size:2.5rem;overflow:hidden}
+.product-img img{width:100%;height:100%;object-fit:cover}
+.product-body{padding:12px}
+.product-name{font-weight:600;font-size:0.85rem;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.product-store-name{font-size:0.75rem;color:var(--text-muted);margin-bottom:6px}
+.product-price{font-family:'Poppins',sans-serif;font-weight:700;color:var(--primary-red);font-size:1rem}
+.product-delivery{font-size:0.72rem;color:var(--text-muted);margin-top:4px}
+.product-actions{display:flex;gap:8px;margin-top:10px;align-items:center}
+.qty-btn{width:30px;height:30px;border-radius:8px;border:1px solid var(--gray-300);background:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.qty-btn:hover{background:var(--gray-100)}
+.qty-val{font-weight:600;font-size:0.9rem;min-width:20px;text-align:center}
+.add-btn{flex:1;background:var(--primary-blue);color:#fff;border:none;border-radius:8px;padding:8px;font-size:0.8rem;font-weight:600;cursor:pointer}
+.add-btn:hover{background:var(--primary-blue-dark)}
+
+/* Cart bar */
+.cart-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--gray-200);padding:12px 20px;display:none;align-items:center;gap:12px;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,0.08)}
+.cart-bar.show{display:flex}
+.cart-info{flex:1}
+.cart-count{font-weight:600;font-size:0.9rem}
+.cart-total{font-family:'Poppins',sans-serif;font-weight:700;color:var(--primary-red);font-size:1.1rem}
+.checkout-btn{background:var(--primary-red);color:#fff;border:none;border-radius:12px;padding:14px 28px;font-weight:700;font-size:0.95rem;cursor:pointer}
+.checkout-btn:hover{background:var(--primary-red-dark)}
+
+/* Checkout panel */
+.checkout-panel{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.5)}
+.checkout-panel.show{display:block}
+.checkout-sheet{position:absolute;bottom:0;left:0;right:0;max-height:90vh;background:#fff;border-radius:20px 20px 0 0;overflow-y:auto;padding:24px 20px 40px;animation:slideUp 0.3s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.checkout-sheet h2{font-family:'Poppins',sans-serif;font-size:1.3rem;margin-bottom:4px}
+.checkout-close{position:absolute;top:16px;right:16px;background:var(--gray-100);border:none;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer}
+.checkout-items{margin:16px 0;border-top:1px solid var(--gray-200);padding-top:12px}
+.checkout-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:0.9rem}
+.checkout-item .ci-name{flex:1}
+.checkout-item .ci-qty{color:var(--text-muted);margin:0 12px}
+.checkout-item .ci-price{font-weight:600}
+.checkout-item .ci-remove{background:none;border:none;color:var(--error);cursor:pointer;font-size:1.1rem;padding:0 4px}
+.checkout-total-row{display:flex;justify-content:space-between;padding:12px 0;border-top:2px solid var(--gray-200);font-family:'Poppins',sans-serif;font-weight:700;font-size:1.1rem}
+.checkout-total-row .ctr-price{color:var(--primary-red)}
+
+/* Delivery form */
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:12px;border:1px solid var(--gray-300);border-radius:10px;font-size:0.9rem;font-family:inherit}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--primary-blue);box-shadow:0 0 0 3px rgba(0,32,159,0.1)}
+
+/* Payment methods */
+.payment-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+.pay-method{background:#fff;border:2px solid var(--gray-200);border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all 0.2s}
+.pay-method:hover{border-color:var(--primary-blue-light)}
+.pay-method.selected{border-color:var(--primary-blue);background:var(--primary-blue-light)}
+.pay-method .pm-icon{font-size:1.5rem;margin-bottom:4px}
+.pay-method .pm-name{font-weight:600;font-size:0.8rem}
+.pay-method .pm-desc{font-size:0.7rem;color:var(--text-muted)}
+
+/* Receipt upload */
+.receipt-section{display:none;margin:16px 0;padding:16px;background:var(--warning-light);border-radius:12px}
+.receipt-section.show{display:block}
+.receipt-section h4{font-size:0.9rem;margin-bottom:8px}
+.file-upload-area{border:2px dashed var(--gray-300);border-radius:10px;padding:24px;text-align:center;cursor:pointer}
+.file-upload-area:hover{border-color:var(--primary-blue);background:var(--primary-blue-light)}
+.file-upload-area .upload-icon{font-size:2rem;margin-bottom:8px}
+.file-upload-area p{font-size:0.85rem;color:var(--text-muted)}
+
+.submit-order-btn{width:100%;background:var(--primary-red);color:#fff;border:none;border-radius:14px;padding:16px;font-family:'Poppins',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;margin-top:16px}
+.submit-order-btn:hover{background:var(--primary-red-dark)}
+.submit-order-btn:disabled{background:var(--gray-400);cursor:not-allowed}
+
+/* Order success */
+.order-success{display:none;text-align:center;padding:40px 20px}
+.order-success.show{display:block}
+.order-success .check-icon{font-size:4rem;margin-bottom:16px}
+.order-success h2{font-family:'Poppins',sans-serif;margin-bottom:8px}
+.order-success .order-num{background:var(--primary-blue-light);color:var(--primary-blue);padding:8px 16px;border-radius:8px;font-weight:700;display:inline-block;margin:12px 0}
+
+/* Category chips */
+.cat-chips{display:flex;gap:8px;overflow-x:auto;padding:0 0 12px;-webkit-overflow-scrolling:touch}
+.cat-chips::-webkit-scrollbar{display:none}
+.cat-chip{white-space:nowrap;padding:8px 16px;border-radius:20px;border:1px solid var(--gray-300);background:#fff;font-size:0.8rem;font-weight:500;cursor:pointer;transition:all 0.2s}
+.cat-chip:hover{border-color:var(--primary-blue)}
+.cat-chip.active{background:var(--primary-blue);color:#fff;border-color:var(--primary-blue)}
+
+/* Search */
+.search-bar{display:flex;gap:8px;margin-bottom:16px}
+.search-bar input{flex:1;padding:12px 16px;border:1px solid var(--gray-300);border-radius:12px;font-size:0.9rem}
+.search-bar input:focus{outline:none;border-color:var(--primary-blue)}
+
+/* Empty state */
+.empty-state{text-align:center;padding:48px 20px;color:var(--text-muted)}
+.empty-state .empty-icon{font-size:3rem;margin-bottom:12px}
+.empty-state p{font-size:0.95rem}
+
+/* Loading */
+.loading{text-align:center;padding:40px;color:var(--text-muted)}
+.loading .spinner{display:inline-block;width:32px;height:32px;border:3px solid var(--gray-200);border-top-color:var(--primary-blue);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Toast */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--primary-blue);color:#fff;padding:12px 24px;border-radius:12px;font-size:0.9rem;font-weight:500;z-index:300;opacity:0;transition:opacity 0.3s;pointer-events:none}
+.toast.show{opacity:1}
+.toast.error{background:var(--error)}
+.toast.success{background:var(--success)}
+
+/* Back button per view */
+.view-back{display:none;align-items:center;gap:6px;font-size:0.9rem;color:var(--primary-blue);cursor:pointer;padding:12px 0 4px;font-weight:500;background:none;border:none}
+.view-back:hover{text-decoration:underline}
+
+/* Responsive */
+@media(max-width:480px){
+  .intl-hero h1{font-size:1.4rem}
+  .country-card{padding:16px 20px;min-width:100px}
+  .product-grid{grid-template-columns:repeat(2,1fr)}
+  .payment-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html">← MyPlopPlop</a>
+  <span class="topbar-title">Shop International</span>
+</div>
+
+<div id="heroSection" class="intl-hero">
+  <h1>Shop International</h1>
+  <p>Buy from Dominican Republic and Panama. We handle everything — you just pick what you want.</p>
+</div>
+
+<!-- Step 1: Country Selection -->
+<div id="countrySection">
+  <div class="country-grid">
+    <div class="country-card" onclick="selectCountry('DO')">
+      <span class="flag">🇩🇴</span>
+      <div class="cname">Dominican Republic</div>
+      <div class="cstores" id="countDO">Loading...</div>
+    </div>
+    <div class="country-card" onclick="selectCountry('PA')">
+      <span class="flag">🇵🇦</span>
+      <div class="cname">Panama</div>
+      <div class="cstores" id="countPA">Loading...</div>
+    </div>
+    <div class="country-card coming-soon">
+      <span class="coming-badge">Soon</span>
+      <span class="flag">🇺🇸</span>
+      <div class="cname">United States</div>
+      <div class="cstores">Coming soon</div>
+    </div>
+  </div>
+</div>
+
+<!-- Step 2: Store Selection -->
+<div id="storeSection" class="section" style="display:none">
+  <button class="view-back" onclick="backToCountries()" style="display:flex">← Back to countries</button>
+  <div class="section-title" id="storeTitle">Stores</div>
+  <div class="cat-chips" id="storeCatChips"></div>
+  <div id="storeList" class="store-list"></div>
+</div>
+
+<!-- Step 3: Products -->
+<div id="productSection" class="section" style="display:none">
+  <button class="view-back" onclick="backToStores()" style="display:flex">← Back to stores</button>
+  <div id="productStoreHeader" style="display:flex;align-items:center;gap:12px;padding:16px 0">
+    <div id="pStoreImg" class="store-logo"></div>
+    <div>
+      <h2 id="pStoreName" style="font-family:'Poppins',sans-serif;font-size:1.1rem"></h2>
+      <div id="pStoreMeta" style="font-size:0.8rem;color:var(--text-muted)"></div>
+    </div>
+  </div>
+  <div class="search-bar">
+    <input id="productSearch" type="text" placeholder="Search products..." oninput="filterProducts()">
+  </div>
+  <div class="cat-chips" id="productCatChips"></div>
+  <div id="productGrid" class="product-grid"></div>
+</div>
+
+<!-- Cart bar -->
+<div id="cartBar" class="cart-bar">
+  <div class="cart-info">
+    <div class="cart-count" id="cartCount">0 items</div>
+    <div class="cart-total" id="cartTotal">0 HTG</div>
+  </div>
+  <button class="checkout-btn" onclick="openCheckout()">Checkout →</button>
+</div>
+
+<!-- Checkout panel -->
+<div id="checkoutPanel" class="checkout-panel">
+  <div class="checkout-sheet">
+    <button class="checkout-close" onclick="closeCheckout()">✕</button>
+    <h2>Order Summary</h2>
+    <p style="color:var(--text-muted);font-size:0.85rem" id="checkoutCountry"></p>
+
+    <div class="checkout-items" id="checkoutItems"></div>
+    <div class="checkout-total-row">
+      <span>Total</span>
+      <span class="ctr-price" id="checkoutTotal"></span>
+    </div>
+
+    <!-- Delivery info -->
+    <h3 style="font-family:'Poppins',sans-serif;font-size:1rem;margin:20px 0 12px">Delivery Address</h3>
+    <div class="form-group">
+      <label>Street Address</label>
+      <input id="delStreet" type="text" placeholder="123 Rue Example, Port-au-Prince">
+    </div>
+    <div class="form-group">
+      <label>City / Zone</label>
+      <input id="delCity" type="text" placeholder="Port-au-Prince">
+    </div>
+    <div class="form-group">
+      <label>Phone</label>
+      <input id="delPhone" type="tel" placeholder="+509 XXXX XXXX">
+    </div>
+
+    <!-- Payment -->
+    <h3 style="font-family:'Poppins',sans-serif;font-size:1rem;margin:20px 0 12px">Payment Method</h3>
+    <div class="payment-grid" id="paymentGrid">
+      <div class="pay-method" data-method="moncash" onclick="selectPayment(this)">
+        <div class="pm-icon">📱</div>
+        <div class="pm-name">MonCash</div>
+        <div class="pm-desc">Mobile money</div>
+      </div>
+      <div class="pay-method" data-method="natcash" onclick="selectPayment(this)">
+        <div class="pm-icon">📲</div>
+        <div class="pm-name">NatCash</div>
+        <div class="pm-desc">Mobile money</div>
+      </div>
+      <div class="pay-method" data-method="bank_transfer" onclick="selectPayment(this)">
+        <div class="pm-icon">🏦</div>
+        <div class="pm-name">Bank Transfer</div>
+        <div class="pm-desc">Local bank</div>
+      </div>
+      <div class="pay-method" data-method="zelle" onclick="selectPayment(this)">
+        <div class="pm-icon">⚡</div>
+        <div class="pm-name">Zelle</div>
+        <div class="pm-desc">US bank transfer</div>
+      </div>
+      <div class="pay-method" data-method="credit_card" onclick="selectPayment(this)">
+        <div class="pm-icon">💳</div>
+        <div class="pm-name">Credit Card</div>
+        <div class="pm-desc">Visa, Mastercard</div>
+      </div>
+      <div class="pay-method" data-method="debit_card" onclick="selectPayment(this)">
+        <div class="pm-icon">💳</div>
+        <div class="pm-name">Debit Card</div>
+        <div class="pm-desc">Any debit card</div>
+      </div>
+      <div class="pay-method" data-method="stripe" onclick="selectPayment(this)">
+        <div class="pm-icon">🔒</div>
+        <div class="pm-name">Stripe</div>
+        <div class="pm-desc">Secure payment</div>
+      </div>
+      <div class="pay-method" data-method="wire_transfer" onclick="selectPayment(this)">
+        <div class="pm-icon">🏛️</div>
+        <div class="pm-name">Wire Transfer</div>
+        <div class="pm-desc">International wire</div>
+      </div>
+    </div>
+
+    <!-- Receipt upload for manual payment -->
+    <div class="receipt-section" id="receiptSection">
+      <h4>Upload Payment Receipt</h4>
+      <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:12px">Upload your payment screenshot or receipt. Our team will verify and process your order.</p>
+      <div class="file-upload-area" onclick="document.getElementById('receiptFile').click()">
+        <div class="upload-icon">📄</div>
+        <p id="receiptLabel">Tap to upload receipt or screenshot</p>
+        <input type="file" id="receiptFile" accept="image/*,.pdf" style="display:none" onchange="onReceiptSelected(this)">
+      </div>
+      <div class="form-group" style="margin-top:12px">
+        <label>Transaction Reference (optional)</label>
+        <input id="txRef" type="text" placeholder="e.g. TXN-12345 or confirmation number">
+      </div>
+    </div>
+
+    <button class="submit-order-btn" id="submitOrderBtn" onclick="submitOrder()">Place Order</button>
+  </div>
+</div>
+
+<!-- Order success -->
+<div id="orderSuccess" class="order-success">
+  <div class="check-icon">✅</div>
+  <h2>Order Placed!</h2>
+  <p style="color:var(--text-muted);margin-bottom:12px">Your order has been submitted.</p>
+  <div class="order-num" id="successOrderNum"></div>
+  <p id="successPaymentMsg" style="color:var(--text-muted);font-size:0.85rem;margin:16px 0"></p>
+  <p style="font-size:0.85rem;color:var(--text-muted)">We'll notify you as your order progresses through each step.</p>
+  <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="orders.html" style="padding:12px 24px;background:var(--primary-blue);color:#fff;border-radius:12px;text-decoration:none;font-weight:600">View My Orders</a>
+    <button onclick="resetShop()" style="padding:12px 24px;background:var(--gray-100);border:none;border-radius:12px;font-weight:600;cursor:pointer">Continue Shopping</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<script src="js/api.js"></script>
+<script>
+var API_BASE = 'https://myplopplop-api.onrender.com';
+var currentCountry = null;
+var currentStore = null;
+var allStores = [];
+var allProducts = [];
+var cart = [];
+var selectedPayment = null;
+var selectedReceiptFile = null;
+var activeCatFilter = 'all';
+
+var COUNTRY_NAMES = { DO: 'Dominican Republic', PA: 'Panama', US: 'United States' };
+var COUNTRY_FLAGS = { DO: '🇩🇴', PA: '🇵🇦', US: '🇺🇸' };
+var CATEGORY_ICONS = { general: '🏪', electronics: '📱', clothing: '👗', home: '🏠', food: '🍽️', health: '💊', auto: '🚗', other: '📦' };
+
+function formatHTG(amount) {
+  return amount.toLocaleString('en') + ' HTG';
+}
+
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' ' + type : '');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(function() { t.className = 'toast'; }, 3000);
+}
+
+// ─── Load Country Store Counts ───
+async function loadCountryCounts() {
+  try {
+    var [dor, par] = await Promise.all([
+      fetch(API_BASE + '/api/international/stores?country=DO&limit=1').then(function(r) { return r.json(); }),
+      fetch(API_BASE + '/api/international/stores?country=PA&limit=1').then(function(r) { return r.json(); })
+    ]);
+    document.getElementById('countDO').textContent = (dor.pagination ? dor.pagination.total : 0) + ' stores';
+    document.getElementById('countPA').textContent = (par.pagination ? par.pagination.total : 0) + ' stores';
+  } catch(e) {
+    document.getElementById('countDO').textContent = 'Browse stores';
+    document.getElementById('countPA').textContent = 'Browse stores';
+  }
+}
+loadCountryCounts();
+
+// ─── Step 1: Select Country ───
+function selectCountry(code) {
+  currentCountry = code;
+  document.querySelectorAll('.country-card').forEach(function(c) { c.classList.remove('active'); });
+  event.currentTarget.classList.add('active');
+
+  document.getElementById('countrySection').style.display = 'none';
+  document.getElementById('heroSection').style.display = 'none';
+  document.getElementById('storeSection').style.display = 'block';
+  document.getElementById('storeTitle').innerHTML = COUNTRY_FLAGS[code] + ' ' + COUNTRY_NAMES[code] + ' — Stores';
+
+  loadStores(code);
+}
+
+function backToCountries() {
+  currentCountry = null;
+  currentStore = null;
+  document.getElementById('storeSection').style.display = 'none';
+  document.getElementById('productSection').style.display = 'none';
+  document.getElementById('countrySection').style.display = 'block';
+  document.getElementById('heroSection').style.display = 'block';
+}
+
+// ─── Step 2: Load & Display Stores ───
+async function loadStores(country) {
+  var list = document.getElementById('storeList');
+  list.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading stores...</p></div>';
+
+  try {
+    var res = await fetch(API_BASE + '/api/international/stores?country=' + country + '&limit=100');
+    var data = await res.json();
+    allStores = data.success ? data.data : [];
+  } catch(e) {
+    allStores = [];
+  }
+
+  // Category chips
+  var cats = {};
+  allStores.forEach(function(s) { cats[s.category] = (cats[s.category] || 0) + 1; });
+  var chipsHTML = '<span class="cat-chip active" onclick="filterStores(\'all\',this)">All (' + allStores.length + ')</span>';
+  Object.keys(cats).forEach(function(c) {
+    chipsHTML += '<span class="cat-chip" onclick="filterStores(\'' + c + '\',this)">' + (CATEGORY_ICONS[c] || '📦') + ' ' + c.charAt(0).toUpperCase() + c.slice(1) + ' (' + cats[c] + ')</span>';
+  });
+  document.getElementById('storeCatChips').innerHTML = chipsHTML;
+
+  renderStores(allStores);
+}
+
+function filterStores(cat, el) {
+  document.querySelectorAll('#storeCatChips .cat-chip').forEach(function(c) { c.classList.remove('active'); });
+  if (el) el.classList.add('active');
+  if (cat === 'all') renderStores(allStores);
+  else renderStores(allStores.filter(function(s) { return s.category === cat; }));
+}
+
+function renderStores(stores) {
+  var list = document.getElementById('storeList');
+  if (stores.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">🏪</div><p>No stores available yet for this country.<br>Check back soon!</p></div>';
+    return;
+  }
+
+  var html = '';
+  stores.forEach(function(s) {
+    html += '<div class="store-item" onclick="selectStore(\'' + s._id + '\')">';
+    html += '  <div class="store-logo">';
+    if (s.logo) html += '<img src="' + s.logo + '" alt="">';
+    else html += CATEGORY_ICONS[s.category] || '🏪';
+    html += '  </div>';
+    html += '  <div class="store-info">';
+    html += '    <h3>' + s.name + '</h3>';
+    html += '    <div class="store-meta">';
+    if (s.city) html += '<span>📍 ' + s.city + '</span>';
+    html += '<span>📦 ~' + s.estimatedDeliveryDays + ' days</span>';
+    html += '    </div>';
+    html += '  </div>';
+    html += '  <span class="store-products-count">' + (s.stats ? s.stats.totalProducts : 0) + ' items</span>';
+    html += '</div>';
+  });
+  list.innerHTML = html;
+}
+
+// ─── Step 3: Select Store & Load Products ───
+async function selectStore(storeId) {
+  currentStore = allStores.find(function(s) { return s._id === storeId; });
+  if (!currentStore) return;
+
+  document.getElementById('storeSection').style.display = 'none';
+  document.getElementById('productSection').style.display = 'block';
+
+  // Store header
+  var logoEl = document.getElementById('pStoreImg');
+  if (currentStore.logo) logoEl.innerHTML = '<img src="' + currentStore.logo + '" alt="">';
+  else logoEl.textContent = CATEGORY_ICONS[currentStore.category] || '🏪';
+  document.getElementById('pStoreName').textContent = currentStore.name;
+  document.getElementById('pStoreMeta').textContent = (currentStore.city || '') + ' • ~' + currentStore.estimatedDeliveryDays + ' days delivery';
+
+  var grid = document.getElementById('productGrid');
+  grid.innerHTML = '<div class="loading" style="grid-column:1/-1"><div class="spinner"></div><p>Loading products...</p></div>';
+
+  try {
+    var res = await fetch(API_BASE + '/api/international/stores/' + storeId);
+    var data = await res.json();
+    allProducts = data.success ? data.data.products : [];
+  } catch(e) {
+    allProducts = [];
+  }
+
+  // Category chips for products
+  var cats = {};
+  allProducts.forEach(function(p) { var c = p.category || 'General'; cats[c] = (cats[c] || 0) + 1; });
+  var chipsHTML = '<span class="cat-chip active" onclick="filterProductCat(\'all\',this)">All (' + allProducts.length + ')</span>';
+  Object.keys(cats).forEach(function(c) {
+    chipsHTML += '<span class="cat-chip" onclick="filterProductCat(\'' + c + '\',this)">' + c + ' (' + cats[c] + ')</span>';
+  });
+  document.getElementById('productCatChips').innerHTML = chipsHTML;
+  activeCatFilter = 'all';
+
+  renderProducts(allProducts);
+}
+
+function backToStores() {
+  currentStore = null;
+  allProducts = [];
+  document.getElementById('productSection').style.display = 'none';
+  document.getElementById('storeSection').style.display = 'block';
+}
+
+function filterProducts() {
+  var q = document.getElementById('productSearch').value.toLowerCase();
+  var filtered = allProducts.filter(function(p) {
+    var matchSearch = !q || p.name.toLowerCase().includes(q) || (p.description || '').toLowerCase().includes(q);
+    var matchCat = activeCatFilter === 'all' || p.category === activeCatFilter;
+    return matchSearch && matchCat;
+  });
+  renderProducts(filtered);
+}
+
+function filterProductCat(cat, el) {
+  activeCatFilter = cat;
+  document.querySelectorAll('#productCatChips .cat-chip').forEach(function(c) { c.classList.remove('active'); });
+  if (el) el.classList.add('active');
+  filterProducts();
+}
+
+function renderProducts(products) {
+  var grid = document.getElementById('productGrid');
+  if (products.length === 0) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📦</div><p>No products found</p></div>';
+    return;
+  }
+
+  var html = '';
+  products.forEach(function(p) {
+    var inCart = cart.find(function(c) { return c.product._id === p._id; });
+    var qty = inCart ? inCart.quantity : 0;
+
+    html += '<div class="product-card' + (qty > 0 ? ' in-cart' : '') + '">';
+    html += '  <div class="product-img">';
+    if (p.images && p.images.length > 0) html += '<img src="' + p.images[0] + '" alt="">';
+    else html += '📦';
+    html += '  </div>';
+    html += '  <div class="product-body">';
+    html += '    <div class="product-name">' + p.name + '</div>';
+    html += '    <div class="product-price">' + formatHTG(p.finalPriceHTG) + '</div>';
+    html += '    <div class="product-delivery">~' + (p.estimatedDeliveryDays || 7) + ' days delivery</div>';
+    html += '    <div class="product-actions">';
+    if (qty > 0) {
+      html += '<button class="qty-btn" onclick="event.stopPropagation();changeQty(\'' + p._id + '\',-1)">−</button>';
+      html += '<span class="qty-val">' + qty + '</span>';
+      html += '<button class="qty-btn" onclick="event.stopPropagation();changeQty(\'' + p._id + '\',1)">+</button>';
+    } else {
+      html += '<button class="add-btn" onclick="event.stopPropagation();addToCart(\'' + p._id + '\')">+ Add to Cart</button>';
+    }
+    html += '    </div>';
+    html += '  </div>';
+    html += '</div>';
+  });
+  grid.innerHTML = html;
+}
+
+// ─── Cart Management ───
+function addToCart(productId) {
+  var product = allProducts.find(function(p) { return p._id === productId; });
+  if (!product) return;
+
+  var existing = cart.find(function(c) { return c.product._id === productId; });
+  if (existing) {
+    existing.quantity++;
+  } else {
+    cart.push({ product: product, quantity: 1 });
+  }
+
+  showToast(product.name + ' added to cart', 'success');
+  updateCartBar();
+  renderProducts(getFilteredProducts());
+}
+
+function changeQty(productId, delta) {
+  var item = cart.find(function(c) { return c.product._id === productId; });
+  if (!item) return;
+
+  item.quantity += delta;
+  if (item.quantity <= 0) {
+    cart = cart.filter(function(c) { return c.product._id !== productId; });
+  }
+
+  updateCartBar();
+  renderProducts(getFilteredProducts());
+}
+
+function getFilteredProducts() {
+  var q = document.getElementById('productSearch').value.toLowerCase();
+  return allProducts.filter(function(p) {
+    var matchSearch = !q || p.name.toLowerCase().includes(q) || (p.description || '').toLowerCase().includes(q);
+    var matchCat = activeCatFilter === 'all' || p.category === activeCatFilter;
+    return matchSearch && matchCat;
+  });
+}
+
+function updateCartBar() {
+  var bar = document.getElementById('cartBar');
+  var total = 0;
+  var count = 0;
+  cart.forEach(function(c) { total += c.product.finalPriceHTG * c.quantity; count += c.quantity; });
+
+  if (count > 0) {
+    document.getElementById('cartCount').textContent = count + ' item' + (count !== 1 ? 's' : '');
+    document.getElementById('cartTotal').textContent = formatHTG(total);
+    bar.classList.add('show');
+  } else {
+    bar.classList.remove('show');
+  }
+}
+
+// ─── Checkout ───
+function openCheckout() {
+  if (cart.length === 0) return;
+
+  if (!API.isLoggedIn()) {
+    showToast('Please log in to place an order', 'error');
+    setTimeout(function() { window.location.href = 'login.html?redirect=international'; }, 1500);
+    return;
+  }
+
+  document.getElementById('checkoutCountry').textContent = COUNTRY_FLAGS[currentCountry] + ' Shipping from ' + COUNTRY_NAMES[currentCountry];
+
+  var itemsHTML = '';
+  var total = 0;
+  cart.forEach(function(c) {
+    var sub = c.product.finalPriceHTG * c.quantity;
+    total += sub;
+    itemsHTML += '<div class="checkout-item">';
+    itemsHTML += '  <span class="ci-name">' + c.product.name + '</span>';
+    itemsHTML += '  <span class="ci-qty">x' + c.quantity + '</span>';
+    itemsHTML += '  <span class="ci-price">' + formatHTG(sub) + '</span>';
+    itemsHTML += '  <button class="ci-remove" onclick="removeFromCheckout(\'' + c.product._id + '\')">✕</button>';
+    itemsHTML += '</div>';
+  });
+  document.getElementById('checkoutItems').innerHTML = itemsHTML;
+  document.getElementById('checkoutTotal').textContent = formatHTG(total);
+
+  document.getElementById('checkoutPanel').classList.add('show');
+}
+
+function closeCheckout() {
+  document.getElementById('checkoutPanel').classList.remove('show');
+}
+
+function removeFromCheckout(productId) {
+  cart = cart.filter(function(c) { return c.product._id !== productId; });
+  updateCartBar();
+  if (cart.length === 0) {
+    closeCheckout();
+    renderProducts(getFilteredProducts());
+  } else {
+    openCheckout();
+  }
+}
+
+function selectPayment(el) {
+  document.querySelectorAll('.pay-method').forEach(function(m) { m.classList.remove('selected'); });
+  el.classList.add('selected');
+  selectedPayment = el.getAttribute('data-method');
+
+  var needsReceipt = ['bank_transfer', 'zelle', 'wire_transfer'].includes(selectedPayment);
+  var receiptSec = document.getElementById('receiptSection');
+  if (needsReceipt) receiptSec.classList.add('show');
+  else receiptSec.classList.remove('show');
+}
+
+function onReceiptSelected(input) {
+  if (input.files && input.files[0]) {
+    selectedReceiptFile = input.files[0];
+    document.getElementById('receiptLabel').textContent = selectedReceiptFile.name;
+  }
+}
+
+async function submitOrder() {
+  if (cart.length === 0) return showToast('Cart is empty', 'error');
+  if (!selectedPayment) return showToast('Select a payment method', 'error');
+
+  var street = document.getElementById('delStreet').value.trim();
+  var city = document.getElementById('delCity').value.trim();
+  var phone = document.getElementById('delPhone').value.trim();
+  if (!street || !city || !phone) return showToast('Fill in delivery address', 'error');
+
+  var btn = document.getElementById('submitOrderBtn');
+  btn.disabled = true;
+  btn.textContent = 'Placing order...';
+
+  try {
+    var items = cart.map(function(c) {
+      return { productId: c.product._id, quantity: c.quantity };
+    });
+
+    var token = API.getToken();
+    var res = await fetch(API_BASE + '/api/international/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({
+        storeId: currentStore._id,
+        items: items,
+        paymentMethod: selectedPayment,
+        deliveryAddress: { street: street, city: city, phone: phone }
+      })
+    });
+    var data = await res.json();
+
+    if (!data.success) {
+      btn.disabled = false;
+      btn.textContent = 'Place Order';
+      return showToast(data.message || 'Failed to place order', 'error');
+    }
+
+    // Upload receipt if needed
+    if (selectedReceiptFile && ['bank_transfer', 'zelle', 'wire_transfer'].includes(selectedPayment)) {
+      var fd = new FormData();
+      fd.append('receipt', selectedReceiptFile);
+      var txRef = document.getElementById('txRef').value.trim();
+      if (txRef) fd.append('transactionRef', txRef);
+
+      await fetch(API_BASE + '/api/international/orders/' + data.data._id + '/payment-receipt', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token },
+        body: fd
+      });
+    }
+
+    // Show success
+    closeCheckout();
+    document.getElementById('heroSection').style.display = 'none';
+    document.getElementById('countrySection').style.display = 'none';
+    document.getElementById('storeSection').style.display = 'none';
+    document.getElementById('productSection').style.display = 'none';
+    document.getElementById('cartBar').classList.remove('show');
+
+    document.getElementById('successOrderNum').textContent = data.data.orderNumber;
+
+    var needsVerification = ['bank_transfer', 'zelle', 'wire_transfer'].includes(selectedPayment);
+    if (needsVerification) {
+      document.getElementById('successPaymentMsg').textContent = 'Your payment will be verified by our team. You\'ll receive a confirmation within 24 hours.';
+    } else {
+      document.getElementById('successPaymentMsg').textContent = 'Your payment is being processed. We\'ll start working on your order shortly.';
+    }
+
+    document.getElementById('orderSuccess').classList.add('show');
+    cart = [];
+
+  } catch(e) {
+    showToast('Network error. Please try again.', 'error');
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Place Order';
+}
+
+function resetShop() {
+  document.getElementById('orderSuccess').classList.remove('show');
+  document.getElementById('heroSection').style.display = 'block';
+  document.getElementById('countrySection').style.display = 'block';
+  currentCountry = null;
+  currentStore = null;
+  allProducts = [];
+  cart = [];
+  selectedPayment = null;
+  selectedReceiptFile = null;
+  updateCartBar();
+}
+</script>
+</body>
+</html>

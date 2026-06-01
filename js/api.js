@@ -203,6 +203,23 @@ const API = (() => {
         return await request('GET', '/api/chat/quick/replies');
     }
 
+    // International Cross-Border Shopping
+    async function intlGetStores(country, category) {
+        var qs = '?limit=100';
+        if (country) qs += '&country=' + country;
+        if (category) qs += '&category=' + category;
+        return await request('GET', '/api/international/stores' + qs);
+    }
+    async function intlGetStore(id) { return await request('GET', '/api/international/stores/' + id); }
+    async function intlGetProduct(id) { return await request('GET', '/api/international/products/' + id); }
+    async function intlCreateOrder(data) { return await request('POST', '/api/international/orders', data); }
+    async function intlGetMyOrders(page, status) {
+        var qs = '?page=' + (page || 1);
+        if (status) qs += '&status=' + status;
+        return await request('GET', '/api/international/orders/mine' + qs);
+    }
+    async function intlGetOrder(id) { return await request('GET', '/api/international/orders/' + id); }
+
     // Sol Groups
     async function solCreateGroup(data) { return await request('POST', '/api/sol', data); }
     async function solGetGroups() { return await request('GET', '/api/sol'); }
@@ -367,6 +384,7 @@ const API = (() => {
         solMyGroups, solJoin, solJoinByCode, solInvite, solGetMembers, solUpdateMember, solRemoveMember,
         solContribute, solVerifyContribution, solGetContributions,
         solGetPayouts, solGeneratePayout, solApprovePayout, solSendPayout,
-        solStartCycle, solGetCycle, solGetAudit
+        solStartCycle, solGetCycle, solGetAudit,
+        intlGetStores, intlGetStore, intlGetProduct, intlCreateOrder, intlGetMyOrders, intlGetOrder
     };
 })();

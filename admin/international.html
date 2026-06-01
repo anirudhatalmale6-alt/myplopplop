@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>International Commerce — Admin</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="stylesheet" href="../css/variables.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg-light);color:var(--text-dark);min-height:100vh}
+
+.topbar{background:var(--primary-blue);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px}
+.topbar a{color:#fff;text-decoration:none;opacity:0.9;font-size:0.85rem}
+.topbar h1{font-family:'Poppins',sans-serif;font-size:1.1rem;flex:1}
+
+.container{max-width:1100px;margin:0 auto;padding:16px}
+
+/* Stats */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+.stat-card{background:#fff;border-radius:14px;padding:20px;text-align:center}
+.stat-val{font-family:'Poppins',sans-serif;font-size:1.8rem;font-weight:800;color:var(--primary-blue)}
+.stat-label{font-size:0.8rem;color:var(--text-muted);margin-top:4px}
+
+/* Tabs */
+.tabs{display:flex;gap:8px;margin-bottom:20px;border-bottom:2px solid var(--gray-200);padding-bottom:0}
+.tab{padding:10px 20px;border:none;background:none;font-size:0.9rem;font-weight:600;color:var(--text-muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px}
+.tab.active{color:var(--primary-blue);border-bottom-color:var(--primary-blue)}
+
+/* Tables */
+.table-wrap{background:#fff;border-radius:14px;overflow:hidden;margin-bottom:20px}
+table{width:100%;border-collapse:collapse}
+th{background:var(--gray-50);padding:12px 16px;text-align:left;font-size:0.8rem;font-weight:600;color:var(--text-muted);text-transform:uppercase}
+td{padding:12px 16px;border-top:1px solid var(--gray-100);font-size:0.85rem}
+tr:hover td{background:var(--gray-50)}
+
+/* Badges */
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:0.72rem;font-weight:600}
+.badge-green{background:var(--success-light);color:#059669}
+.badge-yellow{background:var(--warning-light);color:#B45309}
+.badge-red{background:var(--error-light);color:#DC2626}
+.badge-blue{background:var(--info-light);color:#2563EB}
+
+/* Buttons */
+.btn{padding:8px 16px;border:none;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer}
+.btn-primary{background:var(--primary-blue);color:#fff}
+.btn-primary:hover{background:var(--primary-blue-dark)}
+.btn-success{background:var(--success);color:#fff}
+.btn-danger{background:var(--error);color:#fff}
+.btn-sm{padding:5px 12px;font-size:0.78rem}
+.btn-outline{background:#fff;border:1px solid var(--gray-300);color:var(--text-dark)}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:#fff;border-radius:16px;padding:24px;width:90%;max-width:600px;max-height:85vh;overflow-y:auto}
+.modal h2{font-family:'Poppins',sans-serif;font-size:1.2rem;margin-bottom:16px}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-weight:600;font-size:0.85rem;margin-bottom:6px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px;border:1px solid var(--gray-300);border-radius:8px;font-size:0.9rem;font-family:inherit}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary-blue)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-actions{display:flex;gap:8px;margin-top:16px}
+
+/* Price calc */
+.price-calc{background:var(--primary-blue-light);border-radius:10px;padding:16px;margin:12px 0}
+.price-calc .calc-row{display:flex;justify-content:space-between;font-size:0.85rem;padding:4px 0}
+.price-calc .calc-total{border-top:2px solid var(--primary-blue);padding-top:8px;margin-top:8px;font-weight:700;font-family:'Poppins',sans-serif}
+
+/* Actions bar */
+.actions-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.actions-bar .search-input{flex:1;padding:10px 16px;border:1px solid var(--gray-300);border-radius:10px;font-size:0.9rem;min-width:200px}
+
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:10px;color:#fff;font-weight:500;z-index:200;opacity:0;transition:opacity 0.3s}
+.toast.show{opacity:1}
+.toast.success{background:var(--success)}
+.toast.error{background:var(--error)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="dashboard.html">← Admin</a>
+  <h1>International Commerce</h1>
+</div>
+
+<div class="container">
+  <!-- Stats -->
+  <div class="stats-grid" id="statsGrid">
+    <div class="stat-card"><div class="stat-val" id="statStores">-</div><div class="stat-label">Stores</div></div>
+    <div class="stat-card"><div class="stat-val" id="statProducts">-</div><div class="stat-label">Products</div></div>
+    <div class="stat-card"><div class="stat-val" id="statOrders">-</div><div class="stat-label">Orders</div></div>
+    <div class="stat-card"><div class="stat-val" id="statPending">-</div><div class="stat-label">Pending Payments</div></div>
+    <div class="stat-card"><div class="stat-val" id="statRevenue">-</div><div class="stat-label">Revenue (HTG)</div></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('stores')">Stores</button>
+    <button class="tab" onclick="showTab('products')">Products</button>
+    <button class="tab" onclick="showTab('orders')">Orders</button>
+    <button class="tab" onclick="showTab('payments')">Payment Verification</button>
+  </div>
+
+  <!-- Stores Tab -->
+  <div id="tab-stores">
+    <div class="actions-bar">
+      <button class="btn btn-primary" onclick="openAddStore()">+ Add Store</button>
+      <select id="storeCountryFilter" onchange="loadStores()" style="padding:10px;border:1px solid var(--gray-300);border-radius:8px">
+        <option value="">All Countries</option>
+        <option value="DO">Dominican Republic</option>
+        <option value="PA">Panama</option>
+        <option value="US">United States</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Store</th><th>Country</th><th>Category</th><th>Products</th><th>Orders</th><th>Fees</th><th>Actions</th></tr></thead>
+        <tbody id="storesTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Products Tab -->
+  <div id="tab-products" style="display:none">
+    <div class="actions-bar">
+      <button class="btn btn-primary" onclick="openAddProduct()">+ Add Product</button>
+      <button class="btn btn-outline" onclick="openCSVImport()">Import CSV</button>
+      <select id="productStoreFilter" onchange="loadProducts()" style="padding:10px;border:1px solid var(--gray-300);border-radius:8px">
+        <option value="">All Stores</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Product</th><th>Store</th><th>Source Price</th><th>HTG Price</th><th>Stock</th><th>Orders</th><th>Actions</th></tr></thead>
+        <tbody id="productsTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Orders Tab -->
+  <div id="tab-orders" style="display:none">
+    <div class="actions-bar">
+      <select id="orderStatusFilter" onchange="loadOrders()" style="padding:10px;border:1px solid var(--gray-300);border-radius:8px">
+        <option value="">All Statuses</option>
+        <option value="submitted">Submitted</option>
+        <option value="payment_received">Payment Received</option>
+        <option value="payment_verified">Verified</option>
+        <option value="purchase_authorized">Authorized</option>
+        <option value="purchased">Purchased</option>
+        <option value="pickup">Pickup</option>
+        <option value="shipping">Shipping</option>
+        <option value="delivered">Delivered</option>
+        <option value="completed">Completed</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+      <select id="orderCountryFilter" onchange="loadOrders()" style="padding:10px;border:1px solid var(--gray-300);border-radius:8px">
+        <option value="">All Countries</option>
+        <option value="DO">DR</option>
+        <option value="PA">Panama</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Order #</th><th>Customer</th><th>Store</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="ordersTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Payments Tab -->
+  <div id="tab-payments" style="display:none">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Order #</th><th>Customer</th><th>Amount</th><th>Method</th><th>Ref</th><th>Receipt</th><th>Actions</th></tr></thead>
+        <tbody id="paymentsTable"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Add Store Modal -->
+<div class="modal-overlay" id="storeModal">
+  <div class="modal">
+    <h2 id="storeModalTitle">Add Store</h2>
+    <input type="hidden" id="editStoreId">
+    <div class="form-row">
+      <div class="form-group"><label>Store Name</label><input id="sName" type="text"></div>
+      <div class="form-group"><label>Country</label>
+        <select id="sCountry"><option value="DO">Dominican Republic</option><option value="PA">Panama</option><option value="US">United States</option></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Category</label>
+        <select id="sCategory"><option value="general">General</option><option value="electronics">Electronics</option><option value="clothing">Clothing</option><option value="home">Home</option><option value="food">Food</option><option value="health">Health</option><option value="auto">Auto</option><option value="other">Other</option></select>
+      </div>
+      <div class="form-group"><label>City</label><input id="sCity" type="text"></div>
+    </div>
+    <div class="form-group"><label>Description</label><textarea id="sDesc" rows="2"></textarea></div>
+    <div class="form-group"><label>Logo URL</label><input id="sLogo" type="text" placeholder="https://..."></div>
+    <div class="form-row">
+      <div class="form-group"><label>Service Fee %</label><input id="sServiceFee" type="number" value="10"></div>
+      <div class="form-group"><label>Logistics Fee (HTG)</label><input id="sLogisticsFee" type="number" value="0"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Customs Duty %</label><input id="sCustomsDuty" type="number" value="5"></div>
+      <div class="form-group"><label>Est. Delivery Days</label><input id="sDeliveryDays" type="number" value="7"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="saveStore()">Save Store</button>
+      <button class="btn btn-outline" onclick="closeModal('storeModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Product Modal -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <h2 id="productModalTitle">Add Product</h2>
+    <input type="hidden" id="editProductId">
+    <div class="form-group"><label>Store</label>
+      <select id="pStore" onchange="updatePriceCalc()"></select>
+    </div>
+    <div class="form-group"><label>Product Name</label><input id="pName" type="text"></div>
+    <div class="form-group"><label>Description</label><textarea id="pDesc" rows="2"></textarea></div>
+    <div class="form-group"><label>Category</label><input id="pCategory" type="text" placeholder="e.g. Electronics, Clothing"></div>
+    <div class="form-group"><label>Image URL</label><input id="pImage" type="text" placeholder="https://..."></div>
+    <div class="form-row">
+      <div class="form-group"><label>Source Price</label><input id="pSourcePrice" type="number" step="0.01" oninput="updatePriceCalc()"></div>
+      <div class="form-group"><label>Currency</label>
+        <select id="pCurrency" onchange="updatePriceCalc()"><option value="USD">USD</option><option value="DOP">DOP (Dominican Peso)</option><option value="PAB">PAB (Balboa)</option></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Exchange Rate (to HTG)</label><input id="pExchangeRate" type="number" step="0.01" value="132" oninput="updatePriceCalc()"></div>
+      <div class="form-group"><label>Est. Delivery Days</label><input id="pDeliveryDays" type="number" value="7"></div>
+    </div>
+
+    <div class="price-calc" id="priceCalc">
+      <div class="calc-row"><span>Base (source x rate)</span><span id="calcBase">0 HTG</span></div>
+      <div class="calc-row"><span>Service Fee</span><span id="calcService">0 HTG</span></div>
+      <div class="calc-row"><span>Logistics Fee</span><span id="calcLogistics">0 HTG</span></div>
+      <div class="calc-row"><span>Customs/Duty</span><span id="calcCustoms">0 HTG</span></div>
+      <div class="calc-row calc-total"><span>Final Price</span><span id="calcFinal">0 HTG</span></div>
+    </div>
+
+    <div class="form-group"><label>Override Final Price (HTG) — leave empty for auto-calc</label><input id="pFinalOverride" type="number" placeholder="Leave empty for auto-calculated price"></div>
+
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="saveProduct()">Save Product</button>
+      <button class="btn btn-outline" onclick="closeModal('productModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- CSV Import Modal -->
+<div class="modal-overlay" id="csvModal">
+  <div class="modal">
+    <h2>Import Products from CSV</h2>
+    <div class="form-group"><label>Store</label><select id="csvStore"></select></div>
+    <div class="form-group">
+      <label>CSV/Excel File</label>
+      <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:8px">Columns: name, description, category, sourcePrice, sourceCurrency, exchangeRate, image, deliveryDays, finalPriceHTG (optional)</p>
+      <input type="file" id="csvFile" accept=".csv,.xlsx,.xls">
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="uploadCSV()">Upload & Import</button>
+      <button class="btn btn-outline" onclick="closeModal('csvModal')">Cancel</button>
+    </div>
+    <div id="csvResult" style="margin-top:12px;display:none"></div>
+  </div>
+</div>
+
+<!-- Order Detail Modal -->
+<div class="modal-overlay" id="orderModal">
+  <div class="modal">
+    <h2>Order Details</h2>
+    <div id="orderDetailContent"></div>
+    <div class="form-actions" style="margin-top:16px">
+      <select id="orderNewStatus" style="padding:8px;border:1px solid var(--gray-300);border-radius:8px;flex:1">
+        <option value="">Change status...</option>
+        <option value="payment_received">Payment Received</option>
+        <option value="payment_verified">Payment Verified</option>
+        <option value="purchase_authorized">Purchase Authorized</option>
+        <option value="purchased">Purchased</option>
+        <option value="pickup">Pickup</option>
+        <option value="shipping">Shipping</option>
+        <option value="delivered">Delivered</option>
+        <option value="completed">Completed</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+      <input id="orderTrackingNum" type="text" placeholder="Tracking #" style="padding:8px;border:1px solid var(--gray-300);border-radius:8px;width:140px">
+      <button class="btn btn-primary" onclick="updateOrderStatus()">Update</button>
+      <button class="btn btn-outline" onclick="closeModal('orderModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="../js/api.js"></script>
+<script>
+var API_BASE = 'https://myplopplop-api.onrender.com';
+var INTL = '/api/international';
+var allStoresCache = [];
+var currentOrderId = null;
+
+var COUNTRY_NAMES = { DO: 'DR', PA: 'Panama', US: 'USA' };
+var STATUS_BADGES = {
+  submitted: 'badge-blue', payment_received: 'badge-yellow', payment_verified: 'badge-green',
+  purchase_authorized: 'badge-blue', purchased: 'badge-blue', pickup: 'badge-yellow',
+  shipping: 'badge-yellow', delivered: 'badge-green', completed: 'badge-green',
+  cancelled: 'badge-red', refunded: 'badge-red'
+};
+
+function formatHTG(n) { return (n || 0).toLocaleString('en') + ' HTG'; }
+
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show ' + (type || 'success');
+  clearTimeout(window._tt); window._tt = setTimeout(function() { t.className = 'toast'; }, 3000);
+}
+
+function headers() {
+  var h = { 'Content-Type': 'application/json' };
+  var token = API.getToken();
+  if (token) h['Authorization'] = 'Bearer ' + token;
+  return h;
+}
+
+function authHeaders() {
+  var h = {};
+  var token = API.getToken();
+  if (token) h['Authorization'] = 'Bearer ' + token;
+  return h;
+}
+
+// ─── Load Stats ───
+async function loadStats() {
+  try {
+    var res = await fetch(API_BASE + INTL + '/admin/stats', { headers: headers() });
+    var d = (await res.json()).data;
+    document.getElementById('statStores').textContent = d.totalStores;
+    document.getElementById('statProducts').textContent = d.totalProducts;
+    document.getElementById('statOrders').textContent = d.totalOrders;
+    document.getElementById('statPending').textContent = d.pendingPayments;
+    document.getElementById('statRevenue').textContent = formatHTG(d.totalRevenue);
+  } catch(e) {}
+}
+
+// ─── Tabs ───
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  event.currentTarget.classList.add('active');
+  ['stores','products','orders','payments'].forEach(function(t) {
+    document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
+  });
+  if (name === 'stores') loadStores();
+  if (name === 'products') loadProducts();
+  if (name === 'orders') loadOrders();
+  if (name === 'payments') loadPendingPayments();
+}
+
+// ─── Stores ───
+async function loadStores() {
+  var country = document.getElementById('storeCountryFilter').value;
+  var qs = '?limit=100';
+  if (country) qs += '&country=' + country;
+  try {
+    var res = await fetch(API_BASE + INTL + '/stores' + qs);
+    var data = await res.json();
+    allStoresCache = data.data || [];
+    populateStoreDropdowns();
+    var html = '';
+    allStoresCache.forEach(function(s) {
+      html += '<tr>';
+      html += '<td><strong>' + s.name + '</strong></td>';
+      html += '<td>' + (COUNTRY_NAMES[s.country] || s.country) + '</td>';
+      html += '<td>' + s.category + '</td>';
+      html += '<td>' + (s.stats ? s.stats.totalProducts : 0) + '</td>';
+      html += '<td>' + (s.stats ? s.stats.totalOrders : 0) + '</td>';
+      html += '<td>' + s.serviceFeePercent + '% + ' + (s.logisticsFeeHTG || 0) + ' + ' + s.customsDutyPercent + '%</td>';
+      html += '<td><button class="btn btn-sm btn-outline" onclick="editStore(\'' + s._id + '\')">Edit</button></td>';
+      html += '</tr>';
+    });
+    document.getElementById('storesTable').innerHTML = html || '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-muted)">No stores yet. Click "Add Store" to get started.</td></tr>';
+  } catch(e) {
+    document.getElementById('storesTable').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--error)">Error loading stores</td></tr>';
+  }
+}
+
+function populateStoreDropdowns() {
+  var opts = '<option value="">Select store...</option>';
+  allStoresCache.forEach(function(s) {
+    opts += '<option value="' + s._id + '">' + s.name + ' (' + (COUNTRY_NAMES[s.country] || s.country) + ')</option>';
+  });
+  var pStore = document.getElementById('pStore');
+  var csvStore = document.getElementById('csvStore');
+  var pfStore = document.getElementById('productStoreFilter');
+  if (pStore) pStore.innerHTML = opts;
+  if (csvStore) csvStore.innerHTML = opts;
+  if (pfStore) pfStore.innerHTML = '<option value="">All Stores</option>' + opts.replace('Select store...', 'All Stores');
+}
+
+function openAddStore() {
+  document.getElementById('storeModalTitle').textContent = 'Add Store';
+  document.getElementById('editStoreId').value = '';
+  document.getElementById('sName').value = '';
+  document.getElementById('sCountry').value = 'DO';
+  document.getElementById('sCategory').value = 'general';
+  document.getElementById('sCity').value = '';
+  document.getElementById('sDesc').value = '';
+  document.getElementById('sLogo').value = '';
+  document.getElementById('sServiceFee').value = '10';
+  document.getElementById('sLogisticsFee').value = '0';
+  document.getElementById('sCustomsDuty').value = '5';
+  document.getElementById('sDeliveryDays').value = '7';
+  document.getElementById('storeModal').classList.add('show');
+}
+
+function editStore(id) {
+  var s = allStoresCache.find(function(x) { return x._id === id; });
+  if (!s) return;
+  document.getElementById('storeModalTitle').textContent = 'Edit Store';
+  document.getElementById('editStoreId').value = id;
+  document.getElementById('sName').value = s.name;
+  document.getElementById('sCountry').value = s.country;
+  document.getElementById('sCategory').value = s.category;
+  document.getElementById('sCity').value = s.city || '';
+  document.getElementById('sDesc').value = s.description || '';
+  document.getElementById('sLogo').value = s.logo || '';
+  document.getElementById('sServiceFee').value = s.serviceFeePercent;
+  document.getElementById('sLogisticsFee').value = s.logisticsFeeHTG || 0;
+  document.getElementById('sCustomsDuty').value = s.customsDutyPercent;
+  document.getElementById('sDeliveryDays').value = s.estimatedDeliveryDays;
+  document.getElementById('storeModal').classList.add('show');
+}
+
+async function saveStore() {
+  var body = {
+    name: document.getElementById('sName').value,
+    country: document.getElementById('sCountry').value,
+    category: document.getElementById('sCategory').value,
+    city: document.getElementById('sCity').value,
+    description: document.getElementById('sDesc').value,
+    logo: document.getElementById('sLogo').value,
+    serviceFeePercent: parseInt(document.getElementById('sServiceFee').value) || 10,
+    logisticsFeeHTG: parseInt(document.getElementById('sLogisticsFee').value) || 0,
+    customsDutyPercent: parseInt(document.getElementById('sCustomsDuty').value) || 5,
+    estimatedDeliveryDays: parseInt(document.getElementById('sDeliveryDays').value) || 7
+  };
+  if (!body.name) return showToast('Store name required', 'error');
+
+  var editId = document.getElementById('editStoreId').value;
+  var url = editId ? INTL + '/admin/stores/' + editId : INTL + '/admin/stores';
+  var method = editId ? 'PUT' : 'POST';
+
+  try {
+    var res = await fetch(API_BASE + url, { method: method, headers: headers(), body: JSON.stringify(body) });
+    var data = await res.json();
+    if (data.success) {
+      showToast('Store saved!', 'success');
+      closeModal('storeModal');
+      loadStores();
+      loadStats();
+    } else {
+      showToast(data.message || 'Error saving store', 'error');
+    }
+  } catch(e) { showToast('Network error', 'error'); }
+}
+
+// ─── Products ───
+async function loadProducts() {
+  var storeId = document.getElementById('productStoreFilter').value;
+  var url = storeId ? INTL + '/stores/' + storeId : INTL + '/stores';
+
+  try {
+    if (storeId) {
+      var res = await fetch(API_BASE + INTL + '/stores/' + storeId);
+      var data = await res.json();
+      var products = data.success ? data.data.products : [];
+      renderProductsTable(products);
+    } else {
+      var allProducts = [];
+      for (var i = 0; i < allStoresCache.length; i++) {
+        var res2 = await fetch(API_BASE + INTL + '/stores/' + allStoresCache[i]._id);
+        var d2 = await res2.json();
+        if (d2.success && d2.data.products) {
+          d2.data.products.forEach(function(p) { p._storeName = d2.data.store.name; });
+          allProducts = allProducts.concat(d2.data.products);
+        }
+      }
+      renderProductsTable(allProducts);
+    }
+  } catch(e) {
+    document.getElementById('productsTable').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--error)">Error loading products</td></tr>';
+  }
+}
+
+function renderProductsTable(products) {
+  var html = '';
+  products.forEach(function(p) {
+    html += '<tr>';
+    html += '<td><strong>' + p.name + '</strong><div style="font-size:0.75rem;color:var(--text-muted)">' + (p.category || '') + '</div></td>';
+    html += '<td>' + (p._storeName || '-') + '</td>';
+    html += '<td>' + p.sourcePrice + ' ' + p.sourceCurrency + '</td>';
+    html += '<td><strong>' + formatHTG(p.finalPriceHTG) + '</strong></td>';
+    html += '<td>' + (p.inStock ? '<span class="badge badge-green">In Stock</span>' : '<span class="badge badge-red">Out</span>') + '</td>';
+    html += '<td>' + (p.orderCount || 0) + '</td>';
+    html += '<td><button class="btn btn-sm btn-outline" onclick="editProduct(\'' + p._id + '\')">Edit</button></td>';
+    html += '</tr>';
+  });
+  document.getElementById('productsTable').innerHTML = html || '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-muted)">No products yet</td></tr>';
+}
+
+function openAddProduct() {
+  document.getElementById('productModalTitle').textContent = 'Add Product';
+  document.getElementById('editProductId').value = '';
+  document.getElementById('pName').value = '';
+  document.getElementById('pDesc').value = '';
+  document.getElementById('pCategory').value = '';
+  document.getElementById('pImage').value = '';
+  document.getElementById('pSourcePrice').value = '';
+  document.getElementById('pCurrency').value = 'USD';
+  document.getElementById('pExchangeRate').value = '132';
+  document.getElementById('pDeliveryDays').value = '7';
+  document.getElementById('pFinalOverride').value = '';
+  updatePriceCalc();
+  document.getElementById('productModal').classList.add('show');
+}
+
+async function editProduct(id) {
+  try {
+    var res = await fetch(API_BASE + INTL + '/products/' + id);
+    var data = await res.json();
+    if (!data.success) return;
+    var p = data.data;
+    document.getElementById('productModalTitle').textContent = 'Edit Product';
+    document.getElementById('editProductId').value = id;
+    document.getElementById('pStore').value = p.store._id || p.store;
+    document.getElementById('pName').value = p.name;
+    document.getElementById('pDesc').value = p.description || '';
+    document.getElementById('pCategory').value = p.category || '';
+    document.getElementById('pImage').value = (p.images && p.images[0]) || '';
+    document.getElementById('pSourcePrice').value = p.sourcePrice;
+    document.getElementById('pCurrency').value = p.sourceCurrency;
+    document.getElementById('pExchangeRate').value = p.exchangeRate;
+    document.getElementById('pDeliveryDays').value = p.estimatedDeliveryDays || 7;
+    document.getElementById('pFinalOverride').value = '';
+    updatePriceCalc();
+    document.getElementById('productModal').classList.add('show');
+  } catch(e) { showToast('Error loading product', 'error'); }
+}
+
+function updatePriceCalc() {
+  var price = parseFloat(document.getElementById('pSourcePrice').value) || 0;
+  var rate = parseFloat(document.getElementById('pExchangeRate').value) || 1;
+  var storeId = document.getElementById('pStore').value;
+  var store = allStoresCache.find(function(s) { return s._id === storeId; });
+
+  var base = Math.round(price * rate);
+  var servicePct = store ? store.serviceFeePercent : 10;
+  var service = Math.round(base * servicePct / 100);
+  var logistics = store ? (store.logisticsFeeHTG || 0) : 0;
+  var customsPct = store ? store.customsDutyPercent : 5;
+  var customs = Math.round(base * customsPct / 100);
+  var total = base + service + logistics + customs;
+
+  document.getElementById('calcBase').textContent = formatHTG(base);
+  document.getElementById('calcService').textContent = formatHTG(service) + ' (' + servicePct + '%)';
+  document.getElementById('calcLogistics').textContent = formatHTG(logistics);
+  document.getElementById('calcCustoms').textContent = formatHTG(customs) + ' (' + customsPct + '%)';
+  document.getElementById('calcFinal').textContent = formatHTG(total);
+}
+
+async function saveProduct() {
+  var storeId = document.getElementById('pStore').value;
+  if (!storeId) return showToast('Select a store', 'error');
+  var name = document.getElementById('pName').value;
+  if (!name) return showToast('Product name required', 'error');
+
+  var body = {
+    store: storeId,
+    name: name,
+    description: document.getElementById('pDesc').value,
+    category: document.getElementById('pCategory').value,
+    images: document.getElementById('pImage').value ? [document.getElementById('pImage').value] : [],
+    sourcePrice: parseFloat(document.getElementById('pSourcePrice').value) || 0,
+    sourceCurrency: document.getElementById('pCurrency').value,
+    exchangeRate: parseFloat(document.getElementById('pExchangeRate').value) || 1,
+    estimatedDeliveryDays: parseInt(document.getElementById('pDeliveryDays').value) || 7
+  };
+  var override = document.getElementById('pFinalOverride').value;
+  if (override) body.finalPriceHTG = parseInt(override);
+
+  var editId = document.getElementById('editProductId').value;
+  var url = editId ? INTL + '/admin/products/' + editId : INTL + '/admin/products';
+  var method = editId ? 'PUT' : 'POST';
+
+  try {
+    var res = await fetch(API_BASE + url, { method: method, headers: headers(), body: JSON.stringify(body) });
+    var data = await res.json();
+    if (data.success) {
+      showToast('Product saved!', 'success');
+      closeModal('productModal');
+      loadProducts();
+      loadStats();
+    } else {
+      showToast(data.message || 'Error saving product', 'error');
+    }
+  } catch(e) { showToast('Network error', 'error'); }
+}
+
+// ─── CSV Import ───
+function openCSVImport() {
+  document.getElementById('csvResult').style.display = 'none';
+  document.getElementById('csvFile').value = '';
+  document.getElementById('csvModal').classList.add('show');
+}
+
+async function uploadCSV() {
+  var storeId = document.getElementById('csvStore').value;
+  if (!storeId) return showToast('Select a store', 'error');
+  var file = document.getElementById('csvFile').files[0];
+  if (!file) return showToast('Select a file', 'error');
+
+  var fd = new FormData();
+  fd.append('file', file);
+
+  try {
+    var res = await fetch(API_BASE + INTL + '/admin/stores/' + storeId + '/import', {
+      method: 'POST', headers: authHeaders(), body: fd
+    });
+    var data = await res.json();
+    var resultDiv = document.getElementById('csvResult');
+    resultDiv.style.display = 'block';
+    if (data.success) {
+      resultDiv.innerHTML = '<div style="padding:12px;background:var(--success-light);border-radius:8px"><strong>Imported ' + data.data.imported + ' of ' + data.data.total + ' products</strong>' + (data.data.errors.length > 0 ? '<br><br>Errors:<br>' + data.data.errors.join('<br>') : '') + '</div>';
+      loadStats();
+    } else {
+      resultDiv.innerHTML = '<div style="padding:12px;background:var(--error-light);border-radius:8px">' + (data.message || 'Import failed') + '</div>';
+    }
+  } catch(e) { showToast('Upload error', 'error'); }
+}
+
+// ─── Orders ───
+async function loadOrders() {
+  var status = document.getElementById('orderStatusFilter').value;
+  var country = document.getElementById('orderCountryFilter').value;
+  var qs = '?limit=50';
+  if (status) qs += '&status=' + status;
+  if (country) qs += '&country=' + country;
+
+  try {
+    var res = await fetch(API_BASE + INTL + '/admin/orders' + qs, { headers: headers() });
+    var data = await res.json();
+    var orders = data.data || [];
+    var html = '';
+    orders.forEach(function(o) {
+      var itemNames = o.items.map(function(i) { return i.name; }).join(', ');
+      html += '<tr>';
+      html += '<td><strong>' + o.orderNumber + '</strong><div style="font-size:0.72rem;color:var(--text-muted)">' + new Date(o.createdAt).toLocaleDateString() + '</div></td>';
+      html += '<td>' + (o.customer ? (o.customer.firstName || '') + ' ' + (o.customer.lastName || '') : '-') + '</td>';
+      html += '<td>' + (o.store ? o.store.name : '-') + '</td>';
+      html += '<td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="' + itemNames + '">' + o.items.length + ' items</td>';
+      html += '<td><strong>' + formatHTG(o.totalHTG) + '</strong></td>';
+      html += '<td>' + o.paymentMethod.replace('_', ' ') + '</td>';
+      html += '<td><span class="badge ' + (STATUS_BADGES[o.status] || 'badge-blue') + '">' + o.status.replace('_', ' ') + '</span></td>';
+      html += '<td><button class="btn btn-sm btn-outline" onclick="openOrder(\'' + o._id + '\')">View</button></td>';
+      html += '</tr>';
+    });
+    document.getElementById('ordersTable').innerHTML = html || '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted)">No orders</td></tr>';
+  } catch(e) {
+    document.getElementById('ordersTable').innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--error)">Error loading orders</td></tr>';
+  }
+}
+
+async function openOrder(id) {
+  currentOrderId = id;
+  try {
+    var res = await fetch(API_BASE + INTL + '/orders/' + id, { headers: headers() });
+    var data = await res.json();
+    if (!data.success) return;
+    var o = data.data;
+
+    var html = '<div style="margin-bottom:12px"><strong>Order:</strong> ' + o.orderNumber + '</div>';
+    html += '<div style="margin-bottom:8px"><strong>Status:</strong> <span class="badge ' + (STATUS_BADGES[o.status] || 'badge-blue') + '">' + o.status.replace('_', ' ') + '</span></div>';
+    html += '<div style="margin-bottom:8px"><strong>Payment:</strong> ' + o.paymentMethod.replace('_', ' ');
+    if (o.paymentVerification) html += ' — <span class="badge ' + ({'approved':'badge-green','rejected':'badge-red','submitted':'badge-yellow','pending':'badge-blue'}[o.paymentVerification.status] || '') + '">' + o.paymentVerification.status + '</span>';
+    html += '</div>';
+    html += '<div style="margin-bottom:8px"><strong>Total:</strong> ' + formatHTG(o.totalHTG) + '</div>';
+    html += '<div style="margin-bottom:12px"><strong>Delivery:</strong> ' + (o.deliveryAddress ? o.deliveryAddress.street + ', ' + o.deliveryAddress.city + ' (' + o.deliveryAddress.phone + ')' : '-') + '</div>';
+
+    html += '<h4 style="margin:12px 0 8px">Items:</h4>';
+    o.items.forEach(function(item) {
+      html += '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--gray-100)">';
+      html += '<span>' + item.name + ' x' + item.quantity + '</span>';
+      html += '<span>' + formatHTG(item.subtotalHTG) + '</span>';
+      html += '</div>';
+    });
+
+    if (o.trackingNumber) html += '<div style="margin-top:12px"><strong>Tracking:</strong> ' + o.trackingNumber + '</div>';
+
+    if (o.statusHistory && o.statusHistory.length > 0) {
+      html += '<h4 style="margin:16px 0 8px">History:</h4>';
+      o.statusHistory.forEach(function(h) {
+        html += '<div style="font-size:0.8rem;padding:4px 0;color:var(--text-muted)">' + new Date(h.timestamp).toLocaleString() + ' — ' + h.status.replace('_', ' ') + (h.note ? ' (' + h.note + ')' : '') + '</div>';
+      });
+    }
+
+    document.getElementById('orderDetailContent').innerHTML = html;
+    document.getElementById('orderNewStatus').value = '';
+    document.getElementById('orderTrackingNum').value = o.trackingNumber || '';
+    document.getElementById('orderModal').classList.add('show');
+  } catch(e) { showToast('Error loading order', 'error'); }
+}
+
+async function updateOrderStatus() {
+  if (!currentOrderId) return;
+  var status = document.getElementById('orderNewStatus').value;
+  if (!status) return showToast('Select a status', 'error');
+
+  var body = { status: status };
+  var tracking = document.getElementById('orderTrackingNum').value.trim();
+  if (tracking) body.trackingNumber = tracking;
+
+  try {
+    var res = await fetch(API_BASE + INTL + '/admin/orders/' + currentOrderId + '/status', {
+      method: 'PATCH', headers: headers(), body: JSON.stringify(body)
+    });
+    var data = await res.json();
+    if (data.success) {
+      showToast('Status updated!', 'success');
+      closeModal('orderModal');
+      loadOrders();
+      loadStats();
+    } else {
+      showToast(data.message || 'Error', 'error');
+    }
+  } catch(e) { showToast('Network error', 'error'); }
+}
+
+// ─── Pending Payments ───
+async function loadPendingPayments() {
+  try {
+    var res = await fetch(API_BASE + INTL + '/admin/orders?paymentStatus=submitted&limit=50', { headers: headers() });
+    var data = await res.json();
+    var orders = data.data || [];
+    var html = '';
+    orders.forEach(function(o) {
+      html += '<tr>';
+      html += '<td><strong>' + o.orderNumber + '</strong></td>';
+      html += '<td>' + (o.customer ? (o.customer.firstName || '') + ' ' + (o.customer.lastName || '') : '-') + '</td>';
+      html += '<td><strong>' + formatHTG(o.totalHTG) + '</strong></td>';
+      html += '<td>' + o.paymentMethod.replace('_', ' ') + '</td>';
+      html += '<td>' + (o.paymentVerification && o.paymentVerification.transactionRef ? o.paymentVerification.transactionRef : '-') + '</td>';
+      html += '<td>';
+      if (o.paymentVerification && o.paymentVerification.receiptImage) {
+        html += '<a href="' + API_BASE + o.paymentVerification.receiptImage + '" target="_blank" style="color:var(--primary-blue)">View</a>';
+      } else { html += '-'; }
+      html += '</td>';
+      html += '<td>';
+      html += '<button class="btn btn-sm btn-success" onclick="verifyPayment(\'' + o._id + '\',\'approved\')">Approve</button> ';
+      html += '<button class="btn btn-sm btn-danger" onclick="verifyPayment(\'' + o._id + '\',\'rejected\')">Reject</button>';
+      html += '</td>';
+      html += '</tr>';
+    });
+    document.getElementById('paymentsTable').innerHTML = html || '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-muted)">No pending payment verifications</td></tr>';
+  } catch(e) {
+    document.getElementById('paymentsTable').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--error)">Error loading</td></tr>';
+  }
+}
+
+async function verifyPayment(orderId, status) {
+  if (status === 'rejected' && !confirm('Reject this payment?')) return;
+  try {
+    var res = await fetch(API_BASE + INTL + '/admin/orders/' + orderId + '/verify-payment', {
+      method: 'PATCH', headers: headers(), body: JSON.stringify({ status: status })
+    });
+    var data = await res.json();
+    if (data.success) {
+      showToast('Payment ' + status + '!', 'success');
+      loadPendingPayments();
+      loadStats();
+    } else {
+      showToast(data.message || 'Error', 'error');
+    }
+  } catch(e) { showToast('Network error', 'error'); }
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+// Init
+if (!API.isLoggedIn()) {
+  window.location.href = '../login.html?redirect=admin/international';
+} else {
+  loadStats();
+  loadStores();
+}
+</script>
+</body>
+</html>
