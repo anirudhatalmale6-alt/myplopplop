@@ -491,7 +491,6 @@
         var badge = statusToBadge(order.status);
         var isNew = order.status === 'pending';
         var cName = order.customer ? order.customer.name : (order.recipient ? order.recipient.name : 'Customer');
-        var cPhone = order.customer ? order.customer.phone : (order.recipient ? order.recipient.phone : '');
 
         var itemsHtml = '';
         if (order.items && order.items.length) {
@@ -512,7 +511,6 @@
                 '<div class="customer-avatar">' + getInitials(cName) + '</div>' +
                 '<div>' +
                     '<div class="customer-name">' + cName + '</div>' +
-                    '<div class="customer-phone">' + cPhone + '</div>' +
                 '</div>' +
             '</div>' +
             '<div class="order-time-placed">' +
