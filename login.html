@@ -601,8 +601,10 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const data = await API.login(phone, password);
     if (data.success) {
         API.toast('Welcome back, ' + data.user.name + '!', 'success');
+        var redirectTo = new URLSearchParams(window.location.search).get('redirect');
         setTimeout(() => {
-            if (data.user.role === 'admin') window.location.href = 'admin/dashboard.html';
+            if (redirectTo) window.location.href = redirectTo;
+            else if (data.user.role === 'admin') window.location.href = 'admin/dashboard.html';
             else if (data.user.role === 'driver') window.location.href = 'rider/dashboard.html';
             else window.location.href = 'index.html';
         }, 800);
@@ -645,8 +647,10 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
     const data = await API.register(name, phone, password, role, lang, email);
     if (data.success) {
         API.toast('Account created! Welcome to MyPlopPlop!', 'success');
+        var redirectTo = new URLSearchParams(window.location.search).get('redirect');
         setTimeout(() => {
-            if (role === 'driver') window.location.href = 'driver-onboarding.html';
+            if (redirectTo) window.location.href = redirectTo;
+            else if (role === 'driver') window.location.href = 'driver-onboarding.html';
             else window.location.href = 'index.html';
         }, 800);
     } else {
