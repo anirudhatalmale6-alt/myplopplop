@@ -2309,7 +2309,12 @@ function previewFull() {
 
 function shareStore() {
   if (saveStore() === false) return;
-  const url = window.location.origin + '/store.html?id=my-store';
+  var slug = localStorage.getItem('mpp_published_slug');
+  if (!slug) {
+    showToast('Publish your store first before sharing!', 'error');
+    return;
+  }
+  var url = window.location.origin + '/store.html?slug=' + slug;
   if (navigator.share) {
     navigator.share({
       title: document.getElementById('storeName').value + ' — MyPlopPlop',
@@ -2339,50 +2344,113 @@ function publishStore() {
   }
   var API_BASE = 'https://myplopplop-api.onrender.com';
   var catMap = { restaurant:'restaurant', supermarket:'supermarket', pharmacy:'pharmacy', hardware:'hardware', clothing:'retail', electronics:'retail', beauty:'retail', other:'other' };
+
+  // Don't send huge base64 logo directly - trim if too large
+  var logoVal = state.logo || '';
+  if (logoVal.length > 500000) logoVal = '';
+
+  var storeName = document.getElementById('storeName').value.trim();
   var storePayload = {
-    name: document.getElementById('storeName').value.trim(),
+    name: storeName,
     description: document.getElementById('storeDesc').value || '',
     category: catMap[document.getElementById('storeCategory').value] || 'other',
     phone: document.getElementById('storePhone').value || '',
     address: { street: document.getElementById('storeAddress').value || '' },
-    logo: state.logo || '',
+    logo: logoVal,
     deliveryOptions: { delivery: true, selfPickup: true }
   };
-  showToast('Publishing store...', 'info');
 
-  fetch(API_BASE + '/api/stores', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-    body: JSON.stringify(storePayload)
+  var publishBtn = document.querySelector('.btn-save');
+  if (publishBtn) {
+    publishBtn.disabled = true;
+    publishBtn.querySelector('span:last-child').textContent = 'Publishing...';
+  }
+  showToast('Publishing ' + storeName + '...', 'info');
+
+  // First check if user already has a store - if so, update it
+  fetch(API_BASE + '/api/stores/merchant/my-store', {
+    headers: { 'Authorization': 'Bearer ' + token }
   })
   .then(function(r) { return r.json(); })
-  .then(function(data) {
-    if (data.success && data.data) {
-      var newStoreId = data.data._id;
-      var slug = data.data.slug;
-      // Add products
-      var prods = state.products.filter(function(p) { return p.name && p.name.trim(); });
-      var productPromises = prods.map(function(p) {
-        return fetch(API_BASE + '/api/stores/' + newStoreId + '/products', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-          body: JSON.stringify({ name: p.name, price: parseInt(p.price) || 0, category: 'Products' })
-        });
-      });
-      return Promise.all(productPromises).then(function() {
-        showToast('Store published! Opening your store...', 'success');
-        setTimeout(function() { window.open('store.html?slug=' + slug, '_blank'); }, 800);
+  .then(function(existing) {
+    if (existing.success && existing.data && existing.data.store) {
+      // User has an existing store - update it
+      var existingStore = existing.data.store;
+      return fetch(API_BASE + '/api/stores/' + existingStore._id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify(storePayload)
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(updateData) {
+        if (updateData.success) {
+          return { store: updateData.data, isUpdate: true };
+        }
+        throw new Error(updateData.message || 'Failed to update store');
       });
     } else {
-      showToast(data.message || 'Error publishing store', 'error');
-      // Still show preview
-      setTimeout(function() { window.open('store.html?preview=1', '_blank'); }, 1000);
+      // No existing store - create new
+      return fetch(API_BASE + '/api/stores', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify(storePayload)
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(createData) {
+        if (createData.success && createData.data) {
+          return { store: createData.data, isUpdate: false };
+        }
+        throw new Error(createData.message || 'Failed to create store');
+      });
     }
+  })
+  .then(function(result) {
+    var storeObj = result.store;
+    var storeId = storeObj._id;
+    var slug = storeObj.slug;
+
+    // Add/update products
+    var prods = state.products.filter(function(p) { return p.name && p.name.trim(); });
+    if (prods.length === 0) {
+      return { slug: slug, productCount: 0 };
+    }
+
+    var productPromises = prods.map(function(p) {
+      return fetch(API_BASE + '/api/stores/' + storeId + '/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ name: p.name, price: parseInt(p.price) || 0, category: 'Products' })
+      }).then(function(r) { return r.json(); });
+    });
+
+    return Promise.all(productPromises).then(function(results) {
+      var added = results.filter(function(r) { return r.success; }).length;
+      return { slug: slug, productCount: added };
+    });
+  })
+  .then(function(final) {
+    var msg = 'Store published! ' + (final.productCount > 0 ? final.productCount + ' products added. ' : '');
+    showToast(msg + 'Opening your store...', 'success');
+    localStorage.setItem('mpp_published_slug', final.slug);
+    setTimeout(function() { window.open('store.html?slug=' + final.slug, '_blank'); }, 1000);
   })
   .catch(function(err) {
     console.error('Publish error:', err);
-    showToast('Could not connect to server. Showing preview...', 'error');
-    setTimeout(function() { window.open('store.html?preview=1', '_blank'); }, 1000);
+    var errMsg = err.message || 'Unknown error';
+    if (errMsg.includes('Token')) {
+      showToast('Your session expired. Please log in again.', 'error');
+      setTimeout(function() { window.location.href = 'login.html?redirect=store-designer.html'; }, 2000);
+    } else if (errMsg.includes('fetch') || errMsg.includes('network') || errMsg.includes('Failed to fetch')) {
+      showToast('Cannot connect to server. Check your internet connection and try again.', 'error');
+    } else {
+      showToast('Publish failed: ' + errMsg, 'error');
+    }
+  })
+  .finally(function() {
+    if (publishBtn) {
+      publishBtn.disabled = false;
+      publishBtn.querySelector('span:last-child').textContent = 'Publish Store';
+    }
   });
 }
 
