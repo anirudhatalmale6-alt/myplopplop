@@ -965,16 +965,138 @@ if (isPreview) {
     }
 }
 
-// Fallback to mock store
-if (!store) {
+// Try API store by slug
+var storeSlug = params.get('slug');
+var apiStoreLoading = false;
+
+if (!store && storeSlug) {
+    apiStoreLoading = true;
+    fetch('https://myplopplop-api.onrender.com/api/stores/s/' + encodeURIComponent(storeSlug))
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.success && data.data && data.data.store) {
+                var s = data.data.store;
+                var prods = (data.data.products || []).map(function(p, i) {
+                    return {
+                        id: p._id || ('api-' + i),
+                        name: p.name,
+                        description: p.description || '',
+                        price: p.price || 0,
+                        category: p.category || 'Products',
+                        image: (p.images && p.images.length) ? p.images[0] : '',
+                        inStock: p.inStock !== false,
+                        stockQuantity: p.stockQuantity
+                    };
+                });
+                var catMap = { restaurant:'restaurants', supermarket:'supermarkets', hardware:'hardware', pharmacy:'pharmacies', wholesale:'wholesale', retail:'retail', bakery:'restaurants', other:'retail' };
+                store = {
+                    id: s._id,
+                    slug: s.slug,
+                    name: s.name,
+                    description: s.description || '',
+                    category: catMap[s.category] || 'retail',
+                    address: s.address ? (s.address.street || s.address.city || '') : '',
+                    phone: s.phone || '',
+                    rating: s.rating ? s.rating.average : 0,
+                    reviews: s.rating ? s.rating.count : 0,
+                    eta: s.deliveryOptions ? s.deliveryOptions.estimatedDeliveryMins : 30,
+                    deliveryFee: s.deliveryOptions ? (s.deliveryOptions.deliveryFee || 0) : 0,
+                    open: true,
+                    verified: s.isVerified || false,
+                    products: prods,
+                    logo: s.logo || null,
+                    fromAPI: true
+                };
+                category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
+                renderStorePage();
+            } else {
+                store = MOCK.STORES[0];
+                category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
+                renderStorePage();
+            }
+        })
+        .catch(function() {
+            store = MOCK.STORES[0];
+            category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
+            renderStorePage();
+        });
+} else if (!store && storeId && storeId !== 'my-store') {
+    // Try API by ID
+    fetch('https://myplopplop-api.onrender.com/api/stores/' + encodeURIComponent(storeId))
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.success && data.data && data.data.store) {
+                var s = data.data.store;
+                var prods = (data.data.products || []).map(function(p, i) {
+                    return {
+                        id: p._id || ('api-' + i),
+                        name: p.name,
+                        description: p.description || '',
+                        price: p.price || 0,
+                        category: p.category || 'Products',
+                        image: (p.images && p.images.length) ? p.images[0] : '',
+                        inStock: p.inStock !== false,
+                        stockQuantity: p.stockQuantity
+                    };
+                });
+                var catMap = { restaurant:'restaurants', supermarket:'supermarkets', hardware:'hardware', pharmacy:'pharmacies', wholesale:'wholesale', retail:'retail', bakery:'restaurants', other:'retail' };
+                store = {
+                    id: s._id,
+                    slug: s.slug,
+                    name: s.name,
+                    description: s.description || '',
+                    category: catMap[s.category] || 'retail',
+                    address: s.address ? (s.address.street || s.address.city || '') : '',
+                    phone: s.phone || '',
+                    rating: s.rating ? s.rating.average : 0,
+                    reviews: s.rating ? s.rating.count : 0,
+                    eta: s.deliveryOptions ? s.deliveryOptions.estimatedDeliveryMins : 30,
+                    deliveryFee: s.deliveryOptions ? (s.deliveryOptions.deliveryFee || 0) : 0,
+                    open: true,
+                    verified: s.isVerified || false,
+                    products: prods,
+                    logo: s.logo || null,
+                    fromAPI: true
+                };
+                category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
+            } else {
+                store = MOCK.STORES.find(function(s) { return s.id === storeId; });
+                if (!store) store = MOCK.STORES[0];
+                category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
+            }
+            renderStorePage();
+        })
+        .catch(function() {
+            store = MOCK.STORES.find(function(s) { return s.id === storeId; });
+            if (!store) store = MOCK.STORES[0];
+            category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
+            renderStorePage();
+        });
+    apiStoreLoading = true;
+}
+
+// Fallback to mock store (sync path)
+if (!store && !apiStoreLoading) {
     store = MOCK.STORES.find(function(s) { return s.id === storeId; });
     if (!store) store = MOCK.STORES[0];
     category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
 }
 
 // Update page title
-document.title = store.name + ' — MyPlopPlop';
+if (store) document.title = store.name + ' — MyPlopPlop';
 
+function renderStorePage() {
+    if (!store) return;
+    document.title = store.name + ' — MyPlopPlop';
+    if (!category) category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
+    doRenderStorePage();
+}
+
+if (store && !apiStoreLoading) {
+    doRenderStorePage();
+}
+
+function doRenderStorePage() {
 // ===== CATEGORY-BASED THEME =====
 var CATEGORY_THEMES = {
     'restaurants':  { gradient: 'linear-gradient(135deg, #D21034 0%, #8B0000 60%, #FF6347 100%)', accent: '#D21034', iconBg: '#FFF5F5', label: 'Restaurant' },
@@ -1360,6 +1482,7 @@ document.getElementById('productModal').addEventListener('click', function(e) {
 // ===== INIT CART UI =====
 window.CART = getCart();
 updateCartUI();
+} // end doRenderStorePage
 </script>
 
 <script src="/js/api.js"></script>

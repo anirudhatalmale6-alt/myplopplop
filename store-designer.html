@@ -2331,11 +2331,59 @@ function shareStore() {
 
 function publishStore() {
   if (saveStore() === false) return;
-  const url = window.location.origin + '/store.html?id=my-store';
-  showToast('Store published! Opening your store...', 'success');
-  setTimeout(function() {
-    window.open('store.html?preview=1', '_blank');
-  }, 800);
+  var token = localStorage.getItem('pp_token');
+  if (!token) {
+    showToast('Please log in first to publish your store', 'error');
+    setTimeout(function() { window.location.href = 'login.html?redirect=store-designer.html'; }, 1500);
+    return;
+  }
+  var API_BASE = 'https://myplopplop-api.onrender.com';
+  var catMap = { restaurant:'restaurant', supermarket:'supermarket', pharmacy:'pharmacy', hardware:'hardware', clothing:'retail', electronics:'retail', beauty:'retail', other:'other' };
+  var storePayload = {
+    name: document.getElementById('storeName').value.trim(),
+    description: document.getElementById('storeDesc').value || '',
+    category: catMap[document.getElementById('storeCategory').value] || 'other',
+    phone: document.getElementById('storePhone').value || '',
+    address: { street: document.getElementById('storeAddress').value || '' },
+    logo: state.logo || '',
+    deliveryOptions: { delivery: true, selfPickup: true }
+  };
+  showToast('Publishing store...', 'info');
+
+  fetch(API_BASE + '/api/stores', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+    body: JSON.stringify(storePayload)
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.success && data.data) {
+      var newStoreId = data.data._id;
+      var slug = data.data.slug;
+      // Add products
+      var prods = state.products.filter(function(p) { return p.name && p.name.trim(); });
+      var productPromises = prods.map(function(p) {
+        return fetch(API_BASE + '/api/stores/' + newStoreId + '/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ name: p.name, price: parseInt(p.price) || 0, category: 'Products' })
+        });
+      });
+      return Promise.all(productPromises).then(function() {
+        showToast('Store published! Opening your store...', 'success');
+        setTimeout(function() { window.open('store.html?slug=' + slug, '_blank'); }, 800);
+      });
+    } else {
+      showToast(data.message || 'Error publishing store', 'error');
+      // Still show preview
+      setTimeout(function() { window.open('store.html?preview=1', '_blank'); }, 1000);
+    }
+  })
+  .catch(function(err) {
+    console.error('Publish error:', err);
+    showToast('Could not connect to server. Showing preview...', 'error');
+    setTimeout(function() { window.open('store.html?preview=1', '_blank'); }, 1000);
+  });
 }
 
 // ── Toast ─────────────────────────────────────────────

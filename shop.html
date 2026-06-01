@@ -462,7 +462,44 @@
 
 <script src="js/mock-data.js"></script>
 <script>
+const API_BASE = 'https://myplopplop-api.onrender.com';
 let activeCategory = 'all';
+let apiStores = [];
+let apiLoaded = false;
+
+// Fetch live stores from API and merge with mock data
+(function loadAPIStores() {
+    fetch(API_BASE + '/api/stores?limit=100')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.success && data.data && data.data.length > 0) {
+                apiStores = data.data.map(function(s) {
+                    var catMap = { restaurant:'restaurants', supermarket:'supermarkets', hardware:'hardware', pharmacy:'pharmacies', wholesale:'wholesale', retail:'retail', bakery:'restaurants', other:'retail' };
+                    return {
+                        id: s._id || s.slug,
+                        slug: s.slug,
+                        name: s.name,
+                        category: catMap[s.category] || 'retail',
+                        image: s.logo || '',
+                        rating: s.rating ? s.rating.average : 0,
+                        reviews: s.rating ? s.rating.count : 0,
+                        deliveryFee: s.deliveryOptions ? (s.deliveryOptions.deliveryFee || 0) : 0,
+                        eta: s.deliveryOptions ? (s.deliveryOptions.estimatedDeliveryMins || '30') : '30',
+                        open: s.status === 'active',
+                        verified: s.isVerified || false,
+                        featured: s.isFeatured || false,
+                        description: s.description || '',
+                        address: s.address ? (s.address.street || s.address.city || '') : '',
+                        products: [],
+                        fromAPI: true
+                    };
+                });
+                apiLoaded = true;
+                filterStores();
+            }
+        })
+        .catch(function() {});
+})();
 
 // Build category chips
 (function buildChips() {
@@ -479,11 +516,20 @@ function selectCategory(catId, el) {
     filterStores();
 }
 
+function getAllStores() {
+    var mockStores = MOCK.STORES.filter(function(s) { return s.customLink; });
+    var combined = mockStores.concat(apiStores);
+    if (!apiLoaded) {
+        combined = MOCK.STORES.slice();
+    }
+    return combined;
+}
+
 function filterStores() {
     const query = document.getElementById('searchInput').value.toLowerCase().trim();
     const sortBy = document.getElementById('sortSelect').value;
 
-    let stores = [...MOCK.STORES];
+    let stores = getAllStores();
 
     // Filter by category
     if (activeCategory !== 'all') {
@@ -536,7 +582,7 @@ function renderStores(stores) {
         const catName = cat ? cat.name : '';
         const catColor = cat ? cat.color : '#00209F';
         return `
-            <a href="${store.customLink || 'store.html?id=' + store.id}" class="store-card-grid" style="border-left:4px solid ${catColor}">
+            <a href="${store.customLink || (store.slug ? 'store.html?slug=' + store.slug : 'store.html?id=' + store.id)}" class="store-card-grid" style="border-left:4px solid ${catColor}">
                 <div class="store-thumb" style="${store.image ? 'padding:0;overflow:hidden' : 'background:linear-gradient(135deg, ' + catColor + '15, ' + catColor + '30);color:' + catColor}">${store.image ? '<img src="' + store.image + '" alt="' + store.name + '" style="width:100%;height:100%;object-fit:cover">' : catIcon}</div>
                 <div class="store-details">
                     <div class="store-top">
