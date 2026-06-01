@@ -2375,7 +2375,8 @@ function publishStore() {
     phone: document.getElementById('storePhone').value || '',
     address: { street: document.getElementById('storeAddress').value || '' },
     logo: logoVal,
-    deliveryOptions: { delivery: true, selfPickup: true }
+    deliveryOptions: { delivery: true, selfPickup: true },
+    status: 'active'
   };
 
   var publishBtn = document.querySelector('.btn-save');
