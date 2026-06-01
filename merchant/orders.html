@@ -370,170 +370,16 @@
                 </div>
 
                 <!-- Filter Tabs -->
-                <div class="filter-tabs">
-                    <button class="filter-tab active" onclick="filterOrders('new')">New <span class="count">2</span></button>
-                    <button class="filter-tab" onclick="filterOrders('preparing')">Preparing <span class="count">1</span></button>
-                    <button class="filter-tab" onclick="filterOrders('ready')">Ready <span class="count">1</span></button>
-                    <button class="filter-tab" onclick="filterOrders('all')">All</button>
+                <div class="filter-tabs" id="filterTabs">
+                    <button class="filter-tab active" data-filter="pending">New <span class="count" id="countNew">0</span></button>
+                    <button class="filter-tab" data-filter="preparing">Preparing <span class="count" id="countPreparing">0</span></button>
+                    <button class="filter-tab" data-filter="ready">Ready <span class="count" id="countReady">0</span></button>
+                    <button class="filter-tab" data-filter="all">All</button>
                 </div>
 
-                <!-- Orders List -->
-                <div class="orders-grid">
-
-                    <!-- NEW ORDER 1 -->
-                    <div class="order-card is-new" data-status="new">
-                        <div class="order-card-header">
-                            <span class="order-card-id">#PP-1047</span>
-                            <span class="badge badge-new">New</span>
-                        </div>
-                        <div class="order-card-customer">
-                            <div class="customer-avatar">JP</div>
-                            <div>
-                                <div class="customer-name">Jean-Pierre M.</div>
-                                <div class="customer-phone">+509 3456-7890</div>
-                            </div>
-                        </div>
-                        <div class="order-time-placed">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                            2 minutes ago
-                        </div>
-                        <div class="order-items-list">
-                            <div class="order-item-row">
-                                <span><span class="order-item-qty">2x</span> Griot ak Bannann</span>
-                                <span>1,700 HTG</span>
-                            </div>
-                            <div class="order-item-row">
-                                <span><span class="order-item-qty">1x</span> Diri Kole ak Pwa</span>
-                                <span>600 HTG</span>
-                            </div>
-                        </div>
-                        <div class="order-card-footer">
-                            <div>
-                                <div class="order-total-label">Total</div>
-                                <div class="order-total-value">2,300 HTG</div>
-                            </div>
-                        </div>
-                        <div class="order-actions">
-                            <button class="btn btn-white btn-sm" onclick="declineOrder(this)">Decline</button>
-                            <button class="btn btn-red btn-sm" onclick="acceptOrder(this)">Accept</button>
-                        </div>
-                    </div>
-
-                    <!-- NEW ORDER 2 -->
-                    <div class="order-card is-new" data-status="new">
-                        <div class="order-card-header">
-                            <span class="order-card-id">#PP-1046</span>
-                            <span class="badge badge-new">New</span>
-                        </div>
-                        <div class="order-card-customer">
-                            <div class="customer-avatar">MC</div>
-                            <div>
-                                <div class="customer-name">Marie C.</div>
-                                <div class="customer-phone">+509 4567-1234</div>
-                            </div>
-                        </div>
-                        <div class="order-time-placed">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                            8 minutes ago
-                        </div>
-                        <div class="order-items-list">
-                            <div class="order-item-row">
-                                <span><span class="order-item-qty">1x</span> Tasso Kabrit</span>
-                                <span>950 HTG</span>
-                            </div>
-                            <div class="order-item-row">
-                                <span><span class="order-item-qty">2x</span> Juice Grenadine</span>
-                                <span>300 HTG</span>
-                            </div>
-                        </div>
-                        <div class="order-card-footer">
-                            <div>
-                                <div class="order-total-label">Total</div>
-                                <div class="order-total-value">1,250 HTG</div>
-                            </div>
-                        </div>
-                        <div class="order-actions">
-                            <button class="btn btn-white btn-sm" onclick="declineOrder(this)">Decline</button>
-                            <button class="btn btn-red btn-sm" onclick="acceptOrder(this)">Accept</button>
-                        </div>
-                    </div>
-
-                    <!-- PREPARING -->
-                    <div class="order-card" data-status="preparing">
-                        <div class="order-card-header">
-                            <span class="order-card-id">#PP-1045</span>
-                            <span class="badge badge-preparing">Preparing</span>
-                        </div>
-                        <div class="order-card-customer">
-                            <div class="customer-avatar">RL</div>
-                            <div>
-                                <div class="customer-name">Robert L.</div>
-                                <div class="customer-phone">+509 3876-5432</div>
-                            </div>
-                        </div>
-                        <div class="order-time-placed">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                            15 minutes ago
-                        </div>
-                        <div class="order-items-list">
-                            <div class="order-item-row">
-                                <span><span class="order-item-qty">3x</span> Legim</span>
-                                <span>1,800 HTG</span>
-                            </div>
-                            <div class="order-item-row">
-                                <span><span class="order-item-qty">1x</span> Bannann Peze</span>
-                                <span>200 HTG</span>
-                            </div>
-                        </div>
-                        <div class="order-card-footer">
-                            <div>
-                                <div class="order-total-label">Total</div>
-                                <div class="order-total-value">2,000 HTG</div>
-                            </div>
-                        </div>
-                        <div class="order-actions">
-                            <button class="btn btn-blue btn-sm btn-full" onclick="markReady(this)">Mark Ready</button>
-                        </div>
-                    </div>
-
-                    <!-- READY -->
-                    <div class="order-card" data-status="ready">
-                        <div class="order-card-header">
-                            <span class="order-card-id">#PP-1044</span>
-                            <span class="badge badge-ready">Ready</span>
-                        </div>
-                        <div class="order-card-customer">
-                            <div class="customer-avatar">SD</div>
-                            <div>
-                                <div class="customer-name">Sophie D.</div>
-                                <div class="customer-phone">+509 4321-8765</div>
-                            </div>
-                        </div>
-                        <div class="order-time-placed">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                            28 minutes ago
-                        </div>
-                        <div class="order-items-list">
-                            <div class="order-item-row">
-                                <span><span class="order-item-qty">1x</span> Soup Joumou</span>
-                                <span>750 HTG</span>
-                            </div>
-                            <div class="order-item-row">
-                                <span><span class="order-item-qty">2x</span> Akra</span>
-                                <span>500 HTG</span>
-                            </div>
-                        </div>
-                        <div class="order-card-footer">
-                            <div>
-                                <div class="order-total-label">Total</div>
-                                <div class="order-total-value">1,250 HTG</div>
-                            </div>
-                        </div>
-                        <div class="order-actions">
-                            <button class="btn btn-white btn-sm btn-full" disabled>Awaiting Pickup</button>
-                        </div>
-                    </div>
-
+                <!-- Orders List (dynamic) -->
+                <div class="orders-grid" id="ordersGrid">
+                    <div style="text-align:center;padding:40px;color:var(--text-muted);">Loading orders...</div>
                 </div>
             </div>
         </div>
@@ -570,40 +416,254 @@
 </nav>
 
 <script>
-function filterOrders(status) {
-    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-    event.target.closest('.filter-tab').classList.add('active');
-    document.querySelectorAll('.order-card').forEach(card => {
-        if (status === 'all' || card.dataset.status === status) {
-            card.style.display = '';
-        } else {
-            card.style.display = 'none';
+(function() {
+    if (!API.isLoggedIn()) {
+        window.location.href = '../login.html';
+        return;
+    }
+
+    var myStore = null;
+    var allOrders = [];
+    var currentFilter = 'pending';
+
+    function formatHTG(amount) {
+        return (amount || 0).toLocaleString('fr-HT') + ' HTG';
+    }
+
+    function timeAgo(dateStr) {
+        var diff = Date.now() - new Date(dateStr).getTime();
+        var mins = Math.floor(diff / 60000);
+        if (mins < 1) return 'Just now';
+        if (mins < 60) return mins + ' min ago';
+        var hrs = Math.floor(mins / 60);
+        if (hrs < 24) return hrs + ' hr ago';
+        return Math.floor(hrs / 24) + ' days ago';
+    }
+
+    function getInitials(name) {
+        if (!name) return '??';
+        return name.split(' ').map(function(w) { return w[0]; }).join('').toUpperCase().slice(0, 2);
+    }
+
+    function statusToBadge(status) {
+        var map = {
+            pending: { cls: 'badge-new', label: 'New' },
+            confirmed: { cls: 'badge-new', label: 'Confirmed' },
+            preparing: { cls: 'badge-preparing', label: 'Preparing' },
+            ready: { cls: 'badge-ready', label: 'Ready' },
+            picked_up: { cls: 'badge-ready', label: 'Picked Up' },
+            delivering: { cls: 'badge-ready', label: 'On the Way' },
+            delivered: { cls: 'badge-delivered', label: 'Delivered' },
+            cancelled: { cls: '', label: 'Cancelled' }
+        };
+        return map[status] || { cls: '', label: status };
+    }
+
+    function getActions(order) {
+        var s = order.status;
+        var id = order._id;
+        if (s === 'pending') {
+            return '<button class="btn btn-white btn-sm" onclick="declineOrder(\'' + id + '\')">Decline</button>' +
+                   '<button class="btn btn-red btn-sm" onclick="acceptOrder(\'' + id + '\')">Accept</button>';
         }
+        if (s === 'confirmed') {
+            return '<button class="btn btn-blue btn-sm btn-full" onclick="startPreparing(\'' + id + '\')">Start Preparing</button>';
+        }
+        if (s === 'preparing') {
+            return '<button class="btn btn-blue btn-sm btn-full" onclick="markReady(\'' + id + '\')">Ready for Pickup</button>';
+        }
+        if (s === 'ready') {
+            if (order.deliveryType === 'delivery' && !order.msouwoutRideId) {
+                return '<button class="btn btn-blue btn-sm btn-full" onclick="requestDriver(\'' + id + '\')">Request MsouWout Driver</button>';
+            }
+            return '<button class="btn btn-white btn-sm btn-full" disabled>Awaiting Pickup</button>';
+        }
+        if (s === 'picked_up' || s === 'delivering') {
+            return '<span style="font-size:var(--text-xs);color:var(--info);font-weight:600;">Driver en route</span>';
+        }
+        if (s === 'delivered') {
+            return '<span style="font-size:var(--text-xs);color:var(--success);font-weight:600;">Completed</span>';
+        }
+        return '';
+    }
+
+    function renderCard(order) {
+        var badge = statusToBadge(order.status);
+        var isNew = order.status === 'pending';
+        var cName = order.customer ? order.customer.name : (order.recipient ? order.recipient.name : 'Customer');
+        var cPhone = order.customer ? order.customer.phone : (order.recipient ? order.recipient.phone : '');
+
+        var itemsHtml = '';
+        if (order.items && order.items.length) {
+            order.items.forEach(function(item) {
+                itemsHtml += '<div class="order-item-row">' +
+                    '<span><span class="order-item-qty">' + item.quantity + 'x</span> ' + item.name + '</span>' +
+                    '<span>' + formatHTG(item.subtotal) + '</span>' +
+                '</div>';
+            });
+        }
+
+        return '<div class="order-card' + (isNew ? ' is-new' : '') + '" data-status="' + order.status + '" data-id="' + order._id + '">' +
+            '<div class="order-card-header">' +
+                '<span class="order-card-id">#' + order.orderNumber + '</span>' +
+                '<span class="badge ' + badge.cls + '">' + badge.label + '</span>' +
+            '</div>' +
+            '<div class="order-card-customer">' +
+                '<div class="customer-avatar">' + getInitials(cName) + '</div>' +
+                '<div>' +
+                    '<div class="customer-name">' + cName + '</div>' +
+                    '<div class="customer-phone">' + cPhone + '</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="order-time-placed">' +
+                '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
+                timeAgo(order.createdAt) +
+            '</div>' +
+            '<div class="order-items-list">' + itemsHtml + '</div>' +
+            '<div class="order-card-footer">' +
+                '<div>' +
+                    '<div class="order-total-label">Total</div>' +
+                    '<div class="order-total-value">' + formatHTG(order.total) + '</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="order-actions">' + getActions(order) + '</div>' +
+        '</div>';
+    }
+
+    function renderOrders() {
+        var grid = document.getElementById('ordersGrid');
+        var filtered = allOrders;
+
+        if (currentFilter !== 'all') {
+            filtered = allOrders.filter(function(o) {
+                if (currentFilter === 'pending') return o.status === 'pending' || o.status === 'confirmed';
+                return o.status === currentFilter;
+            });
+        }
+
+        if (filtered.length === 0) {
+            grid.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--text-muted);">' +
+                '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 12px;display:block;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' +
+                '<div style="font-weight:600;margin-bottom:4px;">No orders</div>' +
+                '<div style="font-size:var(--text-sm);">Orders will appear here when customers place them</div>' +
+            '</div>';
+            return;
+        }
+
+        filtered.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+        grid.innerHTML = filtered.map(renderCard).join('');
+
+        // Update counts
+        var newCount = allOrders.filter(function(o) { return o.status === 'pending' || o.status === 'confirmed'; }).length;
+        var prepCount = allOrders.filter(function(o) { return o.status === 'preparing'; }).length;
+        var readyCount = allOrders.filter(function(o) { return o.status === 'ready'; }).length;
+        document.getElementById('countNew').textContent = newCount;
+        document.getElementById('countPreparing').textContent = prepCount;
+        document.getElementById('countReady').textContent = readyCount;
+
+        // Update nav badge
+        var navBadge = document.querySelector('.merchant-nav-item.active .nav-badge');
+        if (navBadge) navBadge.textContent = newCount + prepCount + readyCount;
+    }
+
+    // Filter tab click handlers
+    document.querySelectorAll('#filterTabs .filter-tab').forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('#filterTabs .filter-tab').forEach(function(t) { t.classList.remove('active'); });
+            this.classList.add('active');
+            currentFilter = this.dataset.filter;
+            renderOrders();
+        });
     });
-}
 
-function acceptOrder(btn) {
-    const card = btn.closest('.order-card');
-    card.classList.remove('is-new');
-    card.dataset.status = 'preparing';
-    card.querySelector('.badge').textContent = 'Preparing';
-    card.querySelector('.badge').className = 'badge badge-preparing';
-    card.querySelector('.order-actions').innerHTML = '<button class="btn btn-blue btn-sm btn-full" onclick="markReady(this)">Mark Ready</button>';
-}
+    // Order actions
+    window.acceptOrder = async function(orderId) {
+        var res = await API.updateOrderStatus(orderId, 'confirmed');
+        if (res.success) {
+            var order = allOrders.find(function(o) { return o._id === orderId; });
+            if (order) order.status = 'confirmed';
+            startPreparing(orderId);
+        } else {
+            alert('Failed: ' + (res.message || 'Unknown error'));
+        }
+    };
 
-function declineOrder(btn) {
-    const card = btn.closest('.order-card');
-    card.style.opacity = '0.5';
-    card.querySelector('.order-actions').innerHTML = '<span style="font-size:var(--text-xs);color:var(--error);font-weight:600;">Order Declined</span>';
-}
+    window.startPreparing = async function(orderId) {
+        var res = await API.updateOrderStatus(orderId, 'preparing');
+        if (res.success) {
+            var order = allOrders.find(function(o) { return o._id === orderId; });
+            if (order) order.status = 'preparing';
+            renderOrders();
+        }
+    };
 
-function markReady(btn) {
-    const card = btn.closest('.order-card');
-    card.dataset.status = 'ready';
-    card.querySelector('.badge').textContent = 'Ready';
-    card.querySelector('.badge').className = 'badge badge-ready';
-    card.querySelector('.order-actions').innerHTML = '<button class="btn btn-white btn-sm btn-full" disabled>Awaiting Pickup</button>';
-}
+    window.markReady = async function(orderId) {
+        var res = await API.updateOrderStatus(orderId, 'ready');
+        if (res.success) {
+            var order = allOrders.find(function(o) { return o._id === orderId; });
+            if (order) order.status = 'ready';
+            renderOrders();
+
+            // Auto-request MsouWout driver for delivery orders
+            if (order && order.deliveryType === 'delivery') {
+                requestDriver(orderId);
+            }
+        }
+    };
+
+    window.declineOrder = async function(orderId) {
+        if (!confirm('Decline this order?')) return;
+        var res = await API.updateOrderStatus(orderId, 'cancelled', 'Declined by merchant');
+        if (res.success) {
+            allOrders = allOrders.filter(function(o) { return o._id !== orderId; });
+            renderOrders();
+        }
+    };
+
+    window.requestDriver = async function(orderId) {
+        var btn = document.querySelector('[data-id="' + orderId + '"] .order-actions button');
+        if (btn) { btn.disabled = true; btn.textContent = 'Requesting driver...'; }
+
+        var res = await API.requestDriver(orderId);
+        if (res.success) {
+            var order = allOrders.find(function(o) { return o._id === orderId; });
+            if (order) order.msouwoutRideId = res.rideId || true;
+            renderOrders();
+            alert('Driver requested! Tracking: ' + (res.trackingCode || 'Searching...'));
+        } else {
+            if (btn) { btn.disabled = false; btn.textContent = 'Request MsouWout Driver'; }
+            alert(res.message || 'Could not request driver. Try again.');
+        }
+    };
+
+    // Load store and orders
+    async function loadOrders() {
+        if (!myStore) {
+            var storeRes = await API.getMyStore();
+            if (storeRes.success && storeRes.data) {
+                myStore = storeRes.data.store;
+                // Update sidebar store name
+                var nameEl = document.querySelector('.sidebar div[style*="font-weight:700"]');
+                if (nameEl && myStore.name) nameEl.textContent = myStore.name;
+            } else {
+                document.getElementById('ordersGrid').innerHTML =
+                    '<div style="text-align:center;padding:60px;color:var(--text-muted);">' +
+                    '<div style="font-weight:600;margin-bottom:8px;">No store found</div>' +
+                    '<div style="font-size:var(--text-sm);">Create a store first using the <a href="../store-designer.html">Store Designer</a></div></div>';
+                return;
+            }
+        }
+
+        var ordersRes = await API.getStoreOrders(myStore._id, 1);
+        if (ordersRes.success && ordersRes.data) {
+            allOrders = ordersRes.data;
+        }
+        renderOrders();
+    }
+
+    loadOrders();
+    setInterval(loadOrders, 10000);
+})();
 </script>
 
 <script src="/js/api.js"></script>

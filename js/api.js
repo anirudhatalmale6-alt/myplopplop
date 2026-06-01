@@ -229,6 +229,49 @@ const API = (() => {
     async function solGetCycle(id) { return await request('GET', '/api/sol/' + id + '/cycle'); }
     async function solGetAudit(id) { return await request('GET', '/api/sol/' + id + '/audit'); }
 
+    // ─── Store Orders ───
+    async function createOrder(storeId, items, paymentMethod, deliveryType, deliveryAddress, isDiasporaOrder, recipient, notes) {
+        const body = { storeId, items, paymentMethod, deliveryType: deliveryType || 'delivery' };
+        if (deliveryAddress) body.deliveryAddress = deliveryAddress;
+        if (isDiasporaOrder) body.isDiasporaOrder = true;
+        if (recipient) body.recipient = recipient;
+        if (notes) body.notes = notes;
+        return await request('POST', '/api/orders', body);
+    }
+
+    async function getMyOrders(page = 1, limit = 20) {
+        return await request('GET', '/api/orders/my-orders?page=' + page + '&limit=' + limit);
+    }
+
+    async function getOrder(id) {
+        return await request('GET', '/api/orders/' + id);
+    }
+
+    async function updateOrderStatus(id, status, reason) {
+        const body = { status };
+        if (reason) body.reason = reason;
+        return await request('PUT', '/api/orders/' + id + '/status', body);
+    }
+
+    async function rateOrder(id, rating, review) {
+        return await request('POST', '/api/orders/' + id + '/rate', { rating, review });
+    }
+
+    // ─── Merchant Store ───
+    async function getMyStore() {
+        return await request('GET', '/api/stores/merchant/my-store');
+    }
+
+    async function getStoreOrders(storeId, page = 1, status) {
+        let qs = '?page=' + page;
+        if (status) qs += '&status=' + status;
+        return await request('GET', '/api/stores/' + storeId + '/orders' + qs);
+    }
+
+    async function requestDriver(orderId) {
+        return await request('POST', '/api/dispatch/' + orderId + '/request-driver');
+    }
+
     // Health check
     async function health() {
         return await request('GET', '/api/health');
@@ -318,6 +361,8 @@ const API = (() => {
         moncashTopup, moncashPayRide, natcashTopup, natcashPayRide, walletPayRide, paymentHistory, verifyMoncash,
         getChatMessages, sendChatMessage, getUnreadCount, getQuickReplies,
         subscribeToPush, health, updateNavForUser,
+        createOrder, getMyOrders, getOrder, updateOrderStatus, rateOrder,
+        getMyStore, getStoreOrders, requestDriver,
         solCreateGroup, solGetGroups, solGetGroup, solUpdateGroup, solPublish, solPause, solClose,
         solMyGroups, solJoin, solJoinByCode, solInvite, solGetMembers, solUpdateMember, solRemoveMember,
         solContribute, solVerifyContribution, solGetContributions,

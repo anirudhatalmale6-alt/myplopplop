@@ -1147,32 +1147,110 @@
     const PAYMENT_CLIENT_ID = 'pp_1ohu5zz2tcx';
     const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/5kQbIU2y44pW8VqcfjgYU05';
 
-    // Map checkout payment methods to SolutionIP methods
     function getSolutionIPMethod(method) {
         if (method === 'moncash') return 'moncash';
         if (method === 'natcash') return 'natcash';
         return 'all';
     }
 
-    function confirmOrder() {
+    // Map frontend payment names to backend enum
+    function getAPIPaymentMethod(method) {
+        if (method === 'san_cash') return 'wallet';
+        if (method === 'moncash') return 'moncash';
+        if (method === 'natcash') return 'natcash';
+        if (method === 'credit_card') return 'card';
+        return 'cash';
+    }
+
+    async function createAPIOrder() {
+        var cart = getCart();
+        if (!cart.length) return null;
+
+        // Group items by store
+        var storeGroups = {};
+        cart.forEach(function(item) {
+            var sid = item.storeId;
+            if (!storeGroups[sid]) storeGroups[sid] = [];
+            storeGroups[sid].push(item);
+        });
+
+        var storeIds = Object.keys(storeGroups);
+        var name = document.getElementById('recipientName').value.trim();
+        var phone = document.getElementById('recipientPhone').value.trim();
+        var addr = document.getElementById('deliveryAddress').value.trim();
+        var notesEl = document.getElementById('deliveryNotes');
+        var notes = notesEl ? notesEl.value.trim() : '';
+
+        var createdOrders = [];
+
+        for (var s = 0; s < storeIds.length; s++) {
+            var sid = storeIds[s];
+            var items = storeGroups[sid].map(function(ci) {
+                return {
+                    productId: ci.productId || ci.product?._id || ci.id,
+                    quantity: ci.qty || 1
+                };
+            });
+
+            var orderData = {
+                storeId: sid,
+                items: items,
+                paymentMethod: getAPIPaymentMethod(selectedPayment),
+                deliveryType: 'delivery',
+                deliveryAddress: { street: addr, city: 'Port-au-Prince', notes: notes },
+                recipient: { name: name, phone: phone, address: addr },
+                notes: notes
+            };
+
+            try {
+                var result = await API.createOrder(
+                    orderData.storeId,
+                    orderData.items,
+                    orderData.paymentMethod,
+                    orderData.deliveryType,
+                    orderData.deliveryAddress,
+                    false,
+                    orderData.recipient,
+                    orderData.notes
+                );
+                if (result.success && result.data) {
+                    createdOrders.push(result.data);
+                }
+            } catch (e) {
+                console.error('Order creation failed for store ' + sid, e);
+            }
+        }
+
+        return createdOrders;
+    }
+
+    async function confirmOrder() {
         const btn = document.getElementById('continueBtn');
         btn.disabled = true;
         btn.textContent = 'Processing...';
 
-        const orderId = 'MPP-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
         const summary = getOrderSummary() || calculateSummary(getCart());
         const total = summary ? summary.total : 0;
 
-        // For San Cash wallet (no real payment needed yet) or zero total, complete directly
+        // Try creating real API order if logged in
+        var apiOrders = [];
+        if (typeof API !== 'undefined' && API.isLoggedIn()) {
+            apiOrders = await createAPIOrder() || [];
+        }
+
+        var orderId = apiOrders.length > 0 ? apiOrders[0].orderNumber : ('MPP-' + Date.now() + '-' + Math.floor(Math.random() * 1000));
+
+        // For wallet or zero total, complete directly
         if (selectedPayment === 'san_cash' || total < 20) {
-            completeOrder(orderId);
+            completeOrder(orderId, apiOrders[0] ? apiOrders[0]._id : null);
             return;
         }
 
-        // Credit/Debit Card -> redirect to Stripe Payment Link
+        // Credit card → Stripe
         if (selectedPayment === 'credit_card') {
             localStorage.setItem('mpp_pending_order', JSON.stringify({
                 orderId: orderId,
+                apiOrderId: apiOrders[0] ? apiOrders[0]._id : null,
                 amount: total,
                 method: 'stripe',
                 timestamp: Date.now()
@@ -1181,7 +1259,7 @@
             return;
         }
 
-        // MonCash / NatCash -> SolutionIP
+        // MonCash / NatCash → SolutionIP
         const payMethod = getSolutionIPMethod(selectedPayment);
         fetch(PAYMENT_API + '/paiement-marchand', {
             method: 'POST',
@@ -1198,6 +1276,7 @@
             if (data.status === true && data.url) {
                 localStorage.setItem('mpp_pending_order', JSON.stringify({
                     orderId: orderId,
+                    apiOrderId: apiOrders[0] ? apiOrders[0]._id : null,
                     transactionId: data.transaction_id,
                     amount: total,
                     method: payMethod,
@@ -1218,8 +1297,13 @@
         });
     }
 
-    function completeOrder(orderId) {
+    function completeOrder(orderId, apiOrderId) {
         document.getElementById('successOrderId').textContent = orderId;
+        // Update tracking link to use real order ID if available
+        var trackLink = document.querySelector('#successScreen .btn-red');
+        if (trackLink && apiOrderId) {
+            trackLink.href = 'order-status.html?id=' + apiOrderId;
+        }
         document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
         document.getElementById('stepIndicator').style.display = 'none';
         document.querySelector('.checkout-title').style.display = 'none';

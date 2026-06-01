@@ -423,19 +423,21 @@
         return;
     }
 
-    const statusSteps = ['requested', 'accepted', 'picking_up', 'in_progress', 'delivered'];
-    const completedStatuses = ['delivered', 'cancelled'];
-    const activeStatuses = ['requested', 'accepted', 'picking_up', 'in_progress'];
-    let allRides = [];
-    let currentFilter = 'active';
+    var rideStatusSteps = ['requested', 'accepted', 'picking_up', 'in_progress', 'delivered'];
+    var rideCompletedStatuses = ['delivered', 'cancelled'];
+    var rideActiveStatuses = ['requested', 'accepted', 'picking_up', 'in_progress'];
 
-    const statusLabels = {
-        requested: 'Requested',
-        accepted: 'Driver Assigned',
-        picking_up: 'Picking Up',
-        in_progress: 'On the Way',
-        delivered: 'Delivered',
-        cancelled: 'Cancelled'
+    var orderActiveStatuses = ['pending', 'confirmed', 'preparing', 'ready', 'picked_up', 'delivering'];
+    var orderCompletedStatuses = ['delivered', 'cancelled'];
+
+    var allItems = [];
+    var currentFilter = 'active';
+
+    var statusLabels = {
+        requested: 'Requested', accepted: 'Driver Assigned', picking_up: 'Picking Up',
+        in_progress: 'On the Way', delivered: 'Delivered', cancelled: 'Cancelled',
+        pending: 'Pending', confirmed: 'Confirmed', preparing: 'Preparing',
+        ready: 'Ready for Pickup', picked_up: 'Picked Up', delivering: 'On the Way'
     };
 
     function formatHTG(amount) {
@@ -443,28 +445,59 @@
     }
 
     function formatDate(dateStr) {
-        const d = new Date(dateStr);
+        var d = new Date(dateStr);
         return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
 
-    function getProgress(status) {
-        const idx = statusSteps.indexOf(status);
-        if (idx < 0) return 0;
-        return Math.round(((idx + 1) / statusSteps.length) * 100);
+    function getProgress(item) {
+        if (item._type === 'ride') {
+            var idx = rideStatusSteps.indexOf(item.status);
+            if (idx < 0) return 0;
+            return Math.round(((idx + 1) / rideStatusSteps.length) * 100);
+        } else {
+            var steps = ['pending', 'confirmed', 'preparing', 'ready', 'picked_up', 'delivering', 'delivered'];
+            var idx = steps.indexOf(item.status);
+            if (idx < 0) return 0;
+            return Math.round(((idx + 1) / steps.length) * 100);
+        }
     }
 
-    function renderCard(ride) {
-        const isActive = activeStatuses.includes(ride.status);
-        const label = statusLabels[ride.status] || ride.status;
-        const progress = getProgress(ride.status);
-        const icon = ride.type === 'ride' ? '🚗' : '🏍️';
-        const typeLabel = ride.type === 'ride' ? 'Ride' : 'Delivery';
-        const shortId = ride._id.substring(0, 8).toUpperCase();
-        const pickup = ride.pickup ? ride.pickup.address : 'N/A';
-        const dropoff = ride.dropoff ? ride.dropoff.address : 'N/A';
+    function isActive(item) {
+        if (item._type === 'ride') return rideActiveStatuses.includes(item.status);
+        return orderActiveStatuses.includes(item.status);
+    }
 
-        let progressHtml = '';
-        if (isActive) {
+    function isCompleted(item) {
+        if (item._type === 'ride') return rideCompletedStatuses.includes(item.status);
+        return orderCompletedStatuses.includes(item.status);
+    }
+
+    function renderCard(item) {
+        var active = isActive(item);
+        var label = statusLabels[item.status] || item.status;
+        var progress = getProgress(item);
+
+        if (item._type === 'ride') {
+            var icon = item.type === 'ride' ? '🚗' : '🏍️';
+            var typeLabel = item.type === 'ride' ? 'Ride' : 'Delivery';
+            var shortId = item._id.substring(0, 8).toUpperCase();
+            var pickup = item.pickup ? item.pickup.address : 'N/A';
+            var dropoff = item.dropoff ? item.dropoff.address : 'N/A';
+            var total = item.fare ? item.fare.total : 0;
+            var trackLink = 'tracking.html?id=' + item._id;
+        } else {
+            var icon = '🛒';
+            var typeLabel = item.store ? item.store.name : 'Store Order';
+            var shortId = item.orderNumber || item._id.substring(0, 8).toUpperCase();
+            var itemNames = (item.items || []).map(function(i) { return i.quantity + 'x ' + i.name; }).join(', ');
+            var pickup = itemNames || 'Order items';
+            var dropoff = item.deliveryAddress ? item.deliveryAddress.street : 'Delivery';
+            var total = item.total || 0;
+            var trackLink = 'order-status.html?id=' + item._id;
+        }
+
+        var progressHtml = '';
+        if (active) {
             progressHtml =
                 '<div class="order-progress">' +
                     '<div class="order-progress-bar">' +
@@ -476,30 +509,30 @@
                 '</div>';
         }
 
-        const actionBtn = isActive
-            ? '<a href="tracking.html?id=' + ride._id + '" class="btn btn-blue btn-sm">Track</a>'
-            : '<a href="tracking.html?id=' + ride._id + '" class="btn btn-outline btn-sm">Details</a>';
+        var actionBtn = active
+            ? '<a href="' + trackLink + '" class="btn btn-blue btn-sm">Track</a>'
+            : '<a href="' + trackLink + '" class="btn btn-outline btn-sm">Details</a>';
 
-        return '<div class="order-card" data-status="' + ride.status + '">' +
+        return '<div class="order-card" data-status="' + item.status + '">' +
             '<div class="order-card-header">' +
                 '<span class="order-card-id">' + shortId + '</span>' +
-                '<span class="order-card-date">' + formatDate(ride.createdAt) + '</span>' +
+                '<span class="order-card-date">' + formatDate(item.createdAt) + '</span>' +
             '</div>' +
             '<div class="order-card-body">' +
                 '<div class="order-card-store">' +
                     '<div class="order-store-icon">' + icon + '</div>' +
                     '<div>' +
                         '<div class="order-store-name">' + typeLabel + '</div>' +
-                        '<div class="order-store-items" style="font-size:11px;">' + pickup + ' &rarr; ' + dropoff + '</div>' +
+                        '<div class="order-store-items" style="font-size:11px;">' + pickup + '</div>' +
                     '</div>' +
                     '<div style="margin-left:auto;">' +
-                        '<span class="status-badge ' + ride.status + '">' + label + '</span>' +
+                        '<span class="status-badge ' + item.status + '">' + label + '</span>' +
                     '</div>' +
                 '</div>' +
                 progressHtml +
             '</div>' +
             '<div class="order-card-footer">' +
-                '<span class="order-card-total">' + formatHTG(ride.fare ? ride.fare.total : 0) + '</span>' +
+                '<span class="order-card-total">' + formatHTG(total) + '</span>' +
                 actionBtn +
             '</div>' +
         '</div>';
@@ -514,27 +547,27 @@
             '</svg>' +
             '<h3>No Orders Yet</h3>' +
             '<p>' + message + '</p>' +
-            '<a href="https://msouwout.com" class="btn btn-red">Request a Ride</a>' +
+            '<a href="shop.html" class="btn btn-red">Browse Stores</a>' +
         '</div>';
     }
 
     function renderOrders(filter) {
         currentFilter = filter;
-        const list = document.getElementById('ordersList');
-        let filtered;
+        var list = document.getElementById('ordersList');
+        var filtered;
 
         if (filter === 'active') {
-            filtered = allRides.filter(function(r) { return activeStatuses.includes(r.status); });
+            filtered = allItems.filter(isActive);
         } else if (filter === 'completed') {
-            filtered = allRides.filter(function(r) { return completedStatuses.includes(r.status); });
+            filtered = allItems.filter(isCompleted);
         } else {
-            filtered = allRides;
+            filtered = allItems;
         }
 
         if (filtered.length === 0) {
             var messages = {
-                active: 'You have no active orders right now. Request a ride or delivery!',
-                completed: 'No completed orders yet. Your delivered orders will appear here.',
+                active: 'No active orders right now. Browse stores or request a ride!',
+                completed: 'No completed orders yet.',
                 all: 'You haven\'t placed any orders yet.'
             };
             list.innerHTML = emptyState(messages[filter] || messages.all);
@@ -542,16 +575,15 @@
         }
 
         filtered.sort(function(a, b) {
-            var aActive = activeStatuses.includes(a.status) ? 1 : 0;
-            var bActive = activeStatuses.includes(b.status) ? 1 : 0;
-            if (aActive !== bActive) return bActive - aActive;
+            var aA = isActive(a) ? 1 : 0;
+            var bA = isActive(b) ? 1 : 0;
+            if (aA !== bA) return bA - aA;
             return new Date(b.createdAt) - new Date(a.createdAt);
         });
 
         list.innerHTML = filtered.map(renderCard).join('');
     }
 
-    // Tab switching
     var tabs = document.querySelectorAll('.order-tab');
     tabs.forEach(function(tab) {
         tab.addEventListener('click', function() {
@@ -561,28 +593,36 @@
         });
     });
 
-    // Load rides from API
     async function loadOrders() {
-        var data = await API.getMyRides();
-        if (data.success && data.data) {
-            allRides = data.data;
-        } else {
-            allRides = [];
+        var combined = [];
+
+        // Load rides
+        var ridesData = await API.getMyRides();
+        if (ridesData.success && ridesData.data) {
+            ridesData.data.forEach(function(r) { r._type = 'ride'; });
+            combined = combined.concat(ridesData.data);
         }
 
-        var activeCount = allRides.filter(function(r) { return activeStatuses.includes(r.status); }).length;
-        var completedCount = allRides.filter(function(r) { return completedStatuses.includes(r.status); }).length;
+        // Load store orders
+        var ordersData = await API.getMyOrders();
+        if (ordersData.success && ordersData.data) {
+            ordersData.data.forEach(function(o) { o._type = 'order'; });
+            combined = combined.concat(ordersData.data);
+        }
+
+        allItems = combined;
+
+        var activeCount = allItems.filter(isActive).length;
+        var completedCount = allItems.filter(isCompleted).length;
 
         document.getElementById('activeCount').textContent = activeCount;
         document.getElementById('completedCount').textContent = completedCount;
-        document.getElementById('allCount').textContent = allRides.length;
+        document.getElementById('allCount').textContent = allItems.length;
 
         renderOrders(currentFilter);
     }
 
     loadOrders();
-
-    // Auto-refresh every 15 seconds
     setInterval(loadOrders, 15000);
 })();
 </script>

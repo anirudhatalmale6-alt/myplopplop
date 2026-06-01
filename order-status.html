@@ -1260,11 +1260,48 @@ async function submitDispute() {
     }
 }
 
+var PP_API_URL = 'https://myplopplop-api.onrender.com';
+
+function mapPPOrderToDisplay(order) {
+    var statusMap = {
+        pending: 'pending_payment',
+        confirmed: 'seller_confirmed',
+        preparing: 'preparing',
+        ready: 'ready_for_pickup',
+        picked_up: 'picked_up',
+        delivering: 'on_the_way',
+        delivered: 'delivered',
+        cancelled: 'cancelled'
+    };
+    if (order.paymentStatus === 'paid' && order.status === 'pending') {
+        statusMap.pending = 'paid';
+    }
+
+    return {
+        referenceId: order.orderNumber || order._id,
+        status: statusMap[order.status] || order.status,
+        store: order.store || {},
+        items: (order.items || []).map(function(i) {
+            return { name: i.name, qty: i.quantity, price: i.price };
+        }),
+        subtotal: order.subtotal,
+        platformFee: order.commission,
+        deliveryFee: order.deliveryFee,
+        totalAmount: order.total,
+        paymentMethod: order.paymentMethod,
+        payoutStatus: order.payoutStatus,
+        driver: order.rider ? { name: order.rider.name, phone: order.rider.phone } : null,
+        statusHistory: [],
+        autoReleaseAt: order.payoutAvailableAt
+    };
+}
+
 async function loadOrder() {
     var params = new URLSearchParams(window.location.search);
     var ref = params.get('ref');
+    var orderId = params.get('id');
 
-    if (!ref) {
+    if (!ref && !orderId) {
         document.getElementById('osPage').innerHTML =
             '<div class="os-error"><div class="os-error-icon">🔍</div>' +
             '<h3>' + t('os_no_ref_title') + '</h3>' +
@@ -1274,10 +1311,28 @@ async function loadOrder() {
     }
 
     try {
-        var res = await fetch(API_URL + '/api/orders/verify?ref=' + encodeURIComponent(ref));
-        var data = await res.json();
+        var orderData;
 
-        if (!data.order) {
+        if (orderId) {
+            // MyPlopPlop order - fetch by ID
+            var token = localStorage.getItem('pp_token');
+            var headers = {};
+            if (token) headers['Authorization'] = 'Bearer ' + token;
+            var res = await fetch(PP_API_URL + '/api/orders/' + orderId, { headers: headers });
+            var data = await res.json();
+            if (data.success && data.data) {
+                orderData = mapPPOrderToDisplay(data.data);
+            }
+        } else {
+            // HaitiBiznis order - fetch by reference
+            var res = await fetch(API_URL + '/api/orders/verify?ref=' + encodeURIComponent(ref));
+            var data = await res.json();
+            if (data.order) {
+                orderData = data.order;
+            }
+        }
+
+        if (!orderData) {
             document.getElementById('osPage').innerHTML =
                 '<div class="os-error"><div class="os-error-icon">📋</div>' +
                 '<h3>' + t('os_not_found_title') + '</h3>' +
@@ -1286,7 +1341,8 @@ async function loadOrder() {
             return;
         }
 
-        currentOrder = data.order;
+        currentOrder = orderData;
+        currentOrder._ppOrderId = orderId;
         renderOrder(currentOrder);
     } catch (err) {
         document.getElementById('osPage').innerHTML =
