@@ -1010,14 +1010,12 @@ if (!store && storeSlug) {
                 category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
                 renderStorePage();
             } else {
-                store = MOCK.STORES[0];
-                category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
+                store = null;
                 renderStorePage();
             }
         })
         .catch(function() {
-            store = MOCK.STORES[0];
-            category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
+            store = null;
             renderStorePage();
         });
 } else if (!store && storeId && storeId !== 'my-store') {
@@ -1061,15 +1059,13 @@ if (!store && storeSlug) {
                 category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
             } else {
                 store = MOCK.STORES.find(function(s) { return s.id === storeId; });
-                if (!store) store = MOCK.STORES[0];
-                category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
+                if (store) category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
             }
             renderStorePage();
         })
         .catch(function() {
             store = MOCK.STORES.find(function(s) { return s.id === storeId; });
-            if (!store) store = MOCK.STORES[0];
-            category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
+            if (store) category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
             renderStorePage();
         });
     apiStoreLoading = true;
@@ -1078,22 +1074,40 @@ if (!store && storeSlug) {
 // Fallback to mock store (sync path)
 if (!store && !apiStoreLoading) {
     store = MOCK.STORES.find(function(s) { return s.id === storeId; });
-    if (!store) store = MOCK.STORES[0];
-    category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
+    if (store) category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
 }
 
 // Update page title
 if (store) document.title = store.name + ' — MyPlopPlop';
 
 function renderStorePage() {
-    if (!store) return;
+    if (!store) {
+        showStoreNotFound();
+        return;
+    }
+    if (store.customLink) {
+        window.location.href = store.customLink;
+        return;
+    }
     document.title = store.name + ' — MyPlopPlop';
     if (!category) category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
     doRenderStorePage();
 }
 
+function showStoreNotFound() {
+    document.title = 'Store Not Found — MyPlopPlop';
+    var banner = document.getElementById('storeBanner');
+    banner.style.background = 'linear-gradient(135deg, #6B7280 0%, #374151 100%)';
+    banner.innerHTML = '<div class="store-banner-inner"><a href="shop.html" class="store-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg> Back to Stores</a><div style="text-align:center;padding:40px 20px;"><h1 style="color:#fff;font-size:1.5rem;margin-bottom:12px;">Store Not Found</h1><p style="color:rgba(255,255,255,0.8);font-size:0.95rem;">This store hasn\'t been set up yet or the link is incorrect.</p><a href="shop.html" style="display:inline-block;margin-top:20px;padding:12px 32px;background:#D21034;color:#fff;border-radius:12px;text-decoration:none;font-weight:600;">Browse Stores</a></div></div>';
+    document.getElementById('productsContainer').innerHTML = '';
+}
+
 if (store && !apiStoreLoading) {
-    doRenderStorePage();
+    if (store.customLink) {
+        window.location.href = store.customLink;
+    } else {
+        doRenderStorePage();
+    }
 }
 
 function doRenderStorePage() {
