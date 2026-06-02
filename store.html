@@ -1227,6 +1227,16 @@ function renderProducts() {
     });
 
     var html = '';
+    if (store.products.length === 0) {
+        html += '<div style="text-align:center;padding:48px 20px;">';
+        html += '  <div style="font-size:3rem;margin-bottom:16px;">📦</div>';
+        html += '  <h3 style="color:#374151;font-size:1.1rem;margin-bottom:8px;">No products yet</h3>';
+        html += '  <p style="color:#6B7280;font-size:0.9rem;max-width:300px;margin:0 auto 20px;">This store is being set up. Products will appear here soon.</p>';
+        if (store.fromAPI) {
+            html += '  <a href="store-designer.html" style="display:inline-block;padding:10px 24px;background:var(--primary-blue);color:#fff;border-radius:10px;text-decoration:none;font-weight:600;font-size:0.9rem;">Open Store Designer</a>';
+        }
+        html += '</div>';
+    }
     order.forEach(function(catName) {
         html += '<h3 class="product-category-title">' + catName + '</h3>';
         html += '<div class="product-list">';

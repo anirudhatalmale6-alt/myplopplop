@@ -1854,7 +1854,7 @@ const PRODUCT_EMOJIS = ['🍕','🍗','🍚','🥩','🥑','🍌','🥦','🧃',
 
 // ── Products ──────────────────────────────────────────
 function addProduct() {
-  if (state.products.length >= 3) return;
+  if (state.products.length >= 50) return;
   state.products.push({ emoji: '📦', name: '', price: '' });
   renderProducts();
   updateProgress();
@@ -1889,7 +1889,7 @@ function renderProducts() {
     list.appendChild(row);
   });
   const addBtn = document.getElementById('addProductBtn');
-  addBtn.style.display = state.products.length >= 3 ? 'none' : 'block';
+  addBtn.style.display = state.products.length >= 50 ? 'none' : 'block';
   updatePreviewProducts();
 }
 
@@ -2428,23 +2428,32 @@ function publishStore() {
     var prods = state.products.filter(function(p) { return p.name && p.name.trim(); });
     if (prods.length === 0) return { slug: slug, productCount: 0 };
 
-    var productPromises = prods.map(function(p) {
-      return fetchWithTimeout(API_BASE + '/api/stores/' + storeId + '/products', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-        body: JSON.stringify({ name: p.name, price: parseInt(p.price) || 0, category: 'Products' })
-      }, 30000).then(function(r) { return r.json(); }).catch(function() { return { success: false }; });
+    var bulkPayload = prods.map(function(p) {
+      return { name: p.name.trim(), price: parseInt(p.price) || 0, category: 'Products' };
     });
 
-    return Promise.all(productPromises).then(function(results) {
-      return { slug: slug, productCount: results.filter(function(r) { return r.success; }).length };
+    return fetchWithTimeout(API_BASE + '/api/stores/' + storeId + '/products/bulk', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ products: bulkPayload })
+    }, 60000).then(function(r) { return r.json(); }).then(function(d) {
+      if (d.success) return { slug: slug, productCount: d.count || 0 };
+      console.error('Product bulk add response:', d);
+      return { slug: slug, productCount: 0, productError: d.message || 'Failed to add products' };
+    }).catch(function(err) {
+      console.error('Product bulk add error:', err);
+      return { slug: slug, productCount: 0, productError: err.message || 'Product upload failed' };
     });
   })
   .then(function(final) {
-    var msg = 'Store published! ' + (final.productCount > 0 ? final.productCount + ' products added. ' : '');
-    showToast(msg + 'Opening your store...', 'success');
     localStorage.setItem('mpp_published_slug', final.slug);
-    setTimeout(function() { window.open('store.html?slug=' + final.slug, '_blank'); }, 1000);
+    if (final.productError) {
+      showToast('Store published but products failed: ' + final.productError + '. Try publishing again.', 'error');
+    } else {
+      var msg = 'Store published! ' + (final.productCount > 0 ? final.productCount + ' products added. ' : '');
+      showToast(msg + 'Opening your store...', 'success');
+    }
+    setTimeout(function() { window.open('store.html?slug=' + final.slug, '_blank'); }, 1500);
   })
   .catch(function(err) {
     console.error('Publish error:', err);
