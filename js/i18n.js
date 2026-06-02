@@ -1448,12 +1448,29 @@
     document.documentElement.setAttribute('lang', lang);
 
     // 4. Bulk text replacement for elements without data-i18n
-    if (lang !== 'en') {
-      applyBulkTranslations(lang);
+    applyBulkTranslations(lang);
+  }
+
+  // Build reverse lookup: any translated value -> English key
+  var _reverseBulkMap = null;
+  function getReverseBulkMap() {
+    if (_reverseBulkMap) return _reverseBulkMap;
+    _reverseBulkMap = {};
+    var keys = Object.keys(bulkTextMap);
+    for (var i = 0; i < keys.length; i++) {
+      var enKey = keys[i];
+      _reverseBulkMap[enKey] = enKey;
+      var langs = ['fr', 'kr', 'es'];
+      for (var j = 0; j < langs.length; j++) {
+        var val = bulkTextMap[enKey][langs[j]];
+        if (val) _reverseBulkMap[val] = enKey;
+      }
     }
+    return _reverseBulkMap;
   }
 
   function applyBulkTranslations(lang) {
+    var reverse = getReverseBulkMap();
     var walker = document.createTreeWalker(
       document.body,
       NodeFilter.SHOW_TEXT,
@@ -1464,24 +1481,30 @@
     while (node = walker.nextNode()) {
       var text = node.nodeValue.trim();
       if (!text || text.length < 3) continue;
-      // Skip script/style/textarea content
       var parent = node.parentNode;
       if (!parent) continue;
       var tag = parent.tagName;
       if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'TEXTAREA' || tag === 'INPUT') continue;
-      // Skip already translated elements
       if (parent.hasAttribute && parent.hasAttribute('data-i18n')) continue;
 
-      var entry = bulkTextMap[text];
-      if (entry && entry[lang]) {
-        node.nodeValue = node.nodeValue.replace(text, entry[lang]);
-      } else {
-        // Try stripping leading emoji (emoji + space pattern)
-        var stripped = text.replace(/^[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{FE00}-\u{FEFF}\u{1F900}-\u{1F9FF}\u{2702}-\u{27B0}]+\s*/u, '');
-        if (stripped !== text && stripped.length > 2) {
-          entry = bulkTextMap[stripped];
-          if (entry && entry[lang]) {
-            node.nodeValue = node.nodeValue.replace(stripped, entry[lang]);
+      // Look up via reverse map (matches English keys AND any translated value)
+      var enKey = reverse[text];
+      if (enKey) {
+        var target = (lang === 'en') ? enKey : (bulkTextMap[enKey][lang] || enKey);
+        if (target !== text) {
+          node.nodeValue = node.nodeValue.replace(text, target);
+        }
+        continue;
+      }
+
+      // Try stripping leading emoji
+      var stripped = text.replace(/^[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{FE00}-\u{FEFF}\u{1F900}-\u{1F9FF}\u{2702}-\u{27B0}]+\s*/u, '');
+      if (stripped !== text && stripped.length > 2) {
+        enKey = reverse[stripped];
+        if (enKey) {
+          var target2 = (lang === 'en') ? enKey : (bulkTextMap[enKey][lang] || enKey);
+          if (target2 !== stripped) {
+            node.nodeValue = node.nodeValue.replace(stripped, target2);
           }
         }
       }
