@@ -575,7 +575,21 @@
     // Load cart from localStorage
     function getCart() {
         try {
-            return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+            var raw = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+            return raw.map(function(item) {
+                if (item.product && typeof item.product === 'object') {
+                    return {
+                        storeId: item.storeId,
+                        storeName: item.storeName || item.product.storeName || '',
+                        productId: item.product.id || item.productId || '',
+                        name: item.product.name || item.name || '',
+                        price: item.product.price || item.price || 0,
+                        image: item.product.image || item.image || '',
+                        qty: item.qty || 1
+                    };
+                }
+                return item;
+            });
         } catch(e) {
             return [];
         }
@@ -704,7 +718,7 @@
 
                 groupHTML += `
                     <div class="cart-item">
-                        <div class="cart-item-img">${storeIcon}</div>
+                        <div class="cart-item-img">${item.image ? '<img src="' + item.image + '" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">' : storeIcon}</div>
                         <div class="cart-item-details">
                             <div class="cart-item-name">${item.name}</div>
                             <div class="cart-item-price">${MOCK.formatHTG(item.price)}</div>
@@ -790,7 +804,7 @@
     });
 
     // Initialize
-    seedDemoCart();
+    // seedDemoCart(); // disabled for production
     renderCart();
 })();
 </script>
