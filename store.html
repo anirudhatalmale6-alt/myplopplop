@@ -1242,7 +1242,11 @@ function renderProducts() {
         html += '<div class="product-list">';
         groups[catName].forEach(function(p) {
             html += '<div class="product-card" onclick="openProductModal(\'' + p.id + '\')">';
-            html += '  <div class="product-img-placeholder">' + (p.emoji || (category ? category.icon : '📦')) + '</div>';
+            if (p.image) {
+                html += '  <div class="product-img-placeholder" style="padding:0;overflow:hidden;"><img src="' + p.image + '" alt="' + p.name + '" style="width:100%;height:100%;object-fit:cover;"></div>';
+            } else {
+                html += '  <div class="product-img-placeholder">' + (p.emoji || (category ? category.icon : '📦')) + '</div>';
+            }
             html += '  <div class="product-details">';
             html += '    <div class="product-name">' + p.name + '</div>';
             html += '    <div class="product-desc">' + p.description + '</div>';
@@ -1455,7 +1459,11 @@ function renderModalContent() {
     if (!modalProduct) return;
     var mc = document.getElementById('productModalContent');
     var html = '';
-    html += '<div class="product-modal-img">' + (modalProduct.emoji || (category ? category.icon : '📦')) + '</div>';
+    if (modalProduct.image) {
+        html += '<div class="product-modal-img" style="padding:0;overflow:hidden;border-radius:16px;"><img src="' + modalProduct.image + '" alt="' + modalProduct.name + '" style="width:100%;height:100%;object-fit:cover;"></div>';
+    } else {
+        html += '<div class="product-modal-img">' + (modalProduct.emoji || (category ? category.icon : '📦')) + '</div>';
+    }
     html += '<div class="product-modal-name">' + modalProduct.name + '</div>';
     html += '<div class="product-modal-desc">' + modalProduct.description + '</div>';
     html += '<div class="product-modal-price">' + MOCK.formatHTG(modalProduct.price) + '</div>';
