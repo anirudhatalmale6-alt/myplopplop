@@ -969,106 +969,109 @@ if (isPreview) {
 var storeSlug = params.get('slug');
 var apiStoreLoading = false;
 
+function buildStoreFromAPI(s, products) {
+    var prods = (products || []).map(function(p, i) {
+        return {
+            id: p._id || ('api-' + i),
+            name: p.name,
+            description: p.description || '',
+            price: p.price || 0,
+            category: p.category || 'Products',
+            image: (p.images && p.images.length) ? p.images[0] : '',
+            inStock: p.inStock !== false,
+            stockQuantity: p.stockQuantity
+        };
+    });
+    var catMap = { restaurant:'restaurants', supermarket:'supermarkets', hardware:'hardware', pharmacy:'pharmacies', wholesale:'wholesale', retail:'retail', bakery:'restaurants', other:'retail' };
+    return {
+        id: s._id,
+        slug: s.slug,
+        name: s.name,
+        description: s.description || '',
+        category: catMap[s.category] || 'retail',
+        address: s.address ? (s.address.street || s.address.city || '') : '',
+        phone: s.phone || '',
+        rating: s.rating ? s.rating.average : 0,
+        reviews: s.rating ? s.rating.count : 0,
+        eta: s.deliveryOptions ? s.deliveryOptions.estimatedDeliveryMins : 30,
+        deliveryFee: s.deliveryOptions ? (s.deliveryOptions.deliveryFee || 0) : 0,
+        open: true,
+        verified: s.isVerified || false,
+        products: prods,
+        logo: s.logo || null,
+        fromAPI: true
+    };
+}
+
+function fetchStoreAPI(url, retries) {
+    return fetch(url).then(function(r) {
+        if (!r.ok) {
+            if (retries > 0) {
+                return new Promise(function(resolve) { setTimeout(resolve, 3000); })
+                    .then(function() { return fetchStoreAPI(url, retries - 1); });
+            }
+            throw new Error('API returned ' + r.status);
+        }
+        return r.json();
+    }).catch(function(err) {
+        if (retries > 0 && err.message && err.message.indexOf('API returned') === -1) {
+            return new Promise(function(resolve) { setTimeout(resolve, 3000); })
+                .then(function() { return fetchStoreAPI(url, retries - 1); });
+        }
+        throw err;
+    });
+}
+
+function showStoreLoading() {
+    var banner = document.getElementById('storeBanner');
+    banner.style.background = 'linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)';
+    banner.innerHTML = '<div class="store-banner-inner"><div style="text-align:center;padding:40px 20px;"><div style="width:40px;height:40px;border:3px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;"></div><h2 style="color:#fff;font-size:1.2rem;margin-bottom:8px;">Loading store...</h2><p style="color:rgba(255,255,255,0.7);font-size:0.85rem;">Server is waking up, please wait</p></div></div>';
+    if (!document.getElementById('spinKeyframes')) {
+        var style = document.createElement('style');
+        style.id = 'spinKeyframes';
+        style.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+        document.head.appendChild(style);
+    }
+}
+
 if (!store && storeSlug) {
     apiStoreLoading = true;
-    fetch('https://myplopplop-api.onrender.com/api/stores/s/' + encodeURIComponent(storeSlug))
-        .then(function(r) { return r.json(); })
+    showStoreLoading();
+    fetchStoreAPI('https://myplopplop-api.onrender.com/api/stores/s/' + encodeURIComponent(storeSlug), 2)
         .then(function(data) {
             if (data.success && data.data && data.data.store) {
-                var s = data.data.store;
-                var prods = (data.data.products || []).map(function(p, i) {
-                    return {
-                        id: p._id || ('api-' + i),
-                        name: p.name,
-                        description: p.description || '',
-                        price: p.price || 0,
-                        category: p.category || 'Products',
-                        image: (p.images && p.images.length) ? p.images[0] : '',
-                        inStock: p.inStock !== false,
-                        stockQuantity: p.stockQuantity
-                    };
-                });
-                var catMap = { restaurant:'restaurants', supermarket:'supermarkets', hardware:'hardware', pharmacy:'pharmacies', wholesale:'wholesale', retail:'retail', bakery:'restaurants', other:'retail' };
-                store = {
-                    id: s._id,
-                    slug: s.slug,
-                    name: s.name,
-                    description: s.description || '',
-                    category: catMap[s.category] || 'retail',
-                    address: s.address ? (s.address.street || s.address.city || '') : '',
-                    phone: s.phone || '',
-                    rating: s.rating ? s.rating.average : 0,
-                    reviews: s.rating ? s.rating.count : 0,
-                    eta: s.deliveryOptions ? s.deliveryOptions.estimatedDeliveryMins : 30,
-                    deliveryFee: s.deliveryOptions ? (s.deliveryOptions.deliveryFee || 0) : 0,
-                    open: true,
-                    verified: s.isVerified || false,
-                    products: prods,
-                    logo: s.logo || null,
-                    fromAPI: true
-                };
+                store = buildStoreFromAPI(data.data.store, data.data.products);
                 category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
-                renderStorePage();
             } else {
                 store = null;
-                renderStorePage();
             }
+            try { renderStorePage(); } catch(e) { console.error('Render error:', e); }
         })
-        .catch(function() {
+        .catch(function(err) {
+            console.error('Store fetch failed:', err);
             store = null;
             renderStorePage();
         });
 } else if (!store && storeId && storeId !== 'my-store') {
-    // Try API by ID
-    fetch('https://myplopplop-api.onrender.com/api/stores/' + encodeURIComponent(storeId))
-        .then(function(r) { return r.json(); })
+    apiStoreLoading = true;
+    showStoreLoading();
+    fetchStoreAPI('https://myplopplop-api.onrender.com/api/stores/' + encodeURIComponent(storeId), 2)
         .then(function(data) {
             if (data.success && data.data && data.data.store) {
-                var s = data.data.store;
-                var prods = (data.data.products || []).map(function(p, i) {
-                    return {
-                        id: p._id || ('api-' + i),
-                        name: p.name,
-                        description: p.description || '',
-                        price: p.price || 0,
-                        category: p.category || 'Products',
-                        image: (p.images && p.images.length) ? p.images[0] : '',
-                        inStock: p.inStock !== false,
-                        stockQuantity: p.stockQuantity
-                    };
-                });
-                var catMap = { restaurant:'restaurants', supermarket:'supermarkets', hardware:'hardware', pharmacy:'pharmacies', wholesale:'wholesale', retail:'retail', bakery:'restaurants', other:'retail' };
-                store = {
-                    id: s._id,
-                    slug: s.slug,
-                    name: s.name,
-                    description: s.description || '',
-                    category: catMap[s.category] || 'retail',
-                    address: s.address ? (s.address.street || s.address.city || '') : '',
-                    phone: s.phone || '',
-                    rating: s.rating ? s.rating.average : 0,
-                    reviews: s.rating ? s.rating.count : 0,
-                    eta: s.deliveryOptions ? s.deliveryOptions.estimatedDeliveryMins : 30,
-                    deliveryFee: s.deliveryOptions ? (s.deliveryOptions.deliveryFee || 0) : 0,
-                    open: true,
-                    verified: s.isVerified || false,
-                    products: prods,
-                    logo: s.logo || null,
-                    fromAPI: true
-                };
+                store = buildStoreFromAPI(data.data.store, data.data.products);
                 category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
             } else {
                 store = MOCK.STORES.find(function(s) { return s.id === storeId; });
                 if (store) category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
             }
-            renderStorePage();
+            try { renderStorePage(); } catch(e) { console.error('Render error:', e); }
         })
-        .catch(function() {
+        .catch(function(err) {
+            console.error('Store fetch failed:', err);
             store = MOCK.STORES.find(function(s) { return s.id === storeId; });
             if (store) category = MOCK.CATEGORIES.find(function(c) { return c.id === store.category; });
             renderStorePage();
         });
-    apiStoreLoading = true;
 }
 
 // Fallback to mock store (sync path)
