@@ -1511,6 +1511,13 @@ document.getElementById('productModal').addEventListener('click', function(e) {
     if (e.target === this) closeProductModal();
 });
 
+// ===== EXPOSE FUNCTIONS TO GLOBAL SCOPE (for onclick handlers) =====
+window.getProduct = getProduct;
+window.openProductModal = openProductModal;
+window.closeProductModal = closeProductModal;
+window.addToCartFromModal = addToCartFromModal;
+window.renderModalContent = renderModalContent;
+
 // ===== INIT CART UI =====
 window.CART = getCart();
 updateCartUI();
