@@ -2432,26 +2432,48 @@ function publishStore() {
       return { name: p.name.trim(), price: parseInt(p.price) || 0, category: 'Products' };
     });
 
+    // Try bulk endpoint first, fall back to individual if not available
     return fetchWithTimeout(API_BASE + '/api/stores/' + storeId + '/products/bulk', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
       body: JSON.stringify({ products: bulkPayload })
     }, 60000).then(function(r) { return r.json(); }).then(function(d) {
       if (d.success) return { slug: slug, productCount: d.count || 0 };
-      console.error('Product bulk add response:', d);
+      if (d.message === 'Route not found') throw new Error('FALLBACK');
       return { slug: slug, productCount: 0, productError: d.message || 'Failed to add products' };
-    }).catch(function(err) {
-      console.error('Product bulk add error:', err);
-      return { slug: slug, productCount: 0, productError: err.message || 'Product upload failed' };
+    }).catch(function(bulkErr) {
+      // Fallback: add products one by one
+      if (publishBtn) publishBtn.querySelector('span:last-child').textContent = 'Adding products (1/' + prods.length + ')...';
+      var addedCount = 0;
+      var lastError = '';
+      var chain = Promise.resolve();
+      prods.forEach(function(p, idx) {
+        chain = chain.then(function() {
+          if (publishBtn) publishBtn.querySelector('span:last-child').textContent = 'Adding products (' + (idx+1) + '/' + prods.length + ')...';
+          return fetchWithTimeout(API_BASE + '/api/stores/' + storeId + '/products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ name: p.name.trim(), price: parseInt(p.price) || 0, category: 'Products' })
+          }, 30000).then(function(r) { return r.json(); }).then(function(d) {
+            if (d.success) addedCount++;
+            else lastError = d.message || 'Product rejected';
+          }).catch(function(e) { lastError = e.message || 'Network error'; });
+        });
+      });
+      return chain.then(function() {
+        if (addedCount === 0 && lastError) return { slug: slug, productCount: 0, productError: lastError };
+        return { slug: slug, productCount: addedCount };
+      });
     });
   })
   .then(function(final) {
     localStorage.setItem('mpp_published_slug', final.slug);
     if (final.productError) {
-      showToast('Store published but products failed: ' + final.productError + '. Try publishing again.', 'error');
+      showToast('Store published but products failed: ' + final.productError + '. Please log in and try again.', 'error');
+    } else if (final.productCount > 0) {
+      showToast('Store published! ' + final.productCount + ' products added. Opening your store...', 'success');
     } else {
-      var msg = 'Store published! ' + (final.productCount > 0 ? final.productCount + ' products added. ' : '');
-      showToast(msg + 'Opening your store...', 'success');
+      showToast('Store published! Add products in the designer and publish again.', 'success');
     }
     setTimeout(function() { window.open('store.html?slug=' + final.slug, '_blank'); }, 1500);
   })
