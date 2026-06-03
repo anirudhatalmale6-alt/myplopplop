@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Fleet Partners — MsouWout Logistics</title>
+<meta name="description" content="Register your fleet on MsouWout Logistics. Connect with major clients, get load assignments, grow your trucking business in Haiti.">
+<meta property="og:title" content="Fleet Partners — MsouWout Logistics">
+<meta property="og:description" content="Join Haiti's logistics marketplace. Register your trucks, flatbeds, and equipment.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myplopplop.com/logistics/fleet-register.html">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png">
+<link rel="shortcut icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #0A0F1C;
+    color: #E2E8F0;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+/* ===== TOPBAR ===== */
+.topbar {
+    background: rgba(10, 15, 28, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+.topbar-brand img { height: 28px; border-radius: 6px; }
+.lang-row { display: flex; gap: 2px; }
+.lang-row a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+.lang-row a.active, .lang-row a:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+}
+
+/* ===== HERO ===== */
+.hero {
+    position: relative;
+    padding: 48px 20px 40px;
+    text-align: center;
+    overflow: hidden;
+}
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(135deg, #00209F 0%, #0A0F1C 40%, #0A0F1C 60%, #1a0a10 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px),
+        repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px);
+    z-index: 0;
+}
+.hero::after {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -60px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(210,16,52,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 0;
+}
+.hero > * { position: relative; z-index: 1; }
+.hero-icon {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    display: block;
+    filter: drop-shadow(0 0 20px rgba(210,16,52,0.3));
+}
+.hero h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+}
+.hero h1 span { color: var(--primary-red); }
+.hero h2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 8px;
+}
+.hero p {
+    max-width: 500px;
+    margin: 16px auto 0;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+}
+.trust-badges {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+.trust-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.6);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+}
+.trust-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--primary-red);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ===== PROGRESS STEPPER ===== */
+.stepper-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 24px 20px 0;
+}
+.stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 32px;
+}
+.step-item {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+.step-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 2px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.03);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+}
+.step-circle.active {
+    border-color: var(--primary-red);
+    color: #fff;
+    background: var(--primary-red);
+    box-shadow: 0 0 20px rgba(210,16,52,0.3);
+}
+.step-circle.done {
+    border-color: #10B981;
+    color: #fff;
+    background: #10B981;
+}
+.step-circle.done::after { content: '✓'; }
+.step-label {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    margin-left: 8px;
+    transition: color 0.3s;
+    white-space: nowrap;
+}
+.step-item.active .step-label { color: rgba(255,255,255,0.8); }
+.step-item.done .step-label { color: rgba(16,185,129,0.8); }
+.step-line {
+    width: 40px;
+    height: 2px;
+    background: rgba(255,255,255,0.08);
+    margin: 0 8px;
+    flex-shrink: 0;
+    transition: background 0.4s;
+}
+.step-line.done { background: #10B981; }
+
+/* ===== FORM CONTAINER ===== */
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 20px 120px;
+}
+.form-step {
+    display: none;
+    animation: fadeSlide 0.35s ease;
+}
+.form-step.active { display: block; }
+
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--primary-red);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ===== FORM FIELDS ===== */
+.field {
+    margin-bottom: 18px;
+}
+.field label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 6px;
+    font-family: 'DM Sans', sans-serif;
+}
+.field label .req {
+    color: var(--primary-red);
+    margin-left: 2px;
+}
+.field input, .field select, .field textarea {
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+    outline: none;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--primary-red);
+    background: rgba(210,16,52,0.04);
+    box-shadow: 0 0 0 3px rgba(210,16,52,0.1);
+}
+.field input::placeholder { color: rgba(255,255,255,0.2); }
+.field select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+}
+.field select option { background: #1a1f2e; color: #fff; }
+.field textarea { resize: vertical; min-height: 80px; }
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+.field.error input, .field.error select {
+    border-color: #EF4444;
+    box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+}
+.field .error-msg {
+    font-size: 0.75rem;
+    color: #EF4444;
+    margin-top: 4px;
+    display: none;
+}
+.field.error .error-msg { display: block; }
+
+/* ===== LOGO UPLOAD ===== */
+.logo-upload {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.logo-preview {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 2px dashed rgba(255,255,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+}
+.logo-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.logo-upload-btn {
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: rgba(255,255,255,0.6);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+}
+.logo-upload-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+/* ===== COVERAGE CHECKBOXES ===== */
+.coverage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+.coverage-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+}
+.coverage-item:hover { border-color: rgba(255,255,255,0.15); }
+.coverage-item.selected {
+    border-color: var(--primary-red);
+    background: rgba(210,16,52,0.06);
+}
+.coverage-item input[type="checkbox"] { display: none; }
+.coverage-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 2px solid rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: transparent;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+.coverage-item.selected .coverage-check {
+    background: var(--primary-red);
+    border-color: var(--primary-red);
+    color: #fff;
+}
+.coverage-label {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.6);
+}
+.coverage-item.selected .coverage-label { color: #fff; }
+.coverage-item.nationwide {
+    grid-column: 1 / -1;
+    background: rgba(0,32,159,0.08);
+    border-color: rgba(0,32,159,0.2);
+}
+.coverage-item.nationwide.selected {
+    border-color: var(--primary-blue);
+    background: rgba(0,32,159,0.12);
+}
+.coverage-item.nationwide.selected .coverage-check {
+    background: var(--primary-blue);
+    border-color: var(--primary-blue);
+}
+
+/* ===== FLEET COUNTER ===== */
+.fleet-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.fleet-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+}
+.fleet-item-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.fleet-item-icon { font-size: 1.2rem; }
+.fleet-item-name {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.6);
+    font-family: 'DM Sans', sans-serif;
+}
+.fleet-counter {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+.fleet-counter button {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.5);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+}
+.fleet-counter button:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+.fleet-counter input {
+    width: 40px;
+    text-align: center;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    outline: none;
+}
+.fleet-counter input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+/* ===== VEHICLES ===== */
+.vehicle-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    position: relative;
+}
+.vehicle-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+.vehicle-card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--primary-red);
+    font-weight: 600;
+}
+.vehicle-remove-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.3);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.2s;
+}
+.vehicle-remove-btn:hover { color: #EF4444; }
+.add-vehicle-btn {
+    width: 100%;
+    padding: 14px;
+    border: 2px dashed rgba(255,255,255,0.1);
+    border-radius: 12px;
+    background: transparent;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.9rem;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+}
+.add-vehicle-btn:hover {
+    border-color: var(--primary-red);
+    color: var(--primary-red);
+    background: rgba(210,16,52,0.04);
+}
+
+/* ===== BUTTONS ===== */
+.btn-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+}
+.btn {
+    flex: 1;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    text-align: center;
+}
+.btn-back {
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.1);
+    flex: 0.5;
+}
+.btn-back:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.btn-next {
+    background: var(--primary-red);
+    color: #fff;
+}
+.btn-next:hover { background: #B00D2B; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(210,16,52,0.3); }
+.btn-submit {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #001A7A 100%);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+.btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(0,32,159,0.4); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+/* ===== SUCCESS STATE ===== */
+.success-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 20px 120px;
+    max-width: 500px;
+    margin: 0 auto;
+    animation: fadeSlide 0.5s ease;
+}
+.success-screen.active { display: block; }
+.success-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(16,185,129,0.1);
+    border: 3px solid #10B981;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 24px;
+}
+.success-screen h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.4rem;
+    color: #fff;
+    margin-bottom: 12px;
+}
+.success-screen p {
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+/* ===== LOGIN MODAL ===== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+    background: #141824;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 28px 24px;
+    width: 100%;
+    max-width: 380px;
+    animation: fadeSlide 0.3s ease;
+}
+.modal h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 6px;
+}
+.modal p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 20px;
+}
+.modal .field { margin-bottom: 14px; }
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.4);
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+/* ===== TOAST ===== */
+.toast {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #1a1f2e;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    z-index: 300;
+    opacity: 0;
+    transition: all 0.3s;
+    max-width: 90%;
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.toast.error { border-color: rgba(239,68,68,0.3); }
+.toast.success { border-color: rgba(16,185,129,0.3); }
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(10,15,28,0.95);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+    z-index: 100;
+}
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    text-decoration: none;
+    color: rgba(255,255,255,0.35);
+    font-size: 0.65rem;
+    font-family: 'DM Sans', sans-serif;
+    padding: 4px 12px;
+    transition: color 0.2s;
+}
+.nav-item:hover, .nav-item.active { color: var(--primary-red); }
+.nav-item-icon { font-size: 1.2rem; }
+
+/* ===== FOOTER ===== */
+.footer {
+    background: rgba(0,0,0,0.3);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    padding: 32px 20px;
+    text-align: center;
+    margin-bottom: 64px;
+}
+.footer p {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.25);
+    line-height: 1.8;
+}
+.footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 640px) {
+    .hero h1 { font-size: 2rem; }
+    .hero h2 { font-size: 0.95rem; }
+    .coverage-grid { grid-template-columns: 1fr 1fr 1fr; }
+    .fleet-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+@media (min-width: 768px) {
+    .bottom-nav { display: none; }
+    .form-container { padding-bottom: 40px; }
+    .footer { margin-bottom: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <a href="../index.html" class="topbar-brand">
+        <img src="../assets/favicon-32.png" alt="MyPlopPlop">
+        MsouWout Logistics
+    </a>
+    <div class="lang-row">
+        <a href="#" data-lang="fr">FR</a>
+        <a href="#" data-lang="en">EN</a>
+        <a href="#" data-lang="kr" class="active">KR</a>
+        <a href="#" data-lang="es">ES</a>
+    </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+    <span class="hero-icon">🚛</span>
+    <h1>MsouWout <span>Logistics</span></h1>
+    <h2>Enskri Flòt Ou</h2>
+    <p>Rejwenn makètples lojistik Ayiti a. Konekte ak gwo kliyan, resevwa chajman, grandi biznis ou.</p>
+    <div class="trust-badges">
+        <div class="trust-badge">Patnè Verifye</div>
+        <div class="trust-badge">Dispatch Dirèk</div>
+        <div class="trust-badge">Peman Sekirize</div>
+    </div>
+</div>
+
+<!-- PROGRESS STEPPER -->
+<div class="stepper-container">
+    <div class="stepper" id="stepper">
+        <div class="step-item active" data-step="1">
+            <div class="step-circle active">1</div>
+            <span class="step-label">Konpayi</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="2">
+            <div class="step-circle">2</div>
+            <span class="step-label">Flòt</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="3">
+            <div class="step-circle">3</div>
+            <span class="step-label">Machin</span>
+        </div>
+    </div>
+</div>
+
+<!-- FORM -->
+<div class="form-container" id="formContainer">
+
+    <!-- STEP 1: Company Info -->
+    <div class="form-step active" id="step1">
+        <div class="form-section-title">// Enfòmasyon Konpayi</div>
+
+        <div class="field">
+            <label>Non Konpayi <span class="req">*</span></label>
+            <input type="text" id="companyName" placeholder="Egz: JL Logistics Network" required>
+            <div class="error-msg">Non konpayi obligatwa</div>
+        </div>
+
+        <div class="field">
+            <label>Moun Kontakte <span class="req">*</span></label>
+            <input type="text" id="contactPerson" placeholder="Non konplè" required>
+            <div class="error-msg">Non moun kontakte obligatwa</div>
+        </div>
+
+        <div class="field-row">
+            <div class="field">
+                <label>Telefòn <span class="req">*</span></label>
+                <input type="tel" id="phone" placeholder="+509 0000 0000" value="+509 ">
+                <div class="error-msg">Nimewo telefòn obligatwa</div>
+            </div>
+            <div class="field">
+                <label>Imèl <span class="req">*</span></label>
+                <input type="email" id="email" placeholder="info@konpayi.com">
+                <div class="error-msg">Imèl obligatwa</div>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Adrès</label>
+            <input type="text" id="address" placeholder="Adrès biznis">
+        </div>
+
+        <div class="field">
+            <label>NIF / Tax ID (Opsyonèl)</label>
+            <input type="text" id="taxId" placeholder="Nimewo NIF">
+        </div>
+
+        <div class="field">
+            <label>Logo Konpayi</label>
+            <div class="logo-upload">
+                <div class="logo-preview" id="logoPreview">🏢</div>
+                <label class="logo-upload-btn" for="logoInput">Chwazi Logo</label>
+                <input type="file" id="logoInput" accept="image/*" style="display:none">
+            </div>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-next" onclick="goToStep(2)">Kontinye</button>
+        </div>
+    </div>
+
+    <!-- STEP 2: Coverage & Fleet -->
+    <div class="form-step" id="step2">
+        <div class="form-section-title">// Kouvèti Sèvis</div>
+
+        <div class="coverage-grid" id="coverageGrid">
+            <label class="coverage-item" onclick="toggleCoverage(this)">
+                <input type="checkbox" value="Port-au-Prince">
+                <span class="coverage-check">✓</span>
+                <span class="coverage-label">Port-au-Prince</span>
+            </label>
+            <label class="coverage-item" onclick="toggleCoverage(this)">
+                <input type="checkbox" value="Cap-Haïtien">
+                <span class="coverage-check">✓</span>
+                <span class="coverage-label">Cap-Haïtien</span>
+            </label>
+            <label class="coverage-item" onclick="toggleCoverage(this)">
+                <input type="checkbox" value="Gonaïves">
+                <span class="coverage-check">✓</span>
+                <span class="coverage-label">Gonaïves</span>
+            </label>
+            <label class="coverage-item" onclick="toggleCoverage(this)">
+                <input type="checkbox" value="Miragoâne">
+                <span class="coverage-check">✓</span>
+                <span class="coverage-label">Miragoâne</span>
+            </label>
+            <label class="coverage-item" onclick="toggleCoverage(this)">
+                <input type="checkbox" value="Les Cayes">
+                <span class="coverage-check">✓</span>
+                <span class="coverage-label">Les Cayes</span>
+            </label>
+            <label class="coverage-item" onclick="toggleCoverage(this)">
+                <input type="checkbox" value="Jacmel">
+                <span class="coverage-check">✓</span>
+                <span class="coverage-label">Jacmel</span>
+            </label>
+            <label class="coverage-item nationwide" onclick="toggleCoverage(this)">
+                <input type="checkbox" value="Nationwide">
+                <span class="coverage-check">✓</span>
+                <span class="coverage-label">🇭🇹 Tout Peyi a</span>
+            </label>
+        </div>
+
+        <div class="form-section-title" style="margin-top:28px">// Gwosè Flòt</div>
+
+        <div class="fleet-grid" id="fleetGrid">
+            <div class="fleet-item">
+                <div class="fleet-item-label"><span class="fleet-item-icon">🚛</span><span class="fleet-item-name">Kamyon</span></div>
+                <div class="fleet-counter">
+                    <button type="button" onclick="adjustFleet('trucks',-1)">−</button>
+                    <input type="number" id="fleet_trucks" value="0" min="0" readonly>
+                    <button type="button" onclick="adjustFleet('trucks',1)">+</button>
+                </div>
+            </div>
+            <div class="fleet-item">
+                <div class="fleet-item-label"><span class="fleet-item-icon">📦</span><span class="fleet-item-name">Kontenè</span></div>
+                <div class="fleet-counter">
+                    <button type="button" onclick="adjustFleet('containers',-1)">−</button>
+                    <input type="number" id="fleet_containers" value="0" min="0" readonly>
+                    <button type="button" onclick="adjustFleet('containers',1)">+</button>
+                </div>
+            </div>
+            <div class="fleet-item">
+                <div class="fleet-item-label"><span class="fleet-item-icon">⬜</span><span class="fleet-item-name">Flatbed</span></div>
+                <div class="fleet-counter">
+                    <button type="button" onclick="adjustFleet('flatbeds',-1)">−</button>
+                    <input type="number" id="fleet_flatbeds" value="0" min="0" readonly>
+                    <button type="button" onclick="adjustFleet('flatbeds',1)">+</button>
+                </div>
+            </div>
+            <div class="fleet-item">
+                <div class="fleet-item-label"><span class="fleet-item-icon">⛏️</span><span class="fleet-item-name">Dump Truck</span></div>
+                <div class="fleet-counter">
+                    <button type="button" onclick="adjustFleet('dumpTrucks',-1)">−</button>
+                    <input type="number" id="fleet_dumpTrucks" value="0" min="0" readonly>
+                    <button type="button" onclick="adjustFleet('dumpTrucks',1)">+</button>
+                </div>
+            </div>
+            <div class="fleet-item">
+                <div class="fleet-item-label"><span class="fleet-item-icon">🏗️</span><span class="fleet-item-name">Grua</span></div>
+                <div class="fleet-counter">
+                    <button type="button" onclick="adjustFleet('cranes',-1)">−</button>
+                    <input type="number" id="fleet_cranes" value="0" min="0" readonly>
+                    <button type="button" onclick="adjustFleet('cranes',1)">+</button>
+                </div>
+            </div>
+            <div class="fleet-item">
+                <div class="fleet-item-label"><span class="fleet-item-icon">🔧</span><span class="fleet-item-name">Forklift</span></div>
+                <div class="fleet-counter">
+                    <button type="button" onclick="adjustFleet('forklifts',-1)">−</button>
+                    <input type="number" id="fleet_forklifts" value="0" min="0" readonly>
+                    <button type="button" onclick="adjustFleet('forklifts',1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-back" onclick="goToStep(1)">Retounen</button>
+            <button class="btn btn-next" onclick="goToStep(3)">Kontinye</button>
+        </div>
+    </div>
+
+    <!-- STEP 3: Vehicles -->
+    <div class="form-step" id="step3">
+        <div class="form-section-title">// Ajoute Machin yo</div>
+
+        <div id="vehicleList">
+            <div class="vehicle-card" data-idx="0">
+                <div class="vehicle-card-header">
+                    <span class="vehicle-card-num">MACHIN #1</span>
+                    <button class="vehicle-remove-btn" onclick="removeVehicle(this)" title="Retire" style="display:none">✕</button>
+                </div>
+                <div class="field-row">
+                    <div class="field">
+                        <label>Plak</label>
+                        <input type="text" class="v-plate" placeholder="AA-00000">
+                    </div>
+                    <div class="field">
+                        <label>Tip</label>
+                        <select class="v-type">
+                            <option value="truck">Kamyon</option>
+                            <option value="container">Kontenè</option>
+                            <option value="flatbed">Flatbed</option>
+                            <option value="dumpTruck">Dump Truck</option>
+                            <option value="crane">Grua</option>
+                            <option value="forklift">Forklift</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div class="field">
+                        <label>Kapasite (tòn)</label>
+                        <input type="number" class="v-capacity" placeholder="0" min="0">
+                    </div>
+                    <div class="field">
+                        <label>Non Chofè (opsyonèl)</label>
+                        <input type="text" class="v-driver" placeholder="Non chofè">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="add-vehicle-btn" onclick="addVehicle()">+ Ajoute yon lòt machin</button>
+
+        <div class="btn-row">
+            <button class="btn btn-back" onclick="goToStep(2)">Retounen</button>
+            <button class="btn btn-submit" onclick="submitRegistration()">Soumèt Enskripsyon</button>
+        </div>
+    </div>
+</div>
+
+<!-- SUCCESS SCREEN -->
+<div class="success-screen" id="successScreen">
+    <div class="success-icon">✓</div>
+    <h2>Enskripsyon Soumèt!</h2>
+    <p>Nou pral revize flòt ou epi aktive kont ou nan 24 èdtan. Nou pral kontakte ou sou WhatsApp oswa telefòn.</p>
+    <a href="../index.html" class="btn btn-next" style="display:inline-block;text-decoration:none;max-width:300px;">Retounen Akèy</a>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal">
+    <div class="modal" style="position:relative;">
+        <button class="modal-close" onclick="closeLoginModal()">✕</button>
+        <h3>Konekte</h3>
+        <p>Ou dwe konekte pou enskri flòt ou.</p>
+        <div class="field">
+            <label>Telefòn</label>
+            <input type="tel" id="loginPhone" placeholder="+509 0000 0000" value="+509 ">
+        </div>
+        <div class="field">
+            <label>PIN / Modpas</label>
+            <input type="password" id="loginPin" placeholder="PIN ou">
+        </div>
+        <button class="btn btn-next" style="width:100%" onclick="doLogin()">Konekte</button>
+        <p style="margin-top:12px;text-align:center;font-size:0.8rem;">Pa gen kont? <a href="../index.html" style="color:var(--primary-red);">Kreye Kont</a></p>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <p>MsouWout Logistics — Pati nan ekosistèm <a href="../index.html">MyPlopPlop</a><br>
+    &copy; 2026 MyPlopPlop. Tout dwa rezève. Powered by <a href="https://48hoursready.com">48HoursReady.com</a></p>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+    <a href="../index.html" class="nav-item"><span class="nav-item-icon">🏠</span><span data-i18n="nav.home">Akèy</span></a>
+    <a href="../index.html#stores" class="nav-item"><span class="nav-item-icon">🔍</span><span data-i18n="nav.search">Chèche</span></a>
+    <a href="../cart.html" class="nav-item"><span class="nav-item-icon">🛒</span><span data-i18n="nav.cart">Panye</span></a>
+    <a href="../orders.html" class="nav-item"><span class="nav-item-icon">📦</span><span data-i18n="nav.orders">Kòmand</span></a>
+    <a href="../account.html" class="nav-item"><span class="nav-item-icon">👤</span><span data-i18n="nav.account">Kont</span></a>
+</div>
+
+<script>
+var API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? 'http://localhost:5051/api'
+    : 'https://myplopplop-api.onrender.com/api';
+
+var currentStep = 1;
+var vehicleCount = 1;
+var logoFile = null;
+
+function goToStep(step) {
+    if (step > currentStep && !validateStep(currentStep)) return;
+    currentStep = step;
+    var steps = document.querySelectorAll('.form-step');
+    for (var i = 0; i < steps.length; i++) {
+        steps[i].classList.remove('active');
+    }
+    document.getElementById('step' + step).classList.add('active');
+    updateStepper();
+    window.scrollTo({ top: 200, behavior: 'smooth' });
+}
+
+function updateStepper() {
+    var items = document.querySelectorAll('.step-item');
+    var lines = document.querySelectorAll('.step-line');
+    for (var i = 0; i < items.length; i++) {
+        var s = parseInt(items[i].getAttribute('data-step'));
+        var circle = items[i].querySelector('.step-circle');
+        items[i].classList.remove('active', 'done');
+        circle.classList.remove('active', 'done');
+        circle.textContent = s;
+        if (s === currentStep) {
+            items[i].classList.add('active');
+            circle.classList.add('active');
+        } else if (s < currentStep) {
+            items[i].classList.add('done');
+            circle.classList.add('done');
+            circle.textContent = '';
+        }
+    }
+    for (var j = 0; j < lines.length; j++) {
+        lines[j].classList.toggle('done', j < currentStep - 1);
+    }
+}
+
+function validateStep(step) {
+    if (step === 1) {
+        var fields = [
+            { id: 'companyName', msg: 'Non konpayi obligatwa' },
+            { id: 'contactPerson', msg: 'Non moun kontakte obligatwa' },
+            { id: 'phone', msg: 'Nimewo telefòn obligatwa' },
+            { id: 'email', msg: 'Imèl obligatwa' }
+        ];
+        var valid = true;
+        for (var i = 0; i < fields.length; i++) {
+            var el = document.getElementById(fields[i].id);
+            var parent = el.closest('.field');
+            var val = el.value.trim();
+            if (fields[i].id === 'phone') val = val.replace(/\+509\s*/, '').trim();
+            if (!val) {
+                parent.classList.add('error');
+                valid = false;
+            } else {
+                parent.classList.remove('error');
+            }
+        }
+        if (!valid) showToast('Tanpri ranpli tout chan obligatwa yo', 'error');
+        return valid;
+    }
+    return true;
+}
+
+function toggleCoverage(el) {
+    var cb = el.querySelector('input[type="checkbox"]');
+    cb.checked = !cb.checked;
+    el.classList.toggle('selected', cb.checked);
+    if (cb.value === 'Nationwide' && cb.checked) {
+        var items = document.querySelectorAll('.coverage-item:not(.nationwide)');
+        for (var i = 0; i < items.length; i++) {
+            items[i].querySelector('input').checked = true;
+            items[i].classList.add('selected');
+        }
+    }
+}
+
+function adjustFleet(type, delta) {
+    var input = document.getElementById('fleet_' + type);
+    var val = parseInt(input.value) || 0;
+    val = Math.max(0, val + delta);
+    input.value = val;
+}
+
+function addVehicle() {
+    vehicleCount++;
+    var list = document.getElementById('vehicleList');
+    var card = document.createElement('div');
+    card.className = 'vehicle-card';
+    card.setAttribute('data-idx', vehicleCount - 1);
+    card.innerHTML = '<div class="vehicle-card-header">' +
+        '<span class="vehicle-card-num">MACHIN #' + vehicleCount + '</span>' +
+        '<button class="vehicle-remove-btn" onclick="removeVehicle(this)" title="Retire">✕</button>' +
+        '</div>' +
+        '<div class="field-row">' +
+        '<div class="field"><label>Plak</label><input type="text" class="v-plate" placeholder="AA-00000"></div>' +
+        '<div class="field"><label>Tip</label><select class="v-type">' +
+        '<option value="truck">Kamyon</option><option value="container">Kontenè</option>' +
+        '<option value="flatbed">Flatbed</option><option value="dumpTruck">Dump Truck</option>' +
+        '<option value="crane">Grua</option><option value="forklift">Forklift</option></select></div>' +
+        '</div>' +
+        '<div class="field-row">' +
+        '<div class="field"><label>Kapasite (tòn)</label><input type="number" class="v-capacity" placeholder="0" min="0"></div>' +
+        '<div class="field"><label>Non Chofè (opsyonèl)</label><input type="text" class="v-driver" placeholder="Non chofè"></div>' +
+        '</div>';
+    list.appendChild(card);
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function removeVehicle(btn) {
+    var card = btn.closest('.vehicle-card');
+    card.style.opacity = '0';
+    card.style.transform = 'translateX(20px)';
+    card.style.transition = 'all 0.2s';
+    setTimeout(function() {
+        card.remove();
+        renumberVehicles();
+    }, 200);
+}
+
+function renumberVehicles() {
+    var cards = document.querySelectorAll('.vehicle-card');
+    vehicleCount = cards.length;
+    for (var i = 0; i < cards.length; i++) {
+        cards[i].querySelector('.vehicle-card-num').textContent = 'MACHIN #' + (i + 1);
+        var removeBtn = cards[i].querySelector('.vehicle-remove-btn');
+        removeBtn.style.display = cards.length > 1 ? 'block' : 'none';
+    }
+}
+
+function getToken() {
+    try { return localStorage.getItem('myplopplop_token') || ''; }
+    catch(e) { return ''; }
+}
+
+function showLoginModal() {
+    document.getElementById('loginModal').classList.add('active');
+}
+
+function closeLoginModal() {
+    document.getElementById('loginModal').classList.remove('active');
+}
+
+function doLogin() {
+    var phone = document.getElementById('loginPhone').value.trim();
+    var pin = document.getElementById('loginPin').value.trim();
+    if (!phone || !pin) { showToast('Ranpli telefòn ak PIN', 'error'); return; }
+
+    fetch(API_BASE + '/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: phone.replace(/\s+/g, ''), password: pin })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (data.success && data.token) {
+            localStorage.setItem('myplopplop_token', data.token);
+            if (data.data) localStorage.setItem('myplopplop_user', JSON.stringify(data.data));
+            closeLoginModal();
+            showToast('Konekte!', 'success');
+            submitRegistration();
+        } else {
+            showToast(data.message || 'Echèk koneksyon', 'error');
+        }
+    })
+    .catch(function() { showToast('Erè koneksyon', 'error'); });
+}
+
+function collectFormData() {
+    var coverage = [];
+    var cbs = document.querySelectorAll('#coverageGrid input[type="checkbox"]:checked');
+    for (var i = 0; i < cbs.length; i++) coverage.push(cbs[i].value);
+
+    var vehicles = [];
+    var cards = document.querySelectorAll('.vehicle-card');
+    for (var j = 0; j < cards.length; j++) {
+        var plate = cards[j].querySelector('.v-plate').value.trim();
+        var type = cards[j].querySelector('.v-type').value;
+        var cap = cards[j].querySelector('.v-capacity').value;
+        var driver = cards[j].querySelector('.v-driver').value.trim();
+        if (plate) {
+            vehicles.push({
+                licensePlate: plate,
+                type: type,
+                capacity: parseFloat(cap) || 0,
+                driverAssigned: driver
+            });
+        }
+    }
+
+    return {
+        company: {
+            name: document.getElementById('companyName').value.trim(),
+            contactPerson: document.getElementById('contactPerson').value.trim(),
+            phone: document.getElementById('phone').value.trim().replace(/\s+/g, ''),
+            email: document.getElementById('email').value.trim(),
+            address: document.getElementById('address').value.trim(),
+            taxId: document.getElementById('taxId').value.trim()
+        },
+        serviceCoverage: coverage,
+        fleet: {
+            trucks: parseInt(document.getElementById('fleet_trucks').value) || 0,
+            containers: parseInt(document.getElementById('fleet_containers').value) || 0,
+            flatbeds: parseInt(document.getElementById('fleet_flatbeds').value) || 0,
+            dumpTrucks: parseInt(document.getElementById('fleet_dumpTrucks').value) || 0,
+            cranes: parseInt(document.getElementById('fleet_cranes').value) || 0,
+            forklifts: parseInt(document.getElementById('fleet_forklifts').value) || 0
+        },
+        vehicles: vehicles
+    };
+}
+
+function submitRegistration() {
+    var token = getToken();
+    if (!token) {
+        showLoginModal();
+        return;
+    }
+
+    var data = collectFormData();
+    if (!data.company.name) { showToast('Non konpayi obligatwa', 'error'); goToStep(1); return; }
+
+    var btn = document.querySelector('.btn-submit');
+    btn.disabled = true;
+    btn.textContent = 'Ap soumèt...';
+
+    fetch(API_BASE + '/logistics/partners/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(data)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(result) {
+        btn.disabled = false;
+        btn.textContent = 'Soumèt Enskripsyon';
+        if (result.success) {
+            document.getElementById('formContainer').style.display = 'none';
+            document.querySelector('.stepper-container').style.display = 'none';
+            document.getElementById('successScreen').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            showToast(result.message || 'Erè nan enskripsyon', 'error');
+        }
+    })
+    .catch(function(err) {
+        btn.disabled = false;
+        btn.textContent = 'Soumèt Enskripsyon';
+        showToast('Erè koneksyon sèvè', 'error');
+    });
+}
+
+function showToast(msg, type) {
+    var toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.className = 'toast ' + (type || '');
+    toast.classList.add('show');
+    setTimeout(function() { toast.classList.remove('show'); }, 3500);
+}
+
+document.getElementById('logoInput').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    logoFile = file;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+        document.getElementById('logoPreview').innerHTML = '<img src="' + ev.target.result + '" alt="Logo">';
+    };
+    reader.readAsDataURL(file);
+});
+
+document.querySelectorAll('.field input, .field select').forEach(function(el) {
+    el.addEventListener('focus', function() {
+        this.closest('.field').classList.remove('error');
+    });
+});
+</script>
+<script src="../js/i18n.js"></script>
+</body>
+</html>
