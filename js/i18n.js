@@ -1141,6 +1141,38 @@
       en: 'Install',
       kr: 'Enstale',
       es: 'Instalar'
+    },
+
+    // ── International Shopping ──
+    'intl_title': {
+      fr: '🌎 Achats Internationaux',
+      en: '🌎 Shop International',
+      kr: '🌎 Achte Entènasyonal',
+      es: '🌎 Compras Internacionales'
+    },
+    'intl_desc': {
+      fr: 'Achetez en République Dominicaine et au Panama. Nous gérons l\'expédition, les douanes et la livraison en Haïti.',
+      en: 'Buy from Dominican Republic and Panama. We handle shipping, customs, and delivery to Haiti.',
+      kr: 'Achte nan Repiblik Dominikèn ak Panama. Nou jere ekspedisyon, ladwàn, ak livrezon an Ayiti.',
+      es: 'Compre desde República Dominicana y Panamá. Nosotros manejamos envío, aduanas y entrega a Haití.'
+    },
+    'intl_dr': {
+      fr: 'République Dominicaine',
+      en: 'Dominican Republic',
+      kr: 'Repiblik Dominikèn',
+      es: 'República Dominicana'
+    },
+    'intl_usa': {
+      fr: 'USA (Bientôt)',
+      en: 'USA (Soon)',
+      kr: 'USA (Byento)',
+      es: 'USA (Pronto)'
+    },
+    'intl_btn': {
+      fr: '🛒 Achats Internationaux',
+      en: '🛒 Shop International',
+      kr: '🛒 Achte Entènasyonal',
+      es: '🛒 Compras Internacionales'
     }
   };
 
