@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Koutye Biznis Dashboard — BiznisIQ</title>
+<meta name="description" content="Tablo Koutye Biznis. Swiv pèfòmans ou, jere lead yo, ak wè klasman ou.">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#fff;color:#1F2937;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+
+/* TOP BAR */
+.topbar{background:#fff;border-bottom:1px solid #E5E7EB;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar-left a{color:var(--primary-blue);font-size:0.85rem;font-weight:600}
+.topbar-left img{height:32px;border-radius:6px}
+.topbar-title{font-family:'Poppins',sans-serif;font-size:0.9rem;font-weight:600;color:#1F2937;margin-left:4px}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--primary-blue) 0%,#001A7A 70%,#B8860B 100%);padding:24px 20px 20px;text-align:center;color:#fff}
+.hero h1{font-family:'Poppins',sans-serif;font-size:1.25rem;font-weight:700;margin-bottom:4px}
+.hero p{font-size:0.82rem;opacity:0.85;max-width:420px;margin:0 auto}
+.hero .greeting{font-size:0.9rem;opacity:0.9;margin-top:6px}
+
+/* STATS CARDS */
+.stats-wrap{max-width:600px;margin:0 auto;padding:16px 16px 0}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat-card{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:16px;transition:all 0.2s}
+.stat-card:hover{border-color:var(--primary-blue);box-shadow:0 2px 8px rgba(0,32,159,0.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:8px}
+.stat-icon.blue{background:#E8EDFF}
+.stat-icon.yellow{background:#FEF3C7}
+.stat-icon.green{background:#D1FAE5}
+.stat-icon.gold{background:#FEF3C7}
+.stat-number{font-family:'Poppins',sans-serif;font-size:1.4rem;font-weight:700;color:#1F2937;line-height:1}
+.stat-label{font-size:0.72rem;color:#6B7280;font-weight:500;margin-top:2px}
+
+/* SECTION COMMON */
+.section-wrap{max-width:600px;margin:0 auto;padding:0 16px}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--primary-blue);margin:24px 0 16px;padding-bottom:8px;border-bottom:1px solid #E5E7EB}
+
+/* PERFORMANCE */
+.perf-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.perf-item{background:#F9FAFB;border-radius:10px;padding:12px;text-align:center}
+.perf-value{font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;color:#1F2937}
+.perf-label{font-size:0.7rem;color:#6B7280;margin-top:2px}
+.progress-bar{width:100%;height:8px;background:#E5E7EB;border-radius:4px;overflow:hidden;margin-bottom:4px}
+.progress-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--primary-blue),#10B981);transition:width 0.6s ease}
+.progress-text{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#6B7280;text-align:right}
+
+/* LEADS TABLE */
+.leads-list{margin-bottom:24px}
+.lead-card{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:14px 16px;margin-bottom:10px;transition:all 0.2s}
+.lead-card:hover{border-color:var(--primary-blue);box-shadow:0 2px 8px rgba(0,32,159,0.06)}
+.lead-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.lead-card h4{font-size:0.92rem;font-weight:600;color:#1F2937}
+.lead-card-details{display:flex;align-items:center;gap:10px;font-size:0.78rem;color:#6B7280;flex-wrap:wrap;margin-bottom:8px}
+.lead-card-details span{display:flex;align-items:center;gap:3px}
+.cat-badge{font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:600;padding:3px 8px;border-radius:6px;background:#E8EDFF;color:var(--primary-blue);text-transform:uppercase;letter-spacing:0.05em}
+.status-badge{font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:600;padding:2px 8px;border-radius:4px}
+.status-badge.new{background:#F3F4F6;color:#6B7280}
+.status-badge.contacted{background:#E8EDFF;color:var(--primary-blue)}
+.status-badge.followup{background:#FEF3C7;color:#92400E}
+.status-badge.registered{background:#D1FAE5;color:#065F46}
+.status-badge.activated{background:#065F46;color:#fff}
+
+.lead-actions{display:flex;gap:6px;flex-wrap:wrap}
+.btn-sm{padding:6px 12px;border-radius:8px;font-size:0.72rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;transition:all 0.2s}
+.btn-wa-sm{background:#25D366;color:#fff}
+.btn-wa-sm:hover{background:#1FAD53}
+.btn-convert-sm{background:#10B981;color:#fff}
+.btn-convert-sm:hover{background:#059669}
+.btn-status-sm{background:#F3F4F6;color:#374151;position:relative}
+.btn-status-sm:hover{background:#E5E7EB}
+
+/* STATUS DROPDOWN */
+.status-dropdown{position:absolute;top:100%;right:0;background:#fff;border:1px solid #E5E7EB;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:4px;z-index:50;min-width:140px;display:none}
+.status-dropdown.active{display:block}
+.status-option{display:block;width:100%;text-align:left;padding:8px 12px;border:none;background:none;font-size:0.78rem;font-family:'DM Sans',sans-serif;color:#374151;border-radius:6px;cursor:pointer}
+.status-option:hover{background:#F3F4F6}
+
+.empty-state{text-align:center;padding:32px 20px;color:#9CA3AF;font-size:0.85rem}
+.empty-state .empty-icon{font-size:2rem;margin-bottom:8px}
+
+/* LEADERBOARD */
+.leaderboard{margin-bottom:32px}
+.leaderboard-entry{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fff;border:1px solid #E5E7EB;border-radius:10px;margin-bottom:8px;transition:all 0.2s}
+.leaderboard-entry:hover{border-color:#B8860B;box-shadow:0 2px 8px rgba(184,134,11,0.08)}
+.leaderboard-entry.me{border-color:var(--primary-blue);background:#F8F9FF}
+.rank-badge{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-size:0.85rem;font-weight:700;flex-shrink:0}
+.rank-1{background:linear-gradient(135deg,#FFD700,#B8860B);color:#fff}
+.rank-2{background:linear-gradient(135deg,#C0C0C0,#808080);color:#fff}
+.rank-3{background:linear-gradient(135deg,#CD7F32,#8B4513);color:#fff}
+.rank-other{background:#F3F4F6;color:#6B7280}
+.lb-info{flex:1}
+.lb-name{font-size:0.88rem;font-weight:600;color:#1F2937}
+.lb-stats{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:#6B7280;margin-top:2px}
+.lb-badge{font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:600;padding:3px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:0.05em}
+.lb-badge.gold{background:#FEF3C7;color:#92400E}
+.lb-badge.silver{background:#F3F4F6;color:#6B7280}
+.lb-badge.bronze{background:#FDE8D0;color:#8B4513}
+
+/* BOTTOM CTA */
+.bottom-cta{max-width:600px;margin:0 auto;padding:0 16px 40px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-action{display:inline-block;padding:14px 24px;border-radius:12px;font-size:0.88rem;font-weight:600;font-family:'DM Sans',sans-serif;border:1px solid #D1D5DB;background:#fff;color:#374151;transition:all 0.2s;cursor:pointer}
+.btn-action:hover{background:#F3F4F6;transform:translateY(-1px)}
+.btn-action.primary{background:var(--primary-blue);color:#fff;border-color:var(--primary-blue)}
+.btn-action.primary:hover{background:#001A7A}
+.btn-action.green{background:#10B981;color:#fff;border-color:#10B981}
+.btn-action.green:hover{background:#059669}
+
+/* LOGIN MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(3px);z-index:200;align-items:center;justify-content:center;padding:20px}
+.overlay.active{display:flex}
+.modal{background:#fff;border-radius:16px;padding:28px 24px;width:100%;max-width:360px;box-shadow:0 16px 48px rgba(0,0,0,0.15);position:relative;animation:fadeIn 0.25s}
+.modal h3{font-family:'Poppins',sans-serif;font-size:1.1rem;color:#1F2937;margin-bottom:4px}
+.modal>p{font-size:0.82rem;color:#6B7280;margin-bottom:16px}
+.modal-x{position:absolute;top:14px;right:14px;background:none;border:none;color:#9CA3AF;font-size:1.3rem;cursor:pointer}
+.btn-login{width:100%;padding:14px 24px;border-radius:12px;font-size:0.95rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:var(--primary-blue);color:#fff;transition:all 0.2s;margin-top:12px}
+.btn-login:hover{background:#001A7A}
+
+/* FIELD for modal */
+.m-field{margin-bottom:12px}
+.m-field label{display:block;font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:5px}
+.m-field input{width:100%;padding:13px 14px;background:#fff;border:1.5px solid #D1D5DB;border-radius:10px;color:#1F2937;font-size:0.95rem;font-family:'DM Sans',sans-serif;transition:all 0.2s;outline:none}
+.m-field input:focus{border-color:var(--primary-blue);box-shadow:0 0 0 3px rgba(0,32,159,0.08)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);padding:12px 20px;border-radius:10px;font-size:0.85rem;z-index:300;opacity:0;transition:all 0.3s;max-width:90%;text-align:center;font-weight:500}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.success{background:#065F46;color:#fff}
+.toast.error{background:#1E293B;color:#fff;border:1px solid rgba(239,68,68,0.3)}
+
+/* FOOTER */
+.footer{background:#fff;border-top:1px solid #E5E7EB;padding:24px 20px;text-align:center}
+.footer p{font-size:0.72rem;color:#9CA3AF}
+.footer a{color:#6B7280}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .perf-grid{grid-template-columns:1fr 1fr}
+  .lead-actions{gap:4px}
+  .bottom-cta{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="index.html">&larr; BiznisIQ</a>
+    <img src="../assets/biznisiq-logo.jpg" alt="BiznisIQ">
+    <span class="topbar-title">Koutye Biznis Dashboard</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Tablo Koutye Biznis</h1>
+  <p>Swiv pèfòmans ou, jere lead yo, ak monte nan klasman an.</p>
+  <div class="greeting" id="greeting">Bonjou, Koutye!</div>
+</div>
+
+<!-- STATS CARDS -->
+<div class="stats-wrap">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon blue">&#128200;</div>
+      <div class="stat-number" id="statLeads">0</div>
+      <div class="stat-label">Lead Kapte</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon yellow">&#128172;</div>
+      <div class="stat-number" id="statContacted">0</div>
+      <div class="stat-label">Lead Kontakte</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon green">&#9989;</div>
+      <div class="stat-number" id="statActivated">0</div>
+      <div class="stat-label">Machan Aktive</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon gold">&#128176;</div>
+      <div class="stat-number" id="statCommission">HTG 0</div>
+      <div class="stat-label">Komisyon Touche</div>
+    </div>
+  </div>
+</div>
+
+<!-- PERFORMANCE -->
+<div class="section-wrap">
+  <div class="section-label">Pèfòmans Mwa Sa</div>
+  <div class="perf-grid">
+    <div class="perf-item">
+      <div class="perf-value" id="perfLeads">0</div>
+      <div class="perf-label">Lead</div>
+    </div>
+    <div class="perf-item">
+      <div class="perf-value" id="perfConversions">0</div>
+      <div class="perf-label">Konvèsyon</div>
+    </div>
+    <div class="perf-item">
+      <div class="perf-value" id="perfRate">0%</div>
+      <div class="perf-label">To Konvèsyon</div>
+    </div>
+    <div class="perf-item">
+      <div class="perf-value" id="perfRevenue">HTG 0</div>
+      <div class="perf-label">Revni Jenere</div>
+    </div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="conversionBar" style="width:0%"></div></div>
+  <div class="progress-text" id="conversionText">To konvèsyon: 0%</div>
+</div>
+
+<!-- MY LEADS -->
+<div class="section-wrap">
+  <div class="section-label">Lead Mwen Yo</div>
+  <div class="leads-list" id="leadsList">
+    <div class="empty-state">
+      <div class="empty-icon">&#128203;</div>
+      <p>Ap chaje lead yo...</p>
+    </div>
+  </div>
+</div>
+
+<!-- LEADERBOARD -->
+<div class="section-wrap">
+  <div class="section-label" style="color:#B8860B">&#127942; Top Koutye Biznis Mwa Sa</div>
+  <div class="leaderboard" id="leaderboard"></div>
+</div>
+
+<!-- BOTTOM CTA -->
+<div class="bottom-cta">
+  <a href="capture.html" class="btn-action primary">Kapte Nouvo Lead</a>
+  <a href="convert.html" class="btn-action green">Konvèti Lead</a>
+  <a href="index.html" class="btn-action">Dashboard BiznisIQ</a>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="overlay" id="loginModal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeLogin()">&times;</button>
+    <h3>Konekte</h3>
+    <p>Konekte pou wè tablo ou a.</p>
+    <div class="m-field"><label>Telefon</label><input type="tel" id="loginPhone" placeholder="+509 0000 0000" value="+509 "></div>
+    <div class="m-field"><label>PIN / Modpas</label><input type="password" id="loginPin" placeholder="PIN ou"></div>
+    <button class="btn-login" onclick="doLogin()">Konekte</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p><a href="index.html">BiznisIQ</a> · <a href="../index.html">MyPlopPlop</a> · <a href="https://haitibiznis.com?ref=SHALOM">HaitiBiznis</a><br>&copy; 2026 MyPlopPlop. Tout dwa rezève.</p>
+</div>
+
+<script>
+var API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  ? 'http://localhost:5051/api'
+  : 'https://myplopplop-api.onrender.com/api';
+
+var myLeads = [];
+var openDropdown = null;
+
+var catLabels = {
+  vehicles:'Machin', 'real-estate':'Kay', electronics:'Elektwonik',
+  services:'Sèvis', agriculture:'Agrikilti', construction:'Konstriksyon',
+  marketplace:'Makètples', restaurant:'Restoran', supermarket:'Sipèmakèt',
+  pharmacy:'Famasi', hardware:'Kenkayri', wholesale:'Angwo',
+  retail:'Detay', bakery:'Boulanjri', other:'Lòt'
+};
+
+var statusLabels = {
+  'new': 'Nouvo', 'contacted': 'Kontakte', 'followup': 'Swivi',
+  'registered': 'Enskri', 'activated': 'Aktive'
+};
+
+// ── Auth helpers ──
+function getToken() {
+  try { return localStorage.getItem('myplopplop_token') || ''; } catch(e) { return ''; }
+}
+function getUser() {
+  try {
+    var u = localStorage.getItem('myplopplop_user');
+    return u ? JSON.parse(u) : null;
+  } catch(e) { return null; }
+}
+function closeLogin() { document.getElementById('loginModal').classList.remove('active'); }
+
+function doLogin() {
+  var ph = document.getElementById('loginPhone').value.trim();
+  var pin = document.getElementById('loginPin').value.trim();
+  if (!ph || !pin) { toast('Ranpli telefon ak PIN', 'error'); return; }
+  fetch(API_BASE + '/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone: ph.replace(/\s+/g, ''), password: pin })
+  }).then(function(r) { return r.json(); }).then(function(d) {
+    if (d.success && d.token) {
+      localStorage.setItem('myplopplop_token', d.token);
+      if (d.user) localStorage.setItem('myplopplop_user', JSON.stringify(d.user));
+      closeLogin();
+      toast('Konekte!', 'success');
+      initDashboard();
+    } else { toast(d.message || 'Echèk koneksyon', 'error'); }
+  }).catch(function() { toast('Erè koneksyon', 'error'); });
+}
+
+function requireAuth() {
+  var token = getToken();
+  if (!token) {
+    document.getElementById('loginModal').classList.add('active');
+    return false;
+  }
+  return true;
+}
+
+// ── Init ──
+function initDashboard() {
+  if (!requireAuth()) return;
+
+  // Set greeting
+  var user = getUser();
+  if (user && user.name) {
+    document.getElementById('greeting').textContent = 'Bonjou, ' + user.name + '!';
+  }
+
+  loadMyLeads();
+  renderLeaderboard();
+}
+
+// ── Load leads ──
+function loadMyLeads() {
+  var token = getToken();
+  fetch(API_BASE + '/biznisiq/leads/my', {
+    headers: { 'Authorization': 'Bearer ' + token }
+  }).then(function(r) { return r.json(); }).then(function(res) {
+    if (res.success && res.leads) {
+      myLeads = res.leads;
+    } else if (Array.isArray(res)) {
+      myLeads = res;
+    } else {
+      myLeads = getMockLeads();
+    }
+    renderLeads();
+    computeStats();
+  }).catch(function() {
+    // Use mock data until real API is live
+    myLeads = getMockLeads();
+    renderLeads();
+    computeStats();
+  });
+}
+
+function getMockLeads() {
+  return [
+    { _id: '1', businessName: 'Ti Machann Marie', category: 'restaurant', whatsapp: '+50937001234', status: 'activated', createdAt: '2026-06-01T10:00:00Z', city: 'Delmas' },
+    { _id: '2', businessName: 'Super Marché Jean', category: 'supermarket', whatsapp: '+50938005678', status: 'registered', createdAt: '2026-06-02T14:00:00Z', city: 'Petion-Ville' },
+    { _id: '3', businessName: 'Famasi Sante', category: 'pharmacy', whatsapp: '+50936009012', status: 'contacted', createdAt: '2026-06-04T09:00:00Z', city: 'Port-au-Prince' },
+    { _id: '4', businessName: 'Boulanjri Bon Pen', category: 'bakery', whatsapp: '+50934003456', status: 'followup', createdAt: '2026-06-05T11:00:00Z', city: 'Cap-Haitien' },
+    { _id: '5', businessName: 'Kenkayri Lakay', category: 'hardware', whatsapp: '+50939007890', status: 'new', createdAt: '2026-06-06T08:00:00Z', city: 'Gonaives' },
+    { _id: '6', businessName: 'Magazen Tout Bagay', category: 'retail', whatsapp: '+50931002345', status: 'new', createdAt: '2026-06-07T07:30:00Z', city: 'Jacmel' }
+  ];
+}
+
+// ── Compute stats ──
+function computeStats() {
+  var total = myLeads.length;
+  var contacted = 0, activated = 0, registered = 0;
+  myLeads.forEach(function(l) {
+    if (l.status === 'contacted' || l.status === 'followup' || l.status === 'registered' || l.status === 'activated') contacted++;
+    if (l.status === 'activated') activated++;
+    if (l.status === 'registered') registered++;
+  });
+
+  document.getElementById('statLeads').textContent = total;
+  document.getElementById('statContacted').textContent = contacted;
+  document.getElementById('statActivated').textContent = activated;
+  // Mock commission: HTG 500 per activated merchant
+  var commission = activated * 500;
+  document.getElementById('statCommission').textContent = 'HTG ' + commission.toLocaleString();
+
+  // Performance
+  var conversions = activated + registered;
+  var rate = total > 0 ? Math.round((conversions / total) * 100) : 0;
+  var revenue = activated * 2500; // Mock revenue per activated merchant
+
+  document.getElementById('perfLeads').textContent = total;
+  document.getElementById('perfConversions').textContent = conversions;
+  document.getElementById('perfRate').textContent = rate + '%';
+  document.getElementById('perfRevenue').textContent = 'HTG ' + revenue.toLocaleString();
+
+  document.getElementById('conversionBar').style.width = rate + '%';
+  document.getElementById('conversionText').textContent = 'To konvèsyon: ' + rate + '%';
+}
+
+// ── Render leads ──
+function renderLeads() {
+  var list = document.getElementById('leadsList');
+
+  if (myLeads.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128203;</div><p>Pa gen lead ankò. <a href="capture.html" style="color:var(--primary-blue);font-weight:600;">Kòmanse kapte!</a></p></div>';
+    return;
+  }
+
+  var html = '';
+  myLeads.forEach(function(lead, idx) {
+    var catLabel = catLabels[lead.category] || lead.category || '';
+    var statusClass = lead.status || 'new';
+    var statusText = statusLabels[statusClass] || statusClass.toUpperCase();
+    var phone = lead.whatsapp || lead.phone || '';
+    var date = lead.createdAt ? new Date(lead.createdAt).toLocaleDateString('fr-HT', { day: '2-digit', month: 'short' }) : '';
+
+    html += '<div class="lead-card">'
+      + '<div class="lead-card-top">'
+      + '<h4>' + escHtml(lead.businessName) + '</h4>'
+      + '<span class="status-badge ' + statusClass + '">' + statusText + '</span>'
+      + '</div>'
+      + '<div class="lead-card-details">'
+      + '<span class="cat-badge">' + escHtml(catLabel) + '</span>'
+      + (phone ? '<span>&#128222; ' + escHtml(phone) + '</span>' : '')
+      + (lead.city ? '<span>&#128205; ' + escHtml(lead.city) + '</span>' : '')
+      + (date ? '<span>&#128197; ' + date + '</span>' : '')
+      + '</div>'
+      + '<div class="lead-actions">'
+      + (phone ? '<button class="btn-sm btn-wa-sm" onclick="openWhatsApp(\'' + escAttr(phone) + '\')">WhatsApp</button>' : '')
+      + '<a class="btn-sm btn-convert-sm" href="convert.html?name=' + encodeURIComponent(lead.businessName || '') + '&phone=' + encodeURIComponent(phone) + '&cat=' + encodeURIComponent(lead.category || '') + '">Konvèti</a>'
+      + '<div style="position:relative;display:inline-block">'
+      + '<button class="btn-sm btn-status-sm" onclick="toggleStatus(this,' + idx + ')">Estati &#9660;</button>'
+      + '<div class="status-dropdown" id="dd' + idx + '">'
+      + '<button class="status-option" onclick="updateStatus(' + idx + ',\'new\')">&#9898; Nouvo</button>'
+      + '<button class="status-option" onclick="updateStatus(' + idx + ',\'contacted\')">&#128309; Kontakte</button>'
+      + '<button class="status-option" onclick="updateStatus(' + idx + ',\'followup\')">&#128992; Swivi</button>'
+      + '<button class="status-option" onclick="updateStatus(' + idx + ',\'registered\')">&#128994; Enskri</button>'
+      + '<button class="status-option" onclick="updateStatus(' + idx + ',\'activated\')">&#9899; Aktive</button>'
+      + '</div>'
+      + '</div>'
+      + '</div>'
+      + '</div>';
+  });
+  list.innerHTML = html;
+}
+
+function openWhatsApp(phone) {
+  var cleanPhone = phone.replace(/\s+/g, '').replace(/^\+/, '');
+  window.open('https://wa.me/' + cleanPhone, '_blank');
+}
+
+function toggleStatus(btn, idx) {
+  var dd = document.getElementById('dd' + idx);
+  // Close any open dropdown first
+  if (openDropdown && openDropdown !== dd) {
+    openDropdown.classList.remove('active');
+  }
+  dd.classList.toggle('active');
+  openDropdown = dd.classList.contains('active') ? dd : null;
+}
+
+function updateStatus(idx, newStatus) {
+  var lead = myLeads[idx];
+  if (!lead) return;
+
+  // Close dropdown
+  var dd = document.getElementById('dd' + idx);
+  dd.classList.remove('active');
+  openDropdown = null;
+
+  // Optimistic update
+  lead.status = newStatus;
+  renderLeads();
+  computeStats();
+
+  // Send to API
+  var token = getToken();
+  if (token && lead._id) {
+    fetch(API_BASE + '/biznisiq/leads/' + lead._id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({ status: newStatus })
+    }).then(function(r) { return r.json(); }).then(function(res) {
+      if (res.success) {
+        toast('Estati mete ajou!', 'success');
+      }
+    }).catch(function() {
+      // Keep optimistic update
+    });
+  }
+  toast('Estati: ' + (statusLabels[newStatus] || newStatus), 'success');
+}
+
+// Close dropdown on outside click
+document.addEventListener('click', function(e) {
+  if (openDropdown && !e.target.closest('.btn-status-sm') && !e.target.closest('.status-dropdown')) {
+    openDropdown.classList.remove('active');
+    openDropdown = null;
+  }
+});
+
+// ── Leaderboard (mock) ──
+function renderLeaderboard() {
+  var entries = [
+    { name: 'Jean-Pierre L.', leads: 42, conversions: 18, badge: 'gold' },
+    { name: 'Marie-Claire D.', leads: 38, conversions: 15, badge: 'silver' },
+    { name: 'Roberto M.', leads: 31, conversions: 12, badge: 'bronze' },
+    { name: 'Fabienne J.', leads: 25, conversions: 9, badge: '' },
+    { name: 'Wilner T.', leads: 22, conversions: 7, badge: '' }
+  ];
+
+  var html = '';
+  entries.forEach(function(entry, i) {
+    var rank = i + 1;
+    var rankClass = rank <= 3 ? 'rank-' + rank : 'rank-other';
+    var badgeHtml = '';
+    if (entry.badge === 'gold') badgeHtml = '<span class="lb-badge gold">Gold</span>';
+    else if (entry.badge === 'silver') badgeHtml = '<span class="lb-badge silver">Silver</span>';
+    else if (entry.badge === 'bronze') badgeHtml = '<span class="lb-badge bronze">Bronze</span>';
+
+    html += '<div class="leaderboard-entry">'
+      + '<div class="rank-badge ' + rankClass + '">' + rank + '</div>'
+      + '<div class="lb-info">'
+      + '<div class="lb-name">' + escHtml(entry.name) + '</div>'
+      + '<div class="lb-stats">' + entry.leads + ' lead · ' + entry.conversions + ' konvèsyon</div>'
+      + '</div>'
+      + badgeHtml
+      + '</div>';
+  });
+
+  document.getElementById('leaderboard').innerHTML = html;
+}
+
+// ── Toast ──
+function toast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type || '');
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 3000);
+}
+
+// ── Utils ──
+function escHtml(s) {
+  if (!s) return '';
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function escAttr(s) {
+  return (s || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
+// ── Auto-fill convert.html from URL params ──
+// (handled by convert.html itself)
+
+// ── Init ──
+initDashboard();
+</script>
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Merchant Onboarding — BiznisIQ</title>
+<meta name="description" content="Convert leads into merchants. Create a free MyPlopPlop store in less than 5 minutes.">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#fff;color:#1F2937;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+
+/* TOP BAR */
+.topbar{background:#fff;border-bottom:1px solid #E5E7EB;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar-left a{color:var(--primary-blue);font-size:0.85rem;font-weight:600}
+.topbar-left img{height:32px;border-radius:6px}
+.topbar-title{font-family:'Poppins',sans-serif;font-size:0.9rem;font-weight:600;color:#1F2937;margin-left:4px}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#10B981 0%,#065F46 100%);padding:24px 20px 20px;text-align:center;color:#fff}
+.hero h1{font-family:'Poppins',sans-serif;font-size:1.25rem;font-weight:700;margin-bottom:4px}
+.hero p{font-size:0.82rem;opacity:0.85;max-width:420px;margin:0 auto}
+
+/* FORM */
+.form-wrap{max-width:600px;margin:0 auto;padding:0 16px 32px}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#065F46;margin:24px 0 16px;padding-bottom:8px;border-bottom:1px solid #E5E7EB}
+
+.field{margin-bottom:14px}
+.field label{display:block;font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:5px}
+.field label .req{color:var(--primary-red);margin-left:2px}
+.field input,.field select,.field textarea{width:100%;padding:13px 14px;background:#fff;border:1.5px solid #D1D5DB;border-radius:10px;color:#1F2937;font-size:0.95rem;font-family:'DM Sans',sans-serif;transition:all 0.2s;outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#10B981;box-shadow:0 0 0 3px rgba(16,185,129,0.1)}
+.field input::placeholder,.field textarea::placeholder{color:#9CA3AF}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.field textarea{resize:vertical;min-height:80px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field.error input,.field.error select,.field.error textarea{border-color:#EF4444;box-shadow:0 0 0 3px rgba(239,68,68,0.08)}
+.field .err{font-size:0.72rem;color:#EF4444;margin-top:3px;display:none}
+.field.error .err{display:block}
+
+/* LOGO UPLOAD */
+.logo-upload{display:flex;align-items:center;gap:14px}
+.logo-preview{width:64px;height:64px;border-radius:10px;border:1.5px dashed #D1D5DB;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;background:#F9FAFB;font-size:1.5rem;color:#9CA3AF}
+.logo-preview img{width:100%;height:100%;object-fit:cover}
+.logo-upload input[type="file"]{flex:1}
+
+.btn-create{width:100%;padding:16px 24px;border-radius:12px;font-size:1.05rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:#10B981;color:#fff;transition:all 0.2s;margin-top:8px}
+.btn-create:hover{background:#059669;transform:translateY(-1px);box-shadow:0 4px 16px rgba(16,185,129,0.3)}
+.btn-create:disabled{opacity:0.4;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+.btn-create:active{transform:translateY(0)}
+
+/* SUCCESS SCREEN */
+.success-screen{display:none;max-width:600px;margin:0 auto;padding:32px 16px;text-align:center}
+.success-screen.active{display:block}
+.success-icon{font-size:3rem;margin-bottom:12px}
+.success-screen h2{font-family:'Poppins',sans-serif;font-size:1.3rem;font-weight:700;color:#065F46;margin-bottom:8px}
+.success-screen .store-url{background:#F0FDF4;border:1.5px solid #10B981;border-radius:10px;padding:14px;margin:16px 0;font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:#065F46;word-break:break-all}
+.success-actions{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.btn-whatsapp{padding:14px 24px;border-radius:12px;font-size:0.95rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:#25D366;color:#fff;transition:all 0.2s}
+.btn-whatsapp:hover{background:#1FAD53;transform:translateY(-1px)}
+.btn-secondary{padding:14px 24px;border-radius:12px;font-size:0.9rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;border:1.5px solid #D1D5DB;background:#fff;color:#374151;transition:all 0.2s}
+.btn-secondary:hover{background:#F3F4F6;transform:translateY(-1px)}
+
+/* TEMPLATES */
+.templates-section{max-width:600px;margin:0 auto;padding:0 16px 32px}
+.templates-section h3{font-family:'Poppins',sans-serif;font-size:1rem;font-weight:600;color:#1F2937;margin-bottom:16px}
+.template-card{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:16px;margin-bottom:12px;transition:all 0.2s}
+.template-card:hover{border-color:#10B981;box-shadow:0 2px 8px rgba(16,185,129,0.06)}
+.template-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.template-label{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:3px 8px;border-radius:6px}
+.template-label.initial{background:#E8EDFF;color:var(--primary-blue)}
+.template-label.followup{background:#FEF3C7;color:#92400E}
+.template-label.ready{background:#D1FAE5;color:#065F46}
+.template-text{font-size:0.85rem;color:#374151;line-height:1.5;margin-bottom:12px}
+.template-actions{display:flex;gap:8px}
+.btn-copy,.btn-wa{padding:8px 16px;border-radius:8px;font-size:0.78rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;transition:all 0.2s}
+.btn-copy{background:#F3F4F6;color:#374151}
+.btn-copy:hover{background:#E5E7EB}
+.btn-copy.copied{background:#D1FAE5;color:#065F46}
+.btn-wa{background:#25D366;color:#fff}
+.btn-wa:hover{background:#1FAD53}
+
+/* LOGIN MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(3px);z-index:200;align-items:center;justify-content:center;padding:20px}
+.overlay.active{display:flex}
+.modal{background:#fff;border-radius:16px;padding:28px 24px;width:100%;max-width:360px;box-shadow:0 16px 48px rgba(0,0,0,0.15);position:relative;animation:fadeIn 0.25s}
+.modal h3{font-family:'Poppins',sans-serif;font-size:1.1rem;color:#1F2937;margin-bottom:4px}
+.modal>p{font-size:0.82rem;color:#6B7280;margin-bottom:16px}
+.modal-x{position:absolute;top:14px;right:14px;background:none;border:none;color:#9CA3AF;font-size:1.3rem;cursor:pointer}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);padding:12px 20px;border-radius:10px;font-size:0.85rem;z-index:300;opacity:0;transition:all 0.3s;max-width:90%;text-align:center;font-weight:500}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.success{background:#065F46;color:#fff}
+.toast.error{background:#1E293B;color:#fff;border:1px solid rgba(239,68,68,0.3)}
+
+/* FOOTER */
+.footer{background:#fff;border-top:1px solid #E5E7EB;padding:24px 20px;text-align:center}
+.footer p{font-size:0.72rem;color:#9CA3AF}
+.footer a{color:#6B7280}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:480px){
+  .field-row{grid-template-columns:1fr}
+  .success-actions .btn-whatsapp,.success-actions .btn-secondary{font-size:0.88rem;padding:12px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="index.html">&larr; BiznisIQ</a>
+    <img src="../assets/biznisiq-logo.jpg" alt="BiznisIQ">
+    <span class="topbar-title">Merchant Onboarding</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero" id="heroSection">
+  <h1>Create Free MyPlopPlop Store</h1>
+  <p>Convert a lead into a merchant in less than 5 minutes</p>
+</div>
+
+<!-- STORE CREATION FORM -->
+<div class="form-wrap" id="formWrap">
+  <div class="section-label">Kreye Magazen</div>
+
+  <div class="field">
+    <label>Non Biznis <span class="req">*</span></label>
+    <input type="text" id="fBizName" placeholder="Non biznis la" required>
+    <div class="err">Non biznis obligatwa</div>
+  </div>
+
+  <div class="field">
+    <label>Kategori Biznis <span class="req">*</span></label>
+    <select id="fCategory" required>
+      <option value="">Chwazi kategori...</option>
+      <option value="restaurant">Restoran</option>
+      <option value="supermarket">Sipemake</option>
+      <option value="pharmacy">Famasi</option>
+      <option value="hardware">Kenkayri</option>
+      <option value="wholesale">Angwo</option>
+      <option value="retail">Detay</option>
+      <option value="bakery">Boulanjri</option>
+      <option value="other">Lot</option>
+    </select>
+    <div class="err">Chwazi yon kategori</div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Nimewo WhatsApp <span class="req">*</span></label>
+      <input type="tel" id="fWhatsapp" placeholder="+509 0000 0000" value="+509 ">
+      <div class="err">WhatsApp obligatwa</div>
+    </div>
+    <div class="field">
+      <label>Telefon</label>
+      <input type="tel" id="fPhone" placeholder="+509 0000 0000">
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Vil / Lokasyon</label>
+      <select id="fCity">
+        <option value="">Chwazi vil...</option>
+        <option value="Port-au-Prince">Port-au-Prince</option>
+        <option value="Delmas">Delmas</option>
+        <option value="Petion-Ville">Petion-Ville</option>
+        <option value="Tabarre">Tabarre</option>
+        <option value="Carrefour">Carrefour</option>
+        <option value="Cap-Haitien">Cap-Haitien</option>
+        <option value="Gonaives">Gonaives</option>
+        <option value="Les Cayes">Les Cayes</option>
+        <option value="Jacmel">Jacmel</option>
+        <option value="other">Lot</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Adrès</label>
+      <input type="text" id="fAddress" placeholder="Adrès biznis la">
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Logo Biznis</label>
+    <div class="logo-upload">
+      <div class="logo-preview" id="logoPreview">📷</div>
+      <input type="file" id="fLogo" accept="image/*" onchange="previewLogo(this)">
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Deskripsyon</label>
+    <textarea id="fDescription" placeholder="Deskripsyon kout sou biznis la (opsyonel)"></textarea>
+  </div>
+
+  <button class="btn-create" id="createBtn" onclick="createStore()">Kreye Magazen</button>
+</div>
+
+<!-- SUCCESS SCREEN -->
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">&#10004;&#65039;</div>
+  <h2>Magazen Kreye!</h2>
+  <p style="font-size:0.88rem;color:#6B7280;margin-bottom:4px">Magazen an disponib nan:</p>
+  <div class="store-url" id="storeUrl"></div>
+  <div class="success-actions">
+    <button class="btn-whatsapp" id="btnShareWa" onclick="shareWhatsApp()">Pataje sou WhatsApp</button>
+    <a class="btn-secondary" id="btnAddProducts" href="#">Ajoute Pwodwi</a>
+    <button class="btn-secondary" onclick="resetForm()">Konveti Yon Lot Lead</button>
+  </div>
+</div>
+
+<!-- WHATSAPP OUTREACH TEMPLATES -->
+<div class="templates-section">
+  <div class="section-label" style="color:var(--primary-blue)">WhatsApp Outreach</div>
+  <h3>Modèl Mesaj</h3>
+
+  <div class="template-card">
+    <div class="template-header">
+      <span class="template-label initial">Premye Kontak</span>
+    </div>
+    <div class="template-text" id="tpl1">Bonjou! Nou remake w ap vann pwodwi sou entènet. Nou kapab kreye yon magazen GRATIS pou ou sou MyPlopPlop ki aksepte MonCash, NatCash, Kat Kredi ak livrezon entegre. Enterese?</div>
+    <div class="template-actions">
+      <button class="btn-copy" onclick="copyTemplate('tpl1',this)">Kopye</button>
+      <button class="btn-wa" onclick="sendTemplate('tpl1')">Voye sou WhatsApp</button>
+    </div>
+  </div>
+
+  <div class="template-card">
+    <div class="template-header">
+      <span class="template-label followup">Swivi</span>
+    </div>
+    <div class="template-text" id="tpl2">Bonjou! Mwen te kontakte ou konsènan MyPlopPlop. Magazen gratis la toujou disponib. Ou vle kòmanse jodi a?</div>
+    <div class="template-actions">
+      <button class="btn-copy" onclick="copyTemplate('tpl2',this)">Kopye</button>
+      <button class="btn-wa" onclick="sendTemplate('tpl2')">Voye sou WhatsApp</button>
+    </div>
+  </div>
+
+  <div class="template-card">
+    <div class="template-header">
+      <span class="template-label ready">Magazen Prè</span>
+    </div>
+    <div class="template-text" id="tpl3">Bòn nouvèl! Magazen ou a sou MyPlopPlop prè! Klike la pou wè li: [URL]. Kounye a ou ka ajoute pwodwi ou yo.</div>
+    <div class="template-actions">
+      <button class="btn-copy" onclick="copyTemplate('tpl3',this)">Kopye</button>
+      <button class="btn-wa" onclick="sendTemplate('tpl3')">Voye sou WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="overlay" id="loginModal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeLogin()">&times;</button>
+    <h3>Konekte</h3>
+    <p>Konekte pou kreye magazen.</p>
+    <div class="field"><label>Telefon</label><input type="tel" id="loginPhone" placeholder="+509 0000 0000" value="+509 "></div>
+    <div class="field"><label>PIN / Modpas</label><input type="password" id="loginPin" placeholder="PIN ou"></div>
+    <button class="btn-create" style="margin-top:12px" onclick="doLogin()">Konekte</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p><a href="index.html">BiznisIQ</a> · <a href="../index.html">MyPlopPlop</a> · <a href="https://haitibiznis.com?ref=SHALOM">HaitiBiznis</a><br>&copy; 2026 MyPlopPlop. Tout dwa rezève.</p>
+</div>
+
+<script>
+var API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  ? 'http://localhost:5051/api'
+  : 'https://myplopplop-api.onrender.com/api';
+
+var createdStoreSlug = '';
+var createdStoreUrl = '';
+
+// ── Auth helpers ──
+function getToken() {
+  try { return localStorage.getItem('myplopplop_token') || ''; } catch(e) { return ''; }
+}
+function closeLogin() { document.getElementById('loginModal').classList.remove('active'); }
+
+function doLogin() {
+  var ph = document.getElementById('loginPhone').value.trim();
+  var pin = document.getElementById('loginPin').value.trim();
+  if (!ph || !pin) { toast('Ranpli telefon ak PIN', 'error'); return; }
+  fetch(API_BASE + '/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone: ph.replace(/\s+/g, ''), password: pin })
+  }).then(function(r) { return r.json(); }).then(function(d) {
+    if (d.success && d.token) {
+      localStorage.setItem('myplopplop_token', d.token);
+      closeLogin();
+      toast('Konekte!', 'success');
+      createStore();
+    } else { toast(d.message || 'Echèk koneksyon', 'error'); }
+  }).catch(function() { toast('Erè koneksyon', 'error'); });
+}
+
+// ── Logo preview ──
+function previewLogo(input) {
+  var preview = document.getElementById('logoPreview');
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      preview.innerHTML = '<img src="' + e.target.result + '" alt="Logo">';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+// ── Validation ──
+function validateForm() {
+  var ok = true;
+  var checks = [
+    { id: 'fBizName', test: function(v) { return v.length > 0; } },
+    { id: 'fWhatsapp', test: function(v) { return v.replace(/\s+/g, '').length >= 5; } },
+    { id: 'fCategory', test: function(v) { return v.length > 0; } }
+  ];
+  checks.forEach(function(c) {
+    var el = document.getElementById(c.id);
+    var p = el.closest('.field');
+    if (!c.test(el.value.trim())) { p.classList.add('error'); ok = false; }
+    else { p.classList.remove('error'); }
+  });
+  if (!ok) toast('Ranpli tout chan obligatwa yo', 'error');
+  return ok;
+}
+
+// ── Create Store ──
+function createStore() {
+  var token = getToken();
+  if (!token) { document.getElementById('loginModal').classList.add('active'); return; }
+  if (!validateForm()) return;
+
+  var btn = document.getElementById('createBtn');
+  btn.disabled = true;
+  btn.textContent = 'Ap kreye...';
+
+  // Build form data (supports logo file upload)
+  var formData = new FormData();
+  formData.append('name', document.getElementById('fBizName').value.trim());
+  formData.append('category', document.getElementById('fCategory').value);
+  formData.append('whatsapp', document.getElementById('fWhatsapp').value.trim().replace(/\s+/g, ''));
+  formData.append('phone', document.getElementById('fPhone').value.trim().replace(/\s+/g, ''));
+  formData.append('city', document.getElementById('fCity').value);
+  formData.append('address', document.getElementById('fAddress').value.trim());
+  formData.append('description', document.getElementById('fDescription').value.trim());
+
+  var logoFile = document.getElementById('fLogo').files[0];
+  if (logoFile) formData.append('logo', logoFile);
+
+  fetch(API_BASE + '/stores', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + token },
+    body: formData
+  }).then(function(r) { return r.json(); }).then(function(res) {
+    btn.disabled = false;
+    btn.textContent = 'Kreye Magazen';
+    if (res.success || res.store) {
+      var store = res.store || res;
+      var slug = store.slug || slugify(document.getElementById('fBizName').value.trim());
+      showSuccess(slug);
+    } else {
+      toast(res.message || 'Erè', 'error');
+    }
+  }).catch(function(err) {
+    btn.disabled = false;
+    btn.textContent = 'Kreye Magazen';
+    toast('Erè koneksyon. Eseye ankò.', 'error');
+  });
+}
+
+function slugify(text) {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+function showSuccess(slug) {
+  createdStoreSlug = slug;
+  var baseUrl = location.origin + location.pathname.replace(/biznisiq\/.*$/, '');
+  createdStoreUrl = baseUrl + 'store.html?slug=' + slug;
+
+  document.getElementById('formWrap').style.display = 'none';
+  document.getElementById('heroSection').style.display = 'none';
+  var screen = document.getElementById('successScreen');
+  screen.classList.add('active');
+  document.getElementById('storeUrl').textContent = createdStoreUrl;
+  document.getElementById('btnAddProducts').href = baseUrl + 'store-designer.html?slug=' + slug;
+
+  // Update the "Store Ready" template with actual URL
+  var tpl3El = document.getElementById('tpl3');
+  tpl3El.textContent = tpl3El.textContent.replace('[URL]', createdStoreUrl);
+
+  toast('Magazen kreye!', 'success');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function shareWhatsApp() {
+  var msg = 'Ou kapab wè magazen mwen sou MyPlopPlop: ' + createdStoreUrl;
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+}
+
+function resetForm() {
+  document.getElementById('formWrap').style.display = '';
+  document.getElementById('heroSection').style.display = '';
+  document.getElementById('successScreen').classList.remove('active');
+  // Clear fields
+  document.getElementById('fBizName').value = '';
+  document.getElementById('fCategory').selectedIndex = 0;
+  document.getElementById('fWhatsapp').value = '+509 ';
+  document.getElementById('fPhone').value = '';
+  document.getElementById('fCity').selectedIndex = 0;
+  document.getElementById('fAddress').value = '';
+  document.getElementById('fDescription').value = '';
+  document.getElementById('fLogo').value = '';
+  document.getElementById('logoPreview').innerHTML = '📷';
+  // Reset template 3
+  document.getElementById('tpl3').textContent = 'Bòn nouvèl! Magazen ou a sou MyPlopPlop prè! Klike la pou wè li: [URL]. Kounye a ou ka ajoute pwodwi ou yo.';
+  document.getElementById('fBizName').focus();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Template actions ──
+function copyTemplate(tplId, btn) {
+  var text = document.getElementById(tplId).textContent;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      btn.classList.add('copied');
+      btn.textContent = 'Kopye!';
+      setTimeout(function() { btn.classList.remove('copied'); btn.textContent = 'Kopye'; }, 2000);
+    });
+  } else {
+    // Fallback
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.classList.add('copied');
+    btn.textContent = 'Kopye!';
+    setTimeout(function() { btn.classList.remove('copied'); btn.textContent = 'Kopye'; }, 2000);
+  }
+}
+
+function sendTemplate(tplId) {
+  var text = document.getElementById(tplId).textContent;
+  var phone = document.getElementById('fWhatsapp').value.trim().replace(/\s+/g, '').replace(/^\+/, '');
+  var url = 'https://wa.me/' + (phone || '') + '?text=' + encodeURIComponent(text);
+  window.open(url, '_blank');
+}
+
+// ── Toast ──
+function toast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type || '');
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 3000);
+}
+
+// ── Clear errors on focus ──
+document.querySelectorAll('.field input,.field select,.field textarea').forEach(function(el) {
+  el.addEventListener('focus', function() { this.closest('.field').classList.remove('error'); });
+});
+
+// ── Escape HTML utility ──
+function escHtml(s) {
+  if (!s) return '';
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+</script>
+</body>
+</html>
