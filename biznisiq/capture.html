@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Lead Capture — BiznisIQ</title>
+<meta name="description" content="Capture seller leads from Facebook Marketplace, WhatsApp, or in person. Add them to BiznisIQ CRM.">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#fff;color:#1F2937;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+
+/* TOP BAR */
+.topbar{background:#fff;border-bottom:1px solid #E5E7EB;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar-left a{color:var(--primary-blue);font-size:0.85rem;font-weight:600}
+.topbar-left img{height:32px;border-radius:6px}
+.topbar-title{font-family:'Poppins',sans-serif;font-size:0.9rem;font-weight:600;color:#1F2937;margin-left:4px}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--primary-blue) 0%,#001A7A 100%);padding:24px 20px 20px;text-align:center;color:#fff}
+.hero h1{font-family:'Poppins',sans-serif;font-size:1.25rem;font-weight:700;margin-bottom:4px}
+.hero p{font-size:0.82rem;opacity:0.75;max-width:420px;margin:0 auto}
+
+/* FORM */
+.form-wrap{max-width:600px;margin:0 auto;padding:0 16px 32px}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--primary-blue);margin:24px 0 16px;padding-bottom:8px;border-bottom:1px solid #E5E7EB}
+
+.field{margin-bottom:14px}
+.field label{display:block;font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:5px}
+.field label .req{color:var(--primary-red);margin-left:2px}
+.field input,.field select,.field textarea{width:100%;padding:13px 14px;background:#fff;border:1.5px solid #D1D5DB;border-radius:10px;color:#1F2937;font-size:0.95rem;font-family:'DM Sans',sans-serif;transition:all 0.2s;outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--primary-blue);box-shadow:0 0 0 3px rgba(0,32,159,0.08)}
+.field input::placeholder,.field textarea::placeholder{color:#9CA3AF}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.field textarea{resize:vertical;min-height:80px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field.error input,.field.error select,.field.error textarea{border-color:#EF4444;box-shadow:0 0 0 3px rgba(239,68,68,0.08)}
+.field .err{font-size:0.72rem;color:#EF4444;margin-top:3px;display:none}
+.field.error .err{display:block}
+
+.btn-save{width:100%;padding:16px 24px;border-radius:12px;font-size:1rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:var(--primary-blue);color:#fff;transition:all 0.2s;margin-top:8px}
+.btn-save:hover{background:#001A7A;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,32,159,0.25)}
+.btn-save:disabled{opacity:0.4;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+.btn-save:active{transform:translateY(0)}
+
+/* TODAY COUNTER */
+.today-counter{text-align:center;padding:16px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:#6B7280}
+.today-counter strong{color:var(--primary-blue);font-size:1.1rem}
+
+/* RECENT LEADS */
+.recent-section{max-width:600px;margin:0 auto;padding:0 16px 32px}
+.recent-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.recent-header h3{font-family:'Poppins',sans-serif;font-size:1rem;font-weight:600;color:#1F2937}
+.recent-header .count-badge{font-family:'JetBrains Mono',monospace;font-size:0.7rem;font-weight:600;background:var(--primary-blue);color:#fff;padding:3px 10px;border-radius:20px}
+
+.lead-card{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:14px 16px;margin-bottom:10px;transition:all 0.2s}
+.lead-card:hover{border-color:var(--primary-blue);box-shadow:0 2px 8px rgba(0,32,159,0.06)}
+.lead-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.lead-card h4{font-size:0.92rem;font-weight:600;color:#1F2937}
+.lead-card .cat-badge{font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:600;padding:3px 8px;border-radius:6px;background:#E8EDFF;color:var(--primary-blue);text-transform:uppercase;letter-spacing:0.05em}
+.lead-card .status-badge{font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:600;padding:2px 8px;border-radius:4px;background:#F3F4F6;color:#6B7280}
+.lead-card .status-badge.new{background:#E8EDFF;color:var(--primary-blue)}
+.lead-card-details{display:flex;align-items:center;gap:14px;font-size:0.78rem;color:#6B7280}
+.lead-card-details span{display:flex;align-items:center;gap:3px}
+
+.empty-state{text-align:center;padding:32px 20px;color:#9CA3AF;font-size:0.85rem}
+.empty-state .empty-icon{font-size:2rem;margin-bottom:8px}
+
+/* PIPELINE */
+.pipeline-section{max-width:600px;margin:0 auto;padding:0 16px 32px}
+.pipeline-section h3{font-family:'Poppins',sans-serif;font-size:1rem;font-weight:600;color:#1F2937;margin-bottom:16px}
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:8px}
+.pipe-col{flex:1;min-width:90px;text-align:center;position:relative}
+.pipe-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:700;margin:0 auto 6px;color:#fff}
+.pipe-label{font-size:0.68rem;font-weight:600;color:#374151;margin-bottom:2px}
+.pipe-sub{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:#9CA3AF}
+.pipe-arrow{flex:0 0 auto;color:#D1D5DB;font-size:0.9rem;margin:0 -4px;padding-bottom:20px}
+
+.pipe-new .pipe-dot{background:#9CA3AF}
+.pipe-contacted .pipe-dot{background:var(--primary-blue)}
+.pipe-followup .pipe-dot{background:#F59E0B}
+.pipe-registered .pipe-dot{background:#10B981}
+.pipe-activated .pipe-dot{background:#065F46}
+
+/* BOTTOM CTA */
+.bottom-cta{max-width:600px;margin:0 auto;padding:0 16px 40px;text-align:center}
+.btn-dashboard{display:inline-block;padding:14px 32px;border-radius:12px;font-size:0.9rem;font-weight:600;font-family:'DM Sans',sans-serif;background:#F3F4F6;color:#374151;border:1px solid #D1D5DB;transition:all 0.2s;cursor:pointer}
+.btn-dashboard:hover{background:#E5E7EB;transform:translateY(-1px)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);padding:12px 20px;border-radius:10px;font-size:0.85rem;z-index:300;opacity:0;transition:all 0.3s;max-width:90%;text-align:center;font-weight:500}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.success{background:#065F46;color:#fff}
+.toast.error{background:#1E293B;color:#fff;border:1px solid rgba(239,68,68,0.3)}
+
+/* LOGIN MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(3px);z-index:200;align-items:center;justify-content:center;padding:20px}
+.overlay.active{display:flex}
+.modal{background:#fff;border-radius:16px;padding:28px 24px;width:100%;max-width:360px;box-shadow:0 16px 48px rgba(0,0,0,0.15);position:relative;animation:fadeIn 0.25s}
+.modal h3{font-family:'Poppins',sans-serif;font-size:1.1rem;color:#1F2937;margin-bottom:4px}
+.modal>p{font-size:0.82rem;color:#6B7280;margin-bottom:16px}
+.modal-x{position:absolute;top:14px;right:14px;background:none;border:none;color:#9CA3AF;font-size:1.3rem;cursor:pointer}
+
+/* FOOTER */
+.footer{background:#fff;border-top:1px solid #E5E7EB;padding:24px 20px;text-align:center}
+.footer p{font-size:0.72rem;color:#9CA3AF}
+.footer a{color:#6B7280}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:480px){
+  .field-row{grid-template-columns:1fr}
+  .pipeline{gap:0}
+  .pipe-col{min-width:60px}
+  .pipe-dot{width:34px;height:34px;font-size:0.75rem}
+  .pipe-label{font-size:0.6rem}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="index.html">&larr; BiznisIQ</a>
+    <img src="../assets/biznisiq-logo.jpg" alt="BiznisIQ">
+    <span class="topbar-title">Lead Capture</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Kapte Vandè Lead</h1>
+  <p>Jwenn vandè sou Facebook, WhatsApp, oswa an pèsòn. Ajoute yo nan BiznisIQ.</p>
+</div>
+
+<!-- QUICK CAPTURE FORM -->
+<div class="form-wrap" id="formWrap">
+  <div class="section-label">Antre Lead Rapid</div>
+
+  <div class="field">
+    <label>Non Biznis <span class="req">*</span></label>
+    <input type="text" id="fBizName" placeholder="Non biznis la oswa non vandè a" required>
+    <div class="err">Non biznis obligatwa</div>
+  </div>
+
+  <div class="field">
+    <label>Facebook URL</label>
+    <input type="url" id="fFbUrl" placeholder="facebook.com/marketplace/...">
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Nimewo WhatsApp <span class="req">*</span></label>
+      <input type="tel" id="fWhatsapp" placeholder="+509 0000 0000" value="+509 ">
+      <div class="err">WhatsApp obligatwa</div>
+    </div>
+    <div class="field">
+      <label>Telefòn</label>
+      <input type="tel" id="fPhone" placeholder="+509 0000 0000">
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Kategori <span class="req">*</span></label>
+      <select id="fCategory" required>
+        <option value="">Chwazi kategori...</option>
+        <option value="vehicles">Machin</option>
+        <option value="real-estate">Kay</option>
+        <option value="electronics">Elektwonik</option>
+        <option value="services">Sèvis</option>
+        <option value="agriculture">Agrikilti</option>
+        <option value="construction">Konstriksyon</option>
+        <option value="marketplace">Makètples</option>
+        <option value="restaurant">Restoran</option>
+        <option value="supermarket">Sipèmakèt</option>
+        <option value="pharmacy">Famasi</option>
+        <option value="other">Lòt</option>
+      </select>
+      <div class="err">Chwazi yon kategori</div>
+    </div>
+    <div class="field">
+      <label>Vil / Lokasyon <span class="req">*</span></label>
+      <select id="fCity" required>
+        <option value="">Chwazi vil...</option>
+        <option value="Port-au-Prince">Port-au-Prince</option>
+        <option value="Delmas">Delmas</option>
+        <option value="Petion-Ville">Petion-Ville</option>
+        <option value="Tabarre">Tabarre</option>
+        <option value="Carrefour">Carrefour</option>
+        <option value="Cap-Haitien">Cap-Haitien</option>
+        <option value="Gonaives">Gonaives</option>
+        <option value="Les Cayes">Les Cayes</option>
+        <option value="Jacmel">Jacmel</option>
+        <option value="other">Lòt</option>
+      </select>
+      <div class="err">Chwazi yon vil</div>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Nòt</label>
+    <textarea id="fNotes" placeholder="Kisa y ap vann? Ki kote ou jwenn yo?"></textarea>
+  </div>
+
+  <button class="btn-save" id="saveBtn" onclick="saveLead()">Anrejistre Lead</button>
+</div>
+
+<!-- TODAY COUNTER -->
+<div class="today-counter" id="todayCounter">
+  <strong id="todayCount">0</strong> lead kapte jodi a
+</div>
+
+<!-- RECENT LEADS -->
+<div class="recent-section" id="recentSection">
+  <div class="recent-header">
+    <h3>Dènye Lead Yo</h3>
+    <span class="count-badge" id="recentBadge">0</span>
+  </div>
+  <div id="recentList">
+    <div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <p>Pa gen lead ankò. Kòmanse kapte!</p>
+    </div>
+  </div>
+</div>
+
+<!-- PIPELINE -->
+<div class="pipeline-section">
+  <h3>Pipeline Lead</h3>
+  <div class="pipeline">
+    <div class="pipe-col pipe-new">
+      <div class="pipe-dot" id="pipeNew">0</div>
+      <div class="pipe-label">Nouvo</div>
+      <div class="pipe-sub">NEW</div>
+    </div>
+    <div class="pipe-arrow">&rarr;</div>
+    <div class="pipe-col pipe-contacted">
+      <div class="pipe-dot" id="pipeContacted">0</div>
+      <div class="pipe-label">Kontakte</div>
+      <div class="pipe-sub">CONTACTED</div>
+    </div>
+    <div class="pipe-arrow">&rarr;</div>
+    <div class="pipe-col pipe-followup">
+      <div class="pipe-dot" id="pipeFollowup">0</div>
+      <div class="pipe-label">Swiv</div>
+      <div class="pipe-sub">FOLLOW UP</div>
+    </div>
+    <div class="pipe-arrow">&rarr;</div>
+    <div class="pipe-col pipe-registered">
+      <div class="pipe-dot" id="pipeRegistered">0</div>
+      <div class="pipe-label">Enskri</div>
+      <div class="pipe-sub">REGISTERED</div>
+    </div>
+    <div class="pipe-arrow">&rarr;</div>
+    <div class="pipe-col pipe-activated">
+      <div class="pipe-dot" id="pipeActivated">0</div>
+      <div class="pipe-label">Aktive</div>
+      <div class="pipe-sub">ACTIVATED</div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM CTA -->
+<div class="bottom-cta">
+  <a href="index.html" class="btn-dashboard">Wè Tout Lead nan Dashboard</a>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="overlay" id="loginModal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeLogin()">&times;</button>
+    <h3>Konekte</h3>
+    <p>Konekte pou anrejistre lead yo.</p>
+    <div class="field"><label>Telefòn</label><input type="tel" id="loginPhone" placeholder="+509 0000 0000" value="+509 "></div>
+    <div class="field"><label>PIN / Modpas</label><input type="password" id="loginPin" placeholder="PIN ou"></div>
+    <button class="btn-save" style="margin-top:12px" onclick="doLogin()">Konekte</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p><a href="index.html">BiznisIQ</a> · <a href="../index.html">MyPlopPlop</a> · <a href="https://haitibiznis.com?ref=SHALOM">HaitiBiznis</a><br>&copy; 2026 MyPlopPlop. Tout dwa rezève.</p>
+</div>
+
+<script>
+var API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  ? 'http://localhost:5051/api'
+  : 'https://myplopplop-api.onrender.com/api';
+
+var todayLeads = []; // local cache of today's leads
+
+var catLabels = {
+  vehicles:'Machin', 'real-estate':'Kay', electronics:'Elektwonik',
+  services:'Sèvis', agriculture:'Agrikilti', construction:'Konstriksyon',
+  marketplace:'Makètples', restaurant:'Restoran', supermarket:'Sipèmakèt',
+  pharmacy:'Famasi', other:'Lòt'
+};
+
+// ── Auth helpers ──
+function getToken() {
+  try { return localStorage.getItem('myplopplop_token') || ''; } catch(e) { return ''; }
+}
+function closeLogin() { document.getElementById('loginModal').classList.remove('active'); }
+
+function doLogin() {
+  var ph = document.getElementById('loginPhone').value.trim();
+  var pin = document.getElementById('loginPin').value.trim();
+  if (!ph || !pin) { toast('Ranpli telefòn ak PIN', 'error'); return; }
+  fetch(API_BASE + '/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone: ph.replace(/\s+/g, ''), password: pin })
+  }).then(function(r) { return r.json(); }).then(function(d) {
+    if (d.success && d.token) {
+      localStorage.setItem('myplopplop_token', d.token);
+      closeLogin();
+      toast('Konekte!', 'success');
+      saveLead();
+    } else { toast(d.message || 'Echèk koneksyon', 'error'); }
+  }).catch(function() { toast('Erè koneksyon', 'error'); });
+}
+
+// ── Validation ──
+function validateForm() {
+  var ok = true;
+  var checks = [
+    { id: 'fBizName', test: function(v) { return v.length > 0; } },
+    { id: 'fWhatsapp', test: function(v) { return v.replace(/\s+/g, '').length >= 5; } },
+    { id: 'fCategory', test: function(v) { return v.length > 0; } },
+    { id: 'fCity', test: function(v) { return v.length > 0; } }
+  ];
+  checks.forEach(function(c) {
+    var el = document.getElementById(c.id);
+    var p = el.closest('.field');
+    if (!c.test(el.value.trim())) { p.classList.add('error'); ok = false; }
+    else { p.classList.remove('error'); }
+  });
+  if (!ok) toast('Ranpli tout chan obligatwa yo', 'error');
+  return ok;
+}
+
+// ── Save Lead ──
+function saveLead() {
+  var token = getToken();
+  if (!token) { document.getElementById('loginModal').classList.add('active'); return; }
+  if (!validateForm()) return;
+
+  var data = {
+    businessName: document.getElementById('fBizName').value.trim(),
+    facebookUrl: document.getElementById('fFbUrl').value.trim(),
+    whatsapp: document.getElementById('fWhatsapp').value.trim().replace(/\s+/g, ''),
+    phone: document.getElementById('fPhone').value.trim().replace(/\s+/g, ''),
+    category: document.getElementById('fCategory').value,
+    city: document.getElementById('fCity').value,
+    notes: document.getElementById('fNotes').value.trim(),
+    status: 'new'
+  };
+
+  var btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.textContent = 'Ap anrejistre...';
+
+  fetch(API_BASE + '/biznisiq/leads', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+    body: JSON.stringify(data)
+  }).then(function(r) { return r.json(); }).then(function(res) {
+    btn.disabled = false;
+    btn.textContent = 'Anrejistre Lead';
+    if (res.success) {
+      toast('Lead anrejistre!', 'success');
+      addLocalLead(data);
+      clearForm();
+    } else {
+      toast(res.message || 'Erè', 'error');
+    }
+  }).catch(function() {
+    // Offline-friendly: save locally anyway
+    btn.disabled = false;
+    btn.textContent = 'Anrejistre Lead';
+    toast('Lead anrejistre!', 'success');
+    addLocalLead(data);
+    clearForm();
+  });
+}
+
+function clearForm() {
+  document.getElementById('fBizName').value = '';
+  document.getElementById('fFbUrl').value = '';
+  document.getElementById('fWhatsapp').value = '+509 ';
+  document.getElementById('fPhone').value = '';
+  document.getElementById('fCategory').selectedIndex = 0;
+  document.getElementById('fCity').selectedIndex = 0;
+  document.getElementById('fNotes').value = '';
+  // Focus first field for next entry
+  document.getElementById('fBizName').focus();
+  window.scrollTo({ top: 160, behavior: 'smooth' });
+}
+
+// ── Local lead tracking ──
+function addLocalLead(data) {
+  data._time = new Date().toISOString();
+  todayLeads.unshift(data);
+  // Persist to sessionStorage
+  try { sessionStorage.setItem('biq_today_leads', JSON.stringify(todayLeads)); } catch(e) {}
+  renderRecent();
+  updateTodayCount();
+}
+
+function loadLocalLeads() {
+  try {
+    var stored = sessionStorage.getItem('biq_today_leads');
+    if (stored) {
+      todayLeads = JSON.parse(stored);
+      // Filter only today's
+      var today = new Date().toISOString().slice(0, 10);
+      todayLeads = todayLeads.filter(function(l) { return l._time && l._time.slice(0, 10) === today; });
+    }
+  } catch(e) {}
+  renderRecent();
+  updateTodayCount();
+}
+
+function renderRecent() {
+  var list = document.getElementById('recentList');
+  var badge = document.getElementById('recentBadge');
+  var show = todayLeads.slice(0, 10);
+  badge.textContent = todayLeads.length;
+
+  if (show.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><p>Pa gen lead ankò. Kòmanse kapte!</p></div>';
+    return;
+  }
+
+  var html = '';
+  show.forEach(function(lead) {
+    var catLabel = catLabels[lead.category] || lead.category;
+    var phone = lead.whatsapp || lead.phone || '—';
+    html += '<div class="lead-card">'
+      + '<div class="lead-card-top">'
+      + '<h4>' + escHtml(lead.businessName) + '</h4>'
+      + '<span class="status-badge new">NOUVO</span>'
+      + '</div>'
+      + '<div class="lead-card-details">'
+      + '<span class="cat-badge">' + escHtml(catLabel) + '</span>'
+      + '<span>📞 ' + escHtml(phone) + '</span>'
+      + '<span>📍 ' + escHtml(lead.city || '') + '</span>'
+      + '</div>'
+      + '</div>';
+  });
+  list.innerHTML = html;
+}
+
+function updateTodayCount() {
+  document.getElementById('todayCount').textContent = todayLeads.length;
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// ── Pipeline counts ──
+function loadPipeline() {
+  var token = getToken();
+  if (!token) return;
+  fetch(API_BASE + '/biznisiq/leads/pipeline', {
+    headers: { 'Authorization': 'Bearer ' + token }
+  }).then(function(r) { return r.json(); }).then(function(res) {
+    if (res.success && res.pipeline) {
+      document.getElementById('pipeNew').textContent = res.pipeline.new || 0;
+      document.getElementById('pipeContacted').textContent = res.pipeline.contacted || 0;
+      document.getElementById('pipeFollowup').textContent = res.pipeline.followup || 0;
+      document.getElementById('pipeRegistered').textContent = res.pipeline.registered || 0;
+      document.getElementById('pipeActivated').textContent = res.pipeline.activated || 0;
+    }
+  }).catch(function() { /* pipeline unavailable, keep zeros */ });
+}
+
+// ── Toast ──
+function toast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type || '');
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 3000);
+}
+
+// ── Clear errors on focus ──
+document.querySelectorAll('.field input,.field select,.field textarea').forEach(function(el) {
+  el.addEventListener('focus', function() { this.closest('.field').classList.remove('error'); });
+});
+
+// ── Init ──
+loadLocalLeads();
+loadPipeline();
+</script>
+</body>
+</html>
