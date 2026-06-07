@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poste Gratis — BiznisIQ</title>
+<meta name="description" content="Post your listing for free on BiznisIQ. Vehicles, real estate, electronics, jobs, services across Haiti.">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#F8F9FC;color:#1F2937;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+
+.topbar{background:#fff;border-bottom:1px solid #E5E7EB;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar-left a{color:var(--primary-blue);font-size:0.85rem;font-weight:600}
+.topbar-left img{height:32px;border-radius:6px}
+.lang-row{display:flex;gap:2px}
+.lang-row button{background:none;border:1px solid #E5E7EB;padding:3px 8px;font-size:0.65rem;font-family:'JetBrains Mono',monospace;font-weight:500;color:#9CA3AF;border-radius:4px;cursor:pointer;transition:all 0.2s}
+.lang-row button.active{background:var(--primary-blue);color:#fff;border-color:var(--primary-blue)}
+
+.hero{background:linear-gradient(135deg,var(--primary-blue) 0%,#001A7A 100%);padding:32px 20px 28px;text-align:center;color:#fff}
+.hero h1{font-family:'Poppins',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:6px}
+.hero p{font-size:0.85rem;opacity:0.75}
+
+.stepper{display:flex;align-items:center;justify-content:center;gap:0;padding:24px 20px 0;max-width:400px;margin:0 auto}
+.s-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:0.8rem;font-weight:600;border:2px solid #D1D5DB;color:#9CA3AF;background:#F3F4F6;transition:all 0.3s;flex-shrink:0}
+.s-dot.active{border-color:var(--primary-blue);color:#fff;background:var(--primary-blue);box-shadow:0 0 12px rgba(0,32,159,0.25)}
+.s-dot.done{border-color:#10B981;color:#fff;background:#10B981}
+.s-label{font-size:0.7rem;color:#9CA3AF;margin-left:6px;font-weight:500;white-space:nowrap;transition:color 0.3s}
+.s-item.active .s-label{color:#1F2937}
+.s-item.done .s-label{color:#10B981}
+.s-item{display:flex;align-items:center}
+.s-line{width:40px;height:2px;background:#E5E7EB;margin:0 8px;transition:background 0.3s}
+.s-line.done{background:#10B981}
+
+.form-wrap{max-width:580px;margin:0 auto;padding:0 16px 100px}
+.form-step{display:none;animation:fadeIn 0.3s ease}
+.form-step.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.section-label{font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--primary-blue);margin:24px 0 16px;padding-bottom:8px;border-bottom:1px solid #E5E7EB}
+
+.field{margin-bottom:16px}
+.field label{display:block;font-size:0.82rem;font-weight:600;color:#374151;margin-bottom:5px}
+.field label .req{color:var(--primary-red);margin-left:2px}
+.field input,.field select,.field textarea{width:100%;padding:13px 14px;background:#fff;border:1.5px solid #D1D5DB;border-radius:10px;color:#1F2937;font-size:0.95rem;font-family:'DM Sans',sans-serif;transition:all 0.2s;outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--primary-blue);box-shadow:0 0 0 3px rgba(0,32,159,0.08)}
+.field input::placeholder,.field textarea::placeholder{color:#9CA3AF}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.field textarea{resize:vertical;min-height:90px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field.error input,.field.error select{border-color:#EF4444;box-shadow:0 0 0 3px rgba(239,68,68,0.08)}
+.field .err{font-size:0.72rem;color:#EF4444;margin-top:3px;display:none}
+.field.error .err{display:block}
+
+.price-wrap{position:relative}
+.price-wrap input{padding-right:60px}
+.price-wrap .currency{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:'JetBrains Mono',monospace;font-size:0.8rem;font-weight:600;color:#9CA3AF}
+
+.img-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.img-slot{aspect-ratio:1;border-radius:10px;border:2px dashed #D1D5DB;background:#F9FAFB;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;transition:all 0.2s;position:relative}
+.img-slot:hover{border-color:var(--primary-blue);background:#E8EDFF}
+.img-slot .plus{font-size:1.5rem;color:#9CA3AF}
+.img-slot .txt{font-size:0.6rem;color:#9CA3AF;margin-top:2px}
+.img-slot img{width:100%;height:100%;object-fit:cover}
+.img-slot input{display:none}
+.img-slot .remove{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,0.6);color:#fff;border:none;font-size:0.7rem;cursor:pointer;display:none;align-items:center;justify-content:center}
+.img-slot.has-img .remove{display:flex}
+.img-slot.has-img .plus,.img-slot.has-img .txt{display:none}
+
+.check-row{display:flex;align-items:flex-start;gap:10px;padding:14px 16px;background:#E8EDFF;border-radius:10px;border:1px solid rgba(0,32,159,0.1);margin-top:16px;cursor:pointer}
+.check-row input{margin-top:3px;accent-color:var(--primary-blue);width:18px;height:18px;flex-shrink:0}
+.check-row .check-text{font-size:0.85rem;color:#1F2937;font-weight:500}
+.check-row .check-sub{font-size:0.75rem;color:#6B7280;margin-top:4px;display:none}
+.check-row.checked .check-sub{display:block}
+
+.btn-row{display:flex;gap:12px;margin-top:28px}
+.btn{flex:1;padding:15px 24px;border-radius:12px;font-size:0.95rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;transition:all 0.2s;text-align:center}
+.btn-back{background:#F3F4F6;color:#4B5563;border:1px solid #D1D5DB;flex:0.4}
+.btn-back:hover{background:#E5E7EB}
+.btn-primary{background:var(--primary-blue);color:#fff}
+.btn-primary:hover{background:#001A7A;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,32,159,0.25)}
+.btn:disabled{opacity:0.4;cursor:not-allowed;transform:none!important}
+
+.success{display:none;text-align:center;padding:48px 20px 100px;max-width:500px;margin:0 auto;animation:fadeIn 0.4s}
+.success.active{display:block}
+.success-icon{width:72px;height:72px;border-radius:50%;background:#D1FAE5;border:3px solid #10B981;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 20px}
+.success h2{font-family:'Poppins',sans-serif;font-size:1.3rem;color:#1F2937;margin-bottom:8px}
+.success p{color:#6B7280;margin-bottom:20px}
+.success-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.success-actions a{padding:12px 24px;border-radius:10px;font-weight:600;font-size:0.88rem;transition:all 0.2s}
+
+.preview-card{background:#fff;border-radius:14px;border:1px solid #E5E7EB;padding:16px;margin:20px auto;max-width:320px;text-align:left}
+.preview-card .cat-badge{display:inline-block;font-size:0.65rem;font-weight:600;padding:3px 8px;border-radius:6px;background:#E8EDFF;color:var(--primary-blue);margin-bottom:8px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.05em}
+.preview-card h4{font-size:0.95rem;color:#1F2937;margin-bottom:4px}
+.preview-card .price{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:700;color:var(--primary-red)}
+.preview-card .loc{font-size:0.78rem;color:#6B7280;margin-top:4px}
+
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(3px);z-index:200;align-items:center;justify-content:center;padding:20px}
+.overlay.active{display:flex}
+.modal{background:#fff;border-radius:16px;padding:28px 24px;width:100%;max-width:360px;box-shadow:0 16px 48px rgba(0,0,0,0.15);position:relative;animation:fadeIn 0.25s}
+.modal h3{font-family:'Poppins',sans-serif;font-size:1.1rem;color:#1F2937;margin-bottom:4px}
+.modal>p{font-size:0.82rem;color:#6B7280;margin-bottom:16px}
+.modal-x{position:absolute;top:14px;right:14px;background:none;border:none;color:#9CA3AF;font-size:1.3rem;cursor:pointer}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:#1E293B;color:#fff;padding:12px 20px;border-radius:10px;font-size:0.85rem;z-index:300;opacity:0;transition:all 0.3s;max-width:90%;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.error{border:1px solid rgba(239,68,68,0.3)}
+
+.footer{background:#fff;border-top:1px solid #E5E7EB;padding:24px 20px;text-align:center}
+.footer p{font-size:0.72rem;color:#9CA3AF}
+.footer a{color:#6B7280}
+
+@media(max-width:400px){.img-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="index.html">← BiznisIQ</a>
+    <img src="../assets/biznisiq-logo.jpg" alt="BiznisIQ">
+  </div>
+  <div class="lang-row">
+    <button class="active" onclick="setLang('kr')">KR</button>
+    <button onclick="setLang('fr')">FR</button>
+    <button onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<div class="hero">
+  <h1>Poste Gratis sou BiznisIQ</h1>
+  <p>Rive dè milye achetè nan tout Ayiti</p>
+</div>
+
+<div class="stepper">
+  <div class="s-item active" data-s="1"><div class="s-dot active">1</div><span class="s-label">Detay Lis</span></div>
+  <div class="s-line"></div>
+  <div class="s-item" data-s="2"><div class="s-dot">2</div><span class="s-label">Enfò Vandè</span></div>
+</div>
+
+<div class="form-wrap" id="formWrap">
+
+<!-- STEP 1 -->
+<div class="form-step active" id="step1">
+  <div class="section-label">Detay Lis La</div>
+
+  <div class="field">
+    <label>Kategori <span class="req">*</span></label>
+    <select id="fCategory" required>
+      <option value="">Chwazi yon kategori...</option>
+      <option value="vehicles">🚗 Machin</option>
+      <option value="real-estate">🏠 Kay</option>
+      <option value="electronics">📱 Elektwonik</option>
+      <option value="jobs">💼 Travay</option>
+      <option value="services">🔧 Sèvis</option>
+      <option value="agriculture">🌾 Agrikilti</option>
+      <option value="construction">🏗️ Konstriksyon</option>
+      <option value="marketplace">🛒 Makètples</option>
+    </select>
+    <div class="err">Chwazi yon kategori</div>
+  </div>
+
+  <div class="field">
+    <label>Tit <span class="req">*</span></label>
+    <input type="text" id="fTitle" placeholder="Egz: Toyota RAV4 2019 bon kondisyon" required>
+    <div class="err">Tit obligatwa</div>
+  </div>
+
+  <div class="field">
+    <label>Deskripsyon</label>
+    <textarea id="fDesc" placeholder="Dekri sa ou ap vann, bay detay..."></textarea>
+  </div>
+
+  <div class="field">
+    <label>Pri</label>
+    <div class="price-wrap">
+      <input type="number" id="fPrice" placeholder="0" min="0">
+      <span class="currency">HTG</span>
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Vil <span class="req">*</span></label>
+      <select id="fCity" required>
+        <option value="">Chwazi vil...</option>
+        <option value="Port-au-Prince">Port-au-Prince</option>
+        <option value="Delmas">Delmas</option>
+        <option value="Petion-Ville">Petion-Ville</option>
+        <option value="Tabarre">Tabarre</option>
+        <option value="Carrefour">Carrefour</option>
+        <option value="Cap-Haitien">Cap-Haitien</option>
+        <option value="Gonaives">Gonaives</option>
+        <option value="Les Cayes">Les Cayes</option>
+        <option value="Jacmel">Jacmel</option>
+      </select>
+      <div class="err">Chwazi yon vil</div>
+    </div>
+    <div class="field">
+      <label>Katye (opsyonèl)</label>
+      <input type="text" id="fArea" placeholder="Egz: Bois Verna">
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Foto (jiska 4)</label>
+    <div class="img-grid" id="imgGrid">
+      <label class="img-slot" onclick="trigImg(0)"><span class="plus">+</span><span class="txt">Foto 1</span><input type="file" accept="image/*" onchange="prevImg(this,0)"><button class="remove" onclick="rmImg(event,0)">✕</button></label>
+      <label class="img-slot" onclick="trigImg(1)"><span class="plus">+</span><span class="txt">Foto 2</span><input type="file" accept="image/*" onchange="prevImg(this,1)"><button class="remove" onclick="rmImg(event,1)">✕</button></label>
+      <label class="img-slot" onclick="trigImg(2)"><span class="plus">+</span><span class="txt">Foto 3</span><input type="file" accept="image/*" onchange="prevImg(this,2)"><button class="remove" onclick="rmImg(event,2)">✕</button></label>
+      <label class="img-slot" onclick="trigImg(3)"><span class="plus">+</span><span class="txt">Foto 4</span><input type="file" accept="image/*" onchange="prevImg(this,3)"><button class="remove" onclick="rmImg(event,3)">✕</button></label>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Tags (opsyonèl)</label>
+    <input type="text" id="fTags" placeholder="Egz: toyota, suv, diesel">
+  </div>
+
+  <div class="btn-row"><button class="btn btn-primary" onclick="goStep(2)">Kontinye</button></div>
+</div>
+
+<!-- STEP 2 -->
+<div class="form-step" id="step2">
+  <div class="section-label">Enfòmasyon Vandè</div>
+
+  <div class="field">
+    <label>Non Ou <span class="req">*</span></label>
+    <input type="text" id="fName" placeholder="Non konplè" required>
+    <div class="err">Non obligatwa</div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Telefòn <span class="req">*</span></label>
+      <input type="tel" id="fPhone" placeholder="+509 0000 0000" value="+509 ">
+      <div class="err">Telefòn obligatwa</div>
+    </div>
+    <div class="field">
+      <label>WhatsApp</label>
+      <input type="tel" id="fWhatsapp" placeholder="+509 0000 0000">
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Imèl (opsyonèl)</label>
+    <input type="email" id="fEmail" placeholder="ou@email.com">
+  </div>
+
+  <label class="check-row" id="storeCheck" onclick="toggleStore()">
+    <input type="checkbox" id="fWantStore">
+    <div>
+      <div class="check-text">Mwen vle kreye yon boutik MyPlopPlop</div>
+      <div class="check-sub">Apre ou poste, nou pral ede ou kreye yon boutik gratis pou jere tout lis ou yo.</div>
+    </div>
+  </label>
+
+  <div class="btn-row">
+    <button class="btn btn-back" onclick="goStep(1)">Retounen</button>
+    <button class="btn btn-primary" id="submitBtn" onclick="submitListing()">Poste Lis La</button>
+  </div>
+</div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success" id="successScreen">
+  <div class="success-icon">✓</div>
+  <h2>Lis Ou Poste!</h2>
+  <p>Dè milye moun ap ka wè lis ou a sou BiznisIQ.</p>
+  <div class="preview-card" id="previewCard">
+    <span class="cat-badge" id="prevCat"></span>
+    <h4 id="prevTitle"></h4>
+    <div class="price" id="prevPrice"></div>
+    <div class="loc" id="prevLoc"></div>
+  </div>
+  <div class="success-actions">
+    <a href="index.html" style="background:var(--primary-blue);color:#fff;">Wè Lis Yo</a>
+    <a href="post.html" style="background:#F3F4F6;color:#374151;border:1px solid #D1D5DB;">Poste yon Lòt</a>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="overlay" id="loginModal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeLogin()">✕</button>
+    <h3>Konekte</h3>
+    <p>Konekte pou poste lis ou a.</p>
+    <div class="field"><label>Telefòn</label><input type="tel" id="loginPhone" placeholder="+509 0000 0000" value="+509 "></div>
+    <div class="field"><label>PIN / Modpas</label><input type="password" id="loginPin" placeholder="PIN ou"></div>
+    <button class="btn btn-primary" style="width:100%" onclick="doLogin()">Konekte</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="footer">
+  <p><a href="index.html">BiznisIQ</a> · <a href="../index.html">MyPlopPlop</a> · <a href="https://haitibiznis.com?ref=SHALOM">HaitiBiznis</a><br>&copy; 2026 MyPlopPlop. Tout dwa rezève.</p>
+</div>
+
+<script>
+var API_BASE=(location.hostname==='localhost'||location.hostname==='127.0.0.1')?'http://localhost:5051/api':'https://myplopplop-api.onrender.com/api';
+var curStep=1;
+
+function goStep(s){if(s>curStep&&!validate(curStep))return;curStep=s;document.querySelectorAll('.form-step').forEach(function(el,i){el.classList.toggle('active',i+1===s)});updateStepper();window.scrollTo({top:160,behavior:'smooth'})}
+
+function updateStepper(){var items=document.querySelectorAll('.s-item'),lines=document.querySelectorAll('.s-line');items.forEach(function(it,i){var dot=it.querySelector('.s-dot');it.classList.remove('active','done');dot.classList.remove('active','done');dot.textContent=i+1;if(i+1===curStep){it.classList.add('active');dot.classList.add('active')}else if(i+1<curStep){it.classList.add('done');dot.classList.add('done');dot.textContent='✓'}});lines.forEach(function(l,i){l.classList.toggle('done',i<curStep-1)})}
+
+function validate(s){if(s===1){var ok=true;['fCategory','fTitle','fCity'].forEach(function(id){var el=document.getElementById(id);var p=el.closest('.field');var v=el.value.trim();if(!v){p.classList.add('error');ok=false}else{p.classList.remove('error')}});if(!ok)toast('Ranpli tout chan obligatwa yo','error');return ok}return true}
+
+function trigImg(i){document.querySelectorAll('.img-slot input')[i].click()}
+function prevImg(inp,i){var f=inp.files[0];if(!f)return;var slot=inp.closest('.img-slot');var r=new FileReader();r.onload=function(e){var img=document.createElement('img');img.src=e.target.result;slot.querySelectorAll('img').forEach(function(old){old.remove()});slot.appendChild(img);slot.classList.add('has-img')};r.readAsDataURL(f)}
+function rmImg(e,i){e.preventDefault();e.stopPropagation();var slot=document.querySelectorAll('.img-slot')[i];slot.querySelectorAll('img').forEach(function(img){img.remove()});slot.querySelector('input').value='';slot.classList.remove('has-img')}
+
+function toggleStore(){var cb=document.getElementById('fWantStore');var row=document.getElementById('storeCheck');cb.checked=!cb.checked;row.classList.toggle('checked',cb.checked)}
+
+function getToken(){try{return localStorage.getItem('myplopplop_token')||''}catch(e){return''}}
+function closeLogin(){document.getElementById('loginModal').classList.remove('active')}
+
+function doLogin(){var ph=document.getElementById('loginPhone').value.trim();var pin=document.getElementById('loginPin').value.trim();if(!ph||!pin){toast('Ranpli telefòn ak PIN','error');return}
+fetch(API_BASE+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:ph.replace(/\s+/g,''),password:pin})}).then(function(r){return r.json()}).then(function(d){if(d.success&&d.token){localStorage.setItem('myplopplop_token',d.token);closeLogin();toast('Konekte!','');submitListing()}else{toast(d.message||'Echèk koneksyon','error')}}).catch(function(){toast('Erè koneksyon','error')})}
+
+var catNames={vehicles:'Machin','real-estate':'Kay',electronics:'Elektwonik',jobs:'Travay',services:'Sèvis',agriculture:'Agrikilti',construction:'Konstriksyon',marketplace:'Makètples'};
+
+function submitListing(){var token=getToken();if(!token){document.getElementById('loginModal').classList.add('active');return}
+if(!validate(1))return;var name=document.getElementById('fName').value.trim();var phone=document.getElementById('fPhone').value.trim().replace(/\s+/g,'');if(!name||phone.length<5){document.getElementById('fName').closest('.field').classList.toggle('error',!name);document.getElementById('fPhone').closest('.field').classList.toggle('error',phone.length<5);toast('Non ak telefòn obligatwa','error');return}
+var tags=document.getElementById('fTags').value.trim();var data={title:document.getElementById('fTitle').value.trim(),description:document.getElementById('fDesc').value.trim(),category:document.getElementById('fCategory').value,price:parseFloat(document.getElementById('fPrice').value)||0,location:{city:document.getElementById('fCity').value,area:document.getElementById('fArea').value.trim()},seller:{name:name,phone:phone,whatsapp:document.getElementById('fWhatsapp').value.trim().replace(/\s+/g,'')||phone,email:document.getElementById('fEmail').value.trim()},tags:tags?tags.split(',').map(function(t){return t.trim()}):[],wantStore:document.getElementById('fWantStore').checked};
+var btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Ap poste...';
+fetch(API_BASE+'/biznisiq/listings',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify(data)}).then(function(r){return r.json()}).then(function(res){btn.disabled=false;btn.textContent='Poste Lis La';if(res.success){showSuccess(data)}else{toast(res.message||'Erè','error')}}).catch(function(){btn.disabled=false;btn.textContent='Poste Lis La';showSuccess(data)})}
+
+function showSuccess(data){document.getElementById('formWrap').style.display='none';document.querySelector('.stepper').style.display='none';var ss=document.getElementById('successScreen');ss.classList.add('active');document.getElementById('prevCat').textContent=catNames[data.category]||data.category;document.getElementById('prevTitle').textContent=data.title;document.getElementById('prevPrice').textContent=data.price?data.price.toLocaleString()+' HTG':'Pri pa endike';document.getElementById('prevLoc').textContent='📍 '+data.location.city;window.scrollTo({top:0,behavior:'smooth'})}
+
+function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast '+(type||'');t.classList.add('show');setTimeout(function(){t.classList.remove('show')},3500)}
+
+function setLang(l){document.querySelectorAll('.lang-row button').forEach(function(b){b.classList.toggle('active',b.textContent.trim().toLowerCase()===l)})}
+
+document.querySelectorAll('.field input,.field select,.field textarea').forEach(function(el){el.addEventListener('focus',function(){this.closest('.field').classList.remove('error')})});
+</script>
+</body>
+</html>
