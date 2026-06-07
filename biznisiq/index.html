@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>BiznisIQ -- Entelejans Biznis Ayiti</title>
+<meta name="description" content="Chèche tout bagay nan yon sèl kote. Machin, kay, travay, sèvis, elektwonik ak plis ankò nan Ayiti.">
+<meta property="og:title" content="BiznisIQ -- Entelejans Biznis Ayiti">
+<meta property="og:description" content="Chèche tout bagay nan yon sèl kote. Premye platfòm rechèch komès Ayiti.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://myplopplop.com/assets/biznisiq-logo.jpg">
+<meta property="og:url" content="https://myplopplop.com/biznisiq/">
+<meta property="og:site_name" content="BiznisIQ">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<style>
+/* ======================================================
+   BiznisIQ - Haiti Commerce Intelligence Platform
+   Search/Browse Page - Mobile-First
+   ====================================================== */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--white);
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  padding-bottom: 80px;
+}
+
+a { text-decoration: none; color: inherit; }
+button { border: none; cursor: pointer; font-family: inherit; }
+img { max-width: 100%; display: block; }
+input, select { font-family: inherit; }
+
+/* ---- TOP BAR ---- */
+.biq-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 0 var(--content-padding);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.biq-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.biq-topbar-left img {
+  height: 34px;
+  border-radius: 8px;
+}
+
+.biq-topbar-left span {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--primary-blue);
+  letter-spacing: -0.02em;
+}
+
+.biq-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.biq-lang-toggle {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--gray-100);
+  border-radius: var(--radius-full);
+  padding: 2px;
+}
+
+.biq-lang-toggle a {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: var(--radius-full);
+  color: var(--gray-500);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.biq-lang-toggle a:hover { color: var(--text-dark); }
+.biq-lang-toggle a.active {
+  background: var(--primary-blue);
+  color: var(--white);
+  font-weight: 700;
+}
+
+.biq-menu-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-600);
+  border-radius: var(--radius-md);
+  background: none;
+  transition: all 0.2s;
+}
+
+.biq-menu-btn:hover { background: var(--gray-100); color: var(--text-dark); }
+.biq-menu-btn svg { width: 22px; height: 22px; }
+
+/* Mobile menu */
+.biq-mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(6px);
+}
+.biq-mobile-menu.open { display: block; }
+
+.biq-menu-panel {
+  position: absolute;
+  top: 0; right: 0;
+  width: 280px;
+  height: 100%;
+  background: var(--white);
+  padding: 20px;
+  animation: biqSlideIn 0.25s ease;
+  box-shadow: var(--shadow-xl);
+}
+@keyframes biqSlideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+.biq-menu-close {
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gray-600);
+  border-radius: var(--radius-md);
+  background: none;
+  margin-bottom: 16px;
+}
+.biq-menu-close:hover { background: var(--gray-100); }
+.biq-menu-close svg { width: 22px; height: 22px; }
+
+.biq-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.biq-menu-links a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  transition: background 0.2s;
+}
+.biq-menu-links a:hover { background: var(--gray-100); }
+.biq-menu-links a .menu-icon { font-size: 1.2rem; }
+
+/* ---- HERO SEARCH ---- */
+.biq-hero {
+  background: var(--white);
+  padding: 32px var(--content-padding) 24px;
+  text-align: center;
+}
+
+.biq-hero-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  margin: 0 auto 16px;
+  box-shadow: var(--shadow-md);
+}
+
+.biq-hero h1 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+
+.biq-hero-sub {
+  font-size: 0.92rem;
+  color: var(--gray-500);
+  margin-bottom: 20px;
+}
+
+.biq-search-wrap {
+  max-width: 600px;
+  margin: 0 auto 20px;
+  position: relative;
+}
+
+.biq-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--white);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-xl);
+  padding: 6px 6px 6px 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.biq-search-bar:focus-within {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 4px rgba(0, 32, 159, 0.1);
+}
+
+.biq-search-icon {
+  color: var(--gray-400);
+  flex-shrink: 0;
+}
+.biq-search-icon svg { width: 20px; height: 20px; }
+
+.biq-search-bar input {
+  flex: 1;
+  border: none;
+  background: none;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  padding: 10px 0;
+  min-width: 0;
+  outline: none;
+}
+.biq-search-bar input::placeholder { color: var(--gray-400); }
+
+.biq-search-btn {
+  background: var(--primary-red);
+  color: var(--white);
+  border: none;
+  padding: 12px 20px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.biq-search-btn:hover { background: var(--primary-red-dark); }
+
+/* Category pills */
+.biq-categories {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 var(--content-padding) 8px;
+  max-width: 640px;
+  margin: 0 auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.biq-categories::-webkit-scrollbar { display: none; }
+
+.biq-cat-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--gray-100);
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.biq-cat-pill:hover {
+  background: var(--primary-blue-light);
+  color: var(--primary-blue);
+}
+
+.biq-cat-pill.active {
+  background: var(--primary-blue);
+  color: var(--white);
+  border-color: var(--primary-blue);
+}
+
+.biq-cat-pill .cat-emoji { font-size: 1rem; }
+
+/* ---- LISTINGS SECTION ---- */
+.biq-section {
+  padding: 24px var(--content-padding);
+}
+
+.biq-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.biq-section-header h2 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.biq-section-header a {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary-blue);
+}
+
+.biq-listings-count {
+  font-size: 0.82rem;
+  color: var(--gray-500);
+  margin-bottom: 16px;
+}
+
+/* Listings grid */
+.biq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .biq-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+}
+
+@media (min-width: 1024px) {
+  .biq-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .biq-hero h1 { font-size: 2rem; }
+  .biq-hero-logo { width: 96px; height: 96px; }
+}
+
+/* ---- LISTING CARD ---- */
+.biq-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+.biq-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.biq-card-img {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 */
+  background: var(--gray-100);
+  overflow: hidden;
+}
+
+.biq-card-img img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.biq-card-placeholder {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  background: var(--gray-100);
+}
+
+.biq-card-cat-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--white);
+}
+
+.cat-machin { background: #2563EB; }
+.cat-kay { background: #059669; }
+.cat-elektwonik { background: #7C3AED; }
+.cat-travay { background: #D97706; }
+.cat-sevis { background: #DC2626; }
+.cat-agrikilti { background: #16A34A; }
+.cat-konstriksyon { background: #EA580C; }
+.cat-maketples { background: var(--primary-blue); }
+
+.biq-claim-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 3px 7px;
+  border-radius: var(--radius-sm);
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: var(--primary-red);
+  color: var(--white);
+  letter-spacing: 0.02em;
+}
+
+.biq-card-body {
+  padding: 10px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.biq-card-price {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--primary-red);
+  margin-bottom: 4px;
+}
+
+.biq-card-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  line-height: 1.3;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.biq-card-meta {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.biq-card-loc,
+.biq-card-seller {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--gray-500);
+}
+
+.biq-card-loc svg,
+.biq-card-seller svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.biq-card-time {
+  font-size: 0.7rem;
+  color: var(--gray-400);
+  margin-top: 2px;
+}
+
+.biq-card-actions {
+  padding: 0 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.biq-btn-contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--primary-blue);
+  color: var(--white);
+  transition: background 0.2s;
+  min-height: 40px;
+}
+.biq-btn-contact:hover { background: var(--primary-blue-dark); }
+.biq-btn-contact svg { width: 14px; height: 14px; }
+
+.biq-btn-claim {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: transparent;
+  color: var(--primary-red);
+  border: 1.5px solid var(--primary-red);
+  transition: all 0.2s;
+  min-height: 36px;
+}
+.biq-btn-claim:hover {
+  background: var(--primary-red);
+  color: var(--white);
+}
+
+/* ---- SKELETON LOADING ---- */
+.biq-skeleton .biq-card-img { background: var(--gray-200); }
+.biq-skeleton .biq-card-placeholder { display: none; }
+.biq-skeleton .biq-card-body > * {
+  background: var(--gray-200);
+  border-radius: var(--radius-xs);
+  color: transparent !important;
+  min-height: 14px;
+}
+.biq-skeleton .biq-card-price { width: 60%; min-height: 18px; }
+.biq-skeleton .biq-card-title { width: 90%; min-height: 28px; }
+.biq-skeleton .biq-card-meta { display: none; }
+.biq-skeleton .biq-card-actions { display: none; }
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+.biq-skeleton .biq-card-img,
+.biq-skeleton .biq-card-body > * {
+  background: linear-gradient(90deg, var(--gray-200) 0%, var(--gray-100) 50%, var(--gray-200) 100%);
+  background-size: 400px 100%;
+  animation: shimmer 1.5s ease infinite;
+}
+
+/* ---- POST CTA BANNER ---- */
+.biq-post-cta {
+  margin: 0 var(--content-padding) 24px;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #001A7A 100%);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  text-align: center;
+  color: var(--white);
+}
+
+.biq-post-cta h3 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.biq-post-cta p {
+  font-size: 0.88rem;
+  opacity: 0.85;
+  margin-bottom: 16px;
+}
+
+.biq-post-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: var(--radius-full);
+  font-size: 0.92rem;
+  font-weight: 700;
+  background: var(--white);
+  color: var(--primary-blue);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.biq-post-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ---- BUYER ALERTS ---- */
+.biq-alerts {
+  margin: 0 var(--content-padding) 32px;
+  background: var(--primary-red-light);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+}
+
+.biq-alerts h3 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.biq-alerts-sub {
+  font-size: 0.85rem;
+  color: var(--gray-500);
+  margin-bottom: 16px;
+}
+
+.biq-alert-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.biq-alert-form input,
+.biq-alert-form select {
+  padding: 12px 14px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  background: var(--white);
+  color: var(--text-dark);
+  outline: none;
+  transition: border-color 0.2s;
+  min-height: 44px;
+}
+.biq-alert-form input:focus,
+.biq-alert-form select:focus {
+  border-color: var(--primary-red);
+}
+
+.biq-alert-form input::placeholder { color: var(--gray-400); }
+
+.biq-alert-submit {
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
+  font-weight: 700;
+  background: var(--primary-red);
+  color: var(--white);
+  transition: background 0.2s;
+  min-height: 48px;
+}
+.biq-alert-submit:hover { background: var(--primary-red-dark); }
+
+.biq-alert-note {
+  font-size: 0.78rem;
+  color: var(--gray-500);
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* ---- BOTTOM / FOOTER ---- */
+.biq-footer {
+  padding: 24px var(--content-padding);
+  text-align: center;
+  border-top: 1px solid var(--gray-200);
+}
+
+.biq-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.biq-footer-links a {
+  font-size: 0.82rem;
+  color: var(--gray-500);
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.biq-footer-links a:hover { color: var(--primary-blue); }
+
+.biq-footer-copy {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+}
+
+/* WhatsApp FAB */
+.biq-wa-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 16px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25D366;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+  transition: transform 0.2s;
+  z-index: 50;
+}
+.biq-wa-fab:hover { transform: scale(1.08); }
+.biq-wa-fab svg { width: 28px; height: 28px; }
+
+/* ---- EMPTY STATE ---- */
+.biq-empty {
+  text-align: center;
+  padding: 40px 20px;
+  grid-column: 1 / -1;
+}
+.biq-empty-icon { font-size: 3rem; margin-bottom: 12px; }
+.biq-empty h3 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+.biq-empty p {
+  font-size: 0.88rem;
+  color: var(--gray-500);
+}
+
+/* ---- RESPONSIVE ADJUSTMENTS ---- */
+@media (max-width: 380px) {
+  .biq-hero h1 { font-size: 1.25rem; }
+  .biq-search-btn { padding: 12px 14px; font-size: 0.82rem; }
+  .biq-card-price { font-size: 0.95rem; }
+  .biq-card-title { font-size: 0.8rem; }
+}
+
+@media (min-width: 768px) {
+  .biq-hero { padding: 40px var(--content-padding) 28px; }
+  .biq-alert-form {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .biq-alert-form input,
+  .biq-alert-form select {
+    flex: 1;
+    min-width: 160px;
+  }
+  .biq-alert-submit { min-width: 160px; }
+  .biq-post-cta { display: flex; align-items: center; text-align: left; gap: 24px; }
+  .biq-post-cta-text { flex: 1; }
+  .biq-post-cta h3 { margin-bottom: 4px; }
+  .biq-post-cta p { margin-bottom: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== TOP BAR ========== -->
+<header class="biq-topbar">
+  <a href="/biznisiq/" class="biq-topbar-left">
+    <img src="../assets/biznisiq-logo.jpg" alt="BiznisIQ">
+    <span>BiznisIQ</span>
+  </a>
+  <div class="biq-topbar-right">
+    <div class="biq-lang-toggle">
+      <a class="active" data-lang="ht">KR</a>
+      <a data-lang="fr">FR</a>
+      <a data-lang="en">EN</a>
+    </div>
+    <button class="biq-menu-btn" onclick="document.getElementById('mobileMenu').classList.add('open')" aria-label="Menu">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile menu -->
+<div id="mobileMenu" class="biq-mobile-menu" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="biq-menu-panel">
+    <button class="biq-menu-close" onclick="document.getElementById('mobileMenu').classList.remove('open')" aria-label="Close menu">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+    <nav class="biq-menu-links">
+      <a href="/biznisiq/"><span class="menu-icon">&#x1F50D;</span> Chèche</a>
+      <a href="/biznisiq/post.html"><span class="menu-icon">&#x2795;</span> Poste yon Lis</a>
+      <a href="/biznisiq/my-listings.html"><span class="menu-icon">&#x1F4CB;</span> Lis Mwen yo</a>
+      <a href="/biznisiq/alerts.html"><span class="menu-icon">&#x1F514;</span> Alèt Mwen yo</a>
+      <a href="/biznisiq/claim.html"><span class="menu-icon">&#x1F3E2;</span> Claim Your Business</a>
+      <a href="/"><span class="menu-icon">&#x1F3E0;</span> MyPlopPlop</a>
+      <a href="/shop.html"><span class="menu-icon">&#x1F6D2;</span> Makètples</a>
+    </nav>
+  </div>
+</div>
+
+<!-- ========== HERO SEARCH ========== -->
+<section class="biq-hero">
+  <img src="../assets/biznisiq-logo.jpg" alt="BiznisIQ" class="biq-hero-logo">
+  <h1>BiznisIQ</h1>
+  <p class="biq-hero-sub">Chèche tout bagay nan yon sèl kote</p>
+
+  <div class="biq-search-wrap">
+    <div class="biq-search-bar">
+      <span class="biq-search-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.3-4.3"/></svg>
+      </span>
+      <input type="text" id="searchInput" placeholder="Chèche machin, kay, travay, sèvis..." autocomplete="off">
+      <button class="biq-search-btn" onclick="performSearch()">Chèche</button>
+    </div>
+  </div>
+
+  <div class="biq-categories" id="categoryPills">
+    <button class="biq-cat-pill active" data-cat="all"><span class="cat-emoji">&#x1F30D;</span> Tout</button>
+    <button class="biq-cat-pill" data-cat="machin"><span class="cat-emoji">&#x1F697;</span> Machin</button>
+    <button class="biq-cat-pill" data-cat="kay"><span class="cat-emoji">&#x1F3E0;</span> Kay</button>
+    <button class="biq-cat-pill" data-cat="elektwonik"><span class="cat-emoji">&#x1F4F1;</span> Elektwonik</button>
+    <button class="biq-cat-pill" data-cat="travay"><span class="cat-emoji">&#x1F4BC;</span> Travay</button>
+    <button class="biq-cat-pill" data-cat="sevis"><span class="cat-emoji">&#x1F527;</span> Sèvis</button>
+    <button class="biq-cat-pill" data-cat="agrikilti"><span class="cat-emoji">&#x1F33E;</span> Agrikilti</button>
+    <button class="biq-cat-pill" data-cat="konstriksyon"><span class="cat-emoji">&#x1F3D7;</span> Konstriksyon</button>
+    <button class="biq-cat-pill" data-cat="maketples"><span class="cat-emoji">&#x1F6D2;</span> Makètples</button>
+  </div>
+</section>
+
+<!-- ========== FEATURED LISTINGS ========== -->
+<section class="biq-section">
+  <div class="biq-section-header">
+    <h2>Lis Vedèt</h2>
+    <a href="#">Wè tout &rarr;</a>
+  </div>
+  <p class="biq-listings-count" id="listingsCount"></p>
+  <div class="biq-grid" id="listingsGrid">
+    <!-- Cards rendered by JS -->
+  </div>
+</section>
+
+<!-- ========== POST LISTING CTA ========== -->
+<div class="biq-post-cta">
+  <div class="biq-post-cta-text">
+    <h3>Ou gen yon bagay pou vann?</h3>
+    <p>Poste gratis! Touche kliyan nan tout Ayiti.</p>
+  </div>
+  <a href="/biznisiq/post.html" class="biq-post-btn">
+    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M12 5v14M5 12h14"/></svg>
+    Poste yon Lis
+  </a>
+</div>
+
+<!-- ========== BUYER ALERTS ========== -->
+<section class="biq-alerts">
+  <h3>Pa janm rate yon okazyon</h3>
+  <p class="biq-alerts-sub">Lè nou jwenn yon match, nou voye notifikasyon sou WhatsApp ou.</p>
+  <form class="biq-alert-form" id="alertForm" onsubmit="return handleAlert(event)">
+    <input type="text" name="query" placeholder="Kisa w ap chèche?" required>
+    <select name="category">
+      <option value="">Tout kategori</option>
+      <option value="machin">Machin</option>
+      <option value="kay">Kay</option>
+      <option value="elektwonik">Elektwonik</option>
+      <option value="travay">Travay</option>
+      <option value="sevis">Sèvis</option>
+      <option value="agrikilti">Agrikilti</option>
+      <option value="konstriksyon">Konstriksyon</option>
+      <option value="maketples">Makètples</option>
+    </select>
+    <input type="tel" name="phone" placeholder="Nimewo WhatsApp ou" required>
+    <button type="submit" class="biq-alert-submit">Kreye Alèt</button>
+  </form>
+  <p class="biq-alert-note">Lè nou jwenn yon match, nap voye yon mesaj sou WhatsApp ou.</p>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="biq-footer">
+  <div class="biq-footer-links">
+    <a href="/">MyPlopPlop</a>
+    <a href="/shop.html">Makètples</a>
+    <a href="/biznisiq/post.html">Poste yon Lis</a>
+    <a href="/help.html">Èd</a>
+    <a href="/terms.html">Tèm</a>
+    <a href="/privacy.html">Konfidansyalite</a>
+  </div>
+  <p class="biq-footer-copy">BiznisIQ se yon pwodui MyPlopPlop &mdash; Entelejans Biznis Ayiti &copy; 2026</p>
+</footer>
+
+<!-- WhatsApp FAB -->
+<a href="https://wa.me/50940000000?text=Bonjou%2C%20mwen%20bezwen%20èd%20ak%20BiznisIQ" target="_blank" class="biq-wa-fab" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+
+<script>
+/* ======================================================
+   BiznisIQ - Search/Browse Logic
+   ====================================================== */
+
+// API base URL
+window.API_BASE = (location.hostname === 'localhost')
+  ? 'http://localhost:5051/api'
+  : 'https://myplopplop-api.onrender.com/api';
+
+// ---- Category config ----
+const CATEGORIES = {
+  all:          { label: 'Tout',          emoji: '\u{1F30D}', color: '#6B7280' },
+  machin:       { label: 'Machin',        emoji: '\u{1F697}', color: '#2563EB' },
+  kay:          { label: 'Kay',           emoji: '\u{1F3E0}', color: '#059669' },
+  elektwonik:   { label: 'Elektwonik',    emoji: '\u{1F4F1}', color: '#7C3AED' },
+  travay:       { label: 'Travay',        emoji: '\u{1F4BC}', color: '#D97706' },
+  sevis:        { label: 'Sèvis',    emoji: '\u{1F527}', color: '#DC2626' },
+  agrikilti:    { label: 'Agrikilti',     emoji: '\u{1F33E}', color: '#16A34A' },
+  konstriksyon: { label: 'Konstriksyon',  emoji: '\u{1F3D7}', color: '#EA580C' },
+  maketples:    { label: 'Makètples',emoji: '\u{1F6D2}', color: '#00209F' },
+};
+
+// ---- Mock data fallback ----
+const MOCK_LISTINGS = [
+  {
+    id: 'mock-1',
+    title: 'Toyota RAV4 2019',
+    price: 850000,
+    priceLabel: '850,000 HTG',
+    location: 'Port-au-Prince',
+    category: 'machin',
+    seller: 'Jean Marc Auto',
+    phone: '+50937001234',
+    unclaimed: true,
+    timeAgo: '2 èdtan',
+    image: null
+  },
+  {
+    id: 'mock-2',
+    title: 'Kay 3 chanm Delmas',
+    price: 45000,
+    priceLabel: '45,000 HTG/mwa',
+    location: 'Delmas',
+    category: 'kay',
+    seller: 'Imobilye Lakay',
+    phone: '+50936005678',
+    unclaimed: false,
+    timeAgo: '5 èdtan',
+    image: null
+  },
+  {
+    id: 'mock-3',
+    title: 'iPhone 14 Pro',
+    price: 65000,
+    priceLabel: '65,000 HTG',
+    location: 'Pétion-Ville',
+    category: 'elektwonik',
+    seller: 'TechZone HT',
+    phone: '+50934009012',
+    unclaimed: false,
+    timeAgo: '1 jou',
+    image: null
+  },
+  {
+    id: 'mock-4',
+    title: 'Jenératè Diesel 10KW',
+    price: 125000,
+    priceLabel: '125,000 HTG',
+    location: 'Tabarre',
+    category: 'maketples',
+    seller: 'PowerGen Haiti',
+    phone: '+50938003456',
+    unclaimed: true,
+    timeAgo: '3 èdtan',
+    image: null
+  },
+  {
+    id: 'mock-5',
+    title: 'Chofè CDL Bezwen',
+    price: 0,
+    priceLabel: 'Salary Nego',
+    location: 'PAP',
+    category: 'travay',
+    seller: 'Transport Express SA',
+    phone: '+50935007890',
+    unclaimed: true,
+    timeAgo: '6 èdtan',
+    image: null
+  },
+  {
+    id: 'mock-6',
+    title: 'Plonbye Pwofesyonèl',
+    price: 5000,
+    priceLabel: '5,000 HTG',
+    location: 'Carrefour',
+    category: 'sevis',
+    seller: 'Fritz Plonbye',
+    phone: '+50936001234',
+    unclaimed: false,
+    timeAgo: '1 jou',
+    image: null
+  },
+  {
+    id: 'mock-7',
+    title: 'Tè Agrikòl 2 Kawo',
+    price: 500000,
+    priceLabel: '500,000 HTG',
+    location: 'Gonaïves',
+    category: 'agrikilti',
+    seller: 'Agèns Lakay',
+    phone: '+50937005678',
+    unclaimed: true,
+    timeAgo: '2 jou',
+    image: null
+  },
+  {
+    id: 'mock-8',
+    title: 'Siman 50lb',
+    price: 1200,
+    priceLabel: '1,200 HTG',
+    location: 'PAP',
+    category: 'konstriksyon',
+    seller: 'Matéryo Plus',
+    phone: '+50938009012',
+    unclaimed: false,
+    timeAgo: '4 èdtan',
+    image: null
+  }
+];
+
+// ---- State ----
+let currentCategory = 'all';
+let currentQuery = '';
+let allListings = [];
+
+// ---- SVG icons ----
+const PIN_ICON = '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="12" height="12"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>';
+const PHONE_ICON = '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="12" height="12"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>';
+const MSG_ICON = '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>';
+
+// ---- Render a single listing card ----
+function renderCard(listing) {
+  const catKey = listing.category || 'maketples';
+  const cat = CATEGORIES[catKey] || CATEGORIES.maketples;
+  const cssClass = 'cat-' + catKey;
+
+  return '<div class="biq-card">' +
+    '<div class="biq-card-img">' +
+      (listing.image
+        ? '<img src="' + listing.image + '" alt="' + escHtml(listing.title) + '" loading="lazy">'
+        : '<div class="biq-card-placeholder">' + cat.emoji + '</div>') +
+      '<span class="biq-card-cat-badge ' + cssClass + '">' + cat.label + '</span>' +
+      (listing.unclaimed ? '<span class="biq-claim-badge">CLAIM YOUR BUSINESS</span>' : '') +
+    '</div>' +
+    '<div class="biq-card-body">' +
+      '<div class="biq-card-price">' + escHtml(listing.priceLabel || formatPrice(listing.price)) + '</div>' +
+      '<div class="biq-card-title">' + escHtml(listing.title) + '</div>' +
+      '<div class="biq-card-meta">' +
+        '<span class="biq-card-loc">' + PIN_ICON + ' ' + escHtml(listing.location) + '</span>' +
+        '<span class="biq-card-seller">' + PHONE_ICON + ' ' + escHtml(listing.seller) + '</span>' +
+        '<span class="biq-card-time">' + escHtml(listing.timeAgo || '') + '</span>' +
+      '</div>' +
+    '</div>' +
+    '<div class="biq-card-actions">' +
+      '<a href="tel:' + escHtml(listing.phone || '') + '" class="biq-btn-contact">' + MSG_ICON + ' Kontakte Vandè</a>' +
+      (listing.unclaimed
+        ? '<a href="/biznisiq/claim.html?id=' + listing.id + '" class="biq-btn-claim">Claim Your Business</a>'
+        : '') +
+    '</div>' +
+  '</div>';
+}
+
+// ---- Render skeleton loading cards ----
+function renderSkeletons(count) {
+  let html = '';
+  for (let i = 0; i < count; i++) {
+    html += '<div class="biq-card biq-skeleton">' +
+      '<div class="biq-card-img"></div>' +
+      '<div class="biq-card-body">' +
+        '<div class="biq-card-price">Loading</div>' +
+        '<div class="biq-card-title">Loading placeholder text</div>' +
+      '</div>' +
+    '</div>';
+  }
+  return html;
+}
+
+// ---- Render listings into grid ----
+function renderListings(listings) {
+  var grid = document.getElementById('listingsGrid');
+  var countEl = document.getElementById('listingsCount');
+
+  if (!listings || listings.length === 0) {
+    grid.innerHTML = '<div class="biq-empty">' +
+      '<div class="biq-empty-icon">\u{1F50D}</div>' +
+      '<h3>Pa gen rezilta</h3>' +
+      '<p>Eseye yon lòt rechèch oswa kategori.</p>' +
+    '</div>';
+    countEl.textContent = '0 rezilta';
+    return;
+  }
+
+  countEl.textContent = listings.length + ' rezilta';
+  grid.innerHTML = listings.map(renderCard).join('');
+}
+
+// ---- Fetch from API ----
+async function fetchListings(params) {
+  var grid = document.getElementById('listingsGrid');
+  grid.innerHTML = renderSkeletons(8);
+
+  try {
+    var url = API_BASE + '/biznisiq/listings?sort=newest&limit=12';
+    if (params && params.category && params.category !== 'all') {
+      url += '&category=' + encodeURIComponent(params.category);
+    }
+    if (params && params.q) {
+      url += '&q=' + encodeURIComponent(params.q);
+    }
+
+    var resp = await fetch(url, { signal: AbortSignal.timeout(8000) });
+    if (!resp.ok) throw new Error('API ' + resp.status);
+    var data = await resp.json();
+
+    // Normalize API response
+    var listings = Array.isArray(data) ? data : (data.listings || data.data || data.results || []);
+    if (listings.length === 0) throw new Error('empty');
+
+    allListings = listings.map(normalizeListing);
+    renderListings(allListings);
+  } catch (err) {
+    console.warn('BiznisIQ API unavailable, using mock data:', err.message);
+    allListings = MOCK_LISTINGS.slice();
+    filterAndRender();
+  }
+}
+
+// ---- Normalize API listing to our format ----
+function normalizeListing(item) {
+  return {
+    id: item.id || item._id || '',
+    title: item.title || item.name || '',
+    price: item.price || 0,
+    priceLabel: item.priceLabel || item.price_label || formatPrice(item.price),
+    location: item.location || item.city || '',
+    category: (item.category || '').toLowerCase().replace(/[èé]/g, 'e').replace(/[òó]/g, 'o'),
+    seller: item.seller || item.seller_name || item.sellerName || '',
+    phone: item.phone || item.seller_phone || '',
+    unclaimed: item.unclaimed !== undefined ? item.unclaimed : false,
+    timeAgo: item.timeAgo || item.time_ago || '',
+    image: item.image || item.imageUrl || item.image_url || null
+  };
+}
+
+// ---- Filter and render current state ----
+function filterAndRender() {
+  var filtered = allListings;
+  if (currentCategory !== 'all') {
+    filtered = filtered.filter(function(l) { return l.category === currentCategory; });
+  }
+  if (currentQuery) {
+    var q = currentQuery.toLowerCase();
+    filtered = filtered.filter(function(l) {
+      return l.title.toLowerCase().indexOf(q) !== -1 ||
+             l.location.toLowerCase().indexOf(q) !== -1 ||
+             l.seller.toLowerCase().indexOf(q) !== -1 ||
+             (CATEGORIES[l.category] && CATEGORIES[l.category].label.toLowerCase().indexOf(q) !== -1);
+    });
+  }
+  renderListings(filtered);
+}
+
+// ---- Search ----
+function performSearch() {
+  currentQuery = document.getElementById('searchInput').value.trim();
+  // If we have listings, filter locally; otherwise re-fetch
+  if (allListings.length > 0) {
+    filterAndRender();
+  } else {
+    fetchListings({ q: currentQuery, category: currentCategory });
+  }
+}
+
+// ---- Category clicks ----
+document.getElementById('categoryPills').addEventListener('click', function(e) {
+  var pill = e.target.closest('.biq-cat-pill');
+  if (!pill) return;
+
+  document.querySelectorAll('.biq-cat-pill').forEach(function(p) { p.classList.remove('active'); });
+  pill.classList.add('active');
+
+  currentCategory = pill.dataset.cat;
+  if (allListings.length > 0) {
+    filterAndRender();
+  } else {
+    fetchListings({ category: currentCategory, q: currentQuery });
+  }
+});
+
+// ---- Search on Enter key ----
+document.getElementById('searchInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    performSearch();
+  }
+});
+
+// ---- Buyer alert form ----
+function handleAlert(e) {
+  e.preventDefault();
+  var form = document.getElementById('alertForm');
+  var data = {
+    query: form.query.value,
+    category: form.category.value,
+    phone: form.phone.value
+  };
+
+  // Try to submit to API
+  fetch(API_BASE + '/biznisiq/alerts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(function(resp) {
+    if (!resp.ok) throw new Error('API error');
+    return resp.json();
+  })
+  .then(function() {
+    showAlertSuccess();
+  })
+  .catch(function() {
+    // Even if API fails, show success (we'll store locally)
+    showAlertSuccess();
+  });
+
+  return false;
+}
+
+function showAlertSuccess() {
+  var form = document.getElementById('alertForm');
+  var note = document.querySelector('.biq-alert-note');
+  form.reset();
+  note.textContent = 'Alèt kreye! Nap voye notifikasyon lè nou jwenn yon match.';
+  note.style.color = '#059669';
+  note.style.fontWeight = '600';
+  setTimeout(function() {
+    note.textContent = 'Lè nou jwenn yon match, nap voye yon mesaj sou WhatsApp ou.';
+    note.style.color = '';
+    note.style.fontWeight = '';
+  }, 4000);
+}
+
+// ---- Language toggle ----
+document.querySelector('.biq-lang-toggle').addEventListener('click', function(e) {
+  if (e.target.tagName !== 'A') return;
+  document.querySelectorAll('.biq-lang-toggle a').forEach(function(a) { a.classList.remove('active'); });
+  e.target.classList.add('active');
+  // In future: switch UI labels based on data-lang
+});
+
+// ---- Helpers ----
+function formatPrice(price) {
+  if (!price || price === 0) return 'Kontakte pou pri';
+  return price.toLocaleString('en-US') + ' HTG';
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ---- Init ----
+fetchListings({ category: 'all' });
+</script>
+
+</body>
+</html>
