@@ -377,13 +377,18 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
 
 <script>
 var API='https://myplopplop-api.onrender.com';
+var STORE_ID='6a2b8dfa719d195087fa981e';
 var currentCat='';
 var currentPage=1;
 var totalProducts=0;
 var searchTerm='';
+var allProducts=[];
+var filteredProducts=[];
+var PAGE_SIZE=24;
 var cart=JSON.parse(localStorage.getItem('pp_cart')||'[]');
 var searchTimer=null;
 var loading=false;
+var dataLoaded=false;
 
 function fmtHTG(n){return n.toLocaleString('en-US').replace(/,/g,',')+' HTG'}
 function fmtUSD(htg){return '~$'+(htg/135).toFixed(2)+' USD'}
@@ -412,75 +417,102 @@ document.getElementById('catTabs').addEventListener('click',function(e){
   if(pill)selectCat(pill.dataset.cat);
 });
 
+async function fetchAllProducts(){
+  if(dataLoaded)return;
+  try{
+    var resp=await fetch(API+'/api/international/stores/'+STORE_ID);
+    var json=await resp.json();
+    if(!json.success)throw new Error(json.message);
+    allProducts=(json.data.products||[]).filter(function(p){return p.isActive!==false&&p.finalPriceHTG>0});
+    dataLoaded=true;
+  }catch(e){
+    console.error('Fetch error:',e);
+    allProducts=[];
+  }
+}
+
+function applyFilters(){
+  var sort=document.getElementById('sortSelect').value;
+  var list=allProducts.slice();
+
+  if(currentCat){
+    list=list.filter(function(p){return p.category===currentCat});
+  }
+  if(searchTerm){
+    var q=searchTerm.toLowerCase();
+    list=list.filter(function(p){return(p.name||'').toLowerCase().indexOf(q)!==-1});
+  }
+
+  if(sort==='price_asc')list.sort(function(a,b){return a.finalPriceHTG-b.finalPriceHTG});
+  else if(sort==='price_desc')list.sort(function(a,b){return b.finalPriceHTG-a.finalPriceHTG});
+  else if(sort==='newest')list.sort(function(a,b){return new Date(b.createdAt)-new Date(a.createdAt)});
+  else list.sort(function(a,b){return(b.orderCount||0)-(a.orderCount||0)});
+
+  filteredProducts=list;
+  return list;
+}
+
 async function loadProducts(page){
   if(loading)return;
   loading=true;
   currentPage=page;
+
   if(page===1){
     document.getElementById('productGrid').innerHTML='';
     document.getElementById('skeleton').style.display='';
     document.getElementById('emptyState').style.display='none';
     document.getElementById('loadMoreWrap').style.display='none';
   }
-  var sort=document.getElementById('sortSelect').value;
-  var url=API+'/api/international/products?supplierType=CJ_USA&page='+page+'&limit=24';
-  if(currentCat)url+='&category='+currentCat;
-  if(sort)url+='&sort='+sort;
-  if(searchTerm)url+='&search='+encodeURIComponent(searchTerm);
 
-  try{
-    var resp=await fetch(url);
-    var json=await resp.json();
-    if(!json.success)throw new Error(json.message);
+  await fetchAllProducts();
+  var list=applyFilters();
+  totalProducts=list.length;
+  document.getElementById('prodCount').textContent=totalProducts;
+  document.getElementById('skeleton').style.display='none';
 
-    var products=json.data||[];
-    totalProducts=json.pagination?json.pagination.total:products.length;
-    document.getElementById('prodCount').textContent=totalProducts;
-    document.getElementById('skeleton').style.display='none';
-
-    if(products.length===0&&page===1){
-      document.getElementById('emptyState').style.display='';
-      loading=false;
-      return;
-    }
-
-    var grid=document.getElementById('productGrid');
-    products.forEach(function(p,i){
-      var img=p.images&&p.images.length>0?p.images[0]:'';
-      var card=document.createElement('div');
-      card.className='card rv';
-      card.innerHTML=
-        '<div class="card-img">'+
-          '<img src="'+(img||'')+'" alt="'+esc(p.name)+'" loading="lazy" onerror="this.style.display=\'none\'">'+
-          '<div class="delivery-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~21j</div>'+
-        '</div>'+
-        '<div class="card-body">'+
-          '<div class="card-name">'+esc(p.name)+'</div>'+
-          '<div class="card-price">'+fmtHTG(p.finalPriceHTG)+'</div>'+
-          '<div class="card-price-usd">'+fmtUSD(p.finalPriceHTG)+'</div>'+
-          '<div class="card-bottom">'+
-            '<button class="card-btn" data-id="'+p._id+'" onclick="addToCart(this,\''+p._id+'\',\''+esc(p.name).replace(/'/g,"\\'")+'\','+p.finalPriceHTG+',\''+(img||'').replace(/'/g,"\\'")+'\')">'+
-              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>'+
-              'Ajoute nan Panye'+
-            '</button>'+
-          '</div>'+
-        '</div>';
-      grid.appendChild(card);
-      setTimeout(function(){card.classList.add('vis')},30+i*40);
-    });
-
-    var loaded=grid.children.length;
-    if(loaded<totalProducts){
-      document.getElementById('loadMoreWrap').style.display='';
-      document.getElementById('loadMoreBtn').disabled=false;
-    }else{
-      document.getElementById('loadMoreWrap').style.display='none';
-    }
-  }catch(e){
-    console.error('Load error:',e);
-    document.getElementById('skeleton').style.display='none';
-    if(page===1)document.getElementById('emptyState').style.display='';
+  if(list.length===0&&page===1){
+    document.getElementById('emptyState').style.display='';
+    loading=false;
+    return;
   }
+
+  var start=(page-1)*PAGE_SIZE;
+  var end=page*PAGE_SIZE;
+  var pageItems=list.slice(start,end);
+
+  var grid=document.getElementById('productGrid');
+  pageItems.forEach(function(p,i){
+    var img=p.images&&p.images.length>0?p.images[0]:'';
+    var card=document.createElement('div');
+    card.className='card rv';
+    card.innerHTML=
+      '<div class="card-img">'+
+        '<img src="'+(img||'')+'" alt="'+esc(p.name)+'" loading="lazy" onerror="this.style.display=\'none\'">'+
+        '<div class="delivery-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~21j</div>'+
+      '</div>'+
+      '<div class="card-body">'+
+        '<div class="card-name">'+esc(p.name)+'</div>'+
+        '<div class="card-price">'+fmtHTG(p.finalPriceHTG)+'</div>'+
+        '<div class="card-price-usd">'+fmtUSD(p.finalPriceHTG)+'</div>'+
+        '<div class="card-bottom">'+
+          '<button class="card-btn" data-id="'+p._id+'" onclick="addToCart(this,\''+p._id+'\',\''+esc(p.name).replace(/'/g,"\\'")+'\','+p.finalPriceHTG+',\''+(img||'').replace(/'/g,"\\'")+'\')">'+
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>'+
+            'Ajoute nan Panye'+
+          '</button>'+
+        '</div>'+
+      '</div>';
+    grid.appendChild(card);
+    setTimeout(function(){card.classList.add('vis')},30+i*40);
+  });
+
+  var loaded=grid.children.length;
+  if(loaded<totalProducts){
+    document.getElementById('loadMoreWrap').style.display='';
+    document.getElementById('loadMoreBtn').disabled=false;
+  }else{
+    document.getElementById('loadMoreWrap').style.display='none';
+  }
+
   loading=false;
 }
 
