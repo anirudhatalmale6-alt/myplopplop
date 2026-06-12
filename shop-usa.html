@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <title>Shop USA — MyPlopPlop</title>
-<meta name="description" content="717+ pwodui Ameriken livre nan Ayiti. Peye an Goud.">
+<meta name="description" content="700+ USA products delivered to Haiti. Pay with credit card in USD.">
 <meta property="og:title" content="Shop USA — MyPlopPlop">
-<meta property="og:description" content="717+ pwodui Ameriken livre nan Ayiti. Peye an Goud.">
+<meta property="og:description" content="700+ USA products delivered to Haiti. Pay with credit card in USD.">
 <meta property="og:image" content="https://myplopplop.com/assets/og-myplopplop.jpg">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
@@ -257,7 +257,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
     <div class="nav-title"><span class="flag">&#127482;&#127480;</span> Shop USA</div>
     <div class="nav-search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      <input type="text" id="searchInput" placeholder="Chache pwodui..." oninput="debounceSearch()">
+      <input type="text" id="searchInput" placeholder="Search products..." oninput="debounceSearch()">
     </div>
     <div class="nav-cart" onclick="toggleCart()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
@@ -268,7 +268,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
 
 <div class="mob-search">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-  <input type="text" id="mobSearchInput" placeholder="Chache pwodui..." oninput="debounceSearch()">
+  <input type="text" id="mobSearchInput" placeholder="Search products..." oninput="debounceSearch()">
 </div>
 
 <!-- HERO -->
@@ -276,7 +276,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
   <div class="hero-content">
     <div class="hero-flags">&#127482;&#127480; &#10132; &#127469;&#127481;</div>
     <h1>Shop <span>USA</span> Products</h1>
-    <p class="hero-sub">717+ pwodui Ameriken livre direkteman nan Ayiti. Peye an Goud.</p>
+    <p class="hero-sub">700+ products from America delivered to your door in Haiti. Pay with credit card in USD.</p>
     <div class="hero-badges">
       <div class="hero-badge">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="22" height="18" rx="2"/><path d="M1 9h22"/></svg>
@@ -284,11 +284,11 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
       </div>
       <div class="hero-badge">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        ~21 Jou Livrezon
+        ~21 Day Delivery
       </div>
       <div class="hero-badge">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Garanti
+        Guaranteed
       </div>
     </div>
   </div>
@@ -298,24 +298,24 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
 <!-- CATEGORIES -->
 <div class="cats">
   <div class="cats-inner" id="catTabs">
-    <button class="cat-pill active" data-cat="">Tout</button>
-    <button class="cat-pill" data-cat="auto-parts">&#128663; Auto</button>
-    <button class="cat-pill" data-cat="phones-electronics">&#128241; Elektwonik</button>
-    <button class="cat-pill" data-cat="solar-energy">&#9728;&#65039; Solè</button>
-    <button class="cat-pill" data-cat="home-kitchen">&#127968; Kay &amp; Kizin</button>
-    <button class="cat-pill" data-cat="beauty-personal-care">&#128132; Bote</button>
+    <button class="cat-pill active" data-cat="">All</button>
+    <button class="cat-pill" data-cat="phones-electronics">&#128241; Electronics</button>
+    <button class="cat-pill" data-cat="solar-energy">&#9728;&#65039; Solar</button>
+    <button class="cat-pill" data-cat="auto-parts">&#128663; Auto Parts</button>
+    <button class="cat-pill" data-cat="construction-hardware">&#128296; Construction</button>
+    <button class="cat-pill" data-cat="beauty-personal-care">&#128132; Beauty</button>
   </div>
 </div>
 
 <!-- TOOLBAR -->
 <div class="toolbar">
-  <div class="toolbar-count"><strong id="prodCount">0</strong> pwodui</div>
+  <div class="toolbar-count"><strong id="prodCount">0</strong> products</div>
   <div class="toolbar-sort">
     <select id="sortSelect" onchange="loadProducts(1)">
-      <option value="">Popilè</option>
-      <option value="price_asc">Pri &#8593;</option>
-      <option value="price_desc">Pri &#8595;</option>
-      <option value="newest">Nouvo</option>
+      <option value="">Popular</option>
+      <option value="price_asc">Price &#8593;</option>
+      <option value="price_desc">Price &#8595;</option>
+      <option value="newest">Newest</option>
     </select>
   </div>
 </div>
@@ -325,7 +325,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
   <div class="grid" id="productGrid"></div>
 </div>
 <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
-  <button class="load-more" id="loadMoreBtn" onclick="loadMore()">Chaje Plis</button>
+  <button class="load-more" id="loadMoreBtn" onclick="loadMore()">Load More</button>
 </div>
 
 <!-- SKELETON -->
@@ -341,14 +341,14 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
 <!-- EMPTY STATE -->
 <div class="empty-state" id="emptyState" style="display:none">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-  <p>Pa gen pwodui jwenn. Eseye yon lòt rechèch.</p>
+  <p>No products found. Try a different search.</p>
 </div>
 
 <!-- CART OVERLAY -->
 <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
 <div class="cart-panel" id="cartPanel">
   <div class="cart-header">
-    <h2>&#128722; Panye</h2>
+    <h2>&#128722; Cart</h2>
     <button class="cart-close" onclick="toggleCart()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
   </div>
   <div class="cart-items" id="cartItems">
@@ -359,20 +359,20 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
       <span class="cart-total-label">Total</span>
       <span class="cart-total-price" id="cartTotal">0 HTG</span>
     </div>
-    <button class="cart-checkout" onclick="checkout()">Peye Kounye a</button>
+    <button class="cart-checkout" onclick="checkout()">Checkout Now</button>
   </div>
 </div>
 
 <!-- TOAST -->
 <div class="toast" id="toast">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
-  <span id="toastMsg">Ajoute nan panye!</span>
+  <span id="toastMsg">Added to cart!</span>
 </div>
 
 <!-- FOOTER -->
 <footer class="footer">
   <img src="assets/myplopplop-logo-nav.png" alt="MyPlopPlop" class="footer-logo"><br>
-  <p>&copy; 2026 MyPlopPlop. Tout dwa rezève.</p>
+  <p>&copy; 2026 MyPlopPlop. All rights reserved.</p>
 </footer>
 
 <script>
@@ -390,8 +390,9 @@ var searchTimer=null;
 var loading=false;
 var dataLoaded=false;
 
-function fmtHTG(n){return n.toLocaleString('en-US').replace(/,/g,',')+' HTG'}
-function fmtUSD(htg){return '~$'+(htg/135).toFixed(2)+' USD'}
+function fmtUSD(p){var usd=p.sourcePrice*(1+0.30);return '$'+usd.toFixed(2)+' USD'}
+function fmtUSDraw(n){return '$'+n.toFixed(2)+' USD'}
+function getUSD(p){return Math.round(p.sourcePrice*(1+0.30)*100)/100}
 
 function debounceSearch(){
   clearTimeout(searchTimer);
@@ -485,19 +486,20 @@ async function loadProducts(page){
     var img=p.images&&p.images.length>0?p.images[0]:'';
     var card=document.createElement('div');
     card.className='card rv';
+    var priceUSD=getUSD(p);
     card.innerHTML=
       '<div class="card-img">'+
         '<img src="'+(img||'')+'" alt="'+esc(p.name)+'" loading="lazy" onerror="this.style.display=\'none\'">'+
-        '<div class="delivery-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~21j</div>'+
+        '<div class="delivery-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~21 days</div>'+
       '</div>'+
       '<div class="card-body">'+
         '<div class="card-name">'+esc(p.name)+'</div>'+
-        '<div class="card-price">'+fmtHTG(p.finalPriceHTG)+'</div>'+
-        '<div class="card-price-usd">'+fmtUSD(p.finalPriceHTG)+'</div>'+
+        '<div class="card-price">$'+priceUSD.toFixed(2)+'</div>'+
+        '<div class="card-price-usd">USD &middot; Credit Card</div>'+
         '<div class="card-bottom">'+
-          '<button class="card-btn" data-id="'+p._id+'" onclick="addToCart(this,\''+p._id+'\',\''+esc(p.name).replace(/'/g,"\\'")+'\','+p.finalPriceHTG+',\''+(img||'').replace(/'/g,"\\'")+'\')">'+
+          '<button class="card-btn" data-id="'+p._id+'" onclick="addToCart(this,\''+p._id+'\',\''+esc(p.name).replace(/'/g,"\\'")+'\','+priceUSD+',\''+(img||'').replace(/'/g,"\\'")+'\')">'+
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>'+
-            'Ajoute nan Panye'+
+            'Add to Cart'+
           '</button>'+
         '</div>'+
       '</div>';
@@ -529,12 +531,12 @@ function addToCart(btn,id,name,price,img){
   else{cart.push({id:id,name:name,price:price,img:img,qty:1})}
   saveCart();
   btn.classList.add('added');
-  btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Ajoute!';
+  btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Added!';
   setTimeout(function(){
     btn.classList.remove('added');
-    btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Ajoute nan Panye';
+    btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Add to Cart';
   },1200);
-  showToast(name.substring(0,30)+'... ajoute!');
+  showToast(name.substring(0,30)+'... added!');
 }
 
 function saveCart(){
@@ -559,8 +561,8 @@ function toggleCart(){
 function renderCart(){
   var container=document.getElementById('cartItems');
   if(cart.length===0){
-    container.innerHTML='<div class="cart-empty">Panye ou vid</div>';
-    document.getElementById('cartTotal').textContent='0 HTG';
+    container.innerHTML='<div class="cart-empty">Your cart is empty</div>';
+    document.getElementById('cartTotal').textContent='$0.00 USD';
     return;
   }
   var html='';
@@ -571,18 +573,18 @@ function renderCart(){
       '<div class="ci-img"><img src="'+item.img+'" alt="" onerror="this.style.display=\'none\'"></div>'+
       '<div class="ci-info">'+
         '<div class="ci-name">'+esc(item.name)+'</div>'+
-        '<div class="ci-price">'+fmtHTG(item.price*item.qty)+'</div>'+
+        '<div class="ci-price">$'+(item.price*item.qty).toFixed(2)+' USD</div>'+
         '<div class="ci-qty">'+
           '<button onclick="changeQty('+idx+',-1)">-</button>'+
           '<span>'+item.qty+'</span>'+
           '<button onclick="changeQty('+idx+',1)">+</button>'+
         '</div>'+
-        '<button class="ci-remove" onclick="removeItem('+idx+')">Retire</button>'+
+        '<button class="ci-remove" onclick="removeItem('+idx+')">Remove</button>'+
       '</div>'+
     '</div>';
   });
   container.innerHTML=html;
-  document.getElementById('cartTotal').textContent=fmtHTG(total);
+  document.getElementById('cartTotal').textContent='$'+total.toFixed(2)+' USD';
 }
 
 function changeQty(idx,delta){
@@ -598,7 +600,7 @@ function removeItem(idx){
 
 function checkout(){
   if(cart.length===0)return;
-  showToast('Checkout ap vini byento!');
+  showToast('Checkout coming soon!');
 }
 
 function showToast(msg){
