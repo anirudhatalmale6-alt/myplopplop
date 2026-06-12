@@ -293,7 +293,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
       </div>
       <div class="hero-badge">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        ~21 Day Delivery
+        7-12 Day Delivery
       </div>
       <div class="hero-badge">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -499,7 +499,7 @@ async function loadProducts(page){
     card.innerHTML=
       '<div class="card-img">'+
         '<img src="'+(img||'')+'" alt="'+esc(p.name)+'" loading="lazy" onerror="this.style.display=\'none\'">'+
-        '<div class="delivery-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~21 days</div>'+
+        '<div class="delivery-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>7-12 days</div>'+
       '</div>'+
       '<div class="card-body">'+
         '<div class="card-name">'+esc(p.name)+'</div>'+
