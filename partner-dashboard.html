@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MyPlopPlop - Partner Dashboard</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#D21034;--red-dark:#B00D2C;
+  --blue:#00209F;--blue-dark:#001566;
+  --gold:#D4A017;--gold-light:#E8B82E;
+  --white:#FFFFFF;--off-white:#F8F9FC;--light-gray:#F0F0F5;
+  --dark:#1A1A2E;--text:#2A2A3A;--text-light:#6A6A7A;
+  --green:#22C55E;--green-bg:#F0FDF4;
+  --orange:#F59E0B;--orange-bg:#FFFBEB;
+  --purple:#8B5CF6;--purple-bg:#F5F3FF;
+  --heading:'Poppins',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+  --accent:'DM Sans',system-ui,sans-serif;
+  --radius:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+
+/* NAV */
+.top-nav{
+  background:var(--blue);
+  padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;
+}
+.nav-left{display:flex;align-items:center;gap:10px}
+.nav-left img{width:36px;height:36px;border-radius:50%;object-fit:cover}
+.nav-left span{font-family:var(--heading);font-weight:700;font-size:1.1rem;color:#fff}
+.nav-badge{background:var(--gold);color:var(--dark);padding:5px 14px;border-radius:100px;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+
+/* PARTNER HEADER */
+.partner-header{
+  background:var(--white);border-bottom:1px solid rgba(0,0,0,.06);
+  padding:20px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.partner-header img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:3px solid var(--green)}
+.partner-info h2{font-family:var(--heading);font-size:1.1rem;color:var(--dark)}
+.partner-info p{font-size:.82rem;color:var(--text-light)}
+.partner-links{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.copy-btn{
+  background:rgba(0,32,159,.08);color:var(--blue);border:none;padding:8px 14px;border-radius:100px;
+  font-size:.75rem;font-weight:700;cursor:pointer;font-family:var(--body);transition:all .2s;
+}
+.copy-btn:hover{background:rgba(0,32,159,.15)}
+.copy-btn.copied{background:var(--green-bg);color:#166534}
+
+/* DASHBOARD */
+.dashboard{max-width:1100px;margin:0 auto;padding:28px 20px}
+.dash-title{font-family:var(--heading);font-size:clamp(1.4rem,3vw,1.8rem);color:var(--dark);margin-bottom:4px}
+.dash-sub{font-size:.85rem;color:var(--text-light);margin-bottom:28px}
+
+/* STAT CARDS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:32px}
+.stat{background:var(--white);border-radius:var(--radius);padding:20px 18px;border:1px solid rgba(0,0,0,.04)}
+.stat-icon{font-size:1.6rem;margin-bottom:8px}
+.stat-val{font-family:var(--heading);font-size:1.8rem;font-weight:700;color:var(--dark)}
+.stat-label{font-size:.78rem;color:var(--text-light);margin-top:2px}
+
+/* TABLE */
+.table-section{background:var(--white);border-radius:var(--radius);border:1px solid rgba(0,0,0,.04);overflow:hidden;margin-bottom:28px}
+.table-head{padding:18px 20px;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.table-head h3{font-family:var(--heading);font-size:1rem}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{background:var(--off-white);padding:12px 16px;text-align:left;font-weight:700;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-light);white-space:nowrap}
+td{padding:14px 16px;border-top:1px solid rgba(0,0,0,.04);white-space:nowrap}
+tr:hover td{background:rgba(0,32,159,.02)}
+.badge{display:inline-block;padding:3px 10px;border-radius:100px;font-size:.72rem;font-weight:700}
+.badge-green{background:var(--green-bg);color:#166534}
+.badge-orange{background:var(--orange-bg);color:#92400E}
+.badge-blue{background:rgba(0,32,159,.08);color:var(--blue)}
+
+/* LINKS BOX */
+.links-box{background:var(--white);border:1px solid rgba(0,0,0,.04);border-radius:var(--radius);padding:24px 20px;margin-bottom:28px}
+.links-box h3{font-family:var(--heading);font-size:1rem;margin-bottom:12px}
+.link-row{display:flex;align-items:center;gap:12px;background:var(--off-white);padding:12px 14px;border-radius:10px;margin-bottom:8px;flex-wrap:wrap}
+.link-row strong{font-size:.82rem;min-width:120px}
+.link-row code{font-size:.78rem;color:var(--blue);word-break:break-all;flex:1}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:40px 20px}
+.empty-state .icon{font-size:2.5rem;margin-bottom:8px}
+.empty-state h4{font-family:var(--heading);color:var(--dark);margin-bottom:4px}
+.empty-state p{font-size:.85rem;color:var(--text-light)}
+
+footer{text-align:center;padding:24px;font-size:.75rem;color:var(--text-light);border-top:1px solid rgba(0,0,0,.06);margin-top:20px}
+footer a{color:var(--red);font-weight:600}
+
+@media(max-width:600px){
+  .partner-links{margin-left:0;width:100%}
+  .copy-btn{flex:1;text-align:center}
+  .stats{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="top-nav">
+  <div class="nav-left">
+    <img src="assets/og-myplopplop.jpg" alt="MyPlopPlop" onerror="this.style.display='none'">
+    <span>MyPlopPlop</span>
+  </div>
+  <span class="nav-badge" id="navBadge">Partner Dashboard</span>
+</nav>
+
+<!-- PARTNER HEADER -->
+<div class="partner-header" id="partnerHeader">
+  <img src="assets/spap-logo.jpg" alt="SPAP" id="partnerLogo">
+  <div class="partner-info">
+    <h2 id="partnerName">SPAP</h2>
+    <p id="partnerFull">Secteur Prive Des Affaires Populaire</p>
+  </div>
+  <div class="partner-links">
+    <button class="copy-btn" onclick="copyLink('store')">&#128203; Copy Store Signup Link</button>
+    <button class="copy-btn" onclick="copyLink('driver')">&#128203; Copy Driver Signup Link</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard">
+  <h1 class="dash-title">Partner Dashboard</h1>
+  <p class="dash-sub">Track store and driver signups referred by your organization across the HaitiBiznis ecosystem.</p>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-icon">&#127978;</div>
+      <div class="stat-val" id="statStores">0</div>
+      <div class="stat-label">Stores Registered</div>
+    </div>
+    <div class="stat">
+      <div class="stat-icon">&#128100;</div>
+      <div class="stat-val" id="statDrivers">0</div>
+      <div class="stat-label">Drivers Registered</div>
+    </div>
+    <div class="stat">
+      <div class="stat-icon">&#9989;</div>
+      <div class="stat-val" id="statActive">0</div>
+      <div class="stat-label">Active Members</div>
+    </div>
+    <div class="stat">
+      <div class="stat-icon">&#128176;</div>
+      <div class="stat-val" id="statRevenue">0</div>
+      <div class="stat-label">Revenue (HTG)</div>
+    </div>
+  </div>
+
+  <!-- STORES TABLE -->
+  <div class="table-section">
+    <div class="table-head">
+      <h3>&#127978; Stores Signed Up</h3>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Store Name</th>
+            <th>Owner</th>
+            <th>Phone</th>
+            <th>Category</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="storesBody">
+          <tr><td colspan="7"><div class="empty-state"><div class="icon">&#127978;</div><h4>No stores yet</h4><p>Stores signed up through your referral link will appear here.</p></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DRIVERS TABLE -->
+  <div class="table-section">
+    <div class="table-head">
+      <h3>&#128663; Drivers Signed Up</h3>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Driver Name</th>
+            <th>Phone</th>
+            <th>Vehicle</th>
+            <th>Status</th>
+            <th>Trips</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="driversBody">
+          <tr><td colspan="6"><div class="empty-state"><div class="icon">&#128100;</div><h4>No drivers yet</h4><p>Drivers signed up through your referral link will appear here.</p></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- REGISTRATION LINKS -->
+  <div class="links-box">
+    <h3>&#128279; Your Referral Links</h3>
+    <p style="font-size:.82rem;color:var(--text-light);margin-bottom:16px">Share these links to sign up new stores and drivers. All signups are automatically tracked to your organization.</p>
+    <div class="link-row">
+      <strong>&#127978; Store Signup:</strong>
+      <code id="linkStore">myplopplop.com/merchant/register.html?ref=SPAP</code>
+      <button class="copy-btn" onclick="copyText('linkStore',this)">Copy</button>
+    </div>
+    <div class="link-row">
+      <strong>&#128663; Driver Signup:</strong>
+      <code id="linkDriver">msouwout.com/driver-register.html</code>
+      <button class="copy-btn" onclick="copyText('linkDriver',this)">Copy</button>
+    </div>
+    <div class="link-row">
+      <strong>&#128202; This Dashboard:</strong>
+      <code id="linkDash">myplopplop.com/partner-dashboard.html?partner=SPAP</code>
+      <button class="copy-btn" onclick="copyText('linkDash',this)">Copy</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  &copy; 2026 <a href="index.html">MyPlopPlop</a>. A <a href="https://haitibiznis.com">HaitiBiznis</a> Platform. | Partner Dashboard
+</footer>
+
+<script>
+var partnerConfig = {
+  'SPAP': {name:'SPAP', full:'Secteur Prive Des Affaires Populaire', logo:'assets/spap-logo.jpg', color:'#2E7D32'},
+  'FTPH/COTRASMOTHA': {name:'FTPH/COTRASMOTHA', full:'Federation des Transporteurs Publics Haitiens', logo:'assets/ftph-logo.jpg', color:'var(--blue)'}
+};
+
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var p = params.get('partner') || 'SPAP';
+  var cfg = partnerConfig[p] || partnerConfig['SPAP'];
+  document.getElementById('partnerName').textContent = cfg.name;
+  document.getElementById('partnerFull').textContent = cfg.full;
+  document.getElementById('partnerLogo').src = cfg.logo;
+  document.getElementById('partnerLogo').style.borderColor = cfg.color;
+  document.getElementById('linkStore').textContent = 'myplopplop.com/merchant/register.html?ref=' + encodeURIComponent(cfg.name);
+  document.getElementById('linkDash').textContent = 'myplopplop.com/partner-dashboard.html?partner=' + encodeURIComponent(cfg.name);
+  document.title = cfg.name + ' - Partner Dashboard | MyPlopPlop';
+})();
+
+function copyLink(type){
+  var url;
+  if(type==='store') url = 'https://' + document.getElementById('linkStore').textContent;
+  else url = 'https://' + document.getElementById('linkDriver').textContent;
+  copyToClipboard(url);
+}
+
+function copyText(elId, btn){
+  var text = document.getElementById(elId).textContent;
+  copyToClipboard('https://' + text);
+  btn.classList.add('copied');
+  btn.textContent = 'Copied!';
+  setTimeout(function(){ btn.classList.remove('copied'); btn.textContent = 'Copy'; }, 2000);
+}
+
+function copyToClipboard(text){
+  if(navigator.clipboard){ navigator.clipboard.writeText(text); return; }
+  var ta = document.createElement('textarea'); ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta);
+  ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+}
+</script>
+</body>
+</html>
