@@ -201,6 +201,19 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:1
         <textarea id="storeDesc" data-i18n-placeholder="ph_desc" placeholder="Dekri sa ou vann oswa sèvis ou ofri..."></textarea>
       </div>
 
+      <div class="field">
+        <label data-i18n="lbl_referral">Patnè Referans</label>
+        <select id="referralPartner">
+          <option value="" data-i18n="ref_select">-- Kijan ou te tande pale de MyPlopPlop? --</option>
+          <option value="FTPH/COTRASMOTHA">FTPH/COTRASMOTHA</option>
+          <option value="SPAP">SPAP</option>
+          <option value="Facebook">Facebook</option>
+          <option value="WhatsApp">WhatsApp</option>
+          <option value="Friend/Family" data-i18n="ref_friend">Zanmi / Fanmi</option>
+          <option value="Other" data-i18n="ref_other">Lòt</option>
+        </select>
+      </div>
+
       <button type="submit" class="submit-btn" id="submitBtn">
         <span data-i18n="btn_submit">🏪 Kreye Magazen Mwen</span>
       </button>
@@ -253,6 +266,7 @@ const T = {
     ph_name:'Ex: Kay Griye, Magazen Marie...',ph_owner:'Non konplè ou',ph_wa:'Menm nimewo oswa yon lòt',ph_loc:'Ex: Delmas 32, Petyonvil, Okap...',ph_desc:'Dekri sa ou vann oswa sèvis ou ofri...',
     hint_wa:'Kliyan ap kontakte ou sou WhatsApp',
     cat_select:'-- Chwazi kategori --',cat_rest:'🍽️ Restoran / Manje',cat_groc:'🛒 Sipèmache / Makèt',cat_pharm:'💊 Famasi',cat_cloth:'👕 Rad / Mòd',cat_elec:'📱 Elektwonik',cat_beauty:'💄 Bote / Swen Pèsonèl',cat_home:'🏠 Atik Mezon',cat_other:'📦 Lòt',
+    lbl_referral:'Patnè Referans',ref_select:'-- Kijan ou te tande pale de MyPlopPlop? --',ref_friend:'Zanmi / Fanmi',ref_other:'Lòt',
     btn_submit:'🏪 Kreye Magazen Mwen',
     suc_title:'Magazen Ou Kreye!',suc_desc:'Nou resevwa demann ou. Ekip MyPlopPlop ap kontakte ou sou WhatsApp pou aktive magazen ou.',suc_wa:'Kontakte Nou sou WhatsApp',suc_home:'← Retounen sou MyPlopPlop',
     nav_home:'Akèy',nav_search:'Chèche',nav_cart:'Panye',nav_orders:'Kòmand',nav_account:'Kont'
@@ -265,6 +279,7 @@ const T = {
     ph_name:'Ex: Kay Griye, Magazen Marie...',ph_owner:'Your full name',ph_wa:'Same number or a different one',ph_loc:'Ex: Delmas 32, Petionville, Cap-Haitien...',ph_desc:'Describe what you sell or services you offer...',
     hint_wa:'Customers will contact you on WhatsApp',
     cat_select:'-- Choose category --',cat_rest:'🍽️ Restaurant / Food',cat_groc:'🛒 Grocery / Market',cat_pharm:'💊 Pharmacy',cat_cloth:'👕 Clothing / Fashion',cat_elec:'📱 Electronics',cat_beauty:'💄 Beauty / Personal Care',cat_home:'🏠 Home Goods',cat_other:'📦 Other',
+    lbl_referral:'Referral Partner',ref_select:'-- How did you hear about MyPlopPlop? --',ref_friend:'Friend / Family',ref_other:'Other',
     btn_submit:'🏪 Create My Store',
     suc_title:'Your Store is Created!',suc_desc:'We received your request. The MyPlopPlop team will contact you on WhatsApp to activate your store.',suc_wa:'Contact Us on WhatsApp',suc_home:'← Back to MyPlopPlop',
     nav_home:'Home',nav_search:'Search',nav_cart:'Cart',nav_orders:'Orders',nav_account:'Account'
@@ -277,6 +292,7 @@ const T = {
     ph_name:'Ex: Kay Griye, Magazen Marie...',ph_owner:'Votre nom complet',ph_wa:'Même numéro ou un autre',ph_loc:'Ex: Delmas 32, Pétionville, Cap-Haïtien...',ph_desc:'Décrivez ce que vous vendez ou les services que vous offrez...',
     hint_wa:'Les clients vous contacteront sur WhatsApp',
     cat_select:'-- Choisir catégorie --',cat_rest:'🍽️ Restaurant / Nourriture',cat_groc:'🛒 Supermarché / Marché',cat_pharm:'💊 Pharmacie',cat_cloth:'👕 Vêtements / Mode',cat_elec:'📱 Électronique',cat_beauty:'💄 Beauté / Soins',cat_home:'🏠 Articles Maison',cat_other:'📦 Autre',
+    lbl_referral:'Partenaire de Référence',ref_select:'-- Comment avez-vous entendu parler de MyPlopPlop? --',ref_friend:'Ami / Famille',ref_other:'Autre',
     btn_submit:'🏪 Créer Ma Boutique',
     suc_title:'Votre Boutique est Créée!',suc_desc:'Nous avons reçu votre demande. L\'équipe MyPlopPlop vous contactera sur WhatsApp pour activer votre boutique.',suc_wa:'Contactez-nous sur WhatsApp',suc_home:'← Retour à MyPlopPlop',
     nav_home:'Accueil',nav_search:'Recherche',nav_cart:'Panier',nav_orders:'Commandes',nav_account:'Compte'
@@ -289,6 +305,7 @@ const T = {
     ph_name:'Ex: Kay Griye, Magazen Marie...',ph_owner:'Tu nombre completo',ph_wa:'Mismo número u otro',ph_loc:'Ex: Delmas 32, Petionville, Cap-Haitien...',ph_desc:'Describe lo que vendes o los servicios que ofreces...',
     hint_wa:'Los clientes te contactarán en WhatsApp',
     cat_select:'-- Elegir categoría --',cat_rest:'🍽️ Restaurante / Comida',cat_groc:'🛒 Supermercado / Mercado',cat_pharm:'💊 Farmacia',cat_cloth:'👕 Ropa / Moda',cat_elec:'📱 Electrónica',cat_beauty:'💄 Belleza / Cuidado Personal',cat_home:'🏠 Artículos del Hogar',cat_other:'📦 Otro',
+    lbl_referral:'Socio de Referencia',ref_select:'-- Como se entero de MyPlopPlop? --',ref_friend:'Amigo / Familia',ref_other:'Otro',
     btn_submit:'🏪 Crear Mi Tienda',
     suc_title:'Tu Tienda Está Creada!',suc_desc:'Recibimos tu solicitud. El equipo de MyPlopPlop te contactará en WhatsApp para activar tu tienda.',suc_wa:'Contáctanos en WhatsApp',suc_home:'← Volver a MyPlopPlop',
     nav_home:'Inicio',nav_search:'Buscar',nav_cart:'Carrito',nav_orders:'Pedidos',nav_account:'Cuenta'
@@ -323,8 +340,9 @@ function handleSubmit(e) {
   const wa = document.getElementById('whatsapp').value.trim() || phone;
   const loc = document.getElementById('location').value.trim();
   const desc = document.getElementById('storeDesc').value.trim();
+  const referral = document.getElementById('referralPartner').value;
 
-  const msg = `🏪 NOUVO MAGAZEN - MyPlopPlop\n\nNon Magazen: ${name}\nKategori: ${cat}\nPwopriyetè: ${owner}\nTelefòn: ${phone}\nWhatsApp: ${wa}\nLokasyon: ${loc}\nDeskripsyon: ${desc || 'N/A'}`;
+  const msg = `🏪 NOUVO MAGAZEN - MyPlopPlop\n\nNon Magazen: ${name}\nKategori: ${cat}\nPwopriyetè: ${owner}\nTelefòn: ${phone}\nWhatsApp: ${wa}\nLokasyon: ${loc}\nDeskripsyon: ${desc || 'N/A'}\nPatnè Referans: ${referral || 'N/A'}`;
 
   const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
   document.getElementById('waLink').href = waUrl;

@@ -995,6 +995,19 @@ select.input {
         </div>
 
         <div class="input-group">
+            <label>Referral Partner</label>
+            <select class="input" id="referralPartner" style="padding:13px 16px;cursor:pointer">
+              <option value="">-- How did you hear about MyPlopPlop? --</option>
+              <option value="FTPH/COTRASMOTHA">FTPH/COTRASMOTHA</option>
+              <option value="SPAP">SPAP</option>
+              <option value="Facebook">Facebook</option>
+              <option value="WhatsApp">WhatsApp</option>
+              <option value="Friend/Family">Friend / Family</option>
+              <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <div class="input-group">
             <label>Referral Code <span style="color:var(--text-muted);font-weight:400;">(optional)</span></label>
             <input type="text" class="input" id="referralCode" placeholder="e.g., PPJACQ9TL0" style="text-transform:uppercase;">
             <p id="referralStatus" style="font-size:0.8rem;margin-top:4px;color:var(--text-muted);">Got a code from another driver? Enter it here for bonus rewards!</p>
@@ -1853,7 +1866,9 @@ function saveToStorage() {
         moncashPhone: val('moncashPhone'),
         natcomPhone: val('natcomPhone'),
         bankName: val('bankName'),
-        bankAccount: val('bankAccount')
+        bankAccount: val('bankAccount'),
+        referralPartner: val('referralPartner'),
+        referralCode: val('referralCode')
     };
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
