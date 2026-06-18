@@ -356,6 +356,21 @@ function handleSubmit(e) {
 }
 
 setLang(currentLang);
+
+// Auto-select referral partner from URL param (e.g. ?ref=SPAP)
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var ref = params.get('ref');
+  if (ref) {
+    var sel = document.getElementById('referralPartner');
+    for (var i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].value.toUpperCase() === ref.toUpperCase()) {
+        sel.selectedIndex = i;
+        break;
+      }
+    }
+  }
+})();
 </script>
 </body>
 </html>
