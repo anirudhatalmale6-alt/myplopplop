@@ -169,6 +169,25 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light);color:var(--text-
 .view-back{display:none;align-items:center;gap:6px;font-size:0.9rem;color:var(--primary-blue);cursor:pointer;padding:12px 0 4px;font-weight:500;background:none;border:none}
 .view-back:hover{text-decoration:underline}
 
+/* Product detail modal */
+.product-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.5)}
+.product-modal.show{display:block}
+.product-modal-sheet{position:absolute;bottom:0;left:0;right:0;max-height:90vh;background:#fff;border-radius:20px 20px 0 0;overflow-y:auto;padding:0 0 40px;animation:slideUp 0.3s ease}
+.product-modal-close{position:absolute;top:16px;right:16px;background:rgba(0,0,0,0.5);border:none;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;color:#fff;z-index:10}
+.pm-img{width:100%;height:280px;background:var(--gray-100);display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:20px 20px 0 0}
+.pm-img img{width:100%;height:100%;object-fit:cover}
+.pm-body{padding:20px}
+.pm-name{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.2rem;margin-bottom:8px}
+.pm-price{font-family:'Poppins',sans-serif;font-weight:800;color:var(--primary-red);font-size:1.5rem;margin-bottom:4px}
+.pm-usd{font-size:0.85rem;color:var(--text-muted);margin-bottom:12px}
+.pm-meta{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.pm-meta-item{display:flex;align-items:center;gap:6px;font-size:0.85rem;color:var(--text-muted)}
+.pm-desc{font-size:0.9rem;color:var(--text-dark);line-height:1.5;margin-bottom:20px}
+.pm-store{font-size:0.8rem;color:var(--text-muted);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.pm-store img{width:24px;height:24px;border-radius:6px}
+.pm-add-btn{width:100%;background:var(--primary-blue);color:#fff;border:none;border-radius:14px;padding:16px;font-family:'Poppins',sans-serif;font-weight:700;font-size:1rem;cursor:pointer}
+.pm-add-btn:hover{background:var(--primary-blue-dark)}
+
 /* Responsive */
 @media(max-width:480px){
   .intl-hero h1{font-size:1.4rem}
@@ -358,6 +377,23 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light);color:var(--text-
 </div>
 
 <!-- Toast -->
+<!-- Product detail modal -->
+<div id="productModal" class="product-modal" onclick="if(event.target===this)closeProductModal()">
+  <div class="product-modal-sheet">
+    <button class="product-modal-close" onclick="closeProductModal()">✕</button>
+    <div class="pm-img" id="pmImg"></div>
+    <div class="pm-body">
+      <div class="pm-name" id="pmName"></div>
+      <div class="pm-price" id="pmPrice"></div>
+      <div class="pm-usd" id="pmUsd"></div>
+      <div class="pm-meta" id="pmMeta"></div>
+      <div class="pm-store" id="pmStore"></div>
+      <div class="pm-desc" id="pmDesc"></div>
+      <button class="pm-add-btn" id="pmAddBtn">+ Ajoute nan Panye</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast" class="toast"></div>
 
 <script src="js/api.js"></script>
@@ -590,7 +626,7 @@ function renderProducts(products) {
     var inCart = cart.find(function(c) { return c.product._id === p._id; });
     var qty = inCart ? inCart.quantity : 0;
 
-    html += '<div class="product-card' + (qty > 0 ? ' in-cart' : '') + '">';
+    html += '<div class="product-card' + (qty > 0 ? ' in-cart' : '') + '" onclick="openProductModal(\'' + p._id + '\')">';
     html += '  <div class="product-img">';
     if (p.images && p.images.length > 0) html += '<img src="' + p.images[0] + '" alt="">';
     else html += '📦';
@@ -612,6 +648,60 @@ function renderProducts(products) {
     html += '</div>';
   });
   grid.innerHTML = html;
+}
+
+// ─── Product Detail Modal ───
+function openProductModal(productId) {
+  var p = allProducts.find(function(pr) { return pr._id === productId; });
+  if (!p) return;
+
+  document.getElementById('pmImg').innerHTML = (p.images && p.images.length > 0)
+    ? '<img src="' + p.images[0] + '" alt="">'
+    : '<span style="font-size:4rem">📦</span>';
+
+  document.getElementById('pmName').textContent = p.name;
+  document.getElementById('pmPrice').textContent = formatHTG(p.finalPriceHTG);
+  document.getElementById('pmUsd').textContent = '~$' + p.sourcePrice.toFixed(2) + ' USD';
+
+  var metaHTML = '';
+  metaHTML += '<div class="pm-meta-item">📦 ~' + (p.estimatedDeliveryDays || 10) + ' jou livrezon</div>';
+  if (p.warehouse) metaHTML += '<div class="pm-meta-item">🏭 ' + p.warehouse + '</div>';
+  if (p.category) metaHTML += '<div class="pm-meta-item">🏷️ ' + p.category + '</div>';
+  if (p.inStock !== false) metaHTML += '<div class="pm-meta-item" style="color:var(--success)">✅ An stòk</div>';
+  document.getElementById('pmMeta').innerHTML = metaHTML;
+
+  var storeHTML = '';
+  if (currentStore) {
+    if (currentStore.logo) storeHTML += '<img src="' + currentStore.logo + '" alt="">';
+    storeHTML += currentStore.name;
+  }
+  document.getElementById('pmStore').innerHTML = storeHTML;
+
+  document.getElementById('pmDesc').textContent = p.description || '';
+
+  var btn = document.getElementById('pmAddBtn');
+  var inCart = cart.find(function(c) { return c.product._id === productId; });
+  if (inCart) {
+    btn.textContent = '✓ Nan panye (' + inCart.quantity + ')';
+    btn.style.background = 'var(--success)';
+  } else {
+    btn.textContent = '+ Ajoute nan Panye — ' + formatHTG(p.finalPriceHTG);
+    btn.style.background = '';
+  }
+  btn.onclick = function() {
+    addToCart(productId);
+    var updated = cart.find(function(c) { return c.product._id === productId; });
+    btn.textContent = '✓ Nan panye (' + (updated ? updated.quantity : 1) + ')';
+    btn.style.background = 'var(--success)';
+  };
+
+  document.getElementById('productModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProductModal() {
+  document.getElementById('productModal').classList.remove('show');
+  document.body.style.overflow = '';
 }
 
 // ─── Cart Management ───
