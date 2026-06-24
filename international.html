@@ -181,7 +181,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light);color:var(--text-
 
 <div id="heroSection" class="intl-hero">
   <h1>Shop International</h1>
-  <p>Buy from Dominican Republic and Panama. We handle everything — you just pick what you want.</p>
+  <p>Buy from USA, Dominican Republic, and Panama. We handle everything — you just pick what you want.</p>
 </div>
 
 <!-- Step 1: Country Selection -->
@@ -197,11 +197,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light);color:var(--text-
       <div class="cname">Panama</div>
       <div class="cstores" id="countPA">Loading...</div>
     </div>
-    <div class="country-card coming-soon">
-      <span class="coming-badge">Soon</span>
+    <div class="country-card" onclick="selectCountry('US')">
       <span class="flag">🇺🇸</span>
       <div class="cname">United States</div>
-      <div class="cstores">Coming soon</div>
+      <div class="cstores" id="countUS">Loading...</div>
     </div>
   </div>
 </div>
@@ -380,15 +379,18 @@ function showToast(msg, type) {
 // ─── Load Country Store Counts ───
 async function loadCountryCounts() {
   try {
-    var [dor, par] = await Promise.all([
+    var [dor, par, usr] = await Promise.all([
       fetch(API_BASE + '/api/international/stores?country=DO&limit=1').then(function(r) { return r.json(); }),
-      fetch(API_BASE + '/api/international/stores?country=PA&limit=1').then(function(r) { return r.json(); })
+      fetch(API_BASE + '/api/international/stores?country=PA&limit=1').then(function(r) { return r.json(); }),
+      fetch(API_BASE + '/api/international/stores?country=US&limit=1').then(function(r) { return r.json(); })
     ]);
     document.getElementById('countDO').textContent = (dor.pagination ? dor.pagination.total : 0) + ' stores';
     document.getElementById('countPA').textContent = (par.pagination ? par.pagination.total : 0) + ' stores';
+    document.getElementById('countUS').textContent = (usr.pagination ? usr.pagination.total : 0) + ' stores';
   } catch(e) {
     document.getElementById('countDO').textContent = 'Browse stores';
     document.getElementById('countPA').textContent = 'Browse stores';
+    document.getElementById('countUS').textContent = 'Browse stores';
   }
 }
 loadCountryCounts();
