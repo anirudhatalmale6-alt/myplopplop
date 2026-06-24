@@ -203,6 +203,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light);color:var(--text-
       <div class="cname">United States</div>
       <div class="cstores" id="countUS">Loading...</div>
     </div>
+    <div class="country-card" onclick="selectCountry('CN')">
+      <span class="flag">🇨🇳</span>
+      <div class="cname">China</div>
+      <div class="cstores" id="countCN">Loading...</div>
+    </div>
   </div>
 </div>
 
@@ -361,8 +366,8 @@ var selectedPayment = null;
 var selectedReceiptFile = null;
 var activeCatFilter = 'all';
 
-var COUNTRY_NAMES = { DO: 'Dominican Republic', PA: 'Panama', US: 'United States' };
-var COUNTRY_FLAGS = { DO: '🇩🇴', PA: '🇵🇦', US: '🇺🇸' };
+var COUNTRY_NAMES = { DO: 'Dominican Republic', PA: 'Panama', US: 'United States', CN: 'China' };
+var COUNTRY_FLAGS = { DO: '🇩🇴', PA: '🇵🇦', US: '🇺🇸', CN: '🇨🇳' };
 var CATEGORY_ICONS = { general: '🏪', electronics: '📱', clothing: '👗', home: '🏠', food: '🍽️', health: '💊', auto: '🚗', other: '📦' };
 
 function formatHTG(amount) {
@@ -394,18 +399,21 @@ function showToast(msg, type) {
 // ─── Load Country Store Counts ───
 async function loadCountryCounts() {
   try {
-    var [dor, par, usr] = await Promise.all([
+    var [dor, par, usr, cnr] = await Promise.all([
       fetch(API_BASE + '/api/international/stores?country=DO&limit=1').then(function(r) { return r.json(); }),
       fetch(API_BASE + '/api/international/stores?country=PA&limit=1').then(function(r) { return r.json(); }),
-      fetch(API_BASE + '/api/international/stores?country=US&limit=1').then(function(r) { return r.json(); })
+      fetch(API_BASE + '/api/international/stores?country=US&limit=1').then(function(r) { return r.json(); }),
+      fetch(API_BASE + '/api/international/stores?country=CN&limit=1').then(function(r) { return r.json(); })
     ]);
     document.getElementById('countDO').textContent = (dor.pagination ? dor.pagination.total : 0) + ' stores';
     document.getElementById('countPA').textContent = (par.pagination ? par.pagination.total : 0) + ' stores';
     document.getElementById('countUS').textContent = (usr.pagination ? usr.pagination.total : 0) + ' stores';
+    document.getElementById('countCN').textContent = (cnr.pagination ? cnr.pagination.total : 0) + ' stores';
   } catch(e) {
     document.getElementById('countDO').textContent = 'Browse stores';
     document.getElementById('countPA').textContent = 'Browse stores';
     document.getElementById('countUS').textContent = 'Browse stores';
+    document.getElementById('countCN').textContent = 'Browse stores';
   }
 }
 loadCountryCounts();
