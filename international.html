@@ -182,13 +182,13 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light);color:var(--text-
 
 <div class="topbar">
   <a href="index.html">← MyPlopPlop</a>
-  <span class="topbar-title">Shop International</span>
-  <button onclick="sharePage()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;padding:6px 14px;border-radius:8px;font-size:0.8rem;cursor:pointer;margin-left:auto">Share</button>
+  <span class="topbar-title">Achte Entènasyonal</span>
+  <button onclick="sharePage()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;padding:6px 14px;border-radius:8px;font-size:0.8rem;cursor:pointer;margin-left:auto">Pataje</button>
 </div>
 
 <div id="heroSection" class="intl-hero">
-  <h1>Shop International</h1>
-  <p>Buy from USA, Dominican Republic, and Panama. We handle everything — you just pick what you want.</p>
+  <h1>Achte Entènasyonal</h1>
+  <p>Achte nan USA, Lachin, Repiblik Dominikèn ak Panama. Nou jere tout bagay — ou jis chwazi sa ou vle.</p>
 </div>
 
 <!-- Step 1: Country Selection -->
@@ -196,38 +196,38 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light);color:var(--text-
   <div class="country-grid">
     <div class="country-card" onclick="selectCountry('DO')">
       <span class="flag">🇩🇴</span>
-      <div class="cname">Dominican Republic</div>
-      <div class="cstores" id="countDO">Loading...</div>
+      <div class="cname">Repiblik Dominikèn</div>
+      <div class="cstores" id="countDO">Chajman...</div>
     </div>
     <div class="country-card" onclick="selectCountry('PA')">
       <span class="flag">🇵🇦</span>
       <div class="cname">Panama</div>
-      <div class="cstores" id="countPA">Loading...</div>
+      <div class="cstores" id="countPA">Chajman...</div>
     </div>
     <div class="country-card" onclick="selectCountry('US')">
       <span class="flag">🇺🇸</span>
-      <div class="cname">United States</div>
-      <div class="cstores" id="countUS">Loading...</div>
+      <div class="cname">Etazini</div>
+      <div class="cstores" id="countUS">Chajman...</div>
     </div>
     <div class="country-card" onclick="selectCountry('CN')">
       <span class="flag">🇨🇳</span>
-      <div class="cname">China</div>
-      <div class="cstores" id="countCN">Loading...</div>
+      <div class="cname">Lachin</div>
+      <div class="cstores" id="countCN">Chajman...</div>
     </div>
   </div>
 </div>
 
 <!-- Step 2: Store Selection -->
 <div id="storeSection" class="section" style="display:none">
-  <button class="view-back" onclick="backToCountries()" style="display:flex">← Back to countries</button>
-  <div class="section-title" id="storeTitle">Stores</div>
+  <button class="view-back" onclick="backToCountries()" style="display:flex">← Retounen nan peyi yo</button>
+  <div class="section-title" id="storeTitle">Magazen yo</div>
   <div class="cat-chips" id="storeCatChips"></div>
   <div id="storeList" class="store-list"></div>
 </div>
 
 <!-- Step 3: Products -->
 <div id="productSection" class="section" style="display:none">
-  <button class="view-back" onclick="backToStores()" style="display:flex">← Back to stores</button>
+  <button class="view-back" onclick="backToStores()" style="display:flex">← Retounen nan magazen yo</button>
   <div id="productStoreHeader" style="display:flex;align-items:center;gap:12px;padding:16px 0">
     <div id="pStoreImg" class="store-logo"></div>
     <div>
@@ -236,7 +236,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light);color:var(--text-
     </div>
   </div>
   <div class="search-bar">
-    <input id="productSearch" type="text" placeholder="Search products..." oninput="filterProducts()">
+    <input id="productSearch" type="text" placeholder="Chèche pwodui..." oninput="filterProducts()">
   </div>
   <div class="cat-chips" id="productCatChips"></div>
   <div id="productGrid" class="product-grid"></div>
@@ -245,71 +245,71 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light);color:var(--text-
 <!-- Cart bar -->
 <div id="cartBar" class="cart-bar">
   <div class="cart-info">
-    <div class="cart-count" id="cartCount">0 items</div>
+    <div class="cart-count" id="cartCount">0 atik</div>
     <div class="cart-total" id="cartTotal">0 HTG</div>
   </div>
-  <button class="checkout-btn" onclick="openCheckout()">Checkout →</button>
+  <button class="checkout-btn" onclick="openCheckout()">Peye →</button>
 </div>
 
 <!-- Checkout panel -->
 <div id="checkoutPanel" class="checkout-panel">
   <div class="checkout-sheet">
     <button class="checkout-close" onclick="closeCheckout()">✕</button>
-    <h2>Order Summary</h2>
+    <h2>Rezime Kòmand</h2>
     <p style="color:var(--text-muted);font-size:0.85rem" id="checkoutCountry"></p>
 
     <div class="checkout-items" id="checkoutItems"></div>
     <div class="checkout-total-row">
-      <span>Total</span>
+      <span>Total</span> <!-- same in Creole -->
       <span class="ctr-price" id="checkoutTotal"></span>
     </div>
 
     <!-- Delivery info -->
-    <h3 style="font-family:'Poppins',sans-serif;font-size:1rem;margin:20px 0 12px">Delivery Address</h3>
+    <h3 style="font-family:'Poppins',sans-serif;font-size:1rem;margin:20px 0 12px">Adrès Livrezon</h3>
     <div class="form-group">
-      <label>Street Address</label>
-      <input id="delStreet" type="text" placeholder="123 Rue Example, Port-au-Prince">
+      <label>Adrès</label>
+      <input id="delStreet" type="text" placeholder="123 Ri Egzanp, Pòtoprens">
     </div>
     <div class="form-group">
-      <label>City / Zone</label>
-      <input id="delCity" type="text" placeholder="Port-au-Prince">
+      <label>Vil / Zòn</label>
+      <input id="delCity" type="text" placeholder="Pòtoprens">
     </div>
     <div class="form-group">
-      <label>Phone</label>
+      <label>Telefòn</label>
       <input id="delPhone" type="tel" placeholder="+509 XXXX XXXX">
     </div>
 
     <!-- Payment -->
-    <h3 style="font-family:'Poppins',sans-serif;font-size:1rem;margin:20px 0 12px">Payment Method</h3>
+    <h3 style="font-family:'Poppins',sans-serif;font-size:1rem;margin:20px 0 12px">Metòd Peman</h3>
     <div class="payment-grid" id="paymentGrid">
       <div class="pay-method" data-method="moncash" onclick="selectPayment(this)">
         <div class="pm-icon">📱</div>
         <div class="pm-name">MonCash</div>
-        <div class="pm-desc">Mobile money</div>
+        <div class="pm-desc">Lajan mobil</div>
       </div>
       <div class="pay-method" data-method="natcash" onclick="selectPayment(this)">
         <div class="pm-icon">📲</div>
         <div class="pm-name">NatCash</div>
-        <div class="pm-desc">Mobile money</div>
+        <div class="pm-desc">Lajan mobil</div>
       </div>
       <div class="pay-method" data-method="bank_transfer" onclick="selectPayment(this)">
         <div class="pm-icon">🏦</div>
         <div class="pm-name">Bank Transfer</div>
-        <div class="pm-desc">Local bank</div>
+        <div class="pm-desc">Bank lokal</div>
       </div>
       <div class="pay-method" data-method="zelle" onclick="selectPayment(this)">
         <div class="pm-icon">⚡</div>
         <div class="pm-name">Zelle</div>
-        <div class="pm-desc">US bank transfer</div>
+        <div class="pm-desc">Transfè bank US</div>
       </div>
       <div class="pay-method" data-method="credit_card" onclick="selectPayment(this)">
         <div class="pm-icon">💳</div>
-        <div class="pm-name">Credit Card</div>
+        <div class="pm-name">Kat Kredi</div>
         <div class="pm-desc">Visa, Mastercard</div>
       </div>
       <div class="pay-method" data-method="debit_card" onclick="selectPayment(this)">
         <div class="pm-icon">💳</div>
-        <div class="pm-name">Debit Card</div>
+        <div class="pm-name">Kat Debi</div>
         <div class="pm-desc">Any debit card</div>
       </div>
       <div class="pay-method" data-method="stripe" onclick="selectPayment(this)">
@@ -326,8 +326,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light);color:var(--text-
 
     <!-- Receipt upload for manual payment -->
     <div class="receipt-section" id="receiptSection">
-      <h4>Upload Payment Receipt</h4>
-      <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:12px">Upload your payment screenshot or receipt. Our team will verify and process your order.</p>
+      <h4>Voye Resi Peman</h4>
+      <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:12px">Voye screenshot peman ou oswa resi. Ekip nou ap verifye epi trete kòmand ou.</p>
       <div class="file-upload-area" onclick="document.getElementById('receiptFile').click()">
         <div class="upload-icon">📄</div>
         <p id="receiptLabel">Tap to upload receipt or screenshot</p>
@@ -339,14 +339,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light);color:var(--text-
       </div>
     </div>
 
-    <button class="submit-order-btn" id="submitOrderBtn" onclick="submitOrder()">Place Order</button>
+    <button class="submit-order-btn" id="submitOrderBtn" onclick="submitOrder()">Pase Kòmand</button>
   </div>
 </div>
 
 <!-- Order success -->
 <div id="orderSuccess" class="order-success">
   <div class="check-icon">✅</div>
-  <h2>Order Placed!</h2>
+  <h2>Kòmand Pase!</h2>
   <p style="color:var(--text-muted);margin-bottom:12px">Your order has been submitted.</p>
   <div class="order-num" id="successOrderNum"></div>
   <p id="successPaymentMsg" style="color:var(--text-muted);font-size:0.85rem;margin:16px 0"></p>
@@ -411,15 +411,15 @@ async function loadCountryCounts() {
       fetch(API_BASE + '/api/international/stores?country=US&limit=1').then(function(r) { return r.json(); }),
       fetch(API_BASE + '/api/international/stores?country=CN&limit=1').then(function(r) { return r.json(); })
     ]);
-    document.getElementById('countDO').textContent = (dor.pagination ? dor.pagination.total : 0) + ' stores';
-    document.getElementById('countPA').textContent = (par.pagination ? par.pagination.total : 0) + ' stores';
-    document.getElementById('countUS').textContent = (usr.pagination ? usr.pagination.total : 0) + ' stores';
-    document.getElementById('countCN').textContent = (cnr.pagination ? cnr.pagination.total : 0) + ' stores';
+    document.getElementById('countDO').textContent = (dor.pagination ? dor.pagination.total : 0) + ' magazen';
+    document.getElementById('countPA').textContent = (par.pagination ? par.pagination.total : 0) + ' magazen';
+    document.getElementById('countUS').textContent = (usr.pagination ? usr.pagination.total : 0) + ' magazen';
+    document.getElementById('countCN').textContent = (cnr.pagination ? cnr.pagination.total : 0) + ' magazen';
   } catch(e) {
-    document.getElementById('countDO').textContent = 'Browse stores';
-    document.getElementById('countPA').textContent = 'Browse stores';
-    document.getElementById('countUS').textContent = 'Browse stores';
-    document.getElementById('countCN').textContent = 'Browse stores';
+    document.getElementById('countDO').textContent = 'Wè magazen yo';
+    document.getElementById('countPA').textContent = 'Wè magazen yo';
+    document.getElementById('countUS').textContent = 'Wè magazen yo';
+    document.getElementById('countCN').textContent = 'Wè magazen yo';
   }
 }
 loadCountryCounts();
@@ -442,7 +442,7 @@ function selectCountry(code) {
   document.getElementById('countrySection').style.display = 'none';
   document.getElementById('heroSection').style.display = 'none';
   document.getElementById('storeSection').style.display = 'block';
-  document.getElementById('storeTitle').innerHTML = COUNTRY_FLAGS[code] + ' ' + COUNTRY_NAMES[code] + ' — Stores';
+  document.getElementById('storeTitle').innerHTML = COUNTRY_FLAGS[code] + ' ' + COUNTRY_NAMES[code] + ' — Magazen yo';
 
   loadStores(code);
 }
@@ -459,7 +459,7 @@ function backToCountries() {
 // ─── Step 2: Load & Display Stores ───
 async function loadStores(country) {
   var list = document.getElementById('storeList');
-  list.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading stores...</p></div>';
+  list.innerHTML = '<div class="loading"><div class="spinner"></div><p>Chajman magazen yo...</p></div>';
 
   try {
     var res = await fetch(API_BASE + '/api/international/stores?country=' + country + '&limit=100');
@@ -472,7 +472,7 @@ async function loadStores(country) {
   // Category chips
   var cats = {};
   allStores.forEach(function(s) { cats[s.category] = (cats[s.category] || 0) + 1; });
-  var chipsHTML = '<span class="cat-chip active" onclick="filterStores(\'all\',this)">All (' + allStores.length + ')</span>';
+  var chipsHTML = '<span class="cat-chip active" onclick="filterStores(\'all\',this)">Tout (' + allStores.length + ')</span>';
   Object.keys(cats).forEach(function(c) {
     chipsHTML += '<span class="cat-chip" onclick="filterStores(\'' + c + '\',this)">' + (CATEGORY_ICONS[c] || '📦') + ' ' + c.charAt(0).toUpperCase() + c.slice(1) + ' (' + cats[c] + ')</span>';
   });
@@ -491,7 +491,7 @@ function filterStores(cat, el) {
 function renderStores(stores) {
   var list = document.getElementById('storeList');
   if (stores.length === 0) {
-    list.innerHTML = '<div class="empty-state"><div class="empty-icon">🏪</div><p>No stores available yet for this country.<br>Check back soon!</p></div>';
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">🏪</div><p>Pa gen magazen disponib pou peyi sa a ankò.<br>Tounen byento!</p></div>';
     return;
   }
 
@@ -509,7 +509,7 @@ function renderStores(stores) {
     html += '<span>📦 ~' + s.estimatedDeliveryDays + ' days</span>';
     html += '    </div>';
     html += '  </div>';
-    html += '  <span class="store-products-count">' + (s.stats ? s.stats.totalProducts : 0) + ' items</span>';
+    html += '  <span class="store-products-count">' + (s.stats ? s.stats.totalProducts : 0) + ' atik</span>';
     html += '</div>';
   });
   list.innerHTML = html;
@@ -528,10 +528,10 @@ async function selectStore(storeId) {
   if (currentStore.logo) logoEl.innerHTML = '<img src="' + currentStore.logo + '" alt="">';
   else logoEl.textContent = CATEGORY_ICONS[currentStore.category] || '🏪';
   document.getElementById('pStoreName').textContent = currentStore.name;
-  document.getElementById('pStoreMeta').textContent = (currentStore.city || '') + ' • ~' + currentStore.estimatedDeliveryDays + ' days delivery';
+  document.getElementById('pStoreMeta').textContent = (currentStore.city || '') + ' • ~' + currentStore.estimatedDeliveryDays + ' jou livrezon';
 
   var grid = document.getElementById('productGrid');
-  grid.innerHTML = '<div class="loading" style="grid-column:1/-1"><div class="spinner"></div><p>Loading products...</p></div>';
+  grid.innerHTML = '<div class="loading" style="grid-column:1/-1"><div class="spinner"></div><p>Chajman pwodui yo...</p></div>';
 
   try {
     var res = await fetch(API_BASE + '/api/international/stores/' + storeId);
@@ -544,7 +544,7 @@ async function selectStore(storeId) {
   // Category chips for products
   var cats = {};
   allProducts.forEach(function(p) { var c = p.category || 'General'; cats[c] = (cats[c] || 0) + 1; });
-  var chipsHTML = '<span class="cat-chip active" onclick="filterProductCat(\'all\',this)">All (' + allProducts.length + ')</span>';
+  var chipsHTML = '<span class="cat-chip active" onclick="filterProductCat(\'all\',this)">Tout (' + allProducts.length + ')</span>';
   Object.keys(cats).forEach(function(c) {
     chipsHTML += '<span class="cat-chip" onclick="filterProductCat(\'' + c + '\',this)">' + c + ' (' + cats[c] + ')</span>';
   });
@@ -581,7 +581,7 @@ function filterProductCat(cat, el) {
 function renderProducts(products) {
   var grid = document.getElementById('productGrid');
   if (products.length === 0) {
-    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📦</div><p>No products found</p></div>';
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📦</div><p>Pa jwenn pwodui</p></div>';
     return;
   }
 
@@ -598,14 +598,14 @@ function renderProducts(products) {
     html += '  <div class="product-body">';
     html += '    <div class="product-name">' + p.name + '</div>';
     html += '    <div class="product-price">' + formatHTG(p.finalPriceHTG) + '</div>';
-    html += '    <div class="product-delivery">~' + (p.estimatedDeliveryDays || 7) + ' days delivery</div>';
+    html += '    <div class="product-delivery">~' + (p.estimatedDeliveryDays || 7) + ' jou livrezon</div>';
     html += '    <div class="product-actions">';
     if (qty > 0) {
       html += '<button class="qty-btn" onclick="event.stopPropagation();changeQty(\'' + p._id + '\',-1)">−</button>';
       html += '<span class="qty-val">' + qty + '</span>';
       html += '<button class="qty-btn" onclick="event.stopPropagation();changeQty(\'' + p._id + '\',1)">+</button>';
     } else {
-      html += '<button class="add-btn" onclick="event.stopPropagation();addToCart(\'' + p._id + '\')">+ Add to Cart</button>';
+      html += '<button class="add-btn" onclick="event.stopPropagation();addToCart(\'' + p._id + '\')">+ Ajoute nan Panye</button>';
     }
     html += '    </div>';
     html += '  </div>';
@@ -660,7 +660,7 @@ function updateCartBar() {
   cart.forEach(function(c) { total += c.product.finalPriceHTG * c.quantity; count += c.quantity; });
 
   if (count > 0) {
-    document.getElementById('cartCount').textContent = count + ' item' + (count !== 1 ? 's' : '');
+    document.getElementById('cartCount').textContent = count + ' atik';
     document.getElementById('cartTotal').textContent = formatHTG(total);
     bar.classList.add('show');
   } else {
@@ -764,7 +764,7 @@ async function submitOrder() {
 
     if (!data.success) {
       btn.disabled = false;
-      btn.textContent = 'Place Order';
+      btn.textContent = 'Pase Kòmand';
       return showToast(data.message || 'Failed to place order', 'error');
     }
 
@@ -807,7 +807,7 @@ async function submitOrder() {
   }
 
   btn.disabled = false;
-  btn.textContent = 'Place Order';
+  btn.textContent = 'Pase Kòmand';
 }
 
 function resetShop() {
