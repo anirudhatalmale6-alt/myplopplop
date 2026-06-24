@@ -442,10 +442,10 @@ function showToast(msg, type) {
 async function loadCountryCounts() {
   try {
     var [dor, par, usr, cnr] = await Promise.all([
-      fetch(API_BASE + '/api/international/stores?country=DO&limit=1').then(function(r) { return r.json(); }),
-      fetch(API_BASE + '/api/international/stores?country=PA&limit=1').then(function(r) { return r.json(); }),
-      fetch(API_BASE + '/api/international/stores?country=US&limit=1').then(function(r) { return r.json(); }),
-      fetch(API_BASE + '/api/international/stores?country=CN&limit=1').then(function(r) { return r.json(); })
+      fetch(API_BASE + '/api/international/stores?active=all&country=DO&limit=1').then(function(r) { return r.json(); }),
+      fetch(API_BASE + '/api/international/stores?active=all&country=PA&limit=1').then(function(r) { return r.json(); }),
+      fetch(API_BASE + '/api/international/stores?active=all&country=US&limit=1').then(function(r) { return r.json(); }),
+      fetch(API_BASE + '/api/international/stores?active=all&country=CN&limit=1').then(function(r) { return r.json(); })
     ]);
     document.getElementById('countDO').textContent = (dor.pagination ? dor.pagination.total : 0) + ' magazen';
     document.getElementById('countPA').textContent = (par.pagination ? par.pagination.total : 0) + ' magazen';
@@ -498,7 +498,7 @@ async function loadStores(country) {
   list.innerHTML = '<div class="loading"><div class="spinner"></div><p>Chajman magazen yo...</p></div>';
 
   try {
-    var res = await fetch(API_BASE + '/api/international/stores?country=' + country + '&limit=100');
+    var res = await fetch(API_BASE + '/api/international/stores?active=all&country=' + country + '&limit=100');
     var data = await res.json();
     allStores = data.success ? data.data : [];
   } catch(e) {
@@ -531,8 +531,11 @@ function renderStores(stores) {
     return;
   }
 
+  var activeStores = stores.filter(function(s) { return s.isActive; });
+  var comingSoon = stores.filter(function(s) { return !s.isActive; });
+
   var html = '';
-  stores.forEach(function(s) {
+  activeStores.forEach(function(s) {
     html += '<div class="store-item" onclick="selectStore(\'' + s._id + '\')">';
     html += '  <div class="store-logo">';
     if (s.logo) html += '<img src="' + s.logo + '" alt="">';
@@ -542,12 +545,27 @@ function renderStores(stores) {
     html += '    <h3>' + s.name + '</h3>';
     html += '    <div class="store-meta">';
     if (s.city) html += '<span>📍 ' + s.city + '</span>';
-    html += '<span>📦 ~' + s.estimatedDeliveryDays + ' days</span>';
+    html += '<span>📦 ~' + s.estimatedDeliveryDays + ' jou livrezon</span>';
     html += '    </div>';
     html += '  </div>';
     html += '  <span class="store-products-count">' + (s.stats ? s.stats.totalProducts : 0) + ' atik</span>';
     html += '</div>';
   });
+
+  comingSoon.forEach(function(s) {
+    html += '<div class="store-item" style="opacity:0.55;cursor:default">';
+    html += '  <div class="store-logo">';
+    if (s.logo) html += '<img src="' + s.logo + '" alt="" style="filter:grayscale(0.3)">';
+    else html += CATEGORY_ICONS[s.category] || '🏪';
+    html += '  </div>';
+    html += '  <div class="store-info">';
+    html += '    <h3>' + s.name + '</h3>';
+    html += '    <div class="store-meta"><span style="font-size:0.75rem">' + (s.description || '') + '</span></div>';
+    html += '  </div>';
+    html += '  <span class="store-products-count" style="background:#fef3c7;color:#d97706">Byento</span>';
+    html += '</div>';
+  });
+
   list.innerHTML = html;
 }
 
