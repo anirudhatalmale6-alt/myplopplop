@@ -177,6 +177,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light);color:var(--text-
 <div class="topbar">
   <a href="index.html">← MyPlopPlop</a>
   <span class="topbar-title">Shop International</span>
+  <button onclick="sharePage()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;padding:6px 14px;border-radius:8px;font-size:0.8rem;cursor:pointer;margin-left:auto">Share</button>
 </div>
 
 <div id="heroSection" class="intl-hero">
@@ -368,6 +369,20 @@ function formatHTG(amount) {
   return amount.toLocaleString('en') + ' HTG';
 }
 
+function sharePage() {
+  var url = window.location.origin + window.location.pathname;
+  if (currentCountry) url += '#' + currentCountry;
+  if (navigator.share) {
+    navigator.share({ title: 'MyPlopPlop — Shop International', url: url }).catch(function(){});
+  } else {
+    navigator.clipboard.writeText(url).then(function() {
+      showToast('Link copied!', 'success');
+    }).catch(function() {
+      showToast(url);
+    });
+  }
+}
+
 function showToast(msg, type) {
   var t = document.getElementById('toast');
   t.textContent = msg;
@@ -395,11 +410,20 @@ async function loadCountryCounts() {
 }
 loadCountryCounts();
 
+// Auto-open country from URL hash (e.g. #US)
+(function() {
+  var hash = window.location.hash.replace('#', '').toUpperCase();
+  if (hash && COUNTRY_NAMES[hash]) {
+    setTimeout(function() { selectCountry(hash); }, 300);
+  }
+})();
+
 // ─── Step 1: Select Country ───
 function selectCountry(code) {
   currentCountry = code;
+  window.location.hash = code;
   document.querySelectorAll('.country-card').forEach(function(c) { c.classList.remove('active'); });
-  event.currentTarget.classList.add('active');
+  if (event && event.currentTarget) event.currentTarget.classList.add('active');
 
   document.getElementById('countrySection').style.display = 'none';
   document.getElementById('heroSection').style.display = 'none';
