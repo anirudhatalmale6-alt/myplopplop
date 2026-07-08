@@ -27,7 +27,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light,#f5f6fa);color:var
 
 /* Hero + search */
 .hero{background:linear-gradient(135deg,#00209F 0%,#001247 45%,#D21034 100%);padding:36px 20px 30px;text-align:center;color:#fff}
-.hero h1{font-family:'Poppins',sans-serif;font-size:1.65rem;font-weight:800;margin-bottom:6px;line-height:1.2}
+.hero h1{font-family:'Poppins',sans-serif;font-size:1.65rem;font-weight:800;margin-bottom:6px;line-height:1.2;color:#fff!important}
 .hero p{opacity:0.92;font-size:0.92rem;max-width:520px;margin:0 auto 20px}
 .search-wrap{max-width:640px;margin:0 auto;display:flex;gap:8px;background:#fff;border-radius:16px;padding:8px;box-shadow:0 12px 40px rgba(0,0,0,0.22)}
 .search-wrap input{flex:1;border:none;padding:12px 16px;font-size:1rem;font-family:inherit;border-radius:10px;color:#16181d}
@@ -200,14 +200,20 @@ function fbSearch(q, retailer){
   }).map(function(it){
     var r=map[it.r], landed=fbLanded(it.usd);
     return { retailer:it.r, store:r.name, name:it.name, priceUSD:it.usd, rating:it.rating,
-      image:'https://source.unsplash.com/400x400/?'+encodeURIComponent(it.kw.split(' ')[0]),
+      image:'https://loremflickr.com/400/400/'+encodeURIComponent(it.kw.split(' ')[0])+'?lock='+(it.id.replace(/\D/g,'').slice(-4)||'1'),
       affiliate:{ enabled:!!r.affEnabled&&!!r.affiliateId, url:fbAff(it.r,it,r.affiliateId) },
       orderThrough: r.otEnabled ? Object.assign({enabled:true, exchangeRateHTG:FB_FEES.rate}, landed) : {enabled:false} };
   });
 }
 
 function fmtHTG(n){ return Number(n).toLocaleString('en-US') + ' HTG'; }
-function fallbackImg(el){ el.onerror=null; el.src='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><rect width="400" height="400" fill="#eef0f5"/><text x="50%" y="50%" font-size="90" text-anchor="middle" dominant-baseline="middle">🛍️</text></svg>'); }
+function emojiFor(name){
+  var n=(name||'').toLowerCase();
+  var map=[['headphone','🎧'],['airpod','🎧'],['earbud','🎧'],['watch','⌚'],['laptop','💻'],['phone','📱'],['galaxy','📱'],['smartphone','📱'],['tv','📺'],['television','📺'],['power bank','🔋'],['charger','🔋'],['towel','🧺'],['led','💡'],['light','💡'],['blender','🥤'],['stand','📱'],['holder','📱']];
+  for(var i=0;i<map.length;i++){ if(n.indexOf(map[i][0])!==-1) return map[i][1]; }
+  return '🛍️';
+}
+function fallbackImg(el){ el.onerror=null; var e=el.getAttribute('data-emoji')||'🛍️'; el.src='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><rect width="400" height="400" fill="#eef0f5"/><text x="50%" y="52%" font-size="150" text-anchor="middle" dominant-baseline="middle">'+e+'</text></svg>'); }
 
 function loadRetailers(){
   fetch(API_BASE+'/api/marketplace/retailers')
@@ -279,7 +285,7 @@ function renderCard(p, i){
   return ''+
     '<div class="card">'+
       '<div class="card-img">'+
-        '<img src="'+p.image+'" alt="" loading="lazy" onerror="fallbackImg(this)">'+
+        '<img src="'+p.image+'" alt="" loading="lazy" data-emoji="'+emojiFor(p.name)+'" onerror="fallbackImg(this)">'+
         '<div class="store-badge">'+p.store+'</div>'+rating+
       '</div>'+
       '<div class="card-body">'+
