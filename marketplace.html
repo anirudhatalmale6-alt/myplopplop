@@ -149,16 +149,77 @@ var activeRetailer = null;
 var lastResults = [];
 var selected = null;
 
+/* ── Offline fallback ──────────────────────────────────────────────
+   Mirrors the backend so the marketplace works even before/without the
+   live API. Once /api/marketplace is reachable, live data takes over. */
+var FB_FEES = { rate:135, ship:15, service:10, imp:12, delivery:250 };
+var FB_RETAILERS = [
+  { key:'amazon', name:'Amazon', affiliateId:'myplopplop69-20', affEnabled:true, otEnabled:true },
+  { key:'walmart', name:'Walmart', affiliateId:'', affEnabled:true, otEnabled:true },
+  { key:'ebay', name:'eBay', affiliateId:'', affEnabled:true, otEnabled:true },
+  { key:'aliexpress', name:'AliExpress', affiliateId:'', affEnabled:true, otEnabled:true },
+  { key:'temu', name:'Temu', affiliateId:'', affEnabled:false, otEnabled:true },
+  { key:'cj', name:'CJ Dropshipping', affiliateId:'', affEnabled:false, otEnabled:true }
+];
+var FB_CATALOG = [
+  { r:'amazon', name:'Sony WH-1000XM5 Wireless Noise-Cancelling Headphones', usd:328.00, id:'B09XS7JWHH', url:'https://www.amazon.com/dp/B09XS7JWHH', rating:4.7, kw:'headphones audio wireless bluetooth' },
+  { r:'amazon', name:'Anker 737 Power Bank 24000mAh 140W', usd:109.99, id:'B09VPHVT2Z', url:'https://www.amazon.com/dp/B09VPHVT2Z', rating:4.6, kw:'powerbank charger battery phone' },
+  { r:'amazon', name:'Apple AirPods Pro (2nd Generation)', usd:189.99, id:'B0BDHWDR12', url:'https://www.amazon.com/dp/B0BDHWDR12', rating:4.8, kw:'airpods earbuds audio wireless phone' },
+  { r:'walmart', name:'onn. 50" Class 4K UHD LED Roku Smart TV', usd:228.00, id:'910480139', url:'https://www.walmart.com/ip/910480139', rating:4.4, kw:'tv television smart roku 4k electronics' },
+  { r:'walmart', name:'HP 15.6" Laptop, Intel Core i3, 8GB RAM, 256GB SSD', usd:349.00, id:'5032900420', url:'https://www.walmart.com/ip/5032900420', rating:4.3, kw:'laptop computer notebook electronics' },
+  { r:'walmart', name:'Mainstays 4-Piece Bath Towel Set', usd:12.97, id:'827344521', url:'https://www.walmart.com/ip/827344521', rating:4.5, kw:'towel bath home cotton household' },
+  { r:'ebay', name:'Samsung Galaxy S23 128GB Unlocked Smartphone', usd:469.99, id:'256123456789', url:'https://www.ebay.com/itm/256123456789', rating:4.6, kw:'phone samsung galaxy smartphone android' },
+  { r:'ebay', name:'Casio G-Shock GA-2100 Watch', usd:89.95, id:'256987654321', url:'https://www.ebay.com/itm/256987654321', rating:4.9, kw:'watch casio time wrist accessory' },
+  { r:'aliexpress', name:'Wireless Bluetooth Earbuds TWS Touch Control', usd:14.32, id:'1005004321', url:'https://www.aliexpress.com/item/1005004321.html', rating:4.4, kw:'earbuds bluetooth wireless audio phone' },
+  { r:'aliexpress', name:'LED Strip Lights 10m RGB with Remote', usd:8.76, id:'1005006789', url:'https://www.aliexpress.com/item/1005006789.html', rating:4.5, kw:'led lights strip rgb home decor' },
+  { r:'aliexpress', name:'Foldable Phone Stand Aluminum Desktop Holder', usd:5.49, id:'1005007777', url:'https://www.aliexpress.com/item/1005007777.html', rating:4.7, kw:'phone stand holder desk accessory' },
+  { r:'cj', name:'Portable Mini Blender USB Rechargeable 380ml', usd:11.20, id:'CJ-BL380', url:'', rating:4.3, kw:'blender kitchen portable home smoothie' }
+];
+function fbAff(rkey, item, id){
+  if(!id) return item.url||'';
+  if(rkey==='amazon'){ var b=item.url||('https://www.amazon.com/dp/'+item.id); return b+(b.indexOf('?')===-1?'?':'&')+'tag='+encodeURIComponent(id); }
+  if(rkey==='ebay'){ return 'https://rover.ebay.com/rover/1/711-53200-19255-0/1?mpre='+encodeURIComponent(item.url)+'&campid='+encodeURIComponent(id)+'&toolid=10001'; }
+  if(rkey==='walmart'){ return 'https://goto.walmart.com/c/'+encodeURIComponent(id)+'/568844/9383?veh=aff&u='+encodeURIComponent(item.url); }
+  if(rkey==='aliexpress'){ return 'https://s.click.aliexpress.com/deep_link.htm?aff_short_key='+encodeURIComponent(id)+'&dl_target_url='+encodeURIComponent(item.url); }
+  return item.url||'';
+}
+function fbLanded(usd){
+  var base=usd*FB_FEES.rate;
+  var ship=base*FB_FEES.ship/100, svc=base*FB_FEES.service/100, imp=base*FB_FEES.imp/100, del=FB_FEES.delivery;
+  return { totalHTG:Math.round(base+ship+svc+imp+del), breakdown:{ productHTG:Math.round(base), shippingMarkupHTG:Math.round(ship), serviceFeeHTG:Math.round(svc), importFeeHTG:Math.round(imp), deliveryFeeHTG:Math.round(del) } };
+}
+function fbSearch(q, retailer){
+  q=(q||'').toLowerCase().trim();
+  var map={}; FB_RETAILERS.forEach(function(r){ map[r.key]=r; });
+  return FB_CATALOG.filter(function(it){
+    var r=map[it.r]; if(!r||(!r.affEnabled&&!r.otEnabled)) return false;
+    if(retailer&&it.r!==retailer) return false;
+    if(!q) return true;
+    var hay=(it.name+' '+it.kw).toLowerCase();
+    return q.split(/\s+/).some(function(t){ return hay.indexOf(t)!==-1; });
+  }).map(function(it){
+    var r=map[it.r], landed=fbLanded(it.usd);
+    return { retailer:it.r, store:r.name, name:it.name, priceUSD:it.usd, rating:it.rating,
+      image:'https://source.unsplash.com/400x400/?'+encodeURIComponent(it.kw.split(' ')[0]),
+      affiliate:{ enabled:!!r.affEnabled&&!!r.affiliateId, url:fbAff(it.r,it,r.affiliateId) },
+      orderThrough: r.otEnabled ? Object.assign({enabled:true, exchangeRateHTG:FB_FEES.rate}, landed) : {enabled:false} };
+  });
+}
+
 function fmtHTG(n){ return Number(n).toLocaleString('en-US') + ' HTG'; }
 function fallbackImg(el){ el.onerror=null; el.src='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><rect width="400" height="400" fill="#eef0f5"/><text x="50%" y="50%" font-size="90" text-anchor="middle" dominant-baseline="middle">🛍️</text></svg>'); }
 
 function loadRetailers(){
   fetch(API_BASE+'/api/marketplace/retailers')
-    .then(function(r){return r.json();})
+    .then(function(r){ if(!r.ok) throw new Error('bad'); return r.json(); })
     .then(function(d){
-      RETAILERS = (d && d.retailers) || [];
+      RETAILERS = (d && d.retailers && d.retailers.length) ? d.retailers
+        : FB_RETAILERS.map(function(r){ return {key:r.key,name:r.name}; });
       renderChips();
-    }).catch(function(){ renderChips(); });
+    }).catch(function(){
+      RETAILERS = FB_RETAILERS.map(function(r){ return {key:r.key,name:r.name}; });
+      renderChips();
+    });
 }
 
 function renderChips(){
@@ -183,19 +244,26 @@ function doSearch(){
   state.style.display = 'block';
   state.innerHTML = '<div class="spinner"></div><div>Searching every store…</div>';
 
-  var url = API_BASE+'/api/marketplace/search?q='+encodeURIComponent(q)+(activeRetailer?'&retailer='+activeRetailer:'');
-  fetch(url).then(function(r){return r.json();}).then(function(d){
-    lastResults = (d && d.results) || [];
+  function show(results){
+    lastResults = results || [];
     if(!lastResults.length){
+      state.style.display = 'block';
       state.innerHTML = '<div class="emoji">🔍</div><div>No results for that yet. Try another product — or a broader word.</div>';
       return;
     }
     state.style.display = 'none';
     meta.textContent = lastResults.length+' result'+(lastResults.length>1?'s':'')+(q?(' for "'+q+'"'):'')+' · prices in USD, delivered price in HTG';
     grid.innerHTML = lastResults.map(renderCard).join('');
-  }).catch(function(){
-    state.innerHTML = '<div class="emoji">⚠️</div><div>Could not reach the marketplace. Please try again in a moment.</div>';
-  });
+  }
+
+  var url = API_BASE+'/api/marketplace/search?q='+encodeURIComponent(q)+(activeRetailer?'&retailer='+activeRetailer:'');
+  fetch(url).then(function(r){ if(!r.ok) throw new Error('bad'); return r.json(); })
+    .then(function(d){
+      var results = (d && d.results) || [];
+      // If the live API is unreachable/empty, fall back to the built-in catalog.
+      show(results.length ? results : fbSearch(q, activeRetailer));
+    })
+    .catch(function(){ show(fbSearch(q, activeRetailer)); });
 }
 
 function renderCard(p, i){
