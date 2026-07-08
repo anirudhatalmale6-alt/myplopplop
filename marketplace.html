@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Marketplace — MyPlopPlop</title>
+<meta name="description" content="Search products from Amazon, Walmart, eBay, AliExpress and more. Buy direct, or Order Through MyPlopPlop and pay local — we import and deliver.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<!-- OG for WhatsApp sharing -->
+<meta property="og:title" content="MyPlopPlop Global Marketplace — Search the world, pay local">
+<meta property="og:description" content="Search Amazon, Walmart, eBay, AliExpress. Buy direct or let MyPlopPlop import it for you — pay with MonCash, NatCash or card.">
+<meta property="og:type" content="website">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg-light,#f5f6fa);color:var(--text-dark,#16181d);min-height:100vh}
+
+/* Top bar */
+.topbar{background:var(--primary-blue,#00209F);color:#fff;padding:12px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+.topbar a{color:#fff;text-decoration:none;font-size:0.85rem;opacity:0.9}
+.topbar a:hover{opacity:1}
+.topbar-title{font-family:'Poppins',sans-serif;font-weight:700;font-size:1rem;flex:1}
+
+/* Hero + search */
+.hero{background:linear-gradient(135deg,#00209F 0%,#001247 45%,#D21034 100%);padding:36px 20px 30px;text-align:center;color:#fff}
+.hero h1{font-family:'Poppins',sans-serif;font-size:1.65rem;font-weight:800;margin-bottom:6px;line-height:1.2}
+.hero p{opacity:0.92;font-size:0.92rem;max-width:520px;margin:0 auto 20px}
+.search-wrap{max-width:640px;margin:0 auto;display:flex;gap:8px;background:#fff;border-radius:16px;padding:8px;box-shadow:0 12px 40px rgba(0,0,0,0.22)}
+.search-wrap input{flex:1;border:none;padding:12px 16px;font-size:1rem;font-family:inherit;border-radius:10px;color:#16181d}
+.search-wrap input:focus{outline:none}
+.search-btn{background:var(--primary-red,#D21034);color:#fff;border:none;border-radius:10px;padding:0 22px;font-weight:700;font-size:0.95rem;cursor:pointer;font-family:'Poppins',sans-serif}
+.search-btn:hover{filter:brightness(1.05)}
+.hero-hint{margin-top:12px;font-size:0.78rem;opacity:0.8}
+.hero-hint span{cursor:pointer;text-decoration:underline;margin:0 5px}
+
+/* Retailer chips */
+.chips{max-width:900px;margin:0 auto;padding:18px 16px 4px;display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.chip{white-space:nowrap;background:#fff;border:1.5px solid var(--gray-200,#e4e6ee);border-radius:100px;padding:8px 16px;font-size:0.82rem;font-weight:600;cursor:pointer;color:var(--text-dark,#16181d);transition:all .15s}
+.chip.active{background:var(--primary-blue,#00209F);border-color:var(--primary-blue,#00209F);color:#fff}
+
+/* Results */
+.section{max-width:900px;margin:0 auto;padding:8px 16px 40px}
+.results-meta{font-size:0.82rem;color:var(--text-muted,#6b7280);padding:10px 2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.card{background:#fff;border-radius:16px;overflow:hidden;border:1px solid var(--gray-100,#eef0f5);box-shadow:0 2px 10px rgba(0,0,0,0.04);display:flex;flex-direction:column}
+.card-img{height:170px;background:var(--gray-100,#eef0f5);position:relative;overflow:hidden}
+.card-img img{width:100%;height:100%;object-fit:cover}
+.store-badge{position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.72);color:#fff;font-size:0.7rem;font-weight:700;padding:4px 10px;border-radius:100px;letter-spacing:.02em}
+.rating-badge{position:absolute;top:10px;right:10px;background:#fff;color:#16181d;font-size:0.7rem;font-weight:700;padding:4px 8px;border-radius:100px;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.card-body{padding:14px;display:flex;flex-direction:column;flex:1}
+.card-name{font-weight:600;font-size:0.9rem;line-height:1.35;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.5em}
+.price-usd{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.05rem;color:#16181d;margin-bottom:2px}
+.price-usd small{font-weight:500;font-size:0.72rem;color:var(--text-muted,#6b7280)}
+.card-actions{margin-top:auto;padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.btn{border:none;border-radius:11px;padding:11px;font-weight:700;font-size:0.82rem;cursor:pointer;font-family:'Poppins',sans-serif;text-align:center;text-decoration:none;display:block;line-height:1.2}
+.btn-affiliate{background:#fff;border:1.5px solid var(--gray-300,#d4d7e0);color:#16181d}
+.btn-affiliate:hover{border-color:#16181d}
+.btn-order{background:linear-gradient(135deg,#00209F,#D21034);color:#fff}
+.btn-order:hover{filter:brightness(1.06)}
+.btn-order .oh-htg{display:block;font-size:0.95rem;margin-top:2px}
+.btn-order .oh-label{font-size:0.72rem;opacity:.92;font-weight:600}
+
+/* states */
+.state{text-align:center;padding:60px 20px;color:var(--text-muted,#6b7280)}
+.state .emoji{font-size:2.6rem;margin-bottom:12px}
+.spinner{width:34px;height:34px;border:3px solid var(--gray-200,#e4e6ee);border-top-color:var(--primary-blue,#00209F);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* modal */
+.modal{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.55)}
+.modal.show{display:block}
+.sheet{position:absolute;bottom:0;left:0;right:0;max-height:92vh;overflow-y:auto;background:#fff;border-radius:22px 22px 0 0;padding:24px 20px 34px;animation:up .28s ease;max-width:520px;margin:0 auto}
+@media(min-width:520px){.modal.show{display:flex;align-items:center;justify-content:center}.sheet{position:relative;border-radius:22px;animation:none}}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-close{position:absolute;top:14px;right:14px;background:var(--gray-100,#eef0f5);border:none;width:34px;height:34px;border-radius:50%;font-size:1.1rem;cursor:pointer}
+.sheet h2{font-family:'Poppins',sans-serif;font-size:1.15rem;margin-bottom:2px;padding-right:30px}
+.sheet .sub{font-size:0.82rem;color:var(--text-muted,#6b7280);margin-bottom:16px}
+.brk{border-top:1px solid var(--gray-200,#e4e6ee);margin-top:6px}
+.brk-row{display:flex;justify-content:space-between;padding:9px 0;font-size:0.88rem;border-bottom:1px solid var(--gray-100,#eef0f5)}
+.brk-row.total{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.05rem;border-bottom:none;padding-top:12px;color:var(--primary-red,#D21034)}
+.pay-row{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 4px}
+.pay-pill{background:var(--gray-100,#eef0f5);border-radius:100px;padding:7px 13px;font-size:0.78rem;font-weight:600}
+.cta{width:100%;background:linear-gradient(135deg,#00209F,#D21034);color:#fff;border:none;border-radius:13px;padding:15px;font-weight:700;font-size:0.95rem;cursor:pointer;font-family:'Poppins',sans-serif;margin-top:14px}
+.note{font-size:0.72rem;color:var(--text-muted,#6b7280);text-align:center;margin-top:10px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html">&larr;</a>
+  <div class="topbar-title">MyPlopPlop Marketplace</div>
+  <a href="international.html">Shop International</a>
+</div>
+
+<div class="hero">
+  <h1>Search the world. Pay local.</h1>
+  <p>One search across Amazon, Walmart, eBay, AliExpress and more. Buy direct — or let MyPlopPlop import it and pay with MonCash, NatCash or card.</p>
+  <div class="search-wrap">
+    <input id="q" type="text" placeholder="Search any product…" autocomplete="off">
+    <button class="search-btn" onclick="doSearch()">Search</button>
+  </div>
+  <div class="hero-hint">Try:
+    <span onclick="quick('headphones')">headphones</span>·
+    <span onclick="quick('phone')">phone</span>·
+    <span onclick="quick('watch')">watch</span>·
+    <span onclick="quick('laptop')">laptop</span>
+  </div>
+</div>
+
+<div class="chips" id="chips"></div>
+
+<div class="section">
+  <div class="results-meta" id="meta"></div>
+  <div class="grid" id="grid"></div>
+  <div class="state" id="state">
+    <div class="emoji">🌍</div>
+    <div>Search for anything — we'll show results from every store.</div>
+  </div>
+</div>
+
+<!-- Order Through MyPlopPlop modal -->
+<div class="modal" id="modal">
+  <div class="sheet">
+    <button class="sheet-close" onclick="closeModal()">×</button>
+    <h2 id="mTitle">Order Through MyPlopPlop</h2>
+    <div class="sub" id="mSub"></div>
+    <div class="brk" id="mBrk"></div>
+    <div class="pay-row">
+      <span class="pay-pill">💵 MonCash</span>
+      <span class="pay-pill">💳 NatCash</span>
+      <span class="pay-pill">🏦 Bank transfer</span>
+      <span class="pay-pill">💳 Card</span>
+      <span class="pay-pill">💵 Cash</span>
+    </div>
+    <button class="cta" onclick="startOrder()">Confirm &amp; Continue to Payment</button>
+    <div class="note">You pay MyPlopPlop in HTG. We buy it, import it, clear customs, and deliver to your door — usually in ~21 days. You never need an Amazon or eBay account.</div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script>
+var API_BASE = 'https://myplopplop-api.onrender.com';
+var RETAILERS = [];
+var activeRetailer = null;
+var lastResults = [];
+var selected = null;
+
+function fmtHTG(n){ return Number(n).toLocaleString('en-US') + ' HTG'; }
+function fallbackImg(el){ el.onerror=null; el.src='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><rect width="400" height="400" fill="#eef0f5"/><text x="50%" y="50%" font-size="90" text-anchor="middle" dominant-baseline="middle">🛍️</text></svg>'); }
+
+function loadRetailers(){
+  fetch(API_BASE+'/api/marketplace/retailers')
+    .then(function(r){return r.json();})
+    .then(function(d){
+      RETAILERS = (d && d.retailers) || [];
+      renderChips();
+    }).catch(function(){ renderChips(); });
+}
+
+function renderChips(){
+  var c = document.getElementById('chips');
+  var html = '<div class="chip'+(activeRetailer===null?' active':'')+'" onclick="setRetailer(null)">All stores</div>';
+  RETAILERS.forEach(function(r){
+    html += '<div class="chip'+(activeRetailer===r.key?' active':'')+'" onclick="setRetailer(\''+r.key+'\')">'+r.name+'</div>';
+  });
+  c.innerHTML = html;
+}
+
+function setRetailer(k){ activeRetailer = k; renderChips(); if(document.getElementById('q').value.trim()||lastResults.length) doSearch(); }
+function quick(term){ document.getElementById('q').value = term; doSearch(); }
+
+function doSearch(){
+  var q = document.getElementById('q').value.trim();
+  var grid = document.getElementById('grid');
+  var state = document.getElementById('state');
+  var meta = document.getElementById('meta');
+  grid.innerHTML = '';
+  meta.textContent = '';
+  state.style.display = 'block';
+  state.innerHTML = '<div class="spinner"></div><div>Searching every store…</div>';
+
+  var url = API_BASE+'/api/marketplace/search?q='+encodeURIComponent(q)+(activeRetailer?'&retailer='+activeRetailer:'');
+  fetch(url).then(function(r){return r.json();}).then(function(d){
+    lastResults = (d && d.results) || [];
+    if(!lastResults.length){
+      state.innerHTML = '<div class="emoji">🔍</div><div>No results for that yet. Try another product — or a broader word.</div>';
+      return;
+    }
+    state.style.display = 'none';
+    meta.textContent = lastResults.length+' result'+(lastResults.length>1?'s':'')+(q?(' for "'+q+'"'):'')+' · prices in USD, delivered price in HTG';
+    grid.innerHTML = lastResults.map(renderCard).join('');
+  }).catch(function(){
+    state.innerHTML = '<div class="emoji">⚠️</div><div>Could not reach the marketplace. Please try again in a moment.</div>';
+  });
+}
+
+function renderCard(p, i){
+  var aff = p.affiliate || {};
+  var oh = p.orderThrough || {};
+  var affBtn = aff.enabled
+    ? '<a class="btn btn-affiliate" href="'+aff.url+'" target="_blank" rel="nofollow noopener">Buy on '+p.store+' →</a>'
+    : '';
+  var ohBtn = oh.enabled
+    ? '<button class="btn btn-order" onclick="openOrder('+i+')"><span class="oh-label">Order Through MyPlopPlop</span><span class="oh-htg">'+fmtHTG(oh.totalHTG)+'</span></button>'
+    : '';
+  var rating = p.rating ? '<div class="rating-badge">★ '+p.rating+'</div>' : '';
+  return ''+
+    '<div class="card">'+
+      '<div class="card-img">'+
+        '<img src="'+p.image+'" alt="" loading="lazy" onerror="fallbackImg(this)">'+
+        '<div class="store-badge">'+p.store+'</div>'+rating+
+      '</div>'+
+      '<div class="card-body">'+
+        '<div class="card-name">'+p.name+'</div>'+
+        '<div class="price-usd">$'+p.priceUSD.toFixed(2)+' <small>on '+p.store+'</small></div>'+
+        '<div class="card-actions">'+affBtn+ohBtn+'</div>'+
+      '</div>'+
+    '</div>';
+}
+
+function openOrder(i){
+  selected = lastResults[i];
+  var oh = selected.orderThrough;
+  var b = oh.breakdown;
+  document.getElementById('mSub').textContent = selected.name;
+  document.getElementById('mBrk').innerHTML =
+    row('Product price', fmtHTG(b.productHTG)) +
+    row('Shipping', fmtHTG(b.shippingMarkupHTG)) +
+    row('Service fee', fmtHTG(b.serviceFeeHTG)) +
+    row('Import / customs', fmtHTG(b.importFeeHTG)) +
+    row('Local delivery', fmtHTG(b.deliveryFeeHTG)) +
+    '<div class="brk-row total"><span>You pay</span><span>'+fmtHTG(oh.totalHTG)+'</span></div>';
+  document.getElementById('modal').classList.add('show');
+}
+function row(l,v){ return '<div class="brk-row"><span>'+l+'</span><span>'+v+'</span></div>'; }
+function closeModal(){ document.getElementById('modal').classList.remove('show'); }
+
+function startOrder(){
+  if(!selected) return;
+  // Hand off to the existing international checkout with this item pre-filled.
+  var item = {
+    name: selected.name, image: selected.image, store: selected.store,
+    retailer: selected.retailer, priceUSD: selected.priceUSD,
+    totalHTG: selected.orderThrough.totalHTG, source: 'marketplace'
+  };
+  try { localStorage.setItem('mpp_intl_pending', JSON.stringify(item)); } catch(e){}
+  window.location.href = 'checkout.html?src=marketplace';
+}
+
+document.getElementById('q').addEventListener('keydown', function(e){ if(e.key==='Enter') doSearch(); });
+document.getElementById('modal').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+loadRetailers();
+</script>
+</body>
+</html>
