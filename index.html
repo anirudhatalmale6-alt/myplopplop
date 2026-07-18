@@ -31,15 +31,15 @@
 <link rel="stylesheet" href="css/variables.css">
 <style>
 /* ══════════════════════════════════════════
-   MyPlopPlop Homepage v5.0 — "Clean Onboarding"
-   Scan-in-3-seconds. One action per card.
+   MyPlopPlop Homepage v5.1 — "Onboarding Hub"
+   Gradient action cards · premium CTA · scan in 3s
    ══════════════════════════════════════════ */
 :root{
   --navy:#0A0E27;
-  --blue:#00209F; --blue-2:#1545CC; --blue-bg:#EAF0FF;
-  --red:#D21034;  --red-2:#F0264C;  --red-bg:#FFE9ED;
-  --green:#16A34A;--green-2:#22C55E;--green-bg:#E7F8EE;
-  --orange:#F97316;--orange-2:#FB9A3E;--orange-bg:#FFF1E4;
+  --blue:#00209F; --blue-2:#2E5BEA; --blue-dk:#001A7A;
+  --red:#D21034;  --red-2:#F0264C;  --red-dk:#A50D29;
+  --green:#0E8F43;--green-2:#22C55E;--green-dk:#0A6E33;
+  --orange:#F97316;--orange-2:#FB9A3E;--orange-dk:#DD5F08;
   --ink:#141726; --sub:#5B6070; --line:#E9ECF3;
   --bg:#F4F6FB; --card:#FFFFFF;
   --h:'Poppins',system-ui,sans-serif;
@@ -48,44 +48,24 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body.mp-home{
-  font-family:var(--b);
-  background:var(--bg);
-  color:var(--ink);
-  padding-bottom:76px;
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-}
-a{text-decoration:none;color:inherit}
+body.mp-home{font-family:var(--b);background:var(--bg);color:var(--ink);padding-bottom:76px;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent}
 img{max-width:100%;display:block}
 
 /* ═══ LANGUAGE BAR ═══ */
-.mp-lang{
-  background:var(--navy);display:flex;align-items:center;justify-content:center;
-  height:32px;gap:2px;
-}
-.mp-lang a{
-  color:rgba(255,255,255,.55);font-size:.68rem;font-weight:600;
-  padding:5px 11px;border-radius:100px;cursor:pointer;transition:.2s;
-  font-family:var(--a);letter-spacing:.02em;
-}
+.mp-lang{background:var(--navy);display:flex;align-items:center;justify-content:center;height:32px;gap:2px}
+.mp-lang a{color:rgba(255,255,255,.55);font-size:.68rem;font-weight:600;padding:5px 11px;border-radius:100px;cursor:pointer;transition:.2s;font-family:var(--a);letter-spacing:.02em}
 .mp-lang a:hover{color:#fff;background:rgba(255,255,255,.08)}
 .mp-lang a.active{color:#fff;background:var(--red);font-weight:700}
 
 /* ═══ NAV ═══ */
-.mp-nav{
-  position:sticky;top:0;z-index:100;background:var(--navy);
-  padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between;
-}
+.mp-nav{position:sticky;top:0;z-index:100;background:var(--navy);padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between}
 .mp-nav-logo{display:flex;align-items:center;gap:10px}
 .mp-nav-logo img{height:34px;width:34px;border-radius:9px}
 .mp-nav-logo .nm{font-family:var(--h);font-weight:800;font-size:1.12rem;color:#fff;line-height:1}
 .mp-nav-logo .sm{font-family:var(--a);font-size:.6rem;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.08em;text-transform:uppercase}
 .mp-nav-right{display:flex;align-items:center;gap:6px}
-.mp-nav-cart,.mp-menu-btn{
-  width:40px;height:40px;display:flex;align-items:center;justify-content:center;
-  color:#fff;background:rgba(255,255,255,.08);border:none;border-radius:11px;cursor:pointer;position:relative;
-}
+.mp-nav-cart,.mp-menu-btn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(255,255,255,.08);border:none;border-radius:11px;cursor:pointer;position:relative}
 .mp-nav-cart svg,.mp-menu-btn svg{width:21px;height:21px}
 .mp-cart-badge{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:.6rem;font-weight:700;min-width:16px;height:16px;border-radius:100px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-family:var(--a)}
 
@@ -100,27 +80,14 @@ img{max-width:100%;display:block}
 .mp-menu-panel a .mi{font-size:1.2rem;width:26px;text-align:center}
 
 /* ═══ HERO ═══ */
-.mp-hero{
-  background:
-    radial-gradient(1200px 300px at 15% -20%,rgba(0,32,159,.10),transparent),
-    radial-gradient(900px 260px at 100% 0%,rgba(210,16,52,.08),transparent),
-    var(--bg);
-  padding:26px 16px 6px;text-align:center;
-}
+.mp-hero{background:radial-gradient(1200px 300px at 15% -20%,rgba(0,32,159,.10),transparent),radial-gradient(900px 260px at 100% 0%,rgba(210,16,52,.08),transparent),var(--bg);padding:26px 16px 6px;text-align:center}
 .mp-brand{display:flex;flex-direction:column;align-items:center;gap:10px}
 .mp-brand img{width:60px;height:60px;border-radius:16px;box-shadow:0 8px 22px rgba(0,32,159,.18)}
 .mp-brand .bt{font-family:var(--h);font-weight:800;font-size:1.55rem;letter-spacing:-.02em;line-height:1}
 .mp-brand .bt b{color:var(--red)}
-.mp-tagline{
-  font-family:var(--a);font-weight:600;font-size:.86rem;color:var(--blue);
-  margin-top:2px;letter-spacing:.01em;
-}
-/* Search */
+.mp-tagline{font-family:var(--a);font-weight:600;font-size:.86rem;color:var(--blue);margin-top:2px;letter-spacing:.01em}
 .mp-search{margin:18px auto 4px;max-width:520px}
-.mp-search-bar{
-  display:flex;align-items:center;background:#fff;border:1.5px solid var(--line);
-  border-radius:100px;padding:5px 5px 5px 16px;box-shadow:0 6px 20px rgba(20,23,38,.06);transition:.2s;
-}
+.mp-search-bar{display:flex;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:100px;padding:5px 5px 5px 16px;box-shadow:0 6px 20px rgba(20,23,38,.06);transition:.2s}
 .mp-search-bar:focus-within{border-color:var(--blue);box-shadow:0 6px 22px rgba(0,32,159,.14)}
 .mp-search-bar svg{width:20px;height:20px;color:var(--sub);flex-shrink:0}
 .mp-search-bar input{flex:1;border:none;outline:none;font-family:var(--b);font-size:.92rem;padding:11px 12px;background:none;color:var(--ink);min-width:0}
@@ -132,82 +99,67 @@ img{max-width:100%;display:block}
 .mp-wrap{max-width:640px;margin:0 auto}
 .mp-sec{padding:20px 16px 4px}
 .mp-sec-head{font-family:var(--h);font-weight:800;font-size:1.12rem;letter-spacing:-.01em;margin:0 2px 14px}
-.mp-sec-head span{color:var(--sub);font-weight:600;font-size:.8rem;display:block;font-family:var(--b);margin-top:2px}
 
-/* ═══ PRIMARY CARDS ═══ */
-.mp-cards{display:flex;flex-direction:column;gap:13px}
-.mp-card{
-  position:relative;display:flex;align-items:center;gap:15px;
-  background:var(--card);border:1.5px solid var(--line);border-radius:20px;
-  padding:17px 16px;box-shadow:0 3px 14px rgba(20,23,38,.05);
-  transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s;
-  overflow:hidden;
-}
-.mp-card::after{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
-.mp-card:active{transform:scale(.985)}
-.mp-card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(20,23,38,.10)}
-.mp-ic{
-  width:58px;height:58px;border-radius:16px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;font-size:1.85rem;
-}
+/* ═══ PRIMARY GRADIENT CARDS ═══ */
+.mp-cards{display:flex;flex-direction:column;gap:14px}
+.mp-card{position:relative;display:flex;align-items:center;gap:15px;border-radius:22px;padding:18px 16px;color:#fff;overflow:hidden;transition:transform .16s cubic-bezier(.2,.8,.2,1),box-shadow .16s}
+.mp-card:active{transform:scale(.978)}
+.mp-ic{width:58px;height:58px;border-radius:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.85rem;background:rgba(255,255,255,.20)}
 .mp-tx{flex:1;min-width:0}
 .mp-tx .tt,.mp-tx .st,.mp-tx .mt{display:block}
-.mp-tx .tt{font-family:var(--h);font-weight:800;font-size:1.16rem;line-height:1.1;letter-spacing:-.01em}
-.mp-tx .st{font-family:var(--b);font-weight:600;font-size:.9rem;color:var(--ink);margin-top:3px}
-.mp-tx .mt{font-family:var(--a);font-weight:600;font-size:.72rem;color:var(--sub);margin-top:5px;letter-spacing:.01em}
-.mp-go{width:34px;height:34px;border-radius:100px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--sub);transition:.2s}
-.mp-go svg{width:18px;height:18px}
-.mp-card:hover .mp-go{background:var(--ink);color:#fff}
+.mp-tx .tt{font-family:var(--h);font-weight:800;font-size:1.16rem;line-height:1.15;letter-spacing:-.01em}
+.mp-tx .st{font-family:var(--b);font-weight:700;font-size:.92rem;margin-top:3px;color:rgba(255,255,255,.96)}
+.mp-tx .mt{font-family:var(--a);font-weight:600;font-size:.73rem;margin-top:5px;color:rgba(255,255,255,.82);letter-spacing:.01em}
+.mp-badge{display:inline-block;vertical-align:middle;margin-left:8px;font-family:var(--a);font-weight:800;font-size:.6rem;letter-spacing:.06em;background:#fff;color:var(--green);padding:3px 9px;border-radius:100px;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+/* circular themed CTA */
+.mp-go{width:46px;height:46px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;border:2px solid rgba(255,255,255,.9);box-shadow:0 6px 16px rgba(0,0,0,.22);transition:transform .15s}
+.mp-go svg{width:20px;height:20px}
+.mp-card:active .mp-go{transform:scale(.86)}
 
-/* color variants */
-.c-green::after{background:var(--green)} .c-green .mp-ic{background:var(--green-bg)}
-.c-blue::after{background:var(--blue)}   .c-blue .mp-ic{background:var(--blue-bg)}
-.c-orange::after{background:var(--orange)}.c-orange .mp-ic{background:var(--orange-bg)}
+/* gradient variants */
+.c-vann{background:linear-gradient(135deg,var(--red) 0%,var(--red-2) 100%);box-shadow:0 14px 32px rgba(210,16,52,.32)}
+.c-vann .mp-go{background:var(--red-dk)}
+.c-paren{background:linear-gradient(135deg,var(--green) 0%,var(--green-2) 100%);box-shadow:0 12px 28px rgba(14,143,67,.28)}
+.c-paren .mp-go{background:var(--green-dk)}
+.c-msw{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-2) 100%);box-shadow:0 12px 28px rgba(0,32,159,.30)}
+.c-msw .mp-go{background:var(--blue-dk)}
+.c-achte{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-2) 100%);box-shadow:0 12px 28px rgba(249,115,22,.30)}
+.c-achte .mp-go{background:var(--orange-dk)}
+/* VANN = largest / most attractive */
+.c-vann{padding:22px 18px}
+.c-vann .mp-ic{width:66px;height:66px;font-size:2.1rem}
+.c-vann .tt{font-size:1.32rem}
+.c-vann .st{font-size:.98rem}
 
-/* VANN — primary CTA, filled */
-.mp-card.c-vann{
-  background:linear-gradient(135deg,var(--red) 0%,var(--red-2) 100%);
-  border-color:transparent;box-shadow:0 12px 30px rgba(210,16,52,.30);
-}
-.mp-card.c-vann::after{display:none}
-.c-vann .mp-ic{background:rgba(255,255,255,.18)}
-.c-vann .tt{color:#fff}
-.c-vann .st{color:rgba(255,255,255,.95)}
-.c-vann .mt{color:rgba(255,255,255,.82)}
-.c-vann .mp-go{background:rgba(255,255,255,.18);color:#fff}
-.c-vann:hover .mp-go{background:#fff;color:var(--red)}
-.mp-tag{
-  display:inline-block;vertical-align:middle;margin-left:8px;
-  font-family:var(--a);font-weight:700;font-size:.56rem;letter-spacing:.07em;text-transform:uppercase;
-  background:rgba(255,255,255,.22);color:#fff;padding:3px 8px;border-radius:100px;
-}
+/* ═══ INTERNATIONAL BANNER (navy) ═══ */
+.mp-intl{position:relative;margin:16px 16px 4px;border-radius:22px;padding:22px 20px;background:linear-gradient(135deg,#0A0E27 0%,#12235C 60%,#0E2E7A 100%);color:#fff;overflow:hidden;box-shadow:0 14px 32px rgba(10,14,39,.30)}
+.mp-intl::before{content:"🌍";position:absolute;right:-18px;bottom:-30px;font-size:9rem;opacity:.10;line-height:1;transform:rotate(-8deg)}
+.mp-intl::after{content:"";position:absolute;inset:0;background:radial-gradient(120px 120px at 85% 20%,rgba(46,91,234,.35),transparent);pointer-events:none}
+.mp-intl-in{position:relative}
+.mp-intl-flags{font-size:1.25rem;letter-spacing:4px;margin-bottom:8px}
+.mp-intl h3{font-family:var(--h);font-weight:800;font-size:1.2rem;letter-spacing:-.01em}
+.mp-intl p{font-family:var(--b);font-weight:500;font-size:.82rem;color:rgba(255,255,255,.82);margin:7px 0 15px;line-height:1.5;max-width:460px}
+.mp-intl-cta{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--navy);font-family:var(--h);font-weight:700;font-size:.9rem;padding:12px 22px;border-radius:100px;box-shadow:0 8px 20px rgba(0,0,0,.25);transition:transform .15s;position:relative;overflow:hidden}
+.mp-intl-cta:active{transform:scale(.95)}
+.mp-ship{position:absolute;top:16px;right:18px;font-size:1.3rem;opacity:.5}
 
-/* ═══ SECONDARY SERVICES (horizontal scroll) ═══ */
-.mp-scroll{
-  display:flex;gap:11px;overflow-x:auto;padding:2px 16px 6px;
-  scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
-}
+/* ═══ SECONDARY SERVICES ═══ */
+.mp-scroll{display:flex;gap:11px;overflow-x:auto;padding:2px 16px 6px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .mp-scroll::-webkit-scrollbar{display:none}
-.mp-chip{
-  scroll-snap-align:start;flex:0 0 auto;width:104px;
-  background:#fff;border:1.5px solid var(--line);border-radius:16px;
-  padding:15px 10px 13px;text-align:center;transition:.18s;position:relative;
-}
-.mp-chip:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(20,23,38,.09)}
-.mp-chip:active{transform:scale(.97)}
-.mp-chip .ce{font-size:1.7rem;line-height:1}
-.mp-chip .cn{font-family:var(--h);font-weight:700;font-size:.76rem;margin-top:9px;line-height:1.2;color:var(--ink)}
-.mp-soon{position:absolute;top:7px;right:7px;font-family:var(--a);font-weight:700;font-size:.52rem;letter-spacing:.05em;text-transform:uppercase;background:var(--blue-bg);color:var(--blue);padding:2px 6px;border-radius:100px}
+.mp-chip{scroll-snap-align:start;flex:0 0 auto;width:100px;background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:14px 9px 12px;text-align:center;transition:.18s;position:relative;overflow:hidden}
+.mp-chip:active{transform:scale(.96)}
+.mp-chip .ce{font-size:1.55rem;line-height:1}
+.mp-chip .cn{font-family:var(--h);font-weight:700;font-size:.74rem;margin-top:8px;line-height:1.2;color:var(--sub)}
+.mp-soon{position:absolute;top:6px;right:6px;font-family:var(--a);font-weight:700;font-size:.5rem;letter-spacing:.05em;text-transform:uppercase;background:var(--blue-2);color:#fff;padding:2px 6px;border-radius:100px}
 
 /* ═══ REASSURANCE STRIP ═══ */
-.mp-trust{display:flex;gap:9px;padding:10px 16px 4px;max-width:640px;margin:0 auto;flex-wrap:wrap}
+.mp-trust{display:flex;gap:9px;padding:14px 16px 4px;max-width:640px;margin:0 auto;flex-wrap:wrap}
 .mp-trust .ti{flex:1;min-width:120px;display:flex;align-items:center;gap:9px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:11px 13px}
 .mp-trust .ti .e{font-size:1.15rem}
 .mp-trust .ti .l{font-family:var(--a);font-weight:600;font-size:.76rem;color:var(--ink);line-height:1.2}
 
 /* ═══ FOOTER ═══ */
-.mp-footer{text-align:center;padding:26px 16px 20px;color:var(--sub);font-size:.72rem;font-family:var(--a);font-weight:500}
+.mp-footer{text-align:center;padding:24px 16px 20px;color:var(--sub);font-size:.72rem;font-family:var(--a);font-weight:500}
 .mp-footer b{color:var(--ink)}
 
 /* ═══ WHATSAPP FAB ═══ */
@@ -224,16 +176,14 @@ img{max-width:100%;display:block}
 .mp-whatsapp svg{width:30px;height:30px;fill:#fff}
 
 /* ═══ BOTTOM NAV ═══ */
-.mp-bottom{
-  position:fixed;left:0;right:0;bottom:0;z-index:150;height:64px;
-  background:#fff;border-top:1px solid var(--line);
-  display:flex;padding-bottom:env(safe-area-inset-bottom);
-}
+.mp-bottom{position:fixed;left:0;right:0;bottom:0;z-index:150;height:64px;background:#fff;border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
 .mp-bottom a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--sub);font-family:var(--a);font-weight:600;font-size:.64rem}
 .mp-bottom a svg{width:22px;height:22px}
 .mp-bottom a.active{color:var(--blue)}
 
-/* ═══ ENTRANCE ANIMATION ═══ */
+/* ═══ RIPPLE + ENTRANCE ═══ */
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.4);transform:scale(0);animation:rip .6s ease-out;pointer-events:none;z-index:2}
+@keyframes rip{to{transform:scale(2.4);opacity:0}}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .mp-stagger{opacity:0;animation:rise .5s cubic-bezier(.2,.8,.2,1) forwards}
 .mp-stagger:nth-child(1){animation-delay:.04s}
@@ -246,7 +196,7 @@ img{max-width:100%;display:block}
 
 @media(min-width:560px){
   .mp-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .mp-card.c-vann{grid-column:1 / -1}
+  .c-vann{grid-column:1 / -1}
 }
 </style>
 </head>
@@ -290,7 +240,7 @@ img{max-width:100%;display:block}
     <a href="https://haitibiznis.com/koutye.html"><span class="mi">💰</span> <span data-i18n="menu_earn">Parenaj Biznis</span></a>
     <a href="driver-onboarding.html"><span class="mi">🛵</span> <span data-i18n="menu_driver">Vin Chofè MsouWout</span></a>
     <a href="shop.html"><span class="mi">🛒</span> <span data-i18n="menu_shop">Achte nan Magazen</span></a>
-    <a href="international.html"><span class="mi">🌎</span> <span data-i18n="menu_intl">Achte Entènasyonal</span></a>
+    <a href="international.html"><span class="mi">🌍</span> <span data-i18n="menu_intl">Achte Entènasyonal</span></a>
     <a href="diaspora.html"><span class="mi">❤️</span> <span data-i18n="menu_support">Sipòte Fanmi</span></a>
     <a href="orders.html"><span class="mi">📦</span> <span data-i18n="menu_orders">Kòmand Mwen</span></a>
     <a href="login.html"><span class="mi">👤</span> <span data-i18n="menu_account">Kont Mwen</span></a>
@@ -319,65 +269,77 @@ img{max-width:100%;display:block}
   <h2 class="mp-sec-head" data-i18n="primary_head">Kisa ou vle fè?</h2>
   <div class="mp-cards">
 
-    <!-- VANN — Red — Primary CTA -->
-    <a href="store-designer.html" class="mp-card c-vann mp-stagger">
+    <!-- 1. VANN — Red gradient — Primary CTA -->
+    <a href="store-designer.html" class="mp-card c-vann mp-stagger mp-rip">
       <span class="mp-ic">🏪</span>
       <span class="mp-tx">
-        <span class="tt"><span data-i18n="vann_t">Vann</span><i class="mp-tag" data-i18n="tag_start">Kòmanse la a</i></span>
-        <span class="st" data-i18n="vann_s">Kreye magazen ou GRATIS</span>
-        <span class="mt" data-i18n="vann_m">MonCash • NatCash • Kat Kredi</span>
+        <span class="tt"><span data-i18n="vann_t">Vann</span><i class="mp-badge" data-i18n="vann_badge">🟢 GRATIS</i></span>
+        <span class="st" data-i18n="vann_s">Kreye magazen GRATIS</span>
+        <span class="mt" data-i18n="vann_m">Aksepte MonCash • NatCash • Kat Kredi</span>
       </span>
-      <span class="mp-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      <span class="mp-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
     </a>
 
-    <!-- PARENAJ BIZNIS — Green -->
-    <a href="https://haitibiznis.com/koutye.html" class="mp-card c-green mp-stagger">
+    <!-- 2. PARENAJ BIZNIS — Green gradient -->
+    <a href="https://haitibiznis.com/koutye.html" class="mp-card c-paren mp-stagger mp-rip">
       <span class="mp-ic">💰</span>
       <span class="mp-tx">
         <span class="tt" data-i18n="paren_t">Parenaj Biznis</span>
         <span class="st" data-i18n="paren_s">Fè Lajan Chak Jou</span>
-        <span class="mt" data-i18n="paren_m">Enskri Biznis • Chofè • Touche Komisyon</span>
+        <span class="mt" data-i18n="paren_m">Enskri Biznis • Enskri Chofè • Touche Komisyon</span>
       </span>
-      <span class="mp-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      <span class="mp-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
     </a>
 
-    <!-- MSOUWOUT — Blue -->
-    <a href="driver-onboarding.html" class="mp-card c-blue mp-stagger">
+    <!-- 3. MSOUWOUT — Blue gradient -->
+    <a href="driver-onboarding.html" class="mp-card c-msw mp-stagger mp-rip">
       <span class="mp-ic">🛵</span>
       <span class="mp-tx">
         <span class="tt" data-i18n="msw_t">MsouWout</span>
-        <span class="st" data-i18n="msw_s">Vin Chofè Moto oswa Machin</span>
-        <span class="mt" data-i18n="msw_m">Kòmanse touche lajan</span>
+        <span class="st" data-i18n="msw_s">Vin Chofè Verifye</span>
+        <span class="mt" data-i18n="msw_m">Moto • Machin • Dash Pwoteksyon</span>
       </span>
-      <span class="mp-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      <span class="mp-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
     </a>
 
-    <!-- ACHTE — Orange -->
-    <a href="shop.html" class="mp-card c-orange mp-stagger">
+    <!-- 4. ACHTE — Orange gradient -->
+    <a href="shop.html" class="mp-card c-achte mp-stagger mp-rip">
       <span class="mp-ic">🛒</span>
       <span class="mp-tx">
         <span class="tt" data-i18n="achte_t">Achte</span>
         <span class="st" data-i18n="achte_s">Achte nan magazen lokal yo</span>
-        <span class="mt" data-i18n="achte_m">Restoran • Sipèmache • Famasi</span>
+        <span class="mt" data-i18n="achte_m">Restoran • Makèt • Famasi</span>
       </span>
-      <span class="mp-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      <span class="mp-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
     </a>
 
   </div>
 </section>
 
+<!-- ═══ INTERNATIONAL FEATURED BANNER ═══ -->
+<section class="mp-reveal">
+  <div class="mp-intl">
+    <span class="mp-ship">✈️</span>
+    <div class="mp-intl-in">
+      <div class="mp-intl-flags">🇺🇸 🇨🇳 🇵🇦 🇩🇴</div>
+      <h3 data-i18n="intl_t">🌍 Achte Entènasyonal</h3>
+      <p data-i18n="intl_p">Achte nan USA, Lachin, Panama ak Repiblik Dominikèn. Nou jere acha, transpò ak livrezon jiska lakay ou.</p>
+      <a href="international.html" class="mp-intl-cta mp-rip"><span>🛒</span> <span data-i18n="intl_cta">Kòmanse Achte</span></a>
+    </div>
+  </div>
+</section>
+
 <!-- ═══ SECONDARY SERVICES ═══ -->
-<section class="mp-sec mp-reveal" style="padding-bottom:8px">
+<section class="mp-sec mp-reveal" style="padding-bottom:6px">
   <h2 class="mp-sec-head mp-wrap" data-i18n="more_head" style="padding:0 16px">Plis sèvis</h2>
 </section>
 <div class="mp-scroll mp-reveal">
-  <a href="international.html" class="mp-chip"><div class="ce">🌎</div><div class="cn" data-i18n="s_intl">Achte Entènasyonal</div></a>
-  <a href="https://msouwout.com" class="mp-chip"><div class="ce">📦</div><div class="cn" data-i18n="s_deliv">Livrezon</div></a>
-  <a href="partners/48hoursready.html" class="mp-chip"><div class="ce">⚡</div><div class="cn" data-i18n="s_48">48HoursReady</div></a>
-  <a href="https://wa.me/50946859702?text=%F0%9F%8E%9F%EF%B8%8F%20Mwen%20enterese%20nan%20Tik%C3%A8%20sou%20MyPlopPlop" class="mp-chip"><span class="mp-soon" data-i18n="soon">Byento</span><div class="ce">🎟️</div><div class="cn" data-i18n="s_ticket">Tikè</div></a>
-  <a href="https://wa.me/50946859702?text=%F0%9F%8F%A0%20Mwen%20enterese%20nan%20Imobilye%20sou%20MyPlopPlop" class="mp-chip"><span class="mp-soon" data-i18n="soon">Byento</span><div class="ce">🏠</div><div class="cn" data-i18n="s_realestate">Imobilye</div></a>
-  <a href="https://wa.me/50946859702?text=%F0%9F%91%B7%20Mwen%20enterese%20nan%20Travay%20sou%20MyPlopPlop" class="mp-chip"><span class="mp-soon" data-i18n="soon">Byento</span><div class="ce">👷</div><div class="cn" data-i18n="s_jobs">Travay</div></a>
-  <a href="help.html" class="mp-chip"><div class="ce">➕</div><div class="cn" data-i18n="s_more">Lòt sèvis</div></a>
+  <a href="partners/48hoursready.html" class="mp-chip mp-rip"><div class="ce">⚡</div><div class="cn" data-i18n="s_48">48HoursReady</div></a>
+  <a href="https://wa.me/50946859702?text=%F0%9F%8E%9F%EF%B8%8F%20Mwen%20enterese%20nan%20Tik%C3%A8%20sou%20MyPlopPlop" class="mp-chip mp-rip"><span class="mp-soon" data-i18n="soon">Byento</span><div class="ce">🎟️</div><div class="cn" data-i18n="s_ticket">Tikè</div></a>
+  <a href="https://msouwout.com" class="mp-chip mp-rip"><div class="ce">📦</div><div class="cn" data-i18n="s_deliv">Livrezon</div></a>
+  <a href="https://wa.me/50946859702?text=%F0%9F%8F%A0%20Mwen%20enterese%20nan%20Imobilye%20sou%20MyPlopPlop" class="mp-chip mp-rip"><span class="mp-soon" data-i18n="soon">Byento</span><div class="ce">🏠</div><div class="cn" data-i18n="s_realestate">Imobilye</div></a>
+  <a href="https://wa.me/50946859702?text=%F0%9F%91%B7%20Mwen%20enterese%20nan%20Travay%20sou%20MyPlopPlop" class="mp-chip mp-rip"><span class="mp-soon" data-i18n="soon">Byento</span><div class="ce">👷</div><div class="cn" data-i18n="s_jobs">Travay</div></a>
+  <a href="help.html" class="mp-chip mp-rip"><div class="ce">📞</div><div class="cn" data-i18n="s_other">Lòt sèvis</div></a>
 </div>
 
 <!-- ═══ REASSURANCE STRIP ═══ -->
@@ -431,96 +393,79 @@ img{max-width:100%;display:block}
 </nav>
 
 <script>
-/* ══════════ i18n — v5.0 ══════════ */
+/* ══════════ i18n — v5.1 ══════════ */
 const T = {
   ht: {
     tagline:'Kreye Biznis • Fè Lajan • Deplase An Sekirite',
     search_placeholder:'Kisa w ap chèche jodi a?', search_btn:'Chèche',
     primary_head:'Kisa ou vle fè?',
-    tag_start:'Kòmanse la a',
-    vann_t:'Vann', vann_s:'Kreye magazen ou GRATIS', vann_m:'MonCash • NatCash • Kat Kredi',
-    paren_t:'Parenaj Biznis', paren_s:'Fè Lajan Chak Jou', paren_m:'Enskri Biznis • Chofè • Touche Komisyon',
-    msw_t:'MsouWout', msw_s:'Vin Chofè Moto oswa Machin', msw_m:'Kòmanse touche lajan',
-    achte_t:'Achte', achte_s:'Achte nan magazen lokal yo', achte_m:'Restoran • Sipèmache • Famasi',
+    vann_t:'Vann', vann_badge:'🟢 GRATIS', vann_s:'Kreye magazen GRATIS', vann_m:'Aksepte MonCash • NatCash • Kat Kredi',
+    paren_t:'Parenaj Biznis', paren_s:'Fè Lajan Chak Jou', paren_m:'Enskri Biznis • Enskri Chofè • Touche Komisyon',
+    msw_t:'MsouWout', msw_s:'Vin Chofè Verifye', msw_m:'Moto • Machin • Dash Pwoteksyon',
+    achte_t:'Achte', achte_s:'Achte nan magazen lokal yo', achte_m:'Restoran • Makèt • Famasi',
+    intl_t:'🌍 Achte Entènasyonal', intl_p:'Achte nan USA, Lachin, Panama ak Repiblik Dominikèn. Nou jere acha, transpò ak livrezon jiska lakay ou.', intl_cta:'Kòmanse Achte',
     more_head:'Plis sèvis',
-    s_intl:'Achte Entènasyonal', s_deliv:'Livrezon', s_48:'48HoursReady',
-    s_ticket:'Tikè', s_realestate:'Imobilye', s_jobs:'Travay', s_more:'Lòt sèvis', soon:'Byento',
+    s_48:'48HoursReady', s_ticket:'Tikè', s_deliv:'Livrezon', s_realestate:'Imobilye', s_jobs:'Travay', s_other:'Lòt sèvis', soon:'Byento',
     t_pay:'Peman Sekirize', t_verify:'Biznis & Chofè Verifye', t_wa:'Sipò WhatsApp',
     footer_powered:'Yon platfòm HaitiBiznis',
-    wa_popup_head:'Ki sa ou bezwen?', wa_opt_earn:'💰 Mwen vle kòmanse fè lajan',
-    wa_opt_drive:'🛵 Mwen vle vin chofè', wa_opt_biz:'🏪 Mwen gen biznis',
+    wa_popup_head:'Ki sa ou bezwen?', wa_opt_earn:'💰 Mwen vle kòmanse fè lajan', wa_opt_drive:'🛵 Mwen vle vin chofè', wa_opt_biz:'🏪 Mwen gen biznis',
     nav_home:'Akèy', nav_search:'Chèche', nav_cart:'Panye', nav_orders:'Kòmand', nav_account:'Kont',
-    menu_sell:'Vann sou MyPlopPlop', menu_earn:'Parenaj Biznis', menu_driver:'Vin Chofè MsouWout',
-    menu_shop:'Achte nan Magazen', menu_intl:'Achte Entènasyonal', menu_support:'Sipòte Fanmi',
-    menu_orders:'Kòmand Mwen', menu_account:'Kont Mwen', menu_help:'Èd'
+    menu_sell:'Vann sou MyPlopPlop', menu_earn:'Parenaj Biznis', menu_driver:'Vin Chofè MsouWout', menu_shop:'Achte nan Magazen', menu_intl:'Achte Entènasyonal', menu_support:'Sipòte Fanmi', menu_orders:'Kòmand Mwen', menu_account:'Kont Mwen', menu_help:'Èd'
   },
   en: {
     tagline:'Build a Business • Earn Money • Move Safely',
     search_placeholder:'What are you looking for today?', search_btn:'Search',
     primary_head:'What do you want to do?',
-    tag_start:'Start here',
-    vann_t:'Sell', vann_s:'Create your store FREE', vann_m:'MonCash • NatCash • Credit Card',
+    vann_t:'Sell', vann_badge:'🟢 FREE', vann_s:'Create your store FREE', vann_m:'Accept MonCash • NatCash • Credit Card',
     paren_t:'Business Partner', paren_s:'Earn Money Every Day', paren_m:'Sign up businesses • drivers • earn commission',
-    msw_t:'MsouWout', msw_s:'Become a Moto or Car Driver', msw_m:'Start earning money',
-    achte_t:'Buy', achte_s:'Shop from local stores', achte_m:'Restaurants • Supermarkets • Pharmacies',
+    msw_t:'MsouWout', msw_s:'Become a Verified Driver', msw_m:'Moto • Car • Dash Protection',
+    achte_t:'Buy', achte_s:'Shop from local stores', achte_m:'Restaurants • Markets • Pharmacies',
+    intl_t:'🌍 Shop International', intl_p:'Shop from USA, China, Panama and the Dominican Republic. We handle purchase, shipping and delivery to your door.', intl_cta:'Start Shopping',
     more_head:'More services',
-    s_intl:'Shop International', s_deliv:'Delivery', s_48:'48HoursReady',
-    s_ticket:'Tickets', s_realestate:'Real Estate', s_jobs:'Jobs', s_more:'Other services', soon:'Soon',
+    s_48:'48HoursReady', s_ticket:'Tickets', s_deliv:'Delivery', s_realestate:'Real Estate', s_jobs:'Jobs', s_other:'Other services', soon:'Soon',
     t_pay:'Secure Payment', t_verify:'Verified Businesses & Drivers', t_wa:'WhatsApp Support',
     footer_powered:'A HaitiBiznis platform',
-    wa_popup_head:'What do you need?', wa_opt_earn:'💰 I want to start earning',
-    wa_opt_drive:'🛵 I want to become a driver', wa_opt_biz:'🏪 I have a business',
+    wa_popup_head:'What do you need?', wa_opt_earn:'💰 I want to start earning', wa_opt_drive:'🛵 I want to become a driver', wa_opt_biz:'🏪 I have a business',
     nav_home:'Home', nav_search:'Search', nav_cart:'Cart', nav_orders:'Orders', nav_account:'Account',
-    menu_sell:'Sell on MyPlopPlop', menu_earn:'Business Partner', menu_driver:'Become a Driver',
-    menu_shop:'Shop Stores', menu_intl:'Shop International', menu_support:'Support Family',
-    menu_orders:'My Orders', menu_account:'My Account', menu_help:'Help'
+    menu_sell:'Sell on MyPlopPlop', menu_earn:'Business Partner', menu_driver:'Become a Driver', menu_shop:'Shop Stores', menu_intl:'Shop International', menu_support:'Support Family', menu_orders:'My Orders', menu_account:'My Account', menu_help:'Help'
   },
   fr: {
     tagline:'Créez un Business • Gagnez de l’Argent • Déplacez-vous en Sécurité',
     search_placeholder:'Que cherchez-vous aujourd’hui ?', search_btn:'Rechercher',
     primary_head:'Que voulez-vous faire ?',
-    tag_start:'Commencez ici',
-    vann_t:'Vendre', vann_s:'Créez votre boutique GRATUITE', vann_m:'MonCash • NatCash • Carte de crédit',
+    vann_t:'Vendre', vann_badge:'🟢 GRATUIT', vann_s:'Créez votre boutique GRATUITE', vann_m:'Acceptez MonCash • NatCash • Carte de crédit',
     paren_t:'Partenaire Business', paren_s:'Gagnez de l’argent chaque jour', paren_m:'Inscrivez commerces • chauffeurs • commissions',
-    msw_t:'MsouWout', msw_s:'Devenez chauffeur moto ou voiture', msw_m:'Commencez à gagner de l’argent',
-    achte_t:'Acheter', achte_s:'Achetez dans les boutiques locales', achte_m:'Restaurants • Supermarchés • Pharmacies',
+    msw_t:'MsouWout', msw_s:'Devenez chauffeur vérifié', msw_m:'Moto • Voiture • Protection Dash',
+    achte_t:'Acheter', achte_s:'Achetez dans les boutiques locales', achte_m:'Restaurants • Marchés • Pharmacies',
+    intl_t:'🌍 Achat International', intl_p:'Achetez aux USA, en Chine, au Panama et en République Dominicaine. Nous gérons l’achat, le transport et la livraison chez vous.', intl_cta:'Commencer les achats',
     more_head:'Plus de services',
-    s_intl:'Achat International', s_deliv:'Livraison', s_48:'48HoursReady',
-    s_ticket:'Billets', s_realestate:'Immobilier', s_jobs:'Emplois', s_more:'Autres services', soon:'Bientôt',
+    s_48:'48HoursReady', s_ticket:'Billets', s_deliv:'Livraison', s_realestate:'Immobilier', s_jobs:'Emplois', s_other:'Autres services', soon:'Bientôt',
     t_pay:'Paiement Sécurisé', t_verify:'Commerces & Chauffeurs Vérifiés', t_wa:'Support WhatsApp',
     footer_powered:'Une plateforme HaitiBiznis',
-    wa_popup_head:'De quoi avez-vous besoin ?', wa_opt_earn:'💰 Je veux commencer à gagner',
-    wa_opt_drive:'🛵 Je veux devenir chauffeur', wa_opt_biz:'🏪 J’ai un commerce',
+    wa_popup_head:'De quoi avez-vous besoin ?', wa_opt_earn:'💰 Je veux commencer à gagner', wa_opt_drive:'🛵 Je veux devenir chauffeur', wa_opt_biz:'🏪 J’ai un commerce',
     nav_home:'Accueil', nav_search:'Chercher', nav_cart:'Panier', nav_orders:'Commandes', nav_account:'Compte',
-    menu_sell:'Vendre sur MyPlopPlop', menu_earn:'Partenaire Business', menu_driver:'Devenir Chauffeur',
-    menu_shop:'Boutiques', menu_intl:'Achat International', menu_support:'Soutenir la Famille',
-    menu_orders:'Mes Commandes', menu_account:'Mon Compte', menu_help:'Aide'
+    menu_sell:'Vendre sur MyPlopPlop', menu_earn:'Partenaire Business', menu_driver:'Devenir Chauffeur', menu_shop:'Boutiques', menu_intl:'Achat International', menu_support:'Soutenir la Famille', menu_orders:'Mes Commandes', menu_account:'Mon Compte', menu_help:'Aide'
   },
   es: {
     tagline:'Crea un Negocio • Gana Dinero • Muévete Seguro',
     search_placeholder:'¿Qué buscas hoy?', search_btn:'Buscar',
     primary_head:'¿Qué quieres hacer?',
-    tag_start:'Empieza aquí',
-    vann_t:'Vender', vann_s:'Crea tu tienda GRATIS', vann_m:'MonCash • NatCash • Tarjeta de crédito',
+    vann_t:'Vender', vann_badge:'🟢 GRATIS', vann_s:'Crea tu tienda GRATIS', vann_m:'Acepta MonCash • NatCash • Tarjeta de crédito',
     paren_t:'Socio de Negocios', paren_s:'Gana Dinero Cada Día', paren_m:'Registra negocios • conductores • comisiones',
-    msw_t:'MsouWout', msw_s:'Conviértete en conductor de moto o auto', msw_m:'Empieza a ganar dinero',
-    achte_t:'Comprar', achte_s:'Compra en tiendas locales', achte_m:'Restaurantes • Supermercados • Farmacias',
+    msw_t:'MsouWout', msw_s:'Conviértete en conductor verificado', msw_m:'Moto • Auto • Protección Dash',
+    achte_t:'Comprar', achte_s:'Compra en tiendas locales', achte_m:'Restaurantes • Mercados • Farmacias',
+    intl_t:'🌍 Compras Internacionales', intl_p:'Compra desde USA, China, Panamá y República Dominicana. Gestionamos la compra, el transporte y la entrega hasta tu casa.', intl_cta:'Empezar a Comprar',
     more_head:'Más servicios',
-    s_intl:'Compras Internacionales', s_deliv:'Entrega', s_48:'48HoursReady',
-    s_ticket:'Boletos', s_realestate:'Inmobiliaria', s_jobs:'Empleos', s_more:'Otros servicios', soon:'Pronto',
+    s_48:'48HoursReady', s_ticket:'Boletos', s_deliv:'Entrega', s_realestate:'Inmobiliaria', s_jobs:'Empleos', s_other:'Otros servicios', soon:'Pronto',
     t_pay:'Pago Seguro', t_verify:'Negocios y Conductores Verificados', t_wa:'Soporte WhatsApp',
     footer_powered:'Una plataforma HaitiBiznis',
-    wa_popup_head:'¿Qué necesitas?', wa_opt_earn:'💰 Quiero empezar a ganar',
-    wa_opt_drive:'🛵 Quiero ser conductor', wa_opt_biz:'🏪 Tengo un negocio',
+    wa_popup_head:'¿Qué necesitas?', wa_opt_earn:'💰 Quiero empezar a ganar', wa_opt_drive:'🛵 Quiero ser conductor', wa_opt_biz:'🏪 Tengo un negocio',
     nav_home:'Inicio', nav_search:'Buscar', nav_cart:'Carrito', nav_orders:'Pedidos', nav_account:'Cuenta',
-    menu_sell:'Vender en MyPlopPlop', menu_earn:'Socio de Negocios', menu_driver:'Ser Conductor',
-    menu_shop:'Tiendas', menu_intl:'Compras Internacionales', menu_support:'Apoyar Familia',
-    menu_orders:'Mis Pedidos', menu_account:'Mi Cuenta', menu_help:'Ayuda'
+    menu_sell:'Vender en MyPlopPlop', menu_earn:'Socio de Negocios', menu_driver:'Ser Conductor', menu_shop:'Tiendas', menu_intl:'Compras Internacionales', menu_support:'Apoyar Familia', menu_orders:'Mis Pedidos', menu_account:'Mi Cuenta', menu_help:'Ayuda'
   }
 };
 
 let currentLang = localStorage.getItem('mp-lang') || 'ht';
-
 function setLang(lang){
   currentLang = lang;
   localStorage.setItem('mp-lang', lang);
@@ -529,31 +474,28 @@ function setLang(lang){
   var active = document.querySelector('.mp-lang a[onclick*="'+lang+'"]');
   if(active) active.classList.add('active');
   const t = T[lang] || T.ht;
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if(t[key]) el.textContent = t[key];
-  });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    if(t[key]) el.placeholder = t[key];
-  });
+  document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.getAttribute('data-i18n'); if(t[k]) el.textContent = t[k]; });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { const k = el.getAttribute('data-i18n-placeholder'); if(t[k]) el.placeholder = t[k]; });
 }
+function handleSearch(val){ if(val && val.trim().length > 1){ window.location.href = 'shop.html?q=' + encodeURIComponent(val.trim()); } }
+function toggleWaPopup(){ var p=document.getElementById('waPopup'), o=document.getElementById('waOverlay'); if(p.classList.contains('open')){p.classList.remove('open');o.classList.remove('open');} else {p.classList.add('open');o.classList.add('open');} }
+function closeWaPopup(){ document.getElementById('waPopup').classList.remove('open'); document.getElementById('waOverlay').classList.remove('open'); }
 
-function handleSearch(val){
-  if(val && val.trim().length > 1){
-    window.location.href = 'shop.html?q=' + encodeURIComponent(val.trim());
-  }
+/* ripple on tap (premium press feedback) */
+function ripple(e){
+  var t = e.currentTarget;
+  var rect = t.getBoundingClientRect();
+  var size = Math.max(rect.width, rect.height);
+  var x = (e.clientX || rect.left+rect.width/2) - rect.left - size/2;
+  var y = (e.clientY || rect.top+rect.height/2) - rect.top - size/2;
+  var s = document.createElement('span');
+  s.className = 'ripple';
+  s.style.width = s.style.height = size+'px';
+  s.style.left = x+'px'; s.style.top = y+'px';
+  t.appendChild(s);
+  setTimeout(function(){ s.remove(); }, 600);
 }
-
-function toggleWaPopup(){
-  var p = document.getElementById('waPopup'), o = document.getElementById('waOverlay');
-  if(p.classList.contains('open')){ p.classList.remove('open'); o.classList.remove('open'); }
-  else { p.classList.add('open'); o.classList.add('open'); }
-}
-function closeWaPopup(){
-  document.getElementById('waPopup').classList.remove('open');
-  document.getElementById('waOverlay').classList.remove('open');
-}
+document.querySelectorAll('.mp-rip').forEach(function(el){ el.addEventListener('pointerdown', ripple); });
 
 /* scroll reveal */
 const observer = new IntersectionObserver((entries) => {
