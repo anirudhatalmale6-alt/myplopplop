@@ -164,6 +164,21 @@
     <h1 class="h1" data-i18n="s1_title">Vin yon Chofè MsouWout</h1>
     <p class="sub" data-i18n="s1_sub">Enfòmasyon de baz — sa pran 30 segond.</p>
 
+    <div class="field">
+      <label data-i18n="l_ref">Ki moun ki refere w? <span class="req">*</span></label>
+      <select id="referral">
+        <option value="" disabled selected data-i18n="ref_ph">-- Chwazi --</option>
+        <option value="FTPH">FTPH</option>
+        <option value="COTRASMOTHA">COTRASMOTHA</option>
+        <option value="SPAP">SPAP</option>
+        <option value="Eglise Shalom">Eglise Shalom</option>
+        <option value="Facebook">Facebook</option>
+        <option value="WhatsApp">WhatsApp</option>
+        <option value="Friend/Family" data-i18n="ref_friend">Zanmi / Fanmi</option>
+        <option value="Other" data-i18n="ref_other">Lòt</option>
+      </select>
+    </div>
+
     <div class="row2">
       <div class="field">
         <label data-i18n="l_first">Non <span class="req">*</span></label>
@@ -301,6 +316,7 @@ var T = {
     l_phone:'Telefòn (WhatsApp)', ph_phone:'+509 XXXX XXXX',
     l_email:'Imèl', opt:'(opsyonèl)', l_city:'Vil', ph_city:'Pòtoprens',
     l_dtype:'Kalite Chofè', dt_moto:'Moto', dt_car:'Machin', continue:'Kontinye',
+    l_ref:'Ki moun ki refere w?', ref_ph:'-- Chwazi --', ref_friend:'Zanmi / Fanmi', ref_other:'Lòt',
     s2_title:'Verifikasyon', s2_sub:'Pran yon foto pou chak dokiman. Sa rete prive.',
     d_selfie:'Selfie', d_id:'Kat / Paspò', d_lic:'Lisans Chofè', d_oavct:'OAVCT',
     d_veh:'Foto Machin', d_ins:'Asirans', d_opt:'opsyonèl',
@@ -320,6 +336,7 @@ var T = {
     l_phone:'Téléphone (WhatsApp)', ph_phone:'+509 XXXX XXXX',
     l_email:'E-mail', opt:'(facultatif)', l_city:'Ville', ph_city:'Port-au-Prince',
     l_dtype:'Type de chauffeur', dt_moto:'Moto', dt_car:'Voiture', continue:'Continuer',
+    l_ref:'Qui vous a référé ?', ref_ph:'-- Choisir --', ref_friend:'Ami / Famille', ref_other:'Autre',
     s2_title:'Vérification', s2_sub:'Prenez une photo de chaque document. Cela reste privé.',
     d_selfie:'Selfie', d_id:'CIN / Passeport', d_lic:'Permis', d_oavct:'OAVCT',
     d_veh:'Photo véhicule', d_ins:'Assurance', d_opt:'facultatif',
@@ -339,6 +356,7 @@ var T = {
     l_phone:'Phone (WhatsApp)', ph_phone:'+509 XXXX XXXX',
     l_email:'Email', opt:'(optional)', l_city:'City', ph_city:'Port-au-Prince',
     l_dtype:'Driver Type', dt_moto:'Moto', dt_car:'Car', continue:'Continue',
+    l_ref:'Who referred you?', ref_ph:'-- Select --', ref_friend:'Friend / Family', ref_other:'Other',
     s2_title:'Verification', s2_sub:'Take a photo of each document. This stays private.',
     d_selfie:'Selfie', d_id:'ID / Passport', d_lic:'Driver’s License', d_oavct:'OAVCT',
     d_veh:'Vehicle Photo', d_ins:'Insurance', d_opt:'optional',
@@ -358,6 +376,7 @@ var T = {
     l_phone:'Teléfono (WhatsApp)', ph_phone:'+509 XXXX XXXX',
     l_email:'Correo', opt:'(opcional)', l_city:'Ciudad', ph_city:'Puerto Príncipe',
     l_dtype:'Tipo de conductor', dt_moto:'Moto', dt_car:'Auto', continue:'Continuar',
+    l_ref:'¿Quién te refirió?', ref_ph:'-- Seleccionar --', ref_friend:'Amigo / Familia', ref_other:'Otro',
     s2_title:'Verificación', s2_sub:'Toma una foto de cada documento. Es privado.',
     d_selfie:'Selfie', d_id:'ID / Pasaporte', d_lic:'Licencia', d_oavct:'OAVCT',
     d_veh:'Foto del vehículo', d_ins:'Seguro', d_opt:'opcional',
@@ -408,8 +427,9 @@ function gotoStep(n){
 document.getElementById('next1').addEventListener('click', function(){
   var t = T[currentLang];
   var first = val('firstName'), last = val('lastName'), phone = val('phone'), city = val('city');
+  var referral = val('referral');
   var digits = phone.replace(/[^0-9]/g,'').replace(/^509/,'');
-  if(!first || !last || !city || !digits){ return showErr('err1', t.e_req); }
+  if(!referral || !first || !last || !city || !digits){ return showErr('err1', t.e_req); }
   if(digits.length < 8){ return showErr('err1', t.e_phone); }
   hideErr('err1');
   gotoStep(2);
@@ -452,6 +472,7 @@ document.getElementById('submitBtn').addEventListener('click', function(){
   var plate = val('plate').toUpperCase();
   var city = val('city');
   var email = val('email');
+  var referral = val('referral');
 
   // 1) create the real driver record in the backend (for admin approval)
   var apiData = {
@@ -460,6 +481,7 @@ document.getElementById('submitBtn').addEventListener('click', function(){
     email: email || '',
     vehicle_type: vType,
     license_plate: plate,
+    referral_partner: referral,
     preferred_service: 'both'
   };
   fetch('https://msouwout-backend.onrender.com/api/drivers', {
@@ -471,6 +493,7 @@ document.getElementById('submitBtn').addEventListener('click', function(){
   // 2) send full application + document photos to the team (email notification)
   var fd = new FormData();
   fd.append('_subject', 'New MsouWout Driver: ' + fullName);
+  fd.append('Referred By', referral);
   fd.append('Full Name', fullName);
   fd.append('Phone / WhatsApp', '+509 ' + digits);
   fd.append('Email', email || '(none)');
