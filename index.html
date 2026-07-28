@@ -123,6 +123,15 @@ img{max-width:100%;display:block}
 .c-paren .mp-go{background:var(--green-dk)}
 .c-msw{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-2) 100%);box-shadow:0 12px 28px rgba(0,32,159,.30)}
 .c-msw .mp-go{background:var(--blue-dk)}
+.msw-dual{flex-direction:column;align-items:stretch;gap:13px}
+.msw-dual:active{transform:none}
+.msw-head{display:flex;align-items:center;gap:15px}
+.msw-actions{display:flex;gap:10px}
+.msw-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 8px;border-radius:14px;font-family:var(--b);font-weight:800;font-size:.94rem;text-decoration:none;position:relative;overflow:hidden;transition:transform .15s}
+.msw-btn .be{font-size:1.05rem}
+.msw-btn.primary{background:#fff;color:var(--blue)}
+.msw-btn.ghost{background:rgba(255,255,255,.15);color:#fff;border:1.6px solid rgba(255,255,255,.6)}
+.msw-btn:active{transform:scale(.955)}
 .c-achte{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-2) 100%);box-shadow:0 12px 28px rgba(249,115,22,.30)}
 .c-achte .mp-go{background:var(--orange-dk)}
 /* VANN = largest / most attractive */
@@ -291,16 +300,21 @@ img{max-width:100%;display:block}
       <span class="mp-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
     </a>
 
-    <!-- 3. MSOUWOUT — Blue gradient -->
-    <a href="driver-onboarding.html" class="mp-card c-msw mp-stagger mp-rip">
-      <span class="mp-ic">🛵</span>
-      <span class="mp-tx">
-        <span class="tt" data-i18n="msw_t">MsouWout</span>
-        <span class="st" data-i18n="msw_s">Vin Chofè Verifye</span>
-        <span class="mt" data-i18n="msw_m">Moto • Machin • Dash Pwoteksyon</span>
-      </span>
-      <span class="mp-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-    </a>
+    <!-- 3. MSOUWOUT — Blue gradient, dual action (ride + drive) -->
+    <div class="mp-card c-msw msw-dual mp-stagger">
+      <div class="msw-head">
+        <span class="mp-ic">🛵</span>
+        <span class="mp-tx">
+          <span class="tt" data-i18n="msw_t">MsouWout</span>
+          <span class="st" data-i18n="msw_s">Rele yon kous oswa vin chofè</span>
+          <span class="mt" data-i18n="msw_m">Moto • Machin • Dash Pwoteksyon</span>
+        </span>
+      </div>
+      <div class="msw-actions">
+        <a href="https://msouwout.com" class="msw-btn primary mp-rip"><span class="be">🚗</span> <span data-i18n="msw_ride">Rele yon Kous</span></a>
+        <a href="driver-onboarding.html" class="msw-btn ghost mp-rip"><span class="be">🧑‍✈️</span> <span data-i18n="msw_drive">Vin Chofè</span></a>
+      </div>
+    </div>
 
     <!-- 4. ACHTE — Orange gradient -->
     <a href="shop.html" class="mp-card c-achte mp-stagger mp-rip">
@@ -401,7 +415,7 @@ const T = {
     primary_head:'Kisa ou vle fè?',
     vann_t:'Vann', vann_badge:'🟢 GRATIS', vann_s:'Kreye magazen GRATIS', vann_m:'Aksepte MonCash • NatCash • Kat Kredi',
     paren_t:'Parenaj Biznis', paren_s:'Fè Lajan Chak Jou', paren_m:'Enskri Biznis • Enskri Chofè • Touche Komisyon',
-    msw_t:'MsouWout', msw_s:'Vin Chofè Verifye', msw_m:'Moto • Machin • Dash Pwoteksyon',
+    msw_t:'MsouWout', msw_s:'Rele yon kous oswa vin chofè', msw_m:'Moto • Machin • Dash Pwoteksyon', msw_ride:'Rele yon Kous', msw_drive:'Vin Chofè',
     achte_t:'Achte', achte_s:'Achte nan magazen lokal yo', achte_m:'Restoran • Makèt • Famasi',
     intl_t:'🌍 Achte Entènasyonal', intl_p:'Achte nan USA, Lachin, Panama ak Repiblik Dominikèn. Nou jere acha, transpò ak livrezon jiska lakay ou.', intl_cta:'Kòmanse Achte',
     more_head:'Plis sèvis',
@@ -418,7 +432,7 @@ const T = {
     primary_head:'What do you want to do?',
     vann_t:'Sell', vann_badge:'🟢 FREE', vann_s:'Create your store FREE', vann_m:'Accept MonCash • NatCash • Credit Card',
     paren_t:'Business Partner', paren_s:'Earn Money Every Day', paren_m:'Sign up businesses • drivers • earn commission',
-    msw_t:'MsouWout', msw_s:'Become a Verified Driver', msw_m:'Moto • Car • Dash Protection',
+    msw_t:'MsouWout', msw_s:'Order a ride or become a driver', msw_m:'Moto • Car • Dash Protection', msw_ride:'Order a Ride', msw_drive:'Become a Driver',
     achte_t:'Buy', achte_s:'Shop from local stores', achte_m:'Restaurants • Markets • Pharmacies',
     intl_t:'🌍 Shop International', intl_p:'Shop from USA, China, Panama and the Dominican Republic. We handle purchase, shipping and delivery to your door.', intl_cta:'Start Shopping',
     more_head:'More services',
@@ -435,7 +449,7 @@ const T = {
     primary_head:'Que voulez-vous faire ?',
     vann_t:'Vendre', vann_badge:'🟢 GRATUIT', vann_s:'Créez votre boutique GRATUITE', vann_m:'Acceptez MonCash • NatCash • Carte de crédit',
     paren_t:'Partenaire Business', paren_s:'Gagnez de l’argent chaque jour', paren_m:'Inscrivez commerces • chauffeurs • commissions',
-    msw_t:'MsouWout', msw_s:'Devenez chauffeur vérifié', msw_m:'Moto • Voiture • Protection Dash',
+    msw_t:'MsouWout', msw_s:'Commandez une course ou devenez chauffeur', msw_m:'Moto • Voiture • Protection Dash', msw_ride:'Commander une course', msw_drive:'Devenir chauffeur',
     achte_t:'Acheter', achte_s:'Achetez dans les boutiques locales', achte_m:'Restaurants • Marchés • Pharmacies',
     intl_t:'🌍 Achat International', intl_p:'Achetez aux USA, en Chine, au Panama et en République Dominicaine. Nous gérons l’achat, le transport et la livraison chez vous.', intl_cta:'Commencer les achats',
     more_head:'Plus de services',
@@ -452,7 +466,7 @@ const T = {
     primary_head:'¿Qué quieres hacer?',
     vann_t:'Vender', vann_badge:'🟢 GRATIS', vann_s:'Crea tu tienda GRATIS', vann_m:'Acepta MonCash • NatCash • Tarjeta de crédito',
     paren_t:'Socio de Negocios', paren_s:'Gana Dinero Cada Día', paren_m:'Registra negocios • conductores • comisiones',
-    msw_t:'MsouWout', msw_s:'Conviértete en conductor verificado', msw_m:'Moto • Auto • Protección Dash',
+    msw_t:'MsouWout', msw_s:'Pide un viaje o conviértete en conductor', msw_m:'Moto • Auto • Protección Dash', msw_ride:'Pedir un viaje', msw_drive:'Ser conductor',
     achte_t:'Comprar', achte_s:'Compra en tiendas locales', achte_m:'Restaurantes • Mercados • Farmacias',
     intl_t:'🌍 Compras Internacionales', intl_p:'Compra desde USA, China, Panamá y República Dominicana. Gestionamos la compra, el transporte y la entrega hasta tu casa.', intl_cta:'Empezar a Comprar',
     more_head:'Más servicios',
