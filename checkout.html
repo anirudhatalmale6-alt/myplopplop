@@ -134,6 +134,35 @@
     margin-bottom: var(--space-md);
 }
 
+/* GPS location capture + live delivery quote */
+.gps-box {
+    margin-top: var(--space-md);
+    padding: var(--space-md);
+    border: 2px solid #e2e8f0;
+    border-radius: var(--radius-md, 12px);
+    background: #f8fafc;
+}
+.gps-box.located { border-color: #0f9d55; background: #f2fbf6; }
+.gps-head { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
+.gps-icon { font-size: 20px; line-height: 1; }
+.gps-sub { font-size: var(--text-xs); color: var(--gray-500, #64748b); margin-top: 2px; line-height: 1.4; }
+.gps-btn {
+    width: 100%; padding: 12px; border: 0; border-radius: var(--radius-sm, 8px);
+    background: var(--primary-blue); color: #fff; font-weight: 700; font-size: var(--text-sm);
+    cursor: pointer;
+}
+.gps-btn:hover { opacity: .92; }
+.gps-btn[disabled] { opacity: .6; cursor: default; }
+.gps-status { margin-top: 8px; font-size: var(--text-sm); font-weight: 600; }
+.gps-status.ok { color: #0f9d55; }
+.gps-status.err { color: #e11d48; }
+.gps-quote {
+    margin-top: 10px; padding: 10px 12px; border-radius: var(--radius-sm, 8px);
+    background: #fff; border: 1px solid #d7e3f4; font-size: var(--text-sm);
+}
+.gps-quote .row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.gps-quote .row:last-child { margin-bottom: 0; font-weight: 700; }
+
 .form-section-title {
     font-family: var(--font-heading);
     font-size: var(--text-base);
@@ -660,6 +689,20 @@
                     <input type="text" id="deliveryAddress" class="input" placeholder="Street address, neighborhood, city" value="45 Rue Capois, Champ de Mars, Port-au-Prince">
                 </div>
 
+                <!-- GPS location: required so the driver can find the customer -->
+                <div class="gps-box" id="gpsBox">
+                    <div class="gps-head">
+                        <span class="gps-icon">📍</span>
+                        <div>
+                            <strong>Share your exact location</strong>
+                            <div class="gps-sub">Required — this is how your driver finds you and how we calculate your delivery price.</div>
+                        </div>
+                    </div>
+                    <button type="button" class="gps-btn" id="gpsBtn" onclick="captureLocation()">Use my current location</button>
+                    <div class="gps-status" id="gpsStatus"></div>
+                    <div class="gps-quote" id="gpsQuote" style="display:none;"></div>
+                </div>
+
                 <div class="input-group">
                     <label for="deliveryInstructions">Delivery Instructions (optional)</label>
                     <textarea id="deliveryInstructions" class="input" rows="3" placeholder="Gate code, landmark, special instructions..." style="resize:vertical;">Blue gate next to the mango tree. Ring the bell twice.</textarea>
@@ -967,6 +1010,78 @@
         try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch(e) { return []; }
     }
 
+    // ── GPS location + automatic distance-based delivery price ──────────────
+    var MPP_API = 'https://myplopplop-api.onrender.com';
+    var customerLocation = null;   // {lat,lng} — required before paying
+    var liveQuote = null;          // {distanceKm, deliveryFee}
+
+    // Where the order is picked up from (the store). Falls back to Port-au-Prince
+    // centre if the store has no coordinates on file yet.
+    function getPickupPoint() {
+        var cart = getCart();
+        var sid = cart.length ? cart[0].storeId : null;
+        var store = sid && typeof MOCK !== 'undefined' ? MOCK.STORES.find(function(s){ return s.id === sid; }) : null;
+        if (store && store.lat && store.lng) return { lat: store.lat, lng: store.lng };
+        return { lat: 18.5425, lng: -72.3386 };
+    }
+
+    window.captureLocation = function() {
+        var btn = document.getElementById('gpsBtn');
+        var status = document.getElementById('gpsStatus');
+        if (!navigator.geolocation) {
+            status.className = 'gps-status err';
+            status.textContent = 'Your phone/browser does not support location sharing.';
+            return;
+        }
+        btn.disabled = true;
+        status.className = 'gps-status';
+        status.textContent = 'Getting your location…';
+
+        navigator.geolocation.getCurrentPosition(function(pos) {
+            customerLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+            document.getElementById('gpsBox').classList.add('located');
+            status.className = 'gps-status ok';
+            status.textContent = '✓ Location shared — your driver can find you.';
+            btn.textContent = 'Update my location';
+            btn.disabled = false;
+            fetchDeliveryQuote();
+        }, function(err) {
+            btn.disabled = false;
+            status.className = 'gps-status err';
+            status.textContent = err.code === 1
+                ? 'Location permission denied. Please allow location so the driver can find you.'
+                : 'Could not get your location. Please try again.';
+        }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+    };
+
+    // Ask the server for the distance-based delivery price for this exact trip.
+    function fetchDeliveryQuote() {
+        if (!customerLocation) return;
+        var pickup = getPickupPoint();
+        var box = document.getElementById('gpsQuote');
+        box.style.display = 'block';
+        box.innerHTML = '<div class="row"><span>Calculating delivery price…</span></div>';
+
+        fetch(MPP_API + '/api/rides/quote', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pickup: pickup, dropoff: customerLocation, type: 'delivery' })
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+            if (!d.success || !d.data) throw new Error('no quote');
+            liveQuote = d.data;
+            box.innerHTML =
+                '<div class="row"><span>Distance</span><span>' + d.data.distanceKm + ' km</span></div>' +
+                '<div class="row"><span>Delivery price</span><span>' + d.data.deliveryFee.toLocaleString() + ' HTG</span></div>';
+            // refresh any visible totals with the new distance-based fee
+            if (typeof populateReview === 'function' && currentStep === 3) populateReview();
+        })
+        .catch(function(){
+            box.innerHTML = '<div class="row"><span>Could not calculate the price right now — a standard delivery fee will be used.</span></div>';
+        });
+    }
+
     function getOrderSummary() {
         try { return JSON.parse(localStorage.getItem('myplopplop_order_summary')) || null; } catch(e) { return null; }
     }
@@ -980,10 +1095,15 @@
             storeIds.add(item.storeId);
         });
         let deliveryFee = 0;
-        storeIds.forEach(sid => {
-            const store = MOCK.STORES.find(s => s.id === sid);
-            deliveryFee += store ? store.deliveryFee : 100;
-        });
+        if (liveQuote && typeof liveQuote.deliveryFee === 'number') {
+            // Distance-based price for this exact trip, from the customer's GPS pin
+            deliveryFee = liveQuote.deliveryFee;
+        } else {
+            storeIds.forEach(sid => {
+                const store = MOCK.STORES.find(s => s.id === sid);
+                deliveryFee += store ? store.deliveryFee : 100;
+            });
+        }
         const serviceFee = Math.round(subtotal * 0.05);
         return { subtotal, deliveryFee, serviceFee, promoDiscount: 0, total: subtotal + deliveryFee + serviceFee };
     }
@@ -1063,6 +1183,12 @@
             const addr = document.getElementById('deliveryAddress').value.trim();
             if (!name || !phone || !addr) {
                 alert('Please fill in all required delivery fields.');
+                return;
+            }
+            // GPS is required: the driver needs it to find the customer and it sets the price
+            if (!customerLocation) {
+                alert('Please tap "Use my current location" so your driver can find you and we can calculate your delivery price.');
+                document.getElementById('gpsBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
             }
             currentStep = 2;
@@ -1197,7 +1323,15 @@
                 items: items,
                 paymentMethod: getAPIPaymentMethod(selectedPayment),
                 deliveryType: 'delivery',
-                deliveryAddress: { street: addr, city: 'Port-au-Prince', notes: notes },
+                // GPS pin travels with the order so the dispatch engine can route the driver
+                deliveryAddress: {
+                    street: addr,
+                    city: 'Port-au-Prince',
+                    notes: notes,
+                    coordinates: customerLocation
+                        ? { type: 'Point', coordinates: [customerLocation.lng, customerLocation.lat] }
+                        : undefined
+                },
                 recipient: { name: name, phone: phone, address: addr },
                 notes: notes
             };
