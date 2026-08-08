@@ -11,6 +11,7 @@
 <meta property="og:site_name" content="MyPlopPlop">
 <title data-i18n="page.title">Store Designer — MyPlopPlop</title>
 <meta name="description" content="Design your branded store on MyPlopPlop. Stand out from Facebook Marketplace with your own storefront.">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
@@ -768,6 +769,32 @@ body {
   border-color: var(--primary-blue);
   background: var(--primary-blue-light);
 }
+.csv-import-box {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  border: 2px solid var(--primary-blue-light, #e8f0ff);
+  border-radius: var(--radius-md, 12px);
+  background: #f6f9ff;
+  text-align: center;
+}
+.csv-import-or {
+  position: relative; margin: 0 0 var(--space-sm);
+  color: var(--gray-400, #9aa5b4); font-size: var(--text-xs); font-weight: 700; letter-spacing: 2px;
+}
+.csv-import-or span { background:#f6f9ff; padding:0 10px; position:relative; z-index:1; }
+.csv-import-or::before { content:''; position:absolute; left:0; right:0; top:50%; height:1px; background:var(--gray-200,#e2e8f0); }
+.csv-import-title { font-weight: 700; font-size: var(--text-sm); color: var(--gray-800,#1f2a37); margin-bottom: 4px; }
+.csv-import-sub { font-size: var(--text-xs); color: var(--gray-500,#64748b); margin-bottom: var(--space-sm); line-height: 1.4; }
+.csv-import-btn {
+  width: 100%; padding: 12px; border: 0; border-radius: var(--radius-sm,8px);
+  background: var(--primary-blue,#00209F); color:#fff; font-weight: 700; font-size: var(--text-sm);
+  cursor: pointer; transition: opacity var(--transition-fast);
+}
+.csv-import-btn:hover { opacity: .9; }
+.csv-import-tmpl { display:inline-block; margin-top: var(--space-sm); font-size: var(--text-xs); color: var(--primary-blue,#00209F); font-weight:600; text-decoration: underline; }
+.csv-import-result { margin-top: var(--space-sm); font-size: var(--text-sm); font-weight: 600; }
+.csv-import-result.ok { color: #0f9d55; }
+.csv-import-result.err { color: var(--error,#e11d48); }
 
 /* ===== ACTION BUTTONS ===== */
 .action-bar {
@@ -1557,6 +1584,18 @@ body {
         <button class="add-product-btn" id="addProductBtn" onclick="addProduct()">
           + <span data-i18n="s6.add">Add Product</span>
         </button>
+
+        <div class="csv-import-box">
+          <div class="csv-import-or"><span data-i18n="s6.csv_or">OR</span></div>
+          <div class="csv-import-title">📄 <span data-i18n="s6.csv_title">Upload your whole product list (CSV / Excel)</span></div>
+          <div class="csv-import-sub" data-i18n="s6.csv_sub">Have a lot of products? Upload them all at once instead of typing them one by one.</div>
+          <input type="file" id="csvProductInput" accept=".csv,.xlsx,.xls" style="display:none;" onchange="handleCatalogFile(this)">
+          <button type="button" class="csv-import-btn" onclick="document.getElementById('csvProductInput').click()">
+            ⬆️ <span data-i18n="s6.csv_btn">Choose CSV / Excel file</span>
+          </button>
+          <a href="https://myplopplop-api.onrender.com/api/inventory/template" class="csv-import-tmpl" data-i18n="s6.csv_tmpl">Download the template</a>
+          <div id="csvImportResult" class="csv-import-result" style="display:none;"></div>
+        </div>
       </div>
     </div>
 
@@ -1763,6 +1802,15 @@ const translations = {
   's6.title':    { fr:'Produits en Vedette', en:'Featured Products', kr:'Pwodwi Vedèt', es:'Productos Destacados' },
   's6.sub':      { fr:'Ajoutez jusqu\'à 3 exemples de produits à présenter', en:'Add up to 3 sample products to showcase', kr:'Ajoute jiska 3 pwodwi egzanp pou montre', es:'Agrega hasta 3 productos de muestra para mostrar' },
   's6.add':      { fr:'Ajouter Produit', en:'Add Product', kr:'Ajoute Pwodwi', es:'Agregar Producto' },
+  's6.csv_or':   { fr:'OU', en:'OR', kr:'OSWA', es:'O' },
+  's6.csv_title':{ fr:'Importez toute votre liste de produits (CSV / Excel)', en:'Upload your whole product list (CSV / Excel)', kr:'Telechaje tout lis pwodwi ou (CSV / Excel)', es:'Suba toda su lista de productos (CSV / Excel)' },
+  's6.csv_sub':  { fr:'Beaucoup de produits ? Importez-les tous en une fois au lieu de les saisir un par un.', en:'Have a lot of products? Upload them all at once instead of typing them one by one.', kr:'Ou gen anpil pwodwi? Telechaje yo tout an yon sèl fwa olye pou w tape yo youn pa youn.', es:'¿Muchos productos? Súbalos todos a la vez en lugar de escribirlos uno por uno.' },
+  's6.csv_btn':  { fr:'Choisir un fichier CSV / Excel', en:'Choose CSV / Excel file', kr:'Chwazi yon fichye CSV / Excel', es:'Elegir archivo CSV / Excel' },
+  's6.csv_tmpl': { fr:'Télécharger le modèle', en:'Download the template', kr:'Telechaje modèl la', es:'Descargar la plantilla' },
+  's6.csv_done': { fr:'{n} produits chargés', en:'{n} products loaded', kr:'{n} pwodwi chaje', es:'{n} productos cargados' },
+  's6.csv_none': { fr:'Aucun produit trouvé. Vérifiez les colonnes (name, price...).', en:'No products found. Check the columns (name, price...).', kr:'Pa jwenn okenn pwodwi. Tcheke kolòn yo (name, price...).', es:'No se encontraron productos. Revise las columnas (name, price...).' },
+  's6.csv_err':  { fr:'Impossible de lire le fichier. Enregistrez-le en CSV et réessayez.', en:'Could not read the file. Save it as CSV and try again.', kr:'Pa ka li fichye a. Anrejistre li kòm CSV epi eseye ankò.', es:'No se pudo leer el archivo. Guárdelo como CSV e intente de nuevo.' },
+  's6.csv_wait': { fr:'Chargement... réessayez dans une seconde.', en:'Still loading... try again in a second.', kr:'Ap chaje... eseye ankò nan yon segond.', es:'Cargando... intente de nuevo en un segundo.' },
   's6.name_ph':  { fr:'Nom du produit', en:'Product name', kr:'Non pwodwi', es:'Nombre del producto' },
   's6.price_ph': { fr:'Prix (HTG)', en:'Price (HTG)', kr:'Pri (HTG)', es:'Precio (HTG)' },
   'btn.publish': { fr:'Publier la Boutique', en:'Publish Store', kr:'Pibliye Magazen / Antrepriz', es:'Publicar Tienda' },
@@ -1858,6 +1906,60 @@ function addProduct() {
   state.products.push({ emoji: '📦', name: '', price: '' });
   renderProducts();
   updateProgress();
+}
+
+function showCsvResult(ok, msg) {
+  var box = document.getElementById('csvImportResult');
+  box.style.display = 'block';
+  box.className = 'csv-import-result ' + (ok ? 'ok' : 'err');
+  box.textContent = msg;
+}
+
+// Bulk-load a product list from a CSV/Excel file into the store builder.
+function handleCatalogFile(input) {
+  var file = input.files && input.files[0];
+  if (!file) return;
+  if (typeof XLSX === 'undefined') { showCsvResult(false, t('s6.csv_wait')); return; }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+      var sheet = wb.Sheets[wb.SheetNames[0]];
+      var rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+      // pick a column value by trying several header names (case-insensitive)
+      function pick(row, names) {
+        var keys = Object.keys(row);
+        for (var n = 0; n < names.length; n++) {
+          var k = keys.find(function(kk){ return kk.toLowerCase().trim() === names[n]; });
+          if (k && String(row[k]).trim() !== '') return String(row[k]).trim();
+        }
+        return '';
+      }
+      // drop any blank rows the user hadn't filled in
+      state.products = state.products.filter(function(p){ return p.name && p.name.trim(); });
+      var added = 0;
+      for (var i = 0; i < rows.length; i++) {
+        if (state.products.length >= 200) break;
+        var name = pick(rows[i], ['name','nom','produit','item','product name','pwodwi','producto']);
+        if (!name) continue;
+        var priceRaw = pick(rows[i], ['price','prix','precio','pri']);
+        var price = parseFloat(priceRaw.replace(/[^0-9.]/g, '')) || 0;
+        var category = pick(rows[i], ['category','categorie','catégorie','categoria','kategori']) || 'Products';
+        var description = pick(rows[i], ['description','desc','deskripsyon','descripcion']);
+        state.products.push({ emoji: '📦', name: name, price: price ? String(price) : '', category: category, description: description });
+        added++;
+      }
+      renderProducts();
+      updatePreview();
+      updateProgress();
+      if (added > 0) showCsvResult(true, '✓ ' + t('s6.csv_done').replace('{n}', added));
+      else showCsvResult(false, t('s6.csv_none'));
+    } catch (err) {
+      showCsvResult(false, t('s6.csv_err'));
+    }
+    input.value = '';
+  };
+  reader.readAsArrayBuffer(file);
 }
 
 function removeProduct(idx) {
@@ -2429,7 +2531,12 @@ function publishStore() {
     if (prods.length === 0) return { slug: slug, productCount: 0 };
 
     var bulkPayload = prods.map(function(p) {
-      return { name: p.name.trim(), price: parseInt(p.price) || 0, category: 'Products' };
+      return {
+        name: p.name.trim(),
+        price: parseInt(p.price) || 0,
+        category: (p.category && p.category.trim()) ? p.category.trim() : 'Products',
+        description: p.description || ''
+      };
     });
 
     // Try bulk endpoint first, fall back to individual if not available
