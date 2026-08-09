@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MyPlopPlop — Live Demo Walkthrough</title>
+<meta name="description" content="Guided walkthrough of the MyPlopPlop marketplace: stores, CSV upload, live inventory, GPS checkout and fully automatic delivery dispatch.">
+<meta property="og:title" content="MyPlopPlop — Live Demo">
+<meta property="og:description" content="See the full flow: order, automatic pricing, automatic driver dispatch, live delivery.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<style>
+:root{--red:#D21034;--blue:#00209F;--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--bg:#f5f7fb;--white:#fff;--green:#0f9d55}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+.hero{background:linear-gradient(135deg,var(--blue),#0b1560);color:#fff;padding:38px 20px 44px;text-align:center}
+.hero h1{font-family:Poppins;font-size:27px;font-weight:800;margin-bottom:8px}
+.hero p{opacity:.9;font-size:15px;max-width:640px;margin:0 auto}
+.hero .tag{display:inline-block;background:rgba(255,255,255,.16);padding:6px 14px;border-radius:999px;font-size:12.5px;font-weight:700;letter-spacing:.5px;margin-bottom:14px}
+.wrap{max-width:820px;margin:0 auto;padding:22px 16px 60px}
+.step{background:var(--white);border-radius:16px;padding:22px;margin-bottom:16px;box-shadow:0 1px 3px rgba(16,24,40,.07);border-left:5px solid var(--blue)}
+.step.auto{border-left-color:var(--green)}
+.step h2{font-family:Poppins;font-size:18px;display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.n{background:var(--blue);color:#fff;width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:15px;flex:0 0 auto}
+.step.auto .n{background:var(--green)}
+.step p{color:var(--muted);font-size:14.5px;margin-bottom:12px}
+.btn{display:inline-block;background:var(--red);color:#fff;padding:13px 20px;border-radius:11px;text-decoration:none;font-weight:700;font-size:14.5px;margin:4px 6px 4px 0}
+.btn.blue{background:var(--blue)}
+.btn.ghost{background:#eef3ff;color:var(--blue)}
+.creds{background:#f8fafc;border:1px dashed var(--line);border-radius:10px;padding:12px 14px;font-size:13.5px;margin-top:10px}
+.creds b{color:var(--ink)}
+.creds .k{color:var(--muted)}
+.note{background:#fff8e6;border:1px solid #ffe2b0;border-radius:10px;padding:12px 14px;font-size:13.5px;margin-top:12px}
+.callout{background:#eefbf3;border:1px solid #bfe8d2;border-radius:12px;padding:16px;margin:20px 0;font-size:14.5px}
+.callout b{display:block;font-family:Poppins;margin-bottom:4px;font-size:15px}
+h3.sec{font-family:Poppins;font-size:15px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:26px 0 12px}
+.foot{text-align:center;color:var(--muted);font-size:13px;padding:26px 16px 40px}
+.pill{display:inline-block;background:#eef3ff;color:var(--blue);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;margin-left:6px}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">LIVE DEMO — REAL SYSTEM, NOT A MOCKUP</div>
+  <h1>MyPlopPlop: Buy like Amazon.<br>Delivered like Uber.</h1>
+  <p>Everything below is running live. Follow the steps in order to see the whole journey — from a supplier uploading their catalog, to a customer ordering, to a driver being dispatched automatically with no staff involved.</p>
+</div>
+
+<div class="wrap">
+
+  <h3 class="sec">Part 1 — The seller side</h3>
+
+  <div class="step">
+    <h2><span class="n">1</span> A store on the marketplace</h2>
+    <p>A real verified store with 20 products, all loaded in one click from a CSV file. This is what a hardware store or wholesaler looks like to customers.</p>
+    <a class="btn blue" href="../store.html?id=6a777279b91875bef01e2879" target="_blank">Open the hardware store</a>
+    <a class="btn ghost" href="../store.html?id=6a77727db91875bef01e28c0" target="_blank">Open the wholesale store</a>
+  </div>
+
+  <div class="step">
+    <h2><span class="n">2</span> Upload a whole catalog in one click</h2>
+    <p>A supplier never types products one by one. They upload their price list (CSV or Excel) and every product appears instantly — with a downloadable template so any supplier can use their own list.</p>
+    <a class="btn blue" href="../store-designer.html" target="_blank">Open the Store Builder</a>
+    <div class="note">In the Store Builder, scroll to step 6 “Featured Products” to see the upload box.</div>
+  </div>
+
+  <div class="step">
+    <h2><span class="n">3</span> Live inventory &amp; stock alerts</h2>
+    <p>Real-time stock tracking: total products, in stock, low stock, out of stock, plus the total value of the inventory in gourdes and automatic low-stock alerts.</p>
+    <a class="btn blue" href="../merchant/inventory.html" target="_blank">Open Live Inventory</a>
+    <div class="creds"><span class="k">Sign in as the demo seller —</span> <b>Phone:</b> 50900000201 &nbsp; <b>PIN:</b> 1234</div>
+  </div>
+
+  <h3 class="sec">Part 2 — The customer side</h3>
+
+  <div class="step">
+    <h2><span class="n">4</span> Order with GPS + automatic pricing</h2>
+    <p>The customer must share their exact location — that's how the driver finds them. The delivery price is calculated instantly from the real distance, and they pay for the products and delivery in a single payment.</p>
+    <a class="btn" href="../shop.html" target="_blank">Start shopping</a>
+    <a class="btn ghost" href="../checkout.html" target="_blank">Go straight to checkout</a>
+    <div class="note">Tap “Use my current location” at checkout and watch the distance and delivery price appear automatically.</div>
+  </div>
+
+  <h3 class="sec">Part 3 — The automatic delivery <span class="pill">no staff involved</span></h3>
+
+  <div class="step auto">
+    <h2><span class="n">5</span> The store taps “Ready”</h2>
+    <p>That single tap is the only human action in the whole delivery. The moment it happens, the system creates the delivery, prices it, and starts looking for a driver — automatically.</p>
+    <a class="btn blue" href="../merchant/orders.html" target="_blank">Open the store's Orders screen</a>
+    <div class="creds"><span class="k">Same demo seller —</span> <b>Phone:</b> 50900000201 &nbsp; <b>PIN:</b> 1234</div>
+  </div>
+
+  <div class="step auto">
+    <h2><span class="n">6</span> The nearest driver is offered the job</h2>
+    <p>The system finds the closest available verified driver and offers them the delivery with a 30-second countdown. If they don't accept in time, it passes itself to the next closest driver — no dispatcher, no phone calls.</p>
+    <a class="btn blue" href="../driver-delivery.html" target="_blank">Open the Driver screen</a>
+    <div class="creds"><span class="k">Sign in as the demo driver —</span> <b>Phone:</b> +50900000401 &nbsp; <b>PIN:</b> 1234</div>
+    <div class="note"><b>Best way to show this live:</b> open the store's Orders screen on one phone and the Driver screen on another (or two browser tabs). Tap “Ready” on the order — the delivery offer appears on the driver screen within seconds.</div>
+  </div>
+
+  <div class="step auto">
+    <h2><span class="n">7</span> Pickup, secure code, delivered</h2>
+    <p>The driver gets the route, the customer's details and a secure 4-digit code. The delivery can only be completed when the customer gives that code — proof it reached the right person. Then the driver's earnings are added automatically.</p>
+    <a class="btn ghost" href="../orders.html" target="_blank">Customer's orders &amp; tracking</a>
+  </div>
+
+  <div class="callout">
+    <b>What makes this different</b>
+    No dispatcher, no phone calls, no staff. The system handles the pricing, the driver matching, the hand-off between drivers, the delivery code and the payouts by itself — the way Amazon and Uber work, built for Haiti.
+  </div>
+
+  <div class="foot">
+    MyPlopPlop — part of the HaitiBiznis ecosystem · <a href="https://myplopplop.com" style="color:var(--blue);font-weight:700;text-decoration:none">myplopplop.com</a>
+  </div>
+</div>
+
+</body>
+</html>

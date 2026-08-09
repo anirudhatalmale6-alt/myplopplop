@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Driver — Deliveries | MyPlopPlop</title>
+<meta name="description" content="MyPlopPlop driver screen: receive delivery offers automatically, accept, and complete with the customer's code.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<style>
+:root{
+  --red:#D21034; --blue:#00209F; --ink:#111827; --muted:#6b7280;
+  --line:#e5e7eb; --bg:#f4f6fa; --white:#fff; --green:#0f9d55; --amber:#f59e0b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:40px}
+.top{background:var(--blue);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
+.top h1{font-family:Poppins;font-size:17px;font-weight:700}
+.top .dot{margin-left:auto;font-size:12px;background:rgba(255,255,255,.18);padding:5px 10px;border-radius:999px;font-weight:600}
+.wrap{max-width:520px;margin:0 auto;padding:16px}
+.card{background:var(--white);border-radius:14px;padding:18px;box-shadow:0 1px 3px rgba(16,24,40,.08);margin-bottom:14px}
+.muted{color:var(--muted);font-size:13.5px;line-height:1.5}
+h2{font-family:Poppins;font-size:16px;margin-bottom:6px}
+.big{font-family:Poppins;font-size:26px;font-weight:800}
+.btn{width:100%;padding:15px;border:0;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;font-family:Inter}
+.btn-accept{background:var(--green);color:#fff}
+.btn-decline{background:#fff;color:var(--red);border:2px solid var(--line);margin-top:8px}
+.btn-blue{background:var(--blue);color:#fff}
+.btn[disabled]{opacity:.55;cursor:default}
+.row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.row:last-child{border-bottom:0}
+.row .k{color:var(--muted)}
+.row .v{font-weight:600;text-align:right}
+.offer{border:2px solid var(--green);animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(15,157,85,.35)}50%{box-shadow:0 0 0 10px rgba(15,157,85,0)}}
+.count{background:#fff4e5;color:#b45309;border-radius:10px;padding:10px;text-align:center;font-weight:700;margin:12px 0}
+.empty{text-align:center;padding:34px 16px}
+.empty .ico{font-size:44px;margin-bottom:10px}
+.pin{width:100%;padding:15px;border:2px solid var(--line);border-radius:12px;font-size:22px;text-align:center;letter-spacing:8px;font-weight:700;font-family:Inter;margin-bottom:10px}
+.err{color:var(--red);font-weight:600;font-size:13.5px;margin-top:8px}
+.ok{color:var(--green);font-weight:700}
+.login input{width:100%;padding:13px;border:2px solid var(--line);border-radius:10px;font-size:15px;margin-bottom:10px;font-family:Inter}
+.badge{display:inline-block;background:#eef3ff;color:var(--blue);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700;margin-bottom:8px}
+a.map{display:block;text-align:center;margin-top:10px;color:var(--blue);font-weight:700;font-size:14px;text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <span style="font-size:20px">🛵</span>
+  <h1>Driver — Deliveries</h1>
+  <span class="dot" id="onlineDot">…</span>
+</div>
+
+<div class="wrap">
+  <!-- LOGIN -->
+  <div class="card login" id="loginCard" style="display:none;">
+    <h2>Driver sign in</h2>
+    <p class="muted" style="margin-bottom:12px">Enter your phone and PIN to start receiving deliveries.</p>
+    <input type="tel" id="phone" placeholder="Phone (e.g. +50900000401)">
+    <input type="password" id="pin" placeholder="PIN" inputmode="numeric">
+    <button class="btn btn-blue" onclick="login()">Sign in</button>
+    <div class="err" id="loginErr"></div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main" style="display:none;">
+    <div id="content"></div>
+  </div>
+</div>
+
+<script>
+var API = 'https://myplopplop-api.onrender.com';
+var token = localStorage.getItem('pp_token') || '';
+var timer = null, poll = null, current = null;
+
+function el(id){ return document.getElementById(id); }
+
+function api(method, path, body){
+  var opts = { method: method, headers: { 'Content-Type':'application/json' } };
+  if (token) opts.headers['Authorization'] = 'Bearer ' + token;
+  if (body) opts.body = JSON.stringify(body);
+  return fetch(API + path, opts).then(function(r){ return r.json(); });
+}
+
+function login(){
+  var phone = el('phone').value.trim(), pin = el('pin').value.trim();
+  el('loginErr').textContent = '';
+  api('POST','/api/auth/login',{ phone: phone, pin: pin }).then(function(d){
+    if (d.success && d.token){
+      token = d.token; localStorage.setItem('pp_token', token);
+      el('loginCard').style.display='none'; el('main').style.display='block';
+      goOnline(); start();
+    } else {
+      el('loginErr').textContent = d.message || 'Could not sign in.';
+    }
+  }).catch(function(){ el('loginErr').textContent = 'Network error.'; });
+}
+
+// Tell the server we're online and share our location so we can be matched.
+function goOnline(){
+  api('PUT','/api/drivers/online',{ isOnline:true }).catch(function(){});
+  el('onlineDot').textContent = 'Online';
+  if (navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(function(p){
+      api('PUT','/api/drivers/location',{ latitude:p.coords.latitude, longitude:p.coords.longitude }).catch(function(){});
+    }, function(){}, { enableHighAccuracy:true, timeout:10000 });
+  }
+}
+
+function money(n){ return (n||0).toLocaleString() + ' HTG'; }
+
+function render(data){
+  var offer = data.offer, active = data.active;
+  var c = el('content');
+
+  if (offer){
+    if (current !== String(offer._id)) { current = String(offer._id); }
+    var secs = Math.max(0, Math.round((new Date(offer.offerExpiresAt) - new Date())/1000));
+    c.innerHTML =
+      '<div class="card offer">' +
+        '<span class="badge">NEW DELIVERY OFFER</span>' +
+        '<div class="big">' + money(offer.fare && offer.fare.driverEarning) + '</div>' +
+        '<p class="muted">You earn this for the delivery</p>' +
+        '<div class="count" id="cd">Accept within ' + secs + 's</div>' +
+        '<div class="row"><span class="k">Pick up</span><span class="v">' + (offer.pickup.address||'Store') + '</span></div>' +
+        '<div class="row"><span class="k">Deliver to</span><span class="v">' + (offer.dropoff.address||'Customer') + '</span></div>' +
+        '<div class="row"><span class="k">Distance</span><span class="v">' + (offer.distanceKm||0) + ' km</span></div>' +
+        '<button class="btn btn-accept" onclick="accept(\'' + offer._id + '\')">Accept delivery</button>' +
+        '<button class="btn btn-decline" onclick="decline(\'' + offer._id + '\')">Pass to another driver</button>' +
+      '</div>';
+    startCountdown(new Date(offer.offerExpiresAt));
+    return;
+  }
+
+  if (active){
+    var next = active.status === 'accepted' ? 'picking_up'
+             : active.status === 'picking_up' ? 'in_progress' : 'delivered';
+    var label = active.status === 'accepted' ? 'I have arrived at the store'
+              : active.status === 'picking_up' ? 'I picked up the order'
+              : 'Complete delivery';
+    var pinBox = (next === 'delivered')
+      ? '<p class="muted" style="margin:10px 0 6px">Ask the customer for their 4-digit code:</p>' +
+        '<input class="pin" id="pinIn" maxlength="4" inputmode="numeric" placeholder="••••">'
+      : '';
+    c.innerHTML =
+      '<div class="card">' +
+        '<span class="badge">DELIVERY IN PROGRESS</span>' +
+        '<div class="row"><span class="k">Pick up</span><span class="v">' + (active.pickup.address||'Store') + '</span></div>' +
+        '<div class="row"><span class="k">Deliver to</span><span class="v">' + (active.dropoff.address||'Customer') + '</span></div>' +
+        '<div class="row"><span class="k">Customer</span><span class="v">' + ((active.customer&&active.customer.name)||'Customer') + '</span></div>' +
+        '<div class="row"><span class="k">You earn</span><span class="v">' + money(active.fare&&active.fare.driverEarning) + '</span></div>' +
+        pinBox +
+        '<button class="btn btn-blue" style="margin-top:12px" onclick="advance(\'' + active._id + '\',\'' + next + '\')">' + label + '</button>' +
+        '<div class="err" id="stepErr"></div>' +
+        '<a class="map" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=' +
+          (active.status==='accepted' || active.status==='picking_up'
+            ? (active.pickup.coordinates.coordinates[1]+','+active.pickup.coordinates.coordinates[0])
+            : (active.dropoff.coordinates.coordinates[1]+','+active.dropoff.coordinates.coordinates[0])) +
+        '">🗺️ Open route in Maps</a>' +
+      '</div>';
+    return;
+  }
+
+  c.innerHTML =
+    '<div class="card empty">' +
+      '<div class="ico">🛵</div>' +
+      '<h2>You are online</h2>' +
+      '<p class="muted">Waiting for a delivery. When a store nearby marks an order ready, it will appear here automatically.</p>' +
+    '</div>';
+  current = null;
+}
+
+function startCountdown(expiry){
+  if (timer) clearInterval(timer);
+  timer = setInterval(function(){
+    var cd = el('cd'); if (!cd) { clearInterval(timer); return; }
+    var s = Math.max(0, Math.round((expiry - new Date())/1000));
+    cd.textContent = s > 0 ? 'Accept within ' + s + 's' : 'Offer expired — passing to the next driver…';
+    if (s <= 0) clearInterval(timer);
+  }, 1000);
+}
+
+function accept(id){
+  api('PUT','/api/rides/'+id+'/accept').then(function(d){
+    if (!d.success) alert(d.message || 'Could not accept');
+    refresh();
+  });
+}
+function decline(id){
+  api('PUT','/api/rides/'+id+'/decline').then(function(){ refresh(); });
+}
+function advance(id, next){
+  var body = {}; body.status = next;
+  if (next === 'delivered'){
+    var p = el('pinIn'); body.pin = p ? p.value.trim() : '';
+  }
+  api('PUT','/api/rides/'+id+'/status', body).then(function(d){
+    if (!d.success){
+      var e = el('stepErr'); if (e) e.textContent = d.message || 'Could not update';
+      return;
+    }
+    if (next === 'delivered'){
+      el('content').innerHTML =
+        '<div class="card empty"><div class="ico">✅</div><h2 class="ok">Delivery complete</h2>' +
+        '<p class="muted">Your earnings have been added to your wallet automatically.</p></div>';
+      setTimeout(refresh, 3500);
+      return;
+    }
+    refresh();
+  });
+}
+
+function refresh(){
+  api('GET','/api/rides/my-offer').then(function(d){
+    if (d.success && d.data) render(d.data);
+  }).catch(function(){});
+}
+
+function start(){
+  refresh();
+  if (poll) clearInterval(poll);
+  poll = setInterval(refresh, 4000); // offers arrive automatically
+}
+
+// boot
+if (token){
+  el('main').style.display='block';
+  api('GET','/api/rides/my-offer').then(function(d){
+    if (d.success){ goOnline(); start(); }
+    else { el('main').style.display='none'; el('loginCard').style.display='block'; }
+  }).catch(function(){ el('loginCard').style.display='block'; });
+} else {
+  el('loginCard').style.display='block';
+}
+</script>
+</body>
+</html>
