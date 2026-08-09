@@ -1086,6 +1086,24 @@
         try { return JSON.parse(localStorage.getItem('myplopplop_order_summary')) || null; } catch(e) { return null; }
     }
 
+    // Single source of truth for the amounts shown AND charged.
+    // The cart page may have stored a flat delivery fee before the customer shared
+    // their GPS; once we have a real distance-based quote it always wins, and the
+    // total is recomputed so the review screen and the payment agree.
+    function getFinalSummary() {
+        var summary = getOrderSummary() || calculateSummary(getCart());
+        if (liveQuote && typeof liveQuote.deliveryFee === 'number' && summary) {
+            var subtotal = summary.subtotal || 0;
+            var serviceFee = summary.serviceFee || 0;
+            var promo = summary.promoDiscount || 0;
+            summary = Object.assign({}, summary, {
+                deliveryFee: liveQuote.deliveryFee,
+                total: subtotal + liveQuote.deliveryFee + serviceFee - promo
+            });
+        }
+        return summary;
+    }
+
     // Recalculate summary if not available from cart page
     function calculateSummary(cart) {
         let subtotal = 0;
@@ -1250,9 +1268,8 @@
             `;
         });
 
-        // Summary
-        let summary = getOrderSummary();
-        if (!summary) summary = calculateSummary(cart);
+        // Summary (GPS distance price always wins over any stored flat fee)
+        let summary = getFinalSummary();
 
         document.getElementById('reviewSubtotal').textContent = MOCK.formatHTG(summary.subtotal);
         document.getElementById('reviewDelivery').textContent = summary.deliveryFee === 0 ? 'Free' : MOCK.formatHTG(summary.deliveryFee);
@@ -1363,7 +1380,7 @@
         btn.disabled = true;
         btn.textContent = 'Processing...';
 
-        const summary = getOrderSummary() || calculateSummary(getCart());
+        const summary = getFinalSummary();
         const total = summary ? summary.total : 0;
 
         // Try creating real API order if logged in
