@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta property="og:image" content="https://myplopplop.com/assets/og-myplopplop.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<title>Odoo — Merchant | MyPlopPlop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png">
+<link rel="shortcut icon" href="../favicon.ico">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/layout.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+body { background: var(--bg-light); color: var(--gray-800); margin: 0; }
+
+.topbar {
+  background: var(--primary-blue); color: #fff; height: 56px; display: flex;
+  align-items: center; justify-content: space-between; padding: 0 var(--content-padding);
+  position: sticky; top: 0; z-index: 200;
+}
+.topbar a { color: #fff; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+.lang-switch { display: flex; gap: 4px; }
+.lang-switch button {
+  background: rgba(255,255,255,.15); color: #fff; border: 0; border-radius: 6px;
+  padding: 5px 9px; font-size: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase;
+}
+.lang-switch button.active { background: #fff; color: var(--primary-blue); }
+
+.page { max-width: 900px; margin: 0 auto; padding: 20px var(--content-padding) 80px; }
+h1 { font-family: var(--font-heading); font-size: 26px; margin: 0 0 4px; }
+.sub { color: var(--text-muted); font-size: 15px; margin: 0 0 22px; line-height: 1.5; }
+
+.card {
+  background: #fff; border-radius: 14px; padding: 20px; margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.07);
+}
+.card h2 {
+  font-family: var(--font-heading); font-size: 17px; margin: 0 0 4px;
+  display: flex; align-items: center; gap: 9px;
+}
+.card h2 .n {
+  background: var(--primary-blue); color: #fff; width: 24px; height: 24px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center; font-size: 13px; flex: 0 0 24px;
+}
+.card .hint { color: var(--text-muted); font-size: 13.5px; line-height: 1.55; margin: 0 0 16px; }
+.card .hint code {
+  background: var(--bg-light); padding: 1px 5px; border-radius: 4px;
+  font-family: ui-monospace, Menlo, monospace; font-size: 12.5px;
+}
+
+ol.steps { margin: 0 0 6px; padding-left: 20px; font-size: 14px; line-height: 1.75; }
+ol.steps li { margin-bottom: 4px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.field label { font-size: 12.5px; font-weight: 700; color: var(--gray-700); text-transform: uppercase; letter-spacing: .3px; }
+.field input, .field select {
+  border: 1.5px solid var(--gray-300); border-radius: 9px; padding: 10px 12px;
+  font-size: 15px; font-family: var(--font-body); background: #fff; width: 100%;
+}
+.field input:focus, .field select:focus { outline: none; border-color: var(--primary-blue); }
+.field .note { font-size: 12px; color: var(--text-muted); }
+.field.check { flex-direction: row; align-items: center; gap: 9px; }
+.field.check input { width: 18px; height: 18px; flex: 0 0 18px; }
+.field.check label { text-transform: none; letter-spacing: 0; font-size: 14px; font-weight: 500; }
+
+.btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.btn-row .btn { flex: 0 0 auto; }
+
+.result { margin-top: 16px; font-size: 14px; }
+.result.hide { display: none; }
+.banner { border-radius: 10px; padding: 12px 14px; font-size: 14px; line-height: 1.5; margin-bottom: 12px; }
+.banner.ok { background: #e8f6ec; color: #1b5e2a; }
+.banner.err { background: #fdecec; color: #8f1d1d; }
+.banner.info { background: #eaf1fb; color: #12356e; }
+
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 560px; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--gray-200); white-space: nowrap; }
+th { font-size: 11.5px; text-transform: uppercase; letter-spacing: .4px; color: var(--text-muted); }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+td.price { font-weight: 700; color: var(--primary-blue); }
+
+.status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.stat { background: var(--bg-light); border-radius: 10px; padding: 12px 14px; }
+.stat .k { font-size: 11.5px; text-transform: uppercase; letter-spacing: .4px; color: var(--text-muted); }
+.stat .v { font-size: 20px; font-weight: 700; font-family: var(--font-heading); margin-top: 2px; }
+
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+.dot.ok { background: #2e9e4f; } .dot.err { background: #d33; } .dot.idle { background: var(--gray-400); }
+
+pre.snippet {
+  background: #10233f; color: #e6edf7; border-radius: 10px; padding: 14px; overflow-x: auto;
+  font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; line-height: 1.6; margin: 12px 0 0;
+}
+.copy-line {
+  display: flex; align-items: center; gap: 8px; background: var(--bg-light);
+  border-radius: 9px; padding: 9px 12px; margin-top: 8px; font-family: ui-monospace, Menlo, monospace;
+  font-size: 12.5px; word-break: break-all;
+}
+.copy-line button {
+  margin-left: auto; flex: 0 0 auto; border: 0; background: var(--primary-blue); color: #fff;
+  border-radius: 6px; padding: 5px 10px; font-size: 12px; font-weight: 700; cursor: pointer;
+}
+details summary { cursor: pointer; font-weight: 700; font-size: 14px; color: var(--primary-blue); }
+details[open] summary { margin-bottom: 10px; }
+
+#toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px);
+  background: #10233f; color: #fff; padding: 12px 20px; border-radius: 10px;
+  font-size: 14px; opacity: 0; pointer-events: none; transition: .25s; z-index: 900; max-width: 90vw;
+}
+#toast.show { opacity: 1; transform: translate(-50%, 0); }
+@media (max-width: 560px) { .page { padding-top: 14px; } h1 { font-size: 22px; } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="inventory.html">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <span data-i18n="back">Envantè</span>
+  </a>
+  <div class="lang-switch">
+    <button data-lang="ht" onclick="setLang('ht')">HT</button>
+    <button data-lang="fr" onclick="setLang('fr')">FR</button>
+    <button data-lang="en" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 data-i18n="title">Connecter Odoo</h1>
+  <p class="sub" data-i18n="subtitle">Vos prix changent souvent ? Reliez votre Odoo à MyPlopPlop et votre catalogue se met à jour tout seul — plus besoin d'envoyer un fichier CSV.</p>
+
+  <div id="noStore" class="banner err" style="display:none" data-i18n="no_store">Aucune boutique trouvée sur ce compte.</div>
+
+  <!-- 1. What the Odoo administrator must do -->
+  <div class="card">
+    <h2><span class="n">1</span><span data-i18n="s1_title">Dans Odoo (une seule fois)</span></h2>
+    <p class="hint" data-i18n="s1_hint">À faire par la personne qui administre votre Odoo. Nous ne faisons que LIRE vos produits — nous n'écrivons jamais rien dans votre Odoo.</p>
+    <ol class="steps">
+      <li data-i18n="s1_a">Créez un utilisateur dédié, par exemple <code>myplopplop@votre-societe.com</code>, avec un accès en lecture aux Ventes et à l'Inventaire.</li>
+      <li data-i18n="s1_b">Connectez-vous avec cet utilisateur : Préférences → Sécurité du compte → Nouvelle clé API. Copiez la clé (elle ne s'affiche qu'une fois).</li>
+      <li data-i18n="s1_c">Vérifiez que votre Odoo est joignable depuis Internet en HTTPS. Sur une installation on-premise, il faut ouvrir l'accès à <code>/jsonrpc</code>.</li>
+      <li data-i18n="s1_d">Notez le nom exact de la base de données Odoo.</li>
+    </ol>
+  </div>
+
+  <!-- 2. Connection -->
+  <div class="card">
+    <h2><span class="n">2</span><span data-i18n="s2_title">Connexion</span></h2>
+    <div class="grid">
+      <div class="field">
+        <label data-i18n="f_url">Adresse Odoo</label>
+        <input id="baseUrl" type="url" placeholder="https://odoo.masociete.com">
+        <span class="note" data-i18n="f_url_note">Sans / à la fin</span>
+      </div>
+      <div class="field">
+        <label data-i18n="f_db">Base de données</label>
+        <input id="database" type="text" placeholder="production">
+      </div>
+      <div class="field">
+        <label data-i18n="f_user">Utilisateur</label>
+        <input id="username" type="text" placeholder="myplopplop@masociete.com">
+      </div>
+      <div class="field">
+        <label data-i18n="f_key">Clé API</label>
+        <input id="apiKey" type="password" placeholder="••••••••••••">
+        <span class="note" data-i18n="f_key_note">Laissez vide pour garder la clé déjà enregistrée</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Mapping -->
+  <div class="card">
+    <h2><span class="n">3</span><span data-i18n="s3_title">Prix et catalogue</span></h2>
+    <p class="hint" data-i18n="s3_hint">Comment le prix Odoo devient le prix affiché sur MyPlopPlop.</p>
+    <div class="grid">
+      <div class="field">
+        <label data-i18n="f_pricefield">Champ prix</label>
+        <select id="priceField">
+          <option value="list_price">list_price — prix de vente</option>
+          <option value="standard_price">standard_price — coût</option>
+        </select>
+      </div>
+      <div class="field">
+        <label data-i18n="f_pricelist">Liste de prix (optionnel)</label>
+        <input id="pricelistId" type="number" min="0" placeholder="0">
+        <span class="note" data-i18n="f_pricelist_note">ID d'une pricelist Odoo, 0 = aucune</span>
+      </div>
+      <div class="field">
+        <label data-i18n="f_currency">Devise dans Odoo</label>
+        <select id="sourceCurrency">
+          <option value="HTG">HTG</option>
+          <option value="USD">USD</option>
+        </select>
+      </div>
+      <div class="field">
+        <label data-i18n="f_rate">Taux USD → HTG</label>
+        <input id="exchangeRateHTG" type="number" min="1" step="0.01">
+      </div>
+      <div class="field">
+        <label data-i18n="f_markup">Marge (%)</label>
+        <input id="markupPercent" type="number" step="0.1">
+      </div>
+      <div class="field">
+        <label data-i18n="f_round">Arrondir (HTG)</label>
+        <input id="roundToHTG" type="number" min="0" step="1">
+        <span class="note" data-i18n="f_round_note">0 = pas d'arrondi</span>
+      </div>
+      <div class="field">
+        <label data-i18n="f_interval">Fréquence (minutes)</label>
+        <input id="syncIntervalMinutes" type="number" min="5" step="5">
+      </div>
+      <div class="field">
+        <label data-i18n="f_defcat">Catégorie par défaut</label>
+        <input id="defaultCategory" type="text" placeholder="general">
+      </div>
+    </div>
+    <div class="grid" style="margin-top:14px">
+      <div class="field check"><input id="onlySaleOk" type="checkbox"><label data-i18n="f_saleok">Seulement les articles « peut être vendu »</label></div>
+      <div class="field check"><input id="trackStock" type="checkbox"><label data-i18n="f_stock">Reprendre les quantités en stock</label></div>
+      <div class="field check"><input id="skipZeroPrice" type="checkbox"><label data-i18n="f_zero">Ignorer les articles à 0</label></div>
+      <div class="field check"><input id="syncImages" type="checkbox"><label data-i18n="f_images">Importer les photos produits</label></div>
+      <div class="field check"><input id="deactivateMissing" type="checkbox"><label data-i18n="f_missing">Masquer ce qui disparaît d'Odoo</label></div>
+      <div class="field check"><input id="isActive" type="checkbox"><label data-i18n="f_active">Synchronisation automatique activée</label></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-blue" onclick="saveConfig()" data-i18n="btn_save">Enregistrer</button>
+      <button class="btn btn-white" onclick="testConnection()" data-i18n="btn_test">Tester la connexion</button>
+      <button class="btn btn-red" onclick="syncNow()" data-i18n="btn_sync">Synchroniser maintenant</button>
+    </div>
+    <div id="testResult" class="result hide"></div>
+  </div>
+
+  <!-- 4. Status -->
+  <div class="card">
+    <h2><span class="n">4</span><span data-i18n="s4_title">État</span></h2>
+    <div id="statusBox"><p class="hint" data-i18n="loading">Chargement…</p></div>
+  </div>
+
+  <!-- 5. Instant push -->
+  <div class="card">
+    <h2><span class="n">5</span><span data-i18n="s5_title">Mise à jour instantanée (optionnel)</span></h2>
+    <p class="hint" data-i18n="s5_hint">Par défaut nous relisons Odoo à intervalle régulier. Avec une action automatisée dans Odoo, un changement de prix arrive sur MyPlopPlop en quelques secondes.</p>
+    <div id="hookBox"></div>
+    <details style="margin-top:14px">
+      <summary data-i18n="s5_more">Voir le code à coller dans Odoo</summary>
+      <p class="hint" style="margin-top:8px" data-i18n="s5_steps">Odoo → Paramètres → Technique → Actions automatisées → Nouveau. Modèle : Article (product.template), Déclencheur : à la mise à jour, Action : Exécuter du code Python.</p>
+      <pre class="snippet" id="snippet">…</pre>
+    </details>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const BASE_URL = 'https://myplopplop-api.onrender.com';
+let storeId = null;
+let currentLang = localStorage.getItem('pp_lang') || 'fr';
+
+const T = {
+  fr: {},
+  ht: {
+    back: 'Envantè',
+    title: 'Konekte Odoo',
+    subtitle: "Pri ou yo chanje souvan? Konekte Odoo ou ak MyPlopPlop epi katalòg la ap mete tèt li ajou pou kont li — ou pa bezwen voye fichye CSV ankò.",
+    no_store: 'Nou pa jwenn okenn magazen sou kont sa a.',
+    s1_title: 'Nan Odoo (yon sèl fwa)',
+    s1_hint: "Se moun ki jere Odoo ou a ki fè sa. Nou sèlman LI pwodwi ou yo — nou pa janm ekri anyen nan Odoo ou.",
+    s1_a: "Kreye yon itilizatè apa, pa egzanp myplopplop@konpayi-ou.com, ak dwa pou li Vant ak Envantè.",
+    s1_b: "Konekte ak itilizatè sa a: Preferences → Account Security → New API Key. Kopye kle a (li parèt yon sèl fwa).",
+    s1_c: "Asire w Odoo ou jwenn sou Entènèt an HTTPS. Sou yon enstalasyon on-premise, fòk /jsonrpc ouvè.",
+    s1_d: "Note non egzak baz done Odoo a.",
+    s2_title: 'Koneksyon',
+    f_url: 'Adrès Odoo', f_url_note: 'San / nan fen an',
+    f_db: 'Baz done', f_user: 'Itilizatè', f_key: 'Kle API',
+    f_key_note: 'Kite vid pou kenbe kle ki deja anrejistre a',
+    s3_title: 'Pri ak katalòg',
+    s3_hint: 'Kijan pri Odoo a vin tounen pri sou MyPlopPlop.',
+    f_pricefield: 'Chan pri', f_pricelist: 'Lis pri (opsyonèl)',
+    f_pricelist_note: "ID yon pricelist Odoo, 0 = okenn",
+    f_currency: 'Deviz nan Odoo', f_rate: 'To USD → HTG', f_markup: 'Maj (%)',
+    f_round: 'Awondi (HTG)', f_round_note: '0 = pa awondi',
+    f_interval: 'Chak konbyen minit', f_defcat: 'Kategori pa defo',
+    f_saleok: 'Sèlman atik « ka vann »', f_stock: 'Pran kantite nan stòk',
+    f_zero: 'Sote atik ki gen pri 0', f_images: 'Enpòte foto pwodwi yo',
+    f_missing: 'Kache sa ki disparèt nan Odoo', f_active: 'Senkronizasyon otomatik aktive',
+    btn_save: 'Anrejistre', btn_test: 'Teste koneksyon an', btn_sync: 'Senkronize kounye a',
+    s4_title: 'Eta', loading: 'Ap chaje…',
+    s5_title: 'Mizajou enstantane (opsyonèl)',
+    s5_hint: "Nòmalman nou relè Odoo chak entèval. Ak yon aksyon otomatik nan Odoo, yon chanjman pri rive sou MyPlopPlop nan kèk segonn.",
+    s5_more: 'Wè kòd pou kole nan Odoo',
+    s5_steps: 'Odoo → Settings → Technical → Automated Actions → New. Model: product.template, Trigger: on update, Action: Execute Python Code.',
+    saved: 'Anrejistre', testing: 'Ap teste…', syncing: 'Ap senkronize…',
+    r_version: 'Vèsyon Odoo', r_count: 'Pwodwi ki matche', r_sample: 'Egzanp — men pri ou ta wè sou MyPlopPlop:',
+    c_name: 'Non', c_sku: 'Kòd', c_odoo: 'Pri Odoo', c_cat: 'Kategori', c_stock: 'Stòk', c_mpp: 'Pri MyPlopPlop',
+    sync_done: '{c} kreye, {u} mete ajou, {s} sote, {d} kache',
+    st_status: 'Eta', st_last: 'Dènye fwa', st_live: 'Pwodwi an liy', st_from: 'Soti nan Odoo',
+    st_never: 'Poko janm kouri', st_ok: 'OK', st_err: 'Erè',
+    hook_url: 'Adrès', hook_token: 'Tokèn', copy: 'Kopye', copied: 'Kopye!'
+  },
+  en: {
+    back: 'Inventory',
+    title: 'Connect Odoo',
+    subtitle: "Prices changing all the time? Link your Odoo to MyPlopPlop and your catalogue keeps itself up to date — no more CSV files.",
+    no_store: 'No store found on this account.',
+    s1_title: 'In Odoo (one time only)',
+    s1_hint: "For whoever administers your Odoo. We only READ your products — we never write anything into your Odoo.",
+    s1_a: "Create a dedicated user, e.g. myplopplop@yourcompany.com, with read access to Sales and Inventory.",
+    s1_b: "Log in as that user: Preferences → Account Security → New API Key. Copy the key (it is shown once).",
+    s1_c: "Make sure your Odoo is reachable from the internet over HTTPS. On-premise installs need /jsonrpc open.",
+    s1_d: "Note the exact Odoo database name.",
+    s2_title: 'Connection',
+    f_url: 'Odoo address', f_url_note: 'No trailing slash',
+    f_db: 'Database', f_user: 'User', f_key: 'API key',
+    f_key_note: 'Leave blank to keep the key already saved',
+    s3_title: 'Prices and catalogue',
+    s3_hint: 'How the Odoo price becomes the price shown on MyPlopPlop.',
+    f_pricefield: 'Price field', f_pricelist: 'Pricelist (optional)',
+    f_pricelist_note: 'ID of an Odoo pricelist, 0 = none',
+    f_currency: 'Currency in Odoo', f_rate: 'USD → HTG rate', f_markup: 'Markup (%)',
+    f_round: 'Round to (HTG)', f_round_note: '0 = no rounding',
+    f_interval: 'Every N minutes', f_defcat: 'Default category',
+    f_saleok: 'Only items marked "can be sold"', f_stock: 'Bring stock quantities across',
+    f_zero: 'Skip items priced at 0', f_images: 'Import product photos',
+    f_missing: 'Hide what disappears from Odoo', f_active: 'Automatic sync enabled',
+    btn_save: 'Save', btn_test: 'Test connection', btn_sync: 'Sync now',
+    s4_title: 'Status', loading: 'Loading…',
+    s5_title: 'Instant updates (optional)',
+    s5_hint: "By default we re-read Odoo on a schedule. With an automated action in Odoo, a price change lands on MyPlopPlop within seconds.",
+    s5_more: 'Show the code to paste into Odoo',
+    s5_steps: 'Odoo → Settings → Technical → Automated Actions → New. Model: product.template, Trigger: on update, Action: Execute Python Code.',
+    saved: 'Saved', testing: 'Testing…', syncing: 'Syncing…',
+    r_version: 'Odoo version', r_count: 'Matching products', r_sample: 'Sample — this is the price you would see on MyPlopPlop:',
+    c_name: 'Name', c_sku: 'Code', c_odoo: 'Odoo price', c_cat: 'Category', c_stock: 'Stock', c_mpp: 'MyPlopPlop price',
+    sync_done: '{c} created, {u} updated, {s} skipped, {d} hidden',
+    st_status: 'Status', st_last: 'Last run', st_live: 'Products live', st_from: 'From Odoo',
+    st_never: 'Never run', st_ok: 'OK', st_err: 'Error',
+    hook_url: 'URL', hook_token: 'Token', copy: 'Copy', copied: 'Copied!'
+  }
+};
+
+// French is the markup itself — read the defaults straight off the page so the
+// two can never drift apart.
+document.querySelectorAll('[data-i18n]').forEach(el => { T.fr[el.getAttribute('data-i18n')] = el.innerHTML; });
+Object.assign(T.fr, {
+  saved: 'Enregistré', testing: 'Test en cours…', syncing: 'Synchronisation…',
+  r_version: 'Version Odoo', r_count: 'Produits correspondants', r_sample: 'Échantillon — voici le prix qui serait affiché sur MyPlopPlop :',
+  c_name: 'Nom', c_sku: 'Code', c_odoo: 'Prix Odoo', c_cat: 'Catégorie', c_stock: 'Stock', c_mpp: 'Prix MyPlopPlop',
+  sync_done: '{c} créés, {u} mis à jour, {s} ignorés, {d} masqués',
+  st_status: 'État', st_last: 'Dernière exécution', st_live: 'Produits en ligne', st_from: "Venant d'Odoo",
+  st_never: 'Jamais exécuté', st_ok: 'OK', st_err: 'Erreur',
+  hook_url: 'Adresse', hook_token: 'Jeton', copy: 'Copier', copied: 'Copié !'
+});
+
+function t(key, vars) {
+  let s = (T[currentLang] && T[currentLang][key]) || T.fr[key] || key;
+  if (vars) Object.keys(vars).forEach(k => { s = s.split('{' + k + '}').join(vars[k]); });
+  return s;
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('pp_lang', lang);
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-lang]').forEach(el => el.classList.toggle('active', el.getAttribute('data-lang') === lang));
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.innerHTML = t(el.getAttribute('data-i18n')); });
+  if (storeId) { loadStatus(); }
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+}
+
+async function api(method, path, body) {
+  const opts = { method, headers: {} };
+  const token = localStorage.getItem('pp_token');
+  if (token) opts.headers['Authorization'] = 'Bearer ' + token;
+  if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
+  try {
+    const res = await fetch(BASE_URL + path, opts);
+    return await res.json();
+  } catch (e) {
+    return { success: false, message: 'Connection error' };
+  }
+}
+
+const FIELDS = {
+  baseUrl: 'text', database: 'text', username: 'text', apiKey: 'text',
+  priceField: 'text', pricelistId: 'number', sourceCurrency: 'text',
+  exchangeRateHTG: 'number', markupPercent: 'number', roundToHTG: 'number',
+  syncIntervalMinutes: 'number', defaultCategory: 'text',
+  onlySaleOk: 'check', trackStock: 'check', skipZeroPrice: 'check',
+  syncImages: 'check', deactivateMissing: 'check', isActive: 'check'
+};
+
+function fillForm(cfg) {
+  Object.keys(FIELDS).forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (FIELDS[id] === 'check') el.checked = !!cfg[id];
+    else if (id === 'apiKey') el.value = '';           // never echo the stored key back
+    else el.value = cfg[id] === undefined || cfg[id] === null ? '' : cfg[id];
+  });
+  document.getElementById('apiKey').placeholder = cfg.hasApiKey ? '••••••••••' : '';
+}
+
+function readForm() {
+  const body = {};
+  Object.keys(FIELDS).forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (FIELDS[id] === 'check') body[id] = el.checked;
+    else if (FIELDS[id] === 'number') body[id] = Number(el.value || 0);
+    else body[id] = el.value.trim();
+  });
+  return body;
+}
+
+async function saveConfig(silent) {
+  const res = await api('PUT', '/api/odoo/' + storeId + '/config', readForm());
+  if (res.success) {
+    fillForm(res.data);
+    if (!silent) toast(t('saved'));
+    loadStatus();
+    loadHook();
+  } else {
+    toast(res.message || 'Error');
+  }
+  return res.success;
+}
+
+function banner(kind, html) {
+  return '<div class="banner ' + kind + '">' + html + '</div>';
+}
+
+async function testConnection() {
+  const box = document.getElementById('testResult');
+  box.classList.remove('hide');
+  box.innerHTML = banner('info', t('testing'));
+  if (!(await saveConfig(true))) { box.innerHTML = banner('err', 'Could not save settings'); return; }
+
+  const res = await api('POST', '/api/odoo/' + storeId + '/test');
+  if (!res.success) { box.innerHTML = banner('err', esc(res.message)); return; }
+
+  const d = res.data;
+  let html = banner('ok', '<strong>' + t('r_version') + ':</strong> ' + esc(d.serverVersion) +
+    ' &nbsp;•&nbsp; <strong>' + t('r_count') + ':</strong> ' + d.matchingProducts);
+  if (d.missingFields && d.missingFields.length) {
+    html += banner('info', 'Fields not available on this Odoo: ' + esc(d.missingFields.join(', ')));
+  }
+  html += '<p class="hint">' + t('r_sample') + '</p><div class="table-wrap"><table><thead><tr>' +
+    '<th>' + t('c_name') + '</th><th>' + t('c_sku') + '</th><th>' + t('c_cat') + '</th>' +
+    '<th style="text-align:right">' + t('c_odoo') + '</th><th style="text-align:right">' + t('c_stock') + '</th>' +
+    '<th style="text-align:right">' + t('c_mpp') + '</th></tr></thead><tbody>';
+  d.sample.forEach(s => {
+    html += '<tr><td>' + esc(s.name) + '</td><td>' + esc(s.sku) + '</td><td>' + esc(s.myplopplopCategory) + '</td>' +
+      '<td class="num">' + s.odooPrice + '</td>' +
+      '<td class="num">' + (s.stock === undefined ? '—' : s.stock) + '</td>' +
+      '<td class="num price">' + s.myplopplopPrice + ' HTG</td></tr>';
+  });
+  html += '</tbody></table></div>';
+  box.innerHTML = html;
+}
+
+async function syncNow() {
+  const box = document.getElementById('testResult');
+  box.classList.remove('hide');
+  box.innerHTML = banner('info', t('syncing'));
+  if (!(await saveConfig(true))) { box.innerHTML = banner('err', 'Could not save settings'); return; }
+
+  const res = await api('POST', '/api/odoo/' + storeId + '/sync?mode=full');
+  if (!res.success) { box.innerHTML = banner('err', esc(res.message)); return; }
+  const d = res.data;
+  box.innerHTML = banner('ok', t('sync_done', { c: d.created, u: d.updated, s: d.skipped, d: d.deactivated }));
+  loadStatus();
+}
+
+function fmtDate(v) {
+  if (!v) return '—';
+  const d = new Date(v);
+  return d.toLocaleString(currentLang === 'en' ? 'en-US' : 'fr-FR', { dateStyle: 'short', timeStyle: 'short' });
+}
+
+async function loadStatus() {
+  const res = await api('GET', '/api/odoo/' + storeId + '/status');
+  const box = document.getElementById('statusBox');
+  if (!res.success) { box.innerHTML = '<p class="hint">' + t('st_never') + '</p>'; return; }
+  const d = res.data;
+  const dot = d.status === 'ok' ? 'ok' : (d.status === 'error' ? 'err' : 'idle');
+  const label = d.status === 'ok' ? t('st_ok') : (d.status === 'error' ? t('st_err') : t('st_never'));
+
+  let html = '<div class="status-grid">' +
+    '<div class="stat"><div class="k">' + t('st_status') + '</div><div class="v"><span class="dot ' + dot + '"></span>' + label + '</div></div>' +
+    '<div class="stat"><div class="k">' + t('st_last') + '</div><div class="v" style="font-size:15px">' + fmtDate(d.lastRunAt) + '</div></div>' +
+    '<div class="stat"><div class="k">' + t('st_from') + '</div><div class="v">' + d.productsFromOdoo + '</div></div>' +
+    '<div class="stat"><div class="k">' + t('st_live') + '</div><div class="v">' + d.productsLive + '</div></div>' +
+    '</div>';
+  if (d.lastError) html += banner('err', esc(d.lastError));
+
+  if (d.history && d.history.length) {
+    html += '<div class="table-wrap" style="margin-top:14px"><table><tbody>';
+    d.history.slice(0, 8).forEach(h => {
+      html += '<tr><td>' + fmtDate(h.at) + '</td><td>' + esc(h.mode) + '</td>' +
+        '<td>' + (h.ok ? '+' + h.created + ' / ~' + h.updated + ' / -' + (h.deactivated || 0) : '<span style="color:#d33">' + esc(h.message) + '</span>') + '</td>' +
+        '<td class="num">' + Math.round((h.durationMs || 0) / 100) / 10 + 's</td></tr>';
+    });
+    html += '</tbody></table></div>';
+  }
+  box.innerHTML = html;
+}
+
+function copyText(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.getAttribute('data-value') || el.textContent).then(() => toast(t('copied')));
+}
+
+async function loadHook() {
+  const res = await api('GET', '/api/odoo/' + storeId + '/webhook');
+  if (!res.success) return;
+  const d = res.data;
+  document.getElementById('hookBox').innerHTML =
+    '<div class="copy-line"><strong>' + t('hook_url') + '</strong><span id="hookUrl" data-value="' + esc(d.url) + '">' + esc(d.url) + '</span>' +
+    '<button onclick="copyText(\'hookUrl\')">' + t('copy') + '</button></div>' +
+    '<div class="copy-line"><strong>' + t('hook_token') + '</strong><span id="hookToken" data-value="' + esc(d.token) + '">' + esc(d.token) + '</span>' +
+    '<button onclick="copyText(\'hookToken\')">' + t('copy') + '</button></div>';
+
+  document.getElementById('snippet').textContent =
+    'import json, urllib.request\n\n' +
+    'ids = [r.id for r in records]\n' +
+    'req = urllib.request.Request(\n' +
+    '    "' + d.url + '",\n' +
+    '    data=json.dumps({"ids": ids}).encode(),\n' +
+    '    headers={\n' +
+    '        "Content-Type": "application/json",\n' +
+    '        "' + d.header + '": "' + d.token + '",\n' +
+    '    },\n' +
+    ')\n' +
+    'try:\n' +
+    '    urllib.request.urlopen(req, timeout=5)\n' +
+    'except Exception:\n' +
+    '    pass  # never let MyPlopPlop being down block a save in Odoo\n';
+}
+
+async function init() {
+  setLang(currentLang);
+  const store = await api('GET', '/api/stores/merchant/my-store');
+  if (!store.success || !store.data || !store.data.store) {
+    document.getElementById('noStore').style.display = 'block';
+    return;
+  }
+  storeId = store.data.store._id;
+
+  const cfg = await api('GET', '/api/odoo/' + storeId + '/config');
+  if (cfg.success) {
+    fillForm(cfg.data);
+  } else {
+    // No connection saved yet — show sensible defaults.
+    fillForm({
+      priceField: 'list_price', sourceCurrency: 'HTG', exchangeRateHTG: 135,
+      markupPercent: 0, roundToHTG: 5, syncIntervalMinutes: 30,
+      defaultCategory: 'general', onlySaleOk: true, trackStock: true,
+      skipZeroPrice: true, deactivateMissing: true
+    });
+  }
+  loadStatus();
+  loadHook();
+}
+
+init();
+</script>
+</body>
+</html>
