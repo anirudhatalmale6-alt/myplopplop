@@ -557,6 +557,14 @@
     }
     .inv-item:last-child { border-bottom: none; }
 }
+
+/* On a 390px phone the search box plus two 100px selects did not fit and
+   pushed the whole page sideways. Let the row wrap and the selects shrink. */
+.search-row { flex-wrap: wrap; }
+.search-row .search-bar { flex: 1 1 100%; min-width: 0; }
+.search-row select { flex: 1 1 0; min-width: 0; width: auto; }
+.filters-bar { min-width: 0; max-width: 100%; }
+html, body { overflow-x: hidden; max-width: 100%; }
 </style>
 </head>
 <body>
