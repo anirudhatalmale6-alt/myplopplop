@@ -56,6 +56,21 @@ body {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+  /* 4 language pills + the help link do not fit a 360-390px phone; let the row
+     scroll on its own instead of pushing the whole page sideways */
+  min-width: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.designer-topbar-right::-webkit-scrollbar { display: none; }
+@media (max-width: 520px) { .topbar-sub { display: none; } }
+.designer-topbar-right > * { flex: 0 0 auto; }
+.designer-topbar { gap: var(--space-sm); }
+.designer-topbar-brand { min-width: 0; flex: 0 1 auto; overflow: hidden; white-space: nowrap; }
+@media (max-width: 520px) {
+  .designer-topbar-brand { font-size: var(--text-base); }
+  .lang-btn { padding: 4px 8px; }
 }
 .lang-btn {
   background: rgba(255,255,255,0.15);
@@ -1281,7 +1296,7 @@ body {
   <div class="designer-topbar-brand">
     <span>🛒</span>
     <span>MyPlop<em style="color:#FFD700">Plop</em></span>
-    <span style="font-size:var(--text-xs);font-weight:400;opacity:0.7;margin-left:4px;" data-i18n="page.badge">Store Designer</span>
+    <span class="topbar-sub" style="font-size:var(--text-xs);font-weight:400;opacity:0.7;margin-left:4px;" data-i18n="page.badge">Store Designer</span>
   </div>
   <div class="designer-topbar-right">
     <button class="lang-btn" data-lang="fr">FR</button>
@@ -1354,6 +1369,8 @@ body {
               <option value="clothing" data-i18n="cat.clothing">👗 Clothing</option>
               <option value="electronics" data-i18n="cat.electronics">📱 Electronics</option>
               <option value="beauty" data-i18n="cat.beauty">💄 Beauty</option>
+              <option value="wholesale" data-i18n="cat.wholesale">📦 Wholesale</option>
+              <option value="bakery" data-i18n="cat.bakery">🥖 Bakery</option>
               <option value="other" data-i18n="cat.other">🏬 Other</option>
             </select>
           </div>
@@ -1830,6 +1847,8 @@ const translations = {
   'cat.clothing':{ fr:'👗 Vêtements', en:'👗 Clothing', kr:'👗 Rad', es:'👗 Ropa' },
   'cat.electronics':{ fr:'📱 Électronique', en:'📱 Electronics', kr:'📱 Elektwonik', es:'📱 Electrónica' },
   'cat.beauty':  { fr:'💄 Beauté', en:'💄 Beauty', kr:'💄 Bote', es:'💄 Belleza' },
+  'cat.wholesale':{ fr:'📦 Gros', en:'📦 Wholesale', kr:'📦 Gwosis', es:'📦 Mayorista' },
+  'cat.bakery':  { fr:'🥖 Boulangerie', en:'🥖 Bakery', kr:'🥖 Boulanjri', es:'🥖 Panadería' },
   'cat.other':   { fr:'🏬 Autre', en:'🏬 Other', kr:'🏬 Lòt', es:'🏬 Otro' },
   'eco.part_of': { fr:'Fait partie de l\'Écosystème HaitiBiznis', en:'Part of the HaitiBiznis Ecosystem', kr:'Fè pati Ekosistèm HaitiBiznis', es:'Parte del Ecosistema HaitiBiznis' },
   'toast.saved': { fr:'✅ Boutique sauvegardée avec succès!', en:'✅ Store saved successfully!', kr:'✅ Magazen / Antrepriz sovgade avèk siksè!', es:'✅ ¡Tienda guardada exitosamente!' },
@@ -2082,30 +2101,78 @@ document.getElementById('secondaryColor').addEventListener('input', function() {
 });
 
 // ── File Uploads ──────────────────────────────────────
+// A logo shot on a phone is 2-6 MB. Downscale it on a canvas and step the
+// JPEG quality down until it fits in the request, otherwise it never reaches
+// the server and the merchant publishes a store with no logo.
+function shrinkImage(file, maxPx, maxChars) {
+  return new Promise(function(resolve, reject) {
+    if (!file || !/^image\//.test(file.type)) return reject(new Error('not an image'));
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('read failed'));
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('decode failed'));
+      img.onload = () => {
+        const scale = Math.min(1, maxPx / Math.max(img.naturalWidth, img.naturalHeight));
+        const cw = Math.max(1, Math.round(img.naturalWidth * scale));
+        const ch = Math.max(1, Math.round(img.naturalHeight * scale));
+        const canvas = document.createElement('canvas');
+        canvas.width = cw; canvas.height = ch;
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, cw, ch);
+
+        let out;
+        if (/png/i.test(file.type)) {
+          out = canvas.toDataURL('image/png');
+          if (out.length <= maxChars) return resolve(out);
+          // too heavy as PNG: flatten the transparency onto white, then JPEG
+          ctx.globalCompositeOperation = 'destination-over';
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, cw, ch);
+        }
+        let q = 0.9;
+        out = canvas.toDataURL('image/jpeg', q);
+        while (out.length > maxChars && q > 0.35) {
+          q -= 0.1;
+          out = canvas.toDataURL('image/jpeg', q);
+        }
+        if (out.length > maxChars) {
+          const c2 = document.createElement('canvas');
+          c2.width = Math.max(1, Math.round(cw / 2));
+          c2.height = Math.max(1, Math.round(ch / 2));
+          c2.getContext('2d').drawImage(canvas, 0, 0, c2.width, c2.height);
+          out = c2.toDataURL('image/jpeg', 0.7);
+        }
+        resolve(out);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 document.getElementById('logoFile').addEventListener('change', function() {
   const file = this.files[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    state.logo = e.target.result;
+  shrinkImage(file, 600, 220000).then((dataUrl) => {
+    state.logo = dataUrl;
     const preview = document.getElementById('logoPreview');
-    preview.src = e.target.result;
+    preview.src = dataUrl;
     preview.classList.add('show');
     document.getElementById('logoPlaceholder').style.display = 'none';
     updatePreviewLogo();
     updateProgress();
-  };
-  reader.readAsDataURL(file);
+  }).catch(() => showToast('Could not read that image. Try another one.', 'error'));
 });
 
 document.getElementById('bannerFile').addEventListener('change', function() {
   const file = this.files[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    state.bannerImage = e.target.result;
+  shrinkImage(file, 1200, 320000).then((dataUrl) => {
+    state.bannerImage = dataUrl;
     const preview = document.getElementById('bannerPreview');
-    preview.src = e.target.result;
+    preview.src = dataUrl;
     preview.classList.add('show');
     document.getElementById('bannerPlaceholder').style.display = 'none';
     // Deactivate banner patterns
@@ -2113,8 +2180,7 @@ document.getElementById('bannerFile').addEventListener('change', function() {
     state.bannerPattern = null;
     updatePreviewBanner();
     updateProgress();
-  };
-  reader.readAsDataURL(file);
+  }).catch(() => showToast('Could not read that image. Try another one.', 'error'));
 });
 
 // ── Form Inputs ──────────────────────────────────────
@@ -2347,9 +2413,48 @@ function saveStore() {
   return true;
 }
 
+// If the merchant already published a store but has no local draft (new phone,
+// cleared browser), pull the live store down first. Without this the form opens
+// blank and publishing again wipes the real store and all of its products.
+function loadPublishedStore() {
+  var token = localStorage.getItem('pp_token');
+  if (!token) return;
+  if (localStorage.getItem('mpp_store_draft')) return;
+  fetch(API_BASE + '/api/stores/merchant/my-store', { headers: { 'Authorization': 'Bearer ' + token } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (!d || !d.success || !d.data || !d.data.store) return;
+      var s = d.data.store;
+      var revCat = { restaurant:'restaurant', supermarket:'supermarket', pharmacy:'pharmacy', hardware:'hardware', wholesale:'wholesale', bakery:'bakery', retail:'other', other:'other' };
+      document.getElementById('storeName').value = s.name || '';       state.name = s.name || '';
+      document.getElementById('storeDesc').value = s.description || ''; state.desc = s.description || '';
+      document.getElementById('storeCategory').value = revCat[s.category] || 'other';
+      document.getElementById('storePhone').value = s.phone || '';      state.phone = s.phone || '';
+      document.getElementById('storeAddress').value = (s.address && s.address.street) || '';
+      if (s.logo) {
+        state.logo = s.logo;
+        var p = document.getElementById('logoPreview');
+        p.src = s.logo; p.classList.add('show');
+        document.getElementById('logoPlaceholder').style.display = 'none';
+      }
+      var prods = (d.data.products || []).filter(function(p) { return p.isActive !== false; });
+      if (prods.length) {
+        state.products = prods.map(function(p) {
+          return { emoji: '📦', name: p.name || '', price: p.price || '', category: p.category || '', description: p.description || '' };
+        });
+        renderProducts();
+      }
+      updatePreview();
+      updateProgress();
+      showToast('Loaded your published store', 'success');
+      showPortalLink();
+    })
+    .catch(function() { /* offline: leave the form as-is rather than blocking */ });
+}
+
 function loadStore() {
   const raw = localStorage.getItem('mpp_store_draft');
-  if (!raw) return;
+  if (!raw) { loadPublishedStore(); return; }
   try {
     const data = JSON.parse(raw);
     // Populate fields
@@ -2463,11 +2568,11 @@ function publishStore() {
     setTimeout(function() { window.location.href = 'login.html?redirect=store-designer.html'; }, 1500);
     return;
   }
-  var catMap = { restaurant:'restaurant', supermarket:'supermarket', pharmacy:'pharmacy', hardware:'hardware', clothing:'retail', electronics:'retail', beauty:'retail', other:'other' };
+  var catMap = { restaurant:'restaurant', supermarket:'supermarket', pharmacy:'pharmacy', hardware:'hardware', clothing:'retail', electronics:'retail', beauty:'retail', wholesale:'wholesale', bakery:'bakery', other:'other' };
 
-  // Don't send huge base64 logo - skip if too large
+  // The logo is already downscaled by shrinkImage() on upload, so it fits.
   var logoVal = state.logo || '';
-  if (logoVal.length > 200000) logoVal = '';
+  var coverVal = (state.bannerImage && String(state.bannerImage).indexOf('data:image') === 0) ? state.bannerImage : '';
 
   var storeName = document.getElementById('storeName').value.trim();
   var storePayload = {
@@ -2477,6 +2582,7 @@ function publishStore() {
     phone: document.getElementById('storePhone').value || '',
     address: { street: document.getElementById('storeAddress').value || '' },
     logo: logoVal,
+    coverImage: coverVal,
     deliveryOptions: { delivery: true, selfPickup: true },
     status: 'active'
   };
@@ -2578,11 +2684,13 @@ function publishStore() {
     if (final.productError) {
       showToast('Store published but products failed: ' + final.productError + '. Please log in and try again.', 'error');
     } else if (final.productCount > 0) {
-      showToast('Store published! ' + final.productCount + ' products added. Opening your store...', 'success');
+      showToast('Store published! ' + final.productCount + ' products added.', 'success');
     } else {
       showToast('Store published! Add products in the designer and publish again.', 'success');
     }
-    setTimeout(function() { window.open('store.html?slug=' + final.slug, '_blank'); }, 1500);
+    // A toast disappears. Merchants kept asking "where do I manage my store now?",
+    // so leave a permanent panel pointing at the storefront and the merchant portal.
+    showPublishedPanel(final.slug);
   })
   .catch(function(err) {
     console.error('Publish error:', err);
@@ -2603,6 +2711,63 @@ function publishStore() {
       publishBtn.disabled = false;
       publishBtn.querySelector('span:last-child').textContent = 'Publish Store';
     }
+  });
+}
+
+// A merchant who already has a store needs one obvious way back to the place
+// where they manage it day to day, not just the builder.
+function showPortalLink() {
+  if (document.getElementById('portalLink')) return;
+  var LANG = (localStorage.getItem('pp_lang') || 'kr');
+  var TXT = {
+    kr: 'Espas Machann mwen', fr: 'Mon Espace Marchand',
+    en: 'My Merchant Portal', es: 'Mi Portal de Comerciante'
+  };
+  var a = document.createElement('a');
+  a.id = 'portalLink';
+  a.href = 'merchant/dashboard.html';
+  a.textContent = '🏪  ' + (TXT[LANG] || TXT.kr);
+  a.style.cssText = 'position:fixed;left:12px;right:12px;bottom:12px;z-index:900;display:block;text-align:center;' +
+    'background:#00209F;color:#fff;padding:13px;border-radius:12px;font-weight:700;font-size:14px;' +
+    'font-family:Inter,sans-serif;text-decoration:none;box-shadow:0 6px 20px rgba(0,32,159,.35);max-width:420px;margin:0 auto;';
+  document.body.appendChild(a);
+}
+
+// ── Published panel ───────────────────────────────────
+function showPublishedPanel(slug) {
+  var LANG = (localStorage.getItem('pp_lang') || 'kr');
+  var TX = {
+    kr: { t:'Boutik ou an liy ! 🎉', s:'Kounye a jere l depi Espas Machann ou an — pwodwi, kòmand, logo, lè ouvèti.', a:'Wè boutik la', b:'Espas Machann mwen', c:'Kopye lyen an', ok:'Lyen kopye !' },
+    fr: { t:'Votre boutique est en ligne ! 🎉', s:'Gérez-la depuis votre Espace Marchand — produits, commandes, logo, horaires.', a:'Voir la boutique', b:'Mon Espace Marchand', c:'Copier le lien', ok:'Lien copié !' },
+    en: { t:'Your store is live! 🎉', s:'Manage it from your Merchant Portal — products, orders, logo, opening hours.', a:'View store', b:'My Merchant Portal', c:'Copy link', ok:'Link copied!' },
+    es: { t:'¡Tu tienda está en línea! 🎉', s:'Gestiónala desde tu Portal de Comerciante.', a:'Ver tienda', b:'Mi Portal', c:'Copiar enlace', ok:'¡Enlace copiado!' }
+  };
+  var T = TX[LANG] || TX.kr;
+  var url = location.origin + '/store.html?slug=' + slug;
+
+  var old = document.getElementById('publishedPanel');
+  if (old) old.remove();
+
+  var box = document.createElement('div');
+  box.id = 'publishedPanel';
+  box.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(17,24,39,.6);padding:20px;';
+  box.innerHTML =
+    '<div style="background:#fff;border-radius:22px;max-width:440px;width:100%;padding:28px 22px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);">' +
+      '<div style="font-size:44px;margin-bottom:8px;">🏪</div>' +
+      '<h3 style="font-family:Poppins,sans-serif;font-size:20px;font-weight:800;color:#1A1A2E;margin:0 0 8px;">' + T.t + '</h3>' +
+      '<p style="font-size:14px;color:#6B7280;line-height:1.55;margin:0 0 20px;">' + T.s + '</p>' +
+      '<a href="store.html?slug=' + slug + '" target="_blank" rel="noopener" style="display:block;background:#00209F;color:#fff;padding:14px;border-radius:12px;font-weight:700;text-decoration:none;margin-bottom:10px;">' + T.a + '</a>' +
+      '<a href="merchant/dashboard.html" style="display:block;background:#D21034;color:#fff;padding:14px;border-radius:12px;font-weight:700;text-decoration:none;margin-bottom:10px;">' + T.b + '</a>' +
+      '<button id="ppCopy" style="display:block;width:100%;background:#fff;color:#374151;border:1px solid #D1D5DB;padding:13px;border-radius:12px;font-weight:700;font-family:Inter,sans-serif;font-size:14px;cursor:pointer;margin-bottom:10px;">' + T.c + '</button>' +
+      '<button id="ppClose" style="background:none;border:none;color:#9CA3AF;font-size:13px;cursor:pointer;font-family:Inter,sans-serif;">✕</button>' +
+    '</div>';
+  document.body.appendChild(box);
+  document.getElementById('ppClose').addEventListener('click', function() { box.remove(); });
+  document.getElementById('ppCopy').addEventListener('click', function() {
+    var btn = this;
+    var done = function() { btn.textContent = T.ok; };
+    if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, done);
+    else done();
   });
 }
 

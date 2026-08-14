@@ -1,672 +1,280 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#D21034">
 <meta property="og:image" content="https://myplopplop.com/assets/og-myplopplop.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<title>Products — Merchant | MyPlopPlop</title>
+<title>Pwodwi — MyPlopPlop</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
 <link rel="shortcut icon" href="../favicon.ico">
 <link rel="stylesheet" href="../css/variables.css">
 <link rel="stylesheet" href="../css/base.css">
-<link rel="stylesheet" href="../css/components.css">
-<link rel="stylesheet" href="../css/layout.css">
-<style>
-/* ===== Page Content ===== */
-.page-content {
-    padding: var(--space-md) var(--content-padding);
-    padding-bottom: calc(var(--bottom-nav-height) + var(--space-lg));
-}
-
-/* ===== Page Top ===== */
-.page-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--space-md);
-}
-.page-top h1 {
-    font-family: var(--font-heading);
-    font-size: var(--text-2xl);
-    font-weight: 700;
-}
-
-/* ===== Category Filter ===== */
-.cat-filters {
-    display: flex;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-md);
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-bottom: var(--space-xs);
-}
-.cat-filters::-webkit-scrollbar { display: none; }
-.cat-filter {
-    padding: 8px 16px;
-    border-radius: var(--radius-full);
-    font-size: var(--text-sm);
-    font-weight: 500;
-    color: var(--gray-600);
-    background: var(--gray-100);
-    white-space: nowrap;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    border: none;
-}
-.cat-filter:hover { background: var(--gray-200); }
-.cat-filter.active {
-    background: var(--primary-red);
-    color: var(--white);
-}
-
-/* ===== Product List ===== */
-.product-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-    padding: var(--space-md);
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--gray-200);
-    margin-bottom: var(--space-sm);
-    transition: box-shadow var(--transition-fast);
-}
-.product-item:hover { box-shadow: var(--shadow-sm); }
-.product-img {
-    width: 64px;
-    height: 64px;
-    border-radius: var(--radius-md);
-    background: var(--gray-100);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    flex-shrink: 0;
-}
-.product-info {
-    flex: 1;
-    min-width: 0;
-}
-.product-name {
-    font-weight: 600;
-    font-size: var(--text-sm);
-    color: var(--text-dark);
-    margin-bottom: 2px;
-}
-.product-price {
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: var(--text-sm);
-    color: var(--primary-red);
-}
-.product-category {
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-}
-.product-actions {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    flex-shrink: 0;
-}
-.product-actions .icon-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background var(--transition-fast);
-    color: var(--gray-500);
-    background: var(--gray-50);
-    border: none;
-}
-.product-actions .icon-btn:hover { background: var(--gray-200); }
-.product-actions .icon-btn.delete:hover { background: var(--error-light); color: var(--error); }
-
-/* ===== Toggle ===== */
-.toggle {
-    position: relative;
-    width: 44px;
-    height: 24px;
-    background: var(--gray-300);
-    border-radius: var(--radius-full);
-    cursor: pointer;
-    transition: background var(--transition-fast);
-    flex-shrink: 0;
-    border: none;
-}
-.toggle.active { background: var(--success); }
-.toggle::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 20px;
-    height: 20px;
-    background: var(--white);
-    border-radius: 50%;
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--transition-fast);
-}
-.toggle.active::after { transform: translateX(20px); }
-
-/* ===== Modal Overrides ===== */
-.modal-title {
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: var(--text-xl);
-    margin-bottom: var(--space-md);
-}
-.image-upload {
-    width: 100%;
-    height: 120px;
-    border: 2px dashed var(--gray-300);
-    border-radius: var(--radius-md);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm);
-    color: var(--gray-400);
-    cursor: pointer;
-    transition: border-color var(--transition-fast), background var(--transition-fast);
-    margin-bottom: var(--space-md);
-}
-.image-upload:hover {
-    border-color: var(--primary-blue);
-    background: var(--primary-blue-light);
-}
-.image-upload svg { width: 32px; height: 32px; }
-.image-upload span { font-size: var(--text-sm); font-weight: 500; }
-
-.variant-row {
-    display: flex;
-    gap: var(--space-sm);
-    align-items: flex-end;
-    margin-bottom: var(--space-sm);
-}
-.variant-row .input-group { flex: 1; margin-bottom: 0; }
-.remove-variant {
-    width: 36px;
-    height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--gray-400);
-    cursor: pointer;
-    border: none;
-    background: none;
-}
-.remove-variant:hover { color: var(--error); }
-
-.add-variant-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--primary-blue);
-    cursor: pointer;
-    background: none;
-    border: none;
-    padding: var(--space-sm) 0;
-}
-
-/* ===== Merchant Bottom Nav ===== */
-.merchant-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: var(--bottom-nav-height);
-    background: var(--white);
-    border-top: 1px solid var(--gray-200);
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    z-index: 1000;
-    padding-bottom: env(safe-area-inset-bottom, 0);
-}
-.merchant-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    padding: 6px 12px;
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--gray-400);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-    position: relative;
-}
-.merchant-nav-item svg { width: 24px; height: 24px; }
-.merchant-nav-item.active { color: var(--primary-red); }
-.merchant-nav-item .nav-badge {
-    position: absolute;
-    top: 0;
-    right: 4px;
-    width: 16px;
-    height: 16px;
-    background: var(--primary-red);
-    color: var(--white);
-    font-size: 9px;
-    font-weight: 700;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* ===== Desktop ===== */
-@media (min-width: 1024px) {
-    .merchant-nav { display: none; }
-    .page-content { padding-bottom: var(--space-lg); }
-    .dashboard-content { max-width: 900px; }
-    .products-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--space-sm);
-    }
-    .products-grid .product-item { margin-bottom: 0; }
-}
-</style>
+<link rel="stylesheet" href="../css/merchant.css">
 </head>
-<body>
+<body style="background:var(--bg-light);">
 
-<!-- TOP BAR -->
-<div class="top-bar">
-    <div style="display:flex;align-items:center;gap:var(--space-sm);">
-        <span>Merchant Portal</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:var(--space-md);">
-        <a href="../index.html">View Storefront</a>
-        <a href="#" data-lang="fr">🇫🇷 Français</a>
-        <a href="#" data-lang="en">🇬🇧 English</a>
-        <a href="#" data-lang="kr">🇭🇹 Kreyòl</a>
-        <a href="#" data-lang="es">🇪🇸 Español</a>
-    </div>
+<div class="mp-topbar">
+  <a class="mp-brand" href="../index.html">
+    <img src="../assets/icon-192.png" alt="MyPlopPlop">
+    <span>Merchant</span>
+  </a>
+  <div class="mp-top-actions" id="mpLangBar"></div>
 </div>
 
-<!-- HEADER -->
-<header class="header" style="top: 28px;">
-    <div class="header-inner">
-        <a href="../index.html" class="header-logo">
-            <img src="../assets/icon-192.png" alt="MyPlopPlop" style="height:40px;">
-        </a>
-        <div class="header-actions">
-            <a href="#" class="header-icon" title="Notifications">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                <span class="header-badge">3</span>
-            </a>
-            <a href="settings.html" class="header-icon" title="Settings">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            </a>
-        </div>
-    </div>
-</header>
+<div class="mp-store-header" id="mpStoreHeader"></div>
 
-<!-- MAIN -->
-<main class="main" style="margin-top: calc(var(--header-height) + 28px);">
-    <div class="dashboard-layout">
-
-        <!-- SIDEBAR (Desktop) -->
-        <aside class="sidebar">
-            <div style="padding: 0 var(--space-lg) var(--space-lg);">
-                <div style="display:flex;align-items:center;gap:var(--space-sm);">
-                    <div style="width:40px;height:40px;border-radius:var(--radius-md);background:linear-gradient(135deg,var(--primary-red-light),var(--primary-blue-light));display:flex;align-items:center;justify-content:center;font-size:20px;">🍽️</div>
-                    <div>
-                        <div style="font-weight:700;font-size:var(--text-base);">Lakay Kreyol</div>
-                        <div style="font-size:var(--text-xs);color:var(--success);font-weight:500;">Open Now</div>
-                    </div>
-                </div>
-            </div>
-            <a href="dashboard.html" class="sidebar-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-                Dashboard
-            </a>
-            <a href="orders.html" class="sidebar-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                Orders
-                <span style="margin-left:auto;background:var(--primary-red);color:var(--white);font-size:10px;padding:2px 7px;border-radius:var(--radius-full);font-weight:700;">3</span>
-            </a>
-            <a href="products.html" class="sidebar-item active">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                Products
-            </a>
-            <a href="inventory.html" class="sidebar-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-                Inventory
-            </a>
-            <a href="wallet.html" class="sidebar-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                Wallet
-            </a>
-            <a href="settings.html" class="sidebar-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09"/></svg>
-                Settings
-            </a>
-        </aside>
-
-        <!-- CONTENT -->
-        <div class="dashboard-content">
-            <div class="page-content">
-
-                <!-- Page Top -->
-                <div class="page-top">
-                    <h1>Products</h1>
-                    <button class="btn btn-red btn-sm" onclick="openModal()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        Add Product
-                    </button>
-                </div>
-
-                <!-- Category Filters -->
-                <div class="cat-filters">
-                    <button class="cat-filter active">All (8)</button>
-                    <button class="cat-filter">Main Dishes (4)</button>
-                    <button class="cat-filter">Sides (2)</button>
-                    <button class="cat-filter">Drinks (2)</button>
-                </div>
-
-                <!-- Product List -->
-                <div class="products-grid">
-
-                    <div class="product-item">
-                        <div class="product-img">🍖</div>
-                        <div class="product-info">
-                            <div class="product-name">Griot ak Bannann</div>
-                            <div class="product-price">850 HTG</div>
-                            <div class="product-category">Main Dishes</div>
-                        </div>
-                        <div class="product-actions">
-                            <button class="toggle active" onclick="this.classList.toggle('active')" title="In Stock"></button>
-                            <button class="icon-btn" onclick="openModal()" title="Edit">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                            </button>
-                            <button class="icon-btn delete" title="Delete">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="product-item">
-                        <div class="product-img">🍚</div>
-                        <div class="product-info">
-                            <div class="product-name">Diri Kole ak Pwa</div>
-                            <div class="product-price">600 HTG</div>
-                            <div class="product-category">Main Dishes</div>
-                        </div>
-                        <div class="product-actions">
-                            <button class="toggle active" onclick="this.classList.toggle('active')"></button>
-                            <button class="icon-btn" onclick="openModal()">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                            </button>
-                            <button class="icon-btn delete">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="product-item">
-                        <div class="product-img">🥘</div>
-                        <div class="product-info">
-                            <div class="product-name">Soup Joumou</div>
-                            <div class="product-price">750 HTG</div>
-                            <div class="product-category">Main Dishes</div>
-                        </div>
-                        <div class="product-actions">
-                            <button class="toggle active" onclick="this.classList.toggle('active')"></button>
-                            <button class="icon-btn" onclick="openModal()">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                            </button>
-                            <button class="icon-btn delete">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="product-item">
-                        <div class="product-img">🐐</div>
-                        <div class="product-info">
-                            <div class="product-name">Tasso Kabrit</div>
-                            <div class="product-price">950 HTG</div>
-                            <div class="product-category">Main Dishes</div>
-                        </div>
-                        <div class="product-actions">
-                            <button class="toggle active" onclick="this.classList.toggle('active')"></button>
-                            <button class="icon-btn" onclick="openModal()">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                            </button>
-                            <button class="icon-btn delete">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="product-item">
-                        <div class="product-img">🍌</div>
-                        <div class="product-info">
-                            <div class="product-name">Bannann Peze</div>
-                            <div class="product-price">200 HTG</div>
-                            <div class="product-category">Sides</div>
-                        </div>
-                        <div class="product-actions">
-                            <button class="toggle active" onclick="this.classList.toggle('active')"></button>
-                            <button class="icon-btn" onclick="openModal()">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                            </button>
-                            <button class="icon-btn delete">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="product-item">
-                        <div class="product-img">🥗</div>
-                        <div class="product-info">
-                            <div class="product-name">Akra</div>
-                            <div class="product-price">250 HTG</div>
-                            <div class="product-category">Sides</div>
-                        </div>
-                        <div class="product-actions">
-                            <button class="toggle" onclick="this.classList.toggle('active')"></button>
-                            <button class="icon-btn" onclick="openModal()">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                            </button>
-                            <button class="icon-btn delete">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="product-item">
-                        <div class="product-img">🍹</div>
-                        <div class="product-info">
-                            <div class="product-name">Juice Grenadine</div>
-                            <div class="product-price">150 HTG</div>
-                            <div class="product-category">Drinks</div>
-                        </div>
-                        <div class="product-actions">
-                            <button class="toggle active" onclick="this.classList.toggle('active')"></button>
-                            <button class="icon-btn" onclick="openModal()">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                            </button>
-                            <button class="icon-btn delete">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="product-item">
-                        <div class="product-img">🥤</div>
-                        <div class="product-info">
-                            <div class="product-name">Cola Couronne</div>
-                            <div class="product-price">100 HTG</div>
-                            <div class="product-category">Drinks</div>
-                        </div>
-                        <div class="product-actions">
-                            <button class="toggle active" onclick="this.classList.toggle('active')"></button>
-                            <button class="icon-btn" onclick="openModal()">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                            </button>
-                            <button class="icon-btn delete">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-
-<!-- ADD/EDIT PRODUCT MODAL -->
-<div class="modal-overlay" id="productModal">
-    <div class="modal">
-        <div class="modal-handle"></div>
-        <h2 class="modal-title">Add Product</h2>
-
-        <div class="image-upload" onclick="document.getElementById('imgInput').click()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-            <span>Tap to upload photo</span>
-            <input type="file" id="imgInput" accept="image/*" style="display:none;">
-        </div>
-
-        <div class="input-group">
-            <label>Product Name</label>
-            <input class="input" type="text" placeholder="e.g. Griot ak Bannann">
-        </div>
-
-        <div class="input-group">
-            <label>Description</label>
-            <textarea class="input" rows="3" placeholder="Describe your product..." style="resize:vertical;"></textarea>
-        </div>
-
-        <div style="display:flex;gap:var(--space-md);">
-            <div class="input-group" style="flex:1;">
-                <label>Price (HTG)</label>
-                <input class="input" type="number" placeholder="0">
-            </div>
-            <div class="input-group" style="flex:1;">
-                <label>Category</label>
-                <select class="input">
-                    <option value="">Select...</option>
-                    <option>Main Dishes</option>
-                    <option>Sides</option>
-                    <option>Drinks</option>
-                    <option>Desserts</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Variants -->
-        <div style="margin-bottom:var(--space-md);">
-            <label style="display:block;font-size:var(--text-sm);font-weight:500;color:var(--gray-700);margin-bottom:var(--space-sm);">Variants (optional)</label>
-            <div id="variantsContainer">
-                <div class="variant-row">
-                    <div class="input-group">
-                        <input class="input" type="text" placeholder="e.g. Large">
-                    </div>
-                    <div class="input-group">
-                        <input class="input" type="number" placeholder="+ HTG">
-                    </div>
-                    <button class="remove-variant" onclick="this.parentElement.remove()">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                    </button>
-                </div>
-            </div>
-            <button class="add-variant-btn" onclick="addVariant()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Add Variant
-            </button>
-        </div>
-
-        <div style="display:flex;gap:var(--space-sm);">
-            <button class="btn btn-white btn-full" onclick="closeModal()">Cancel</button>
-            <button class="btn btn-red btn-full" onclick="closeModal()">Save Product</button>
-        </div>
-    </div>
+<div class="mp-layout">
+  <aside class="mp-sidebar" id="mpSidebar"></aside>
+  <main class="mp-main">
+    <h1 class="mp-page-title" id="pgTitle">Pwodwi</h1>
+    <div id="mpBody"></div>
+  </main>
 </div>
 
-<!-- MERCHANT BOTTOM NAV (Mobile) -->
-<nav class="merchant-nav">
-    <a href="dashboard.html" class="merchant-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        <span>Dashboard</span>
-    </a>
-    <a href="orders.html" class="merchant-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        <span class="nav-badge">3</span>
-        <span>Orders</span>
-    </a>
-    <a href="products.html" class="merchant-nav-item active">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg>
-        <span>Products</span>
-    </a>
-    <a href="inventory.html" class="merchant-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-        <span>Inventory</span>
-    </a>
-    <a href="wallet.html" class="merchant-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        <span>Wallet</span>
-    </a>
-    <a href="settings.html" class="merchant-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09"/></svg>
-        <span>Settings</span>
-    </a>
-</nav>
+<nav class="mp-bottom-nav" id="mpBottomNav"></nav>
 
+<div class="mp-modal" id="prodModal">
+  <div class="mp-modal-box">
+    <div class="mp-modal-title" id="modalTitle"></div>
+    <div class="mp-field"><label id="lbPhoto"></label>
+      <div class="mp-logo-row">
+        <div class="mp-logo-preview" id="pPrev">📦</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <button class="mp-btn mp-btn-blue mp-btn-sm" id="pPick"></button>
+          <button class="mp-btn mp-btn-ghost mp-btn-sm" id="pClear"></button>
+        </div>
+        <input type="file" accept="image/*" class="mp-file" id="pFile">
+      </div>
+    </div>
+    <div class="mp-field"><label id="lbName"></label><input class="mp-input" id="pName" maxlength="120"></div>
+    <div class="mp-grid-2">
+      <div class="mp-field"><label id="lbPrice"></label><input class="mp-input" type="number" min="0" id="pPrice"></div>
+      <div class="mp-field"><label id="lbStock"></label><input class="mp-input" type="number" min="0" id="pStock"></div>
+    </div>
+    <div class="mp-field"><label id="lbCat"></label><input class="mp-input" id="pCat" maxlength="60"></div>
+    <div class="mp-field"><label id="lbDesc"></label><textarea class="mp-textarea" id="pDesc" maxlength="500"></textarea></div>
+    <label class="mp-hours-closed" style="margin-bottom:var(--space-md);"><input type="checkbox" id="pInStock" checked> <span id="lbInStock"></span></label>
+    <div style="display:flex;gap:8px;">
+      <button class="mp-btn mp-btn-ghost" style="flex:1;" id="pCancel"></button>
+      <button class="mp-btn mp-btn-red" style="flex:2;" id="pSave"></button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/merchant.js"></script>
 <script>
-function openModal() {
-    document.getElementById('productModal').classList.add('show');
-}
-function closeModal() {
-    document.getElementById('productModal').classList.remove('show');
-}
-document.getElementById('productModal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-});
+(function () {
+  var L = {
+    title:    { kr:'Pwodwi', fr:'Produits', en:'Products', es:'Productos' },
+    add:      { kr:'+ Ajoute yon pwodwi', fr:'+ Ajouter un produit', en:'+ Add a product', es:'+ Añadir producto' },
+    bulk:     { kr:'Enpòte yon lis (CSV/Excel)', fr:'Importer une liste (CSV/Excel)', en:'Import a list (CSV/Excel)', es:'Importar lista (CSV/Excel)' },
+    search:   { kr:'Chèche yon pwodwi...', fr:'Rechercher un produit...', en:'Search a product...', es:'Buscar producto...' },
+    none:     { kr:'Pa gen pwodwi ankò. Ajoute premye a !', fr:'Aucun produit. Ajoutez le premier !', en:'No products yet. Add your first one!', es:'Sin productos aún.' },
+    noMatch:  { kr:'Anyen pa koresponn.', fr:'Aucun résultat.', en:'No matches.', es:'Sin resultados.' },
+    newP:     { kr:'Nouvo pwodwi', fr:'Nouveau produit', en:'New product', es:'Nuevo producto' },
+    editP:    { kr:'Modifye pwodwi', fr:'Modifier le produit', en:'Edit product', es:'Editar producto' },
+    photo:    { kr:'Foto', fr:'Photo', en:'Photo', es:'Foto' },
+    choose:   { kr:'Chwazi', fr:'Choisir', en:'Choose', es:'Elegir' },
+    remove:   { kr:'Retire', fr:'Retirer', en:'Remove', es:'Quitar' },
+    name:     { kr:'Non pwodwi a', fr:'Nom du produit', en:'Product name', es:'Nombre' },
+    price:    { kr:'Pri (HTG)', fr:'Prix (HTG)', en:'Price (HTG)', es:'Precio (HTG)' },
+    stock:    { kr:'Kantite nan estòk', fr:'Quantité en stock', en:'Stock quantity', es:'Cantidad' },
+    cat:      { kr:'Kategori', fr:'Catégorie', en:'Category', es:'Categoría' },
+    desc:     { kr:'Deskripsyon', fr:'Description', en:'Description', es:'Descripción' },
+    inStock:  { kr:'Disponib pou vann', fr:'Disponible à la vente', en:'Available for sale', es:'Disponible' },
+    cancel:   { kr:'Anile', fr:'Annuler', en:'Cancel', es:'Cancelar' },
+    save:     { kr:'Anrejistre', fr:'Enregistrer', en:'Save', es:'Guardar' },
+    saving:   { kr:'Ap anrejistre...', fr:'Enregistrement...', en:'Saving...', es:'Guardando...' },
+    edit:     { kr:'Modifye', fr:'Modifier', en:'Edit', es:'Editar' },
+    del:      { kr:'Efase', fr:'Supprimer', en:'Delete', es:'Borrar' },
+    confirmDel:{ kr:'Efase pwodwi sa a ?', fr:'Supprimer ce produit ?', en:'Delete this product?', es:'¿Borrar este producto?' },
+    out:      { kr:'Fini nan estòk', fr:'Rupture de stock', en:'Out of stock', es:'Agotado' },
+    needName: { kr:'Mete yon non ak yon pri.', fr:'Indiquez un nom et un prix.', en:'Enter a name and a price.', es:'Pon nombre y precio.' },
+    tooBig:   { kr:'Foto a twò gwo.', fr:'Photo trop lourde.', en:'Photo too heavy.', es:'Foto muy pesada.' }
+  };
+  function L_(k) { var e = L[k]; return e ? (e[MP.lang()] || e.en) : k; }
 
-function addVariant() {
-    const container = document.getElementById('variantsContainer');
-    const row = document.createElement('div');
-    row.className = 'variant-row';
-    row.innerHTML = `
-        <div class="input-group">
-            <input class="input" type="text" placeholder="e.g. Large">
-        </div>
-        <div class="input-group">
-            <input class="input" type="number" placeholder="+ HTG">
-        </div>
-        <button class="remove-variant" onclick="this.parentElement.remove()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-    `;
-    container.appendChild(row);
-}
-
-// Category filter
-document.querySelectorAll('.cat-filter').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('.cat-filter').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
+  function langBar() {
+    var bar = document.getElementById('mpLangBar');
+    bar.innerHTML = ['kr', 'fr', 'en', 'es'].map(function (l) {
+      var flag = { kr: '🇭🇹', fr: '🇫🇷', en: '🇬🇧', es: '🇪🇸' }[l];
+      return '<button class="mp-lang' + (MP.lang() === l ? ' active' : '') + '" data-l="' + l + '">' + flag + '</button>';
+    }).join('');
+    bar.querySelectorAll('[data-l]').forEach(function (b) {
+      b.addEventListener('click', function () { localStorage.setItem('pp_lang', b.dataset.l); location.reload(); });
     });
-});
-</script>
+  }
 
-<script src="/js/api.js"></script>
-<script src="/js/i18n.js"></script>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
+  var products = [], storeId = null, editing = null, photo = '', filter = '';
+
+  function render() {
+    document.getElementById('pgTitle').textContent = L_('title');
+    var list = products.filter(function (p) {
+      if (!filter) return true;
+      return (p.name || '').toLowerCase().indexOf(filter) !== -1 ||
+             (p.category || '').toLowerCase().indexOf(filter) !== -1;
+    });
+
+    var html =
+      '<div style="display:flex;gap:8px;margin-bottom:var(--space-md);flex-wrap:wrap;">' +
+        '<button class="mp-btn mp-btn-red" style="flex:1;min-width:180px;" id="btnAdd">' + L_('add') + '</button>' +
+        '<a class="mp-btn mp-btn-ghost" style="flex:1;min-width:180px;" href="inventory.html">' + L_('bulk') + '</a>' +
+      '</div>' +
+      '<input class="mp-input" id="q" placeholder="' + L_('search') + '" value="' + MP.esc(filter) + '" style="margin-bottom:var(--space-md);">';
+
+    if (!products.length) {
+      html += '<div class="mp-empty"><div class="mp-empty-icon">📦</div><p>' + L_('none') + '</p></div>';
+    } else if (!list.length) {
+      html += '<div class="mp-empty"><div class="mp-empty-icon">🔍</div><p>' + L_('noMatch') + '</p></div>';
+    } else {
+      html += list.map(function (p) {
+        var img = (p.images && p.images[0]) ? '<img src="' + MP.esc(p.images[0]) + '" alt="">' : '📦';
+        return '<div class="mp-row">' +
+          '<div class="mp-row-thumb">' + img + '</div>' +
+          '<div class="mp-row-main">' +
+            '<div class="mp-row-name">' + MP.esc(p.name) + '</div>' +
+            '<div class="mp-row-sub">' + MP.money(p.price) +
+              (p.category ? ' · ' + MP.esc(p.category) : '') +
+              (p.inStock === false ? ' · <span style="color:var(--error);font-weight:600;">' + L_('out') + '</span>' : '') +
+            '</div>' +
+          '</div>' +
+          '<div class="mp-row-actions">' +
+            '<button class="mp-btn mp-btn-ghost mp-btn-sm" data-edit="' + p._id + '">' + L_('edit') + '</button>' +
+            '<button class="mp-btn mp-btn-ghost mp-btn-sm" data-del="' + p._id + '" style="color:var(--error);">✕</button>' +
+          '</div></div>';
+      }).join('');
+    }
+
+    document.getElementById('mpBody').innerHTML = html;
+
+    document.getElementById('btnAdd').addEventListener('click', function () { openModal(null); });
+    var q = document.getElementById('q');
+    q.addEventListener('input', function () {
+      filter = q.value.trim().toLowerCase();
+      var pos = q.selectionStart;
+      render();
+      var nq = document.getElementById('q');
+      nq.focus(); nq.setSelectionRange(pos, pos);
+    });
+    document.querySelectorAll('[data-edit]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        openModal(products.filter(function (p) { return p._id === b.dataset.edit; })[0]);
+      });
+    });
+    document.querySelectorAll('[data-del]').forEach(function (b) {
+      b.addEventListener('click', function () { del(b.dataset.del); });
+    });
+  }
+
+  /* ---- modal ---- */
+  var modal = document.getElementById('prodModal');
+  function labels() {
+    document.getElementById('lbPhoto').textContent = L_('photo');
+    document.getElementById('lbName').textContent = L_('name');
+    document.getElementById('lbPrice').textContent = L_('price');
+    document.getElementById('lbStock').textContent = L_('stock');
+    document.getElementById('lbCat').textContent = L_('cat');
+    document.getElementById('lbDesc').textContent = L_('desc');
+    document.getElementById('lbInStock').textContent = L_('inStock');
+    document.getElementById('pPick').textContent = L_('choose');
+    document.getElementById('pClear').textContent = L_('remove');
+    document.getElementById('pCancel').textContent = L_('cancel');
+    document.getElementById('pSave').textContent = L_('save');
+  }
+
+  function setPhoto(url) {
+    photo = url || '';
+    var prev = document.getElementById('pPrev');
+    prev.className = 'mp-logo-preview' + (photo ? ' has' : '');
+    prev.innerHTML = photo ? '<img src="' + photo + '" alt="">' : '📦';
+  }
+
+  function openModal(p) {
+    editing = p || null;
+    document.getElementById('modalTitle').textContent = p ? L_('editP') : L_('newP');
+    document.getElementById('pName').value = p ? (p.name || '') : '';
+    document.getElementById('pPrice').value = p ? (p.price || '') : '';
+    document.getElementById('pStock').value = (p && p.stockQuantity >= 0) ? p.stockQuantity : '';
+    document.getElementById('pCat').value = p ? (p.category || '') : '';
+    document.getElementById('pDesc').value = p ? (p.description || '') : '';
+    document.getElementById('pInStock').checked = p ? p.inStock !== false : true;
+    setPhoto(p && p.images && p.images[0]);
+    modal.classList.add('open');
+  }
+  function closeModal() { modal.classList.remove('open'); editing = null; }
+
+  document.getElementById('pCancel').addEventListener('click', closeModal);
+  modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+  document.getElementById('pPick').addEventListener('click', function () { document.getElementById('pFile').click(); });
+  document.getElementById('pClear').addEventListener('click', function () { setPhoto(''); });
+  document.getElementById('pFile').addEventListener('change', function (e) {
+    var f = e.target.files && e.target.files[0];
+    if (!f) return;
+    MP.compressImage(f, 700, 220000).then(setPhoto).catch(function () { MP.toast(L_('tooBig'), 'error'); });
+  });
+
+  document.getElementById('pSave').addEventListener('click', function () {
+    var btn = this;
+    var name = document.getElementById('pName').value.trim();
+    var price = parseFloat(document.getElementById('pPrice').value);
+    if (!name || !(price >= 0)) { MP.toast(L_('needName'), 'error'); return; }
+    var stockRaw = document.getElementById('pStock').value;
+    var body = {
+      name: name,
+      price: price,
+      category: document.getElementById('pCat').value.trim(),
+      description: document.getElementById('pDesc').value.trim(),
+      images: photo ? [photo] : [],
+      stockQuantity: stockRaw === '' ? -1 : (parseInt(stockRaw, 10) || 0),
+      inStock: document.getElementById('pInStock').checked
+    };
+    btn.disabled = true; btn.textContent = L_('saving');
+    var call = editing
+      ? MP.req('PUT', '/api/stores/products/' + editing._id, body)
+      : MP.req('POST', '/api/stores/' + storeId + '/products', body);
+    call.then(function (d) {
+      btn.disabled = false; btn.textContent = L_('save');
+      if (!d || !d.success) throw new Error((d && d.message) || 'failed');
+      if (editing) {
+        products = products.map(function (p) { return p._id === editing._id ? d.data : p; });
+      } else {
+        products.unshift(d.data);
+      }
+      closeModal();
+      render();
+      MP.toast(MP.t('saved'), 'success');
+    }).catch(function (e) {
+      btn.disabled = false; btn.textContent = L_('save');
+      MP.toast(e && e.message === 'too_large' ? L_('tooBig') : MP.t('saveFail'), 'error');
+    });
+  });
+
+  function del(id) {
+    if (!confirm(L_('confirmDel'))) return;
+    MP.req('DELETE', '/api/stores/products/' + id).then(function (d) {
+      if (!d || !d.success) throw new Error('failed');
+      products = products.filter(function (p) { return p._id !== id; });
+      render();
+      MP.toast(MP.t('saved'), 'success');
+    }).catch(function () { MP.toast(MP.t('saveFail'), 'error'); });
+  }
+
+  langBar();
+  labels();
+  MP.boot('products', function (data) {
+    storeId = data.store._id;
+    products = data.products || [];
+    render();
+  });
+})();
+</script>
 </body>
 </html>

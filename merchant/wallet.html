@@ -1,522 +1,175 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#D21034">
 <meta property="og:image" content="https://myplopplop.com/assets/og-myplopplop.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<title>Wallet — Merchant | MyPlopPlop</title>
+<title>Bous — MyPlopPlop</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
 <link rel="shortcut icon" href="../favicon.ico">
 <link rel="stylesheet" href="../css/variables.css">
 <link rel="stylesheet" href="../css/base.css">
-<link rel="stylesheet" href="../css/components.css">
-<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/merchant.css">
 <style>
-/* ===== Page Content ===== */
-.page-content {
-    padding: var(--space-md) var(--content-padding);
-    padding-bottom: calc(var(--bottom-nav-height) + var(--space-lg));
+.mp-balance {
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+  color: var(--white); border-radius: var(--radius-lg); padding: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
-
-/* ===== Balance Card ===== */
-.balance-card {
-    background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 60%, var(--primary-red) 100%);
-    border-radius: var(--radius-xl);
-    padding: var(--space-xl) var(--space-lg);
-    color: var(--white);
-    margin-bottom: var(--space-lg);
-    position: relative;
-    overflow: hidden;
-}
-.balance-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
-    border-radius: 50%;
-}
-.balance-label {
-    font-size: var(--text-sm);
-    opacity: 0.8;
-    margin-bottom: var(--space-xs);
-}
-.balance-amount {
-    font-family: var(--font-heading);
-    font-size: var(--text-4xl);
-    font-weight: 800;
-    margin-bottom: var(--space-xs);
-}
-.balance-currency {
-    font-size: var(--text-lg);
-    font-weight: 400;
-    opacity: 0.7;
-}
-.balance-row {
-    display: flex;
-    gap: var(--space-lg);
-    margin-top: var(--space-md);
-    padding-top: var(--space-md);
-    border-top: 1px solid rgba(255,255,255,0.15);
-}
-.balance-sub {
-    flex: 1;
-}
-.balance-sub-label {
-    font-size: var(--text-xs);
-    opacity: 0.7;
-    margin-bottom: 2px;
-}
-.balance-sub-value {
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: var(--text-lg);
-}
-
-.withdraw-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm);
-    width: 100%;
-    padding: 14px;
-    background: var(--white);
-    color: var(--primary-blue);
-    border: none;
-    border-radius: var(--radius-md);
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: var(--text-base);
-    cursor: pointer;
-    margin-top: var(--space-md);
-    transition: all var(--transition-fast);
-    position: relative;
-    z-index: 1;
-}
-.withdraw-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-/* ===== Transaction List ===== */
-.tx-section-title {
-    font-family: var(--font-heading);
-    font-size: var(--text-lg);
-    font-weight: 700;
-    margin-bottom: var(--space-md);
-}
-.tx-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-    padding: var(--space-md) 0;
-    border-bottom: 1px solid var(--gray-100);
-}
-.tx-item:last-child { border-bottom: none; }
-.tx-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-}
-.tx-icon.earning { background: var(--success-light); }
-.tx-icon.withdrawal { background: var(--primary-blue-light); }
-.tx-icon.fee { background: var(--gray-100); }
-.tx-info {
-    flex: 1;
-    min-width: 0;
-}
-.tx-title {
-    font-weight: 600;
-    font-size: var(--text-sm);
-    color: var(--text-dark);
-}
-.tx-subtitle {
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-}
-.tx-amount {
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: var(--text-sm);
-    text-align: right;
-}
-.tx-amount.positive { color: var(--success); }
-.tx-amount.negative { color: var(--text-dark); }
-.tx-date {
-    font-size: 11px;
-    color: var(--gray-400);
-    text-align: right;
-}
-
-/* ===== Payout Settings ===== */
-.payout-section {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--gray-200);
-    padding: var(--space-lg);
-    margin-top: var(--space-lg);
-}
-.payout-title {
-    font-family: var(--font-heading);
-    font-size: var(--text-lg);
-    font-weight: 700;
-    margin-bottom: var(--space-md);
-}
-.payout-method {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-    padding: var(--space-md);
-    background: var(--gray-50);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--gray-200);
-    margin-bottom: var(--space-sm);
-}
-.payout-method-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-sm);
-    background: var(--white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    box-shadow: var(--shadow-sm);
-}
-.payout-method-info {
-    flex: 1;
-}
-.payout-method-name {
-    font-weight: 600;
-    font-size: var(--text-sm);
-}
-.payout-method-detail {
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-}
-.payout-method-check {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: var(--success);
-    color: var(--white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* ===== Merchant Bottom Nav ===== */
-.merchant-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: var(--bottom-nav-height);
-    background: var(--white);
-    border-top: 1px solid var(--gray-200);
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    z-index: 1000;
-    padding-bottom: env(safe-area-inset-bottom, 0);
-}
-.merchant-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    padding: 6px 12px;
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--gray-400);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-    position: relative;
-}
-.merchant-nav-item svg { width: 24px; height: 24px; }
-.merchant-nav-item.active { color: var(--primary-red); }
-.merchant-nav-item .nav-badge {
-    position: absolute;
-    top: 0;
-    right: 4px;
-    width: 16px;
-    height: 16px;
-    background: var(--primary-red);
-    color: var(--white);
-    font-size: 9px;
-    font-weight: 700;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* ===== Desktop ===== */
-@media (min-width: 1024px) {
-    .merchant-nav { display: none; }
-    .page-content { padding-bottom: var(--space-lg); }
-    .dashboard-content { max-width: 700px; }
-}
+.mp-balance-label { font-size: var(--text-xs); opacity: .8; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+.mp-balance-value { font-family: var(--font-heading); font-size: var(--text-3xl); font-weight: 800; margin: 4px 0 var(--space-md); }
+.mp-balance-split { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); }
+.mp-balance-cell { background: rgba(255,255,255,.14); border-radius: var(--radius-md); padding: 10px 12px; }
+.mp-balance-cell .v { font-family: var(--font-heading); font-weight: 700; font-size: var(--text-base); }
+.mp-balance-cell .l { font-size: 10px; opacity: .85; }
 </style>
 </head>
-<body>
+<body style="background:var(--bg-light);">
 
-<!-- TOP BAR -->
-<div class="top-bar">
-    <div style="display:flex;align-items:center;gap:var(--space-sm);">
-        <span>Merchant Portal</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:var(--space-md);">
-        <a href="../index.html">View Storefront</a>
-        <a href="#" data-lang="fr">🇫🇷 Français</a>
-        <a href="#" data-lang="en">🇬🇧 English</a>
-        <a href="#" data-lang="kr">🇭🇹 Kreyòl</a>
-        <a href="#" data-lang="es">🇪🇸 Español</a>
-    </div>
+<div class="mp-topbar">
+  <a class="mp-brand" href="../index.html">
+    <img src="../assets/icon-192.png" alt="MyPlopPlop">
+    <span>Merchant</span>
+  </a>
+  <div class="mp-top-actions" id="mpLangBar"></div>
 </div>
 
-<!-- HEADER -->
-<header class="header" style="top: 28px;">
-    <div class="header-inner">
-        <a href="../index.html" class="header-logo">
-            <img src="../assets/icon-192.png" alt="MyPlopPlop" style="height:40px;">
-        </a>
-        <div class="header-actions">
-            <a href="#" class="header-icon" title="Notifications">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                <span class="header-badge">3</span>
-            </a>
-            <a href="settings.html" class="header-icon" title="Settings">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            </a>
-        </div>
-    </div>
-</header>
+<div class="mp-store-header" id="mpStoreHeader"></div>
 
-<!-- MAIN -->
-<main class="main" style="margin-top: calc(var(--header-height) + 28px);">
-    <div class="dashboard-layout">
+<div class="mp-layout">
+  <aside class="mp-sidebar" id="mpSidebar"></aside>
+  <main class="mp-main">
+    <h1 class="mp-page-title" id="pgTitle">Bous</h1>
+    <div id="mpBody"></div>
+  </main>
+</div>
 
-        <!-- SIDEBAR (Desktop) -->
-        <aside class="sidebar">
-            <div style="padding: 0 var(--space-lg) var(--space-lg);">
-                <div style="display:flex;align-items:center;gap:var(--space-sm);">
-                    <div style="width:40px;height:40px;border-radius:var(--radius-md);background:linear-gradient(135deg,var(--primary-red-light),var(--primary-blue-light));display:flex;align-items:center;justify-content:center;font-size:20px;">🍽️</div>
-                    <div>
-                        <div style="font-weight:700;font-size:var(--text-base);">Lakay Kreyol</div>
-                        <div style="font-size:var(--text-xs);color:var(--success);font-weight:500;">Open Now</div>
-                    </div>
-                </div>
-            </div>
-            <a href="dashboard.html" class="sidebar-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-                Dashboard
-            </a>
-            <a href="orders.html" class="sidebar-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                Orders
-                <span style="margin-left:auto;background:var(--primary-red);color:var(--white);font-size:10px;padding:2px 7px;border-radius:var(--radius-full);font-weight:700;">3</span>
-            </a>
-            <a href="products.html" class="sidebar-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                Products
-            </a>
-            <a href="inventory.html" class="sidebar-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-                Inventory
-            </a>
-            <a href="wallet.html" class="sidebar-item active">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                Wallet
-            </a>
-            <a href="settings.html" class="sidebar-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09"/></svg>
-                Settings
-            </a>
-        </aside>
+<nav class="mp-bottom-nav" id="mpBottomNav"></nav>
 
-        <!-- CONTENT -->
-        <div class="dashboard-content">
-            <div class="page-content">
+<script src="../js/merchant.js"></script>
+<script>
+(function () {
+  var L = {
+    title:     { kr:'Bous', fr:'Portefeuille', en:'Wallet', es:'Billetera' },
+    available: { kr:'Disponib pou retire', fr:'Disponible au retrait', en:'Available to withdraw', es:'Disponible' },
+    pending:   { kr:'Ap tann', fr:'En attente', en:'Pending', es:'Pendiente' },
+    total:     { kr:'Total', fr:'Total', en:'Total', es:'Total' },
+    pendOrd:   { kr:'kòmand ap tann', fr:'commandes en attente', en:'orders pending', es:'pedidos pendientes' },
+    availOrd:  { kr:'kòmand disponib', fr:'commandes disponibles', en:'orders available', es:'pedidos disponibles' },
+    withdraw:  { kr:'Mande peman', fr:'Demander un paiement', en:'Request payout', es:'Solicitar pago' },
+    minNote:   { kr:'Minimòm 500 HTG. Peman rive nan 24–48 èdtan sou MonCash oswa NatCash.', fr:'Minimum 500 HTG. Paiement sous 24–48 h via MonCash ou NatCash.', en:'Minimum 500 HTG. Paid within 24–48h via MonCash or NatCash.', es:'Mínimo 500 HTG. Pago en 24–48 h.' },
+    method:    { kr:'Metòd', fr:'Méthode', en:'Method', es:'Método' },
+    amount:    { kr:'Montan (HTG)', fr:'Montant (HTG)', en:'Amount (HTG)', es:'Monto (HTG)' },
+    history:   { kr:'Istwa peman yo', fr:'Historique des paiements', en:'Payout history', es:'Historial' },
+    noHistory: { kr:'Pa gen peman ankò.', fr:'Aucun paiement pour le moment.', en:'No payouts yet.', es:'Sin pagos aún.' },
+    how:       { kr:'Kijan lajan an mache', fr:"Comment l'argent arrive", en:'How the money works', es:'Cómo funciona el dinero' },
+    howBody:   {
+      kr:'Lè yon kòmand livre epi kliyan an peye, pati pa w la ale nan "Ap tann". Apre MyPlopPlop verifye kòmand la, li pase nan "Disponib" — epi ou ka mande peman w.',
+      fr:'Quand une commande est livrée et payée, votre part passe en « En attente ». Après vérification par MyPlopPlop, elle devient « Disponible » et vous pouvez demander le paiement.',
+      en:'When an order is delivered and paid, your share goes to "Pending". Once MyPlopPlop verifies it, it becomes "Available" and you can request a payout.',
+      es:'Cuando un pedido se entrega y se paga, tu parte pasa a «Pendiente». Tras la verificación, pasa a «Disponible».'
+    },
+    sending:   { kr:'Ap voye...', fr:'Envoi...', en:'Sending...', es:'Enviando...' }
+  };
+  function L_(k) { var e = L[k]; return e ? (e[MP.lang()] || e.en) : k; }
 
-                <h1 style="font-family:var(--font-heading);font-size:var(--text-2xl);font-weight:700;margin-bottom:var(--space-md);">Wallet</h1>
+  function langBar() {
+    var bar = document.getElementById('mpLangBar');
+    bar.innerHTML = ['kr', 'fr', 'en', 'es'].map(function (l) {
+      var flag = { kr: '🇭🇹', fr: '🇫🇷', en: '🇬🇧', es: '🇪🇸' }[l];
+      return '<button class="mp-lang' + (MP.lang() === l ? ' active' : '') + '" data-l="' + l + '">' + flag + '</button>';
+    }).join('');
+    bar.querySelectorAll('[data-l]').forEach(function (b) {
+      b.addEventListener('click', function () { localStorage.setItem('pp_lang', b.dataset.l); location.reload(); });
+    });
+  }
 
-                <!-- Balance Card -->
-                <div class="balance-card">
-                    <div class="balance-label">Available Balance</div>
-                    <div class="balance-amount">45,000 <span class="balance-currency">HTG</span></div>
-                    <div class="balance-row">
-                        <div class="balance-sub">
-                            <div class="balance-sub-label">Pending</div>
-                            <div class="balance-sub-value">12,500 HTG</div>
-                        </div>
-                        <div class="balance-sub">
-                            <div class="balance-sub-label">This Month</div>
-                            <div class="balance-sub-value">187,500 HTG</div>
-                        </div>
-                    </div>
-                    <button class="withdraw-btn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
-                        Withdraw Funds
-                    </button>
-                </div>
+  function load() {
+    return MP.req('GET', '/api/payouts/wallet').then(function (d) {
+      if (!d || !d.success) throw new Error((d && d.message) || 'failed');
+      render(d.data);
+    }).catch(function (e) {
+      document.getElementById('mpBody').innerHTML =
+        '<div class="mp-empty"><div class="mp-empty-icon">⚠️</div><p>' + MP.esc(String(e.message || e)) + '</p></div>';
+    });
+  }
 
-                <!-- Transaction History -->
-                <div class="tx-section-title">Transaction History</div>
-                <div class="card card-flat" style="padding:var(--space-sm) var(--space-md);">
+  function render(w) {
+    document.getElementById('pgTitle').textContent = L_('title');
+    var avail = w.available_balance || 0;
 
-                    <div class="tx-item">
-                        <div class="tx-icon earning">💰</div>
-                        <div class="tx-info">
-                            <div class="tx-title">Order #PP-1043</div>
-                            <div class="tx-subtitle">Emmanuel J. - 2x Poulet Creole</div>
-                        </div>
-                        <div>
-                            <div class="tx-amount positive">+2,100 HTG</div>
-                            <div class="tx-date">Today, 11:30</div>
-                        </div>
-                    </div>
+    document.getElementById('mpBody').innerHTML =
+      '<div class="mp-balance">' +
+        '<div class="mp-balance-label">' + L_('available') + '</div>' +
+        '<div class="mp-balance-value">' + MP.money(avail) + '</div>' +
+        '<div class="mp-balance-split">' +
+          '<div class="mp-balance-cell"><div class="v">' + MP.money(w.pending_balance || 0) + '</div>' +
+            '<div class="l">' + L_('pending') + ' · ' + (w.pending_orders || 0) + ' ' + L_('pendOrd') + '</div></div>' +
+          '<div class="mp-balance-cell"><div class="v">' + MP.money(w.balance || 0) + '</div>' +
+            '<div class="l">' + L_('total') + '</div></div>' +
+        '</div>' +
+      '</div>' +
 
-                    <div class="tx-item">
-                        <div class="tx-icon earning">💰</div>
-                        <div class="tx-info">
-                            <div class="tx-title">Order #PP-1042</div>
-                            <div class="tx-subtitle">Frantz B. - 1x Griot, 1x Legim</div>
-                        </div>
-                        <div>
-                            <div class="tx-amount positive">+1,450 HTG</div>
-                            <div class="tx-date">Today, 10:15</div>
-                        </div>
-                    </div>
+      '<div class="mp-card">' +
+        '<div class="mp-card-title">' + MP.svg('<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>') + L_('withdraw') + '</div>' +
+        '<div class="mp-grid-2">' +
+          '<div class="mp-field"><label>' + L_('amount') + '</label>' +
+            '<input class="mp-input" type="number" min="500" id="wAmount" value="' + (avail >= 500 ? Math.floor(avail) : '') + '"></div>' +
+          '<div class="mp-field"><label>' + L_('method') + '</label>' +
+            '<select class="mp-select" id="wMethod"><option value="moncash">MonCash</option><option value="natcash">NatCash</option></select></div>' +
+        '</div>' +
+        '<div class="mp-hint" style="margin-bottom:var(--space-md);">' + L_('minNote') + '</div>' +
+        '<button class="mp-btn mp-btn-red mp-btn-block" id="wSend"' + (avail < 500 ? ' disabled' : '') + '>' + L_('withdraw') + '</button>' +
+      '</div>' +
 
-                    <div class="tx-item">
-                        <div class="tx-icon earning">💰</div>
-                        <div class="tx-info">
-                            <div class="tx-title">Order #PP-1041</div>
-                            <div class="tx-subtitle">Claudette M. - 3x Diri Kole</div>
-                        </div>
-                        <div>
-                            <div class="tx-amount positive">+1,800 HTG</div>
-                            <div class="tx-date">Today, 09:45</div>
-                        </div>
-                    </div>
+      '<div class="mp-card">' +
+        '<div class="mp-card-title">' + MP.svg('<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>') + L_('history') + '</div>' +
+        ((w.recent_payouts && w.recent_payouts.length)
+          ? w.recent_payouts.map(function (p) {
+              return '<div class="mp-row"><div class="mp-row-thumb">💸</div>' +
+                '<div class="mp-row-main"><div class="mp-row-name">' + MP.money(p.amount) + '</div>' +
+                '<div class="mp-row-sub">' + MP.esc(p.method || '') + ' · ' + MP.when(p.createdAt) + '</div></div>' +
+                '<span class="mp-status ' + MP.esc(p.status === 'completed' ? 'delivered' : 'pending') + '">' + MP.esc(p.status || '') + '</span></div>';
+            }).join('')
+          : '<div class="mp-empty" style="padding:var(--space-lg) 0;"><p>' + L_('noHistory') + '</p></div>') +
+      '</div>' +
 
-                    <div class="tx-item">
-                        <div class="tx-icon fee">📊</div>
-                        <div class="tx-info">
-                            <div class="tx-title">Platform Fee</div>
-                            <div class="tx-subtitle">Commission on 12 orders</div>
-                        </div>
-                        <div>
-                            <div class="tx-amount negative">-3,750 HTG</div>
-                            <div class="tx-date">Yesterday</div>
-                        </div>
-                    </div>
+      '<div class="mp-card">' +
+        '<div class="mp-card-title">' + MP.svg('<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>') + L_('how') + '</div>' +
+        '<p style="font-size:var(--text-sm);color:var(--gray-600);line-height:1.6;">' + L_('howBody') + '</p>' +
+      '</div>';
 
-                    <div class="tx-item">
-                        <div class="tx-icon withdrawal">🏦</div>
-                        <div class="tx-info">
-                            <div class="tx-title">Withdrawal</div>
-                            <div class="tx-subtitle">To MonCash ****4521</div>
-                        </div>
-                        <div>
-                            <div class="tx-amount negative">-25,000 HTG</div>
-                            <div class="tx-date">Mar 28</div>
-                        </div>
-                    </div>
+    var send = document.getElementById('wSend');
+    if (send) send.addEventListener('click', function () {
+      var btn = this, old = btn.textContent;
+      var amount = parseInt(document.getElementById('wAmount').value, 10) || 0;
+      btn.disabled = true; btn.textContent = L_('sending');
+      MP.req('POST', '/api/payouts/request', {
+        amount: amount,
+        method: document.getElementById('wMethod').value
+      }).then(function (d) {
+        btn.textContent = old;
+        if (!d || !d.success) { btn.disabled = false; MP.toast((d && d.message) || MP.t('saveFail'), 'error'); return; }
+        MP.toast((d.data && d.data.message) || MP.t('saved'), 'success');
+        load();
+      }).catch(function () {
+        btn.disabled = false; btn.textContent = old;
+        MP.toast(MP.t('saveFail'), 'error');
+      });
+    });
+  }
 
-                    <div class="tx-item">
-                        <div class="tx-icon earning">💰</div>
-                        <div class="tx-info">
-                            <div class="tx-title">Order #PP-1038</div>
-                            <div class="tx-subtitle">Pierre A. - 2x Soup Joumou</div>
-                        </div>
-                        <div>
-                            <div class="tx-amount positive">+1,500 HTG</div>
-                            <div class="tx-date">Mar 28</div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Payout Settings -->
-                <div class="payout-section">
-                    <div class="payout-title">Payout Settings</div>
-
-                    <div class="payout-method">
-                        <div class="payout-method-icon">📱</div>
-                        <div class="payout-method-info">
-                            <div class="payout-method-name">MonCash</div>
-                            <div class="payout-method-detail">+509 ****4521</div>
-                        </div>
-                        <div class="payout-method-check">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                        </div>
-                    </div>
-
-                    <div class="payout-method" style="opacity:0.6;">
-                        <div class="payout-method-icon">🏦</div>
-                        <div class="payout-method-info">
-                            <div class="payout-method-name">Bank Transfer</div>
-                            <div class="payout-method-detail">Not configured</div>
-                        </div>
-                    </div>
-
-                    <button class="btn btn-white btn-sm" style="margin-top:var(--space-md);">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        Add Payout Method
-                    </button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</main>
-
-<!-- MERCHANT BOTTOM NAV (Mobile) -->
-<nav class="merchant-nav">
-    <a href="dashboard.html" class="merchant-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        <span>Dashboard</span>
-    </a>
-    <a href="orders.html" class="merchant-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        <span class="nav-badge">3</span>
-        <span>Orders</span>
-    </a>
-    <a href="products.html" class="merchant-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        <span>Products</span>
-    </a>
-    <a href="inventory.html" class="merchant-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-        <span>Inventory</span>
-    </a>
-    <a href="wallet.html" class="merchant-nav-item active">
-        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/></svg>
-        <span>Wallet</span>
-    </a>
-    <a href="settings.html" class="merchant-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09"/></svg>
-        <span>Settings</span>
-    </a>
-</nav>
-
-<script src="/js/api.js"></script>
-<script src="/js/i18n.js"></script>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
+  langBar();
+  MP.boot('wallet', function () { load(); });
+})();
+</script>
 </body>
 </html>

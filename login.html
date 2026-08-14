@@ -606,6 +606,8 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             if (redirectTo) window.location.href = redirectTo;
             else if (data.user.role === 'admin') window.location.href = 'admin/dashboard.html';
             else if (data.user.role === 'driver') window.location.href = 'rider/dashboard.html';
+            // merchants land in their own portal, not the shopper homepage
+            else if (data.user.role === 'merchant') window.location.href = 'merchant/dashboard.html';
             else window.location.href = 'index.html';
         }, 800);
     } else {
@@ -651,6 +653,8 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
         setTimeout(() => {
             if (redirectTo) window.location.href = redirectTo;
             else if (role === 'driver') window.location.href = 'driver-onboarding.html';
+            // a brand-new merchant has no store yet, so start them in the builder
+            else if (role === 'merchant') window.location.href = 'store-designer.html';
             else window.location.href = 'index.html';
         }, 800);
     } else {

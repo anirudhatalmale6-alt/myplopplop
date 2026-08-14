@@ -1,671 +1,229 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#D21034">
 <meta property="og:image" content="https://myplopplop.com/assets/og-myplopplop.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<title>Orders — Merchant | MyPlopPlop</title>
+<title>Kòmand — MyPlopPlop</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
 <link rel="shortcut icon" href="../favicon.ico">
 <link rel="stylesheet" href="../css/variables.css">
 <link rel="stylesheet" href="../css/base.css">
-<link rel="stylesheet" href="../css/components.css">
-<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/merchant.css">
 <style>
-/* ===== Page Content ===== */
-.page-content {
-    padding: var(--space-md) var(--content-padding);
-    padding-bottom: calc(var(--bottom-nav-height) + var(--space-lg));
+.mp-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: var(--space-md); -webkit-overflow-scrolling: touch; }
+.mp-tab {
+  flex: 0 0 auto; padding: 8px 14px; border-radius: var(--radius-full); cursor: pointer;
+  border: 1px solid var(--gray-300); background: var(--white); color: var(--gray-600);
+  font-family: var(--font-body); font-size: var(--text-xs); font-weight: 700; white-space: nowrap;
 }
-
-/* ===== Sound Indicator ===== */
-.sound-indicator {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    background: var(--primary-red-light);
-    border-radius: var(--radius-md);
-    margin-bottom: var(--space-md);
-    font-size: var(--text-xs);
-    font-weight: 600;
-    color: var(--primary-red);
-}
-.sound-bars {
-    display: flex;
-    align-items: flex-end;
-    gap: 2px;
-    height: 14px;
-}
-.sound-bar {
-    width: 3px;
-    background: var(--primary-red);
-    border-radius: 2px;
-    animation: soundWave 1s ease-in-out infinite alternate;
-}
-.sound-bar:nth-child(1) { height: 6px; animation-delay: 0s; }
-.sound-bar:nth-child(2) { height: 10px; animation-delay: 0.2s; }
-.sound-bar:nth-child(3) { height: 14px; animation-delay: 0.4s; }
-.sound-bar:nth-child(4) { height: 8px; animation-delay: 0.6s; }
-@keyframes soundWave {
-    from { transform: scaleY(0.4); }
-    to { transform: scaleY(1); }
-}
-
-/* ===== Filter Tabs ===== */
-.filter-tabs {
-    display: flex;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-md);
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-bottom: var(--space-xs);
-}
-.filter-tabs::-webkit-scrollbar { display: none; }
-.filter-tab {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    border-radius: var(--radius-full);
-    font-size: var(--text-sm);
-    font-weight: 500;
-    color: var(--gray-600);
-    background: var(--gray-100);
-    white-space: nowrap;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    border: none;
-}
-.filter-tab:hover { background: var(--gray-200); }
-.filter-tab.active {
-    background: var(--primary-red);
-    color: var(--white);
-}
-.filter-tab .count {
-    font-size: 11px;
-    font-weight: 700;
-    background: rgba(255,255,255,0.25);
-    padding: 1px 6px;
-    border-radius: var(--radius-full);
-}
-.filter-tab.active .count {
-    background: rgba(255,255,255,0.3);
-}
-
-/* ===== Order Card ===== */
-.order-card {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--gray-200);
-    padding: var(--space-md);
-    margin-bottom: var(--space-md);
-    transition: box-shadow var(--transition-fast);
-}
-.order-card:hover { box-shadow: var(--shadow-sm); }
-.order-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--space-sm);
-}
-.order-card-id {
-    font-weight: 700;
-    font-size: var(--text-base);
-    color: var(--text-dark);
-}
-.order-card-customer {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-md);
-}
-.customer-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: var(--radius-full);
-    background: var(--gray-200);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-}
-.customer-name {
-    font-weight: 600;
-    font-size: var(--text-sm);
-}
-.customer-phone {
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-}
-.order-items-list {
-    background: var(--gray-50);
-    border-radius: var(--radius-sm);
-    padding: var(--space-sm) var(--space-md);
-    margin-bottom: var(--space-md);
-}
-.order-item-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 0;
-    font-size: var(--text-sm);
-}
-.order-item-row + .order-item-row {
-    border-top: 1px solid var(--gray-200);
-}
-.order-item-qty {
-    color: var(--primary-red);
-    font-weight: 700;
-    margin-right: 6px;
-}
-.order-card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: var(--space-sm);
-    border-top: 1px solid var(--gray-100);
-}
-.order-total-label {
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-}
-.order-total-value {
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: var(--text-lg);
-    color: var(--text-dark);
-}
-.order-time-placed {
-    font-size: var(--text-xs);
-    color: var(--gray-400);
-    margin-bottom: var(--space-sm);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-.order-actions {
-    display: flex;
-    gap: var(--space-sm);
-    margin-top: var(--space-sm);
-}
-.order-actions .btn { flex: 1; }
-
-/* ===== Status Badges ===== */
-.badge-new { background: var(--primary-red-light); color: var(--primary-red); }
-.badge-preparing { background: var(--warning-light); color: var(--warning); }
-.badge-ready { background: var(--info-light); color: var(--info); }
-.badge-delivered { background: var(--success-light); color: var(--success); }
-
-/* ===== New order pulse ===== */
-.order-card.is-new {
-    border-color: var(--primary-red);
-    border-width: 2px;
-    animation: newOrderPulse 2s ease-in-out 3;
-}
-@keyframes newOrderPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(210,16,52,0); }
-    50% { box-shadow: 0 0 0 6px rgba(210,16,52,0.15); }
-}
-
-/* ===== Merchant Bottom Nav ===== */
-.merchant-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: var(--bottom-nav-height);
-    background: var(--white);
-    border-top: 1px solid var(--gray-200);
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    z-index: 1000;
-    padding-bottom: env(safe-area-inset-bottom, 0);
-}
-.merchant-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    padding: 6px 12px;
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--gray-400);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-    position: relative;
-}
-.merchant-nav-item svg { width: 24px; height: 24px; }
-.merchant-nav-item.active { color: var(--primary-red); }
-.merchant-nav-item .nav-badge {
-    position: absolute;
-    top: 0;
-    right: 4px;
-    width: 16px;
-    height: 16px;
-    background: var(--primary-red);
-    color: var(--white);
-    font-size: 9px;
-    font-weight: 700;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* ===== Desktop ===== */
-@media (min-width: 1024px) {
-    .merchant-nav { display: none; }
-    .page-content { padding-bottom: var(--space-lg); }
-    .dashboard-content { max-width: 900px; }
-    .orders-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--space-md);
-    }
-    .orders-grid .order-card { margin-bottom: 0; }
-}
+.mp-tab.active { background: var(--primary-red); border-color: var(--primary-red); color: var(--white); }
+.mp-order { display: block; background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: var(--space-md); margin-bottom: var(--space-sm); }
+.mp-order-top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-sm); }
+.mp-order-num { font-family: var(--font-heading); font-weight: 700; font-size: var(--text-sm); color: var(--text-dark); }
+.mp-order-items { margin: var(--space-sm) 0; padding: var(--space-sm) 0; border-top: 1px solid var(--gray-100); border-bottom: 1px solid var(--gray-100); font-size: var(--text-xs); color: var(--gray-600); }
+.mp-order-items div { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; }
+.mp-order-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: var(--space-sm); }
 </style>
 </head>
-<body>
+<body style="background:var(--bg-light);">
 
-<!-- TOP BAR -->
-<div class="top-bar">
-    <div style="display:flex;align-items:center;gap:var(--space-sm);">
-        <span>Merchant Portal</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:var(--space-md);">
-        <a href="../index.html">View Storefront</a>
-        <a href="#" data-lang="fr">🇫🇷 Français</a>
-        <a href="#" data-lang="en">🇬🇧 English</a>
-        <a href="#" data-lang="kr">🇭🇹 Kreyòl</a>
-        <a href="#" data-lang="es">🇪🇸 Español</a>
-    </div>
+<div class="mp-topbar">
+  <a class="mp-brand" href="../index.html">
+    <img src="../assets/icon-192.png" alt="MyPlopPlop">
+    <span>Merchant</span>
+  </a>
+  <div class="mp-top-actions" id="mpLangBar"></div>
 </div>
 
-<!-- HEADER -->
-<header class="header" style="top: 28px;">
-    <div class="header-inner">
-        <a href="../index.html" class="header-logo">
-            <img src="../assets/icon-192.png" alt="MyPlopPlop" style="height:40px;">
-        </a>
-        <div class="header-actions">
-            <a href="#" class="header-icon" title="Notifications">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                <span class="header-badge">3</span>
-            </a>
-            <a href="settings.html" class="header-icon" title="Settings">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            </a>
-        </div>
-    </div>
-</header>
+<div class="mp-store-header" id="mpStoreHeader"></div>
 
-<!-- MAIN -->
-<main class="main" style="margin-top: calc(var(--header-height) + 28px);">
-    <div class="dashboard-layout">
+<div class="mp-layout">
+  <aside class="mp-sidebar" id="mpSidebar"></aside>
+  <main class="mp-main">
+    <h1 class="mp-page-title" id="pgTitle">Kòmand</h1>
+    <div id="mpBody"></div>
+  </main>
+</div>
 
-        <!-- SIDEBAR (Desktop) -->
-        <aside class="sidebar">
-            <div style="padding: 0 var(--space-lg) var(--space-lg);">
-                <div style="display:flex;align-items:center;gap:var(--space-sm);">
-                    <div style="width:40px;height:40px;border-radius:var(--radius-md);background:linear-gradient(135deg,var(--primary-red-light),var(--primary-blue-light));display:flex;align-items:center;justify-content:center;font-size:20px;">🍽️</div>
-                    <div>
-                        <div style="font-weight:700;font-size:var(--text-base);">Lakay Kreyol</div>
-                        <div style="font-size:var(--text-xs);color:var(--success);font-weight:500;">Open Now</div>
-                    </div>
-                </div>
-            </div>
-            <a href="dashboard.html" class="sidebar-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-                Dashboard
-            </a>
-            <a href="orders.html" class="sidebar-item active">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                Orders
-                <span style="margin-left:auto;background:var(--primary-red);color:var(--white);font-size:10px;padding:2px 7px;border-radius:var(--radius-full);font-weight:700;">3</span>
-            </a>
-            <a href="products.html" class="sidebar-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                Products
-            </a>
-            <a href="inventory.html" class="sidebar-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-                Inventory
-            </a>
-            <a href="wallet.html" class="sidebar-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                Wallet
-            </a>
-            <a href="settings.html" class="sidebar-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09"/></svg>
-                Settings
-            </a>
-        </aside>
+<nav class="mp-bottom-nav" id="mpBottomNav"></nav>
 
-        <!-- CONTENT -->
-        <div class="dashboard-content">
-            <div class="page-content">
-
-                <!-- Page Title -->
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-md);">
-                    <h1 style="font-family:var(--font-heading);font-size:var(--text-2xl);font-weight:700;">Orders</h1>
-                </div>
-
-                <!-- Sound notification indicator -->
-                <div class="sound-indicator">
-                    <div class="sound-bars">
-                        <div class="sound-bar"></div>
-                        <div class="sound-bar"></div>
-                        <div class="sound-bar"></div>
-                        <div class="sound-bar"></div>
-                    </div>
-                    Sound alerts ON for new orders
-                </div>
-
-                <!-- Filter Tabs -->
-                <div class="filter-tabs" id="filterTabs">
-                    <button class="filter-tab active" data-filter="pending">New <span class="count" id="countNew">0</span></button>
-                    <button class="filter-tab" data-filter="preparing">Preparing <span class="count" id="countPreparing">0</span></button>
-                    <button class="filter-tab" data-filter="ready">Ready <span class="count" id="countReady">0</span></button>
-                    <button class="filter-tab" data-filter="all">All</button>
-                </div>
-
-                <!-- Orders List (dynamic) -->
-                <div class="orders-grid" id="ordersGrid">
-                    <div style="text-align:center;padding:40px;color:var(--text-muted);">Loading orders...</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-
-<!-- MERCHANT BOTTOM NAV (Mobile) -->
-<nav class="merchant-nav">
-    <a href="dashboard.html" class="merchant-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        <span>Dashboard</span>
-    </a>
-    <a href="orders.html" class="merchant-nav-item active">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8" fill="none" stroke="white" stroke-width="2"/></svg>
-        <span class="nav-badge">3</span>
-        <span>Orders</span>
-    </a>
-    <a href="products.html" class="merchant-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        <span>Products</span>
-    </a>
-    <a href="inventory.html" class="merchant-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-        <span>Inventory</span>
-    </a>
-    <a href="wallet.html" class="merchant-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        <span>Wallet</span>
-    </a>
-    <a href="settings.html" class="merchant-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09"/></svg>
-        <span>Settings</span>
-    </a>
-</nav>
-
+<script src="../js/merchant.js"></script>
 <script>
-(function() {
-    if (!API.isLoggedIn()) {
-        window.location.href = '../login.html';
-        return;
-    }
+(function () {
+  var L = {
+    title:   { kr:'Kòmand', fr:'Commandes', en:'Orders', es:'Pedidos' },
+    all:     { kr:'Tout', fr:'Toutes', en:'All', es:'Todos' },
+    news:    { kr:'Nouvo', fr:'Nouvelles', en:'New', es:'Nuevos' },
+    active:  { kr:'An kou', fr:'En cours', en:'In progress', es:'En curso' },
+    done:    { kr:'Fini', fr:'Terminées', en:'Completed', es:'Completados' },
+    none:    { kr:'Pa gen kòmand isit la.', fr:'Aucune commande ici.', en:'No orders here.', es:'Sin pedidos aquí.' },
+    accept:  { kr:'Aksepte', fr:'Accepter', en:'Accept', es:'Aceptar' },
+    prep:    { kr:'M ap prepare l', fr:'En préparation', en:'Preparing', es:'Preparando' },
+    ready:   { kr:'Li pare — rele chofè a', fr:'Prêt — appeler le livreur', en:'Ready — call the driver', es:'Listo — llamar repartidor' },
+    deliv:   { kr:'Livre', fr:'Livré', en:'Delivered', es:'Entregado' },
+    cancel:  { kr:'Anile', fr:'Annuler', en:'Cancel', es:'Cancelar' },
+    confirmCancel: { kr:'Anile kòmand sa a ?', fr:'Annuler cette commande ?', en:'Cancel this order?', es:'¿Cancelar este pedido?' },
+    pickup:  { kr:'Kliyan an ap vin chèche', fr:'Retrait sur place', en:'Customer pickup', es:'Recogida' },
+    delivery:{ kr:'Livrezon', fr:'Livraison', en:'Delivery', es:'Entrega' },
+    driver:  { kr:'Chofè', fr:'Livreur', en:'Driver', es:'Repartidor' },
+    pin:     { kr:'Kòd', fr:'Code', en:'PIN', es:'Código' },
+    refresh: { kr:'Aktyalize', fr:'Actualiser', en:'Refresh', es:'Actualizar' },
+    unpaid:  { kr:'Poko peye', fr:'Non payé', en:'Unpaid', es:'No pagado' },
+    paid:    { kr:'Peye', fr:'Payé', en:'Paid', es:'Pagado' }
+  };
+  function L_(k) { var e = L[k]; return e ? (e[MP.lang()] || e.en) : k; }
 
-    var myStore = null;
-    var allOrders = [];
-    var currentFilter = 'pending';
-
-    function formatHTG(amount) {
-        return (amount || 0).toLocaleString('fr-HT') + ' HTG';
-    }
-
-    function timeAgo(dateStr) {
-        var diff = Date.now() - new Date(dateStr).getTime();
-        var mins = Math.floor(diff / 60000);
-        if (mins < 1) return 'Just now';
-        if (mins < 60) return mins + ' min ago';
-        var hrs = Math.floor(mins / 60);
-        if (hrs < 24) return hrs + ' hr ago';
-        return Math.floor(hrs / 24) + ' days ago';
-    }
-
-    function getInitials(name) {
-        if (!name) return '??';
-        return name.split(' ').map(function(w) { return w[0]; }).join('').toUpperCase().slice(0, 2);
-    }
-
-    function statusToBadge(status) {
-        var map = {
-            pending: { cls: 'badge-new', label: 'New' },
-            confirmed: { cls: 'badge-new', label: 'Confirmed' },
-            preparing: { cls: 'badge-preparing', label: 'Preparing' },
-            ready: { cls: 'badge-ready', label: 'Ready' },
-            picked_up: { cls: 'badge-ready', label: 'Picked Up' },
-            delivering: { cls: 'badge-ready', label: 'On the Way' },
-            delivered: { cls: 'badge-delivered', label: 'Delivered' },
-            cancelled: { cls: '', label: 'Cancelled' }
-        };
-        return map[status] || { cls: '', label: status };
-    }
-
-    function getActions(order) {
-        var s = order.status;
-        var id = order._id;
-        if (s === 'pending') {
-            return '<button class="btn btn-white btn-sm" onclick="declineOrder(\'' + id + '\')">Decline</button>' +
-                   '<button class="btn btn-red btn-sm" onclick="acceptOrder(\'' + id + '\')">Accept</button>';
-        }
-        if (s === 'confirmed') {
-            return '<button class="btn btn-blue btn-sm btn-full" onclick="startPreparing(\'' + id + '\')">Start Preparing</button>';
-        }
-        if (s === 'preparing') {
-            return '<button class="btn btn-blue btn-sm btn-full" onclick="markReady(\'' + id + '\')">Ready for Pickup</button>';
-        }
-        if (s === 'ready') {
-            if (order.deliveryType === 'delivery' && !order.msouwoutRideId) {
-                return '<button class="btn btn-blue btn-sm btn-full" onclick="requestDriver(\'' + id + '\')">Request MsouWout Driver</button>';
-            }
-            return '<button class="btn btn-white btn-sm btn-full" disabled>Awaiting Pickup</button>';
-        }
-        if (s === 'picked_up' || s === 'delivering') {
-            return '<span style="font-size:var(--text-xs);color:var(--info);font-weight:600;">Driver en route</span>';
-        }
-        if (s === 'delivered') {
-            return '<span style="font-size:var(--text-xs);color:var(--success);font-weight:600;">Completed</span>';
-        }
-        return '';
-    }
-
-    function renderCard(order) {
-        var badge = statusToBadge(order.status);
-        var isNew = order.status === 'pending';
-        var cName = order.customer ? order.customer.name : (order.recipient ? order.recipient.name : 'Customer');
-
-        var itemsHtml = '';
-        if (order.items && order.items.length) {
-            order.items.forEach(function(item) {
-                itemsHtml += '<div class="order-item-row">' +
-                    '<span><span class="order-item-qty">' + item.quantity + 'x</span> ' + item.name + '</span>' +
-                    '<span>' + formatHTG(item.subtotal) + '</span>' +
-                '</div>';
-            });
-        }
-
-        return '<div class="order-card' + (isNew ? ' is-new' : '') + '" data-status="' + order.status + '" data-id="' + order._id + '">' +
-            '<div class="order-card-header">' +
-                '<span class="order-card-id">#' + order.orderNumber + '</span>' +
-                '<span class="badge ' + badge.cls + '">' + badge.label + '</span>' +
-            '</div>' +
-            '<div class="order-card-customer">' +
-                '<div class="customer-avatar">' + getInitials(cName) + '</div>' +
-                '<div>' +
-                    '<div class="customer-name">' + cName + '</div>' +
-                '</div>' +
-            '</div>' +
-            '<div class="order-time-placed">' +
-                '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
-                timeAgo(order.createdAt) +
-            '</div>' +
-            '<div class="order-items-list">' + itemsHtml + '</div>' +
-            '<div class="order-card-footer">' +
-                '<div>' +
-                    '<div class="order-total-label">Total</div>' +
-                    '<div class="order-total-value">' + formatHTG(order.total) + '</div>' +
-                '</div>' +
-            '</div>' +
-            '<div class="order-actions">' + getActions(order) + '</div>' +
-        '</div>';
-    }
-
-    function renderOrders() {
-        var grid = document.getElementById('ordersGrid');
-        var filtered = allOrders;
-
-        if (currentFilter !== 'all') {
-            filtered = allOrders.filter(function(o) {
-                if (currentFilter === 'pending') return o.status === 'pending' || o.status === 'confirmed';
-                return o.status === currentFilter;
-            });
-        }
-
-        if (filtered.length === 0) {
-            grid.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--text-muted);">' +
-                '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 12px;display:block;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' +
-                '<div style="font-weight:600;margin-bottom:4px;">No orders</div>' +
-                '<div style="font-size:var(--text-sm);">Orders will appear here when customers place them</div>' +
-            '</div>';
-            return;
-        }
-
-        filtered.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
-        grid.innerHTML = filtered.map(renderCard).join('');
-
-        // Update counts
-        var newCount = allOrders.filter(function(o) { return o.status === 'pending' || o.status === 'confirmed'; }).length;
-        var prepCount = allOrders.filter(function(o) { return o.status === 'preparing'; }).length;
-        var readyCount = allOrders.filter(function(o) { return o.status === 'ready'; }).length;
-        document.getElementById('countNew').textContent = newCount;
-        document.getElementById('countPreparing').textContent = prepCount;
-        document.getElementById('countReady').textContent = readyCount;
-
-        // Update nav badge
-        var navBadge = document.querySelector('.merchant-nav-item.active .nav-badge');
-        if (navBadge) navBadge.textContent = newCount + prepCount + readyCount;
-    }
-
-    // Filter tab click handlers
-    document.querySelectorAll('#filterTabs .filter-tab').forEach(function(tab) {
-        tab.addEventListener('click', function() {
-            document.querySelectorAll('#filterTabs .filter-tab').forEach(function(t) { t.classList.remove('active'); });
-            this.classList.add('active');
-            currentFilter = this.dataset.filter;
-            renderOrders();
-        });
+  function langBar() {
+    var bar = document.getElementById('mpLangBar');
+    bar.innerHTML = ['kr', 'fr', 'en', 'es'].map(function (l) {
+      var flag = { kr: '🇭🇹', fr: '🇫🇷', en: '🇬🇧', es: '🇪🇸' }[l];
+      return '<button class="mp-lang' + (MP.lang() === l ? ' active' : '') + '" data-l="' + l + '">' + flag + '</button>';
+    }).join('');
+    bar.querySelectorAll('[data-l]').forEach(function (b) {
+      b.addEventListener('click', function () { localStorage.setItem('pp_lang', b.dataset.l); location.reload(); });
     });
+  }
 
-    // Order actions
-    window.acceptOrder = async function(orderId) {
-        var res = await API.updateOrderStatus(orderId, 'confirmed');
-        if (res.success) {
-            var order = allOrders.find(function(o) { return o._id === orderId; });
-            if (order) order.status = 'confirmed';
-            startPreparing(orderId);
-        } else {
-            alert('Failed: ' + (res.message || 'Unknown error'));
+  var storeId = null, orders = [], tab = 'new';
+  var TABS = [
+    ['new',    'news',   ['pending']],
+    ['active', 'active', ['confirmed', 'preparing', 'ready', 'picked_up', 'delivering']],
+    ['done',   'done',   ['delivered', 'cancelled']],
+    ['all',    'all',    null]
+  ];
+
+  /* the merchant's next step for each status — one obvious button, no menus */
+  var NEXT = {
+    pending:   { to: 'confirmed', label: 'accept', cls: 'mp-btn-red' },
+    confirmed: { to: 'preparing', label: 'prep',   cls: 'mp-btn-blue' },
+    preparing: { to: 'ready',     label: 'ready',  cls: 'mp-btn-red' },
+    ready:     null,   // dispatch engine takes over: nearest driver is offered the job
+    picked_up: null,
+    delivering:null
+  };
+
+  var tabPicked = false;
+  function load() {
+    return MP.req('GET', '/api/stores/' + storeId + '/orders?limit=60').then(function (d) {
+      orders = (d && d.success && d.data) ? d.data : [];
+      // Open on the first tab that actually has orders, so the merchant never
+      // lands on an empty screen while work is waiting one tab over.
+      if (!tabPicked) {
+        tabPicked = true;
+        for (var i = 0; i < TABS.length; i++) {
+          var st = TABS[i][2];
+          var n = st ? orders.filter(function (o) { return st.indexOf(o.status) !== -1; }).length : orders.length;
+          if (n > 0) { tab = TABS[i][0]; break; }
         }
-    };
+      }
+      render();
+    });
+  }
 
-    window.startPreparing = async function(orderId) {
-        var res = await API.updateOrderStatus(orderId, 'preparing');
-        if (res.success) {
-            var order = allOrders.find(function(o) { return o._id === orderId; });
-            if (order) order.status = 'preparing';
-            renderOrders();
-        }
-    };
+  function render() {
+    document.getElementById('pgTitle').textContent = L_('title');
+    var def = TABS.filter(function (t) { return t[0] === tab; })[0];
+    var list = def[2] ? orders.filter(function (o) { return def[2].indexOf(o.status) !== -1; }) : orders;
 
-    window.markReady = async function(orderId) {
-        var res = await API.updateOrderStatus(orderId, 'ready');
-        if (res.success) {
-            var order = allOrders.find(function(o) { return o._id === orderId; });
-            if (order) order.status = 'ready';
-            renderOrders();
+    var html = '<div class="mp-tabs">' + TABS.map(function (t) {
+      var n = t[2] ? orders.filter(function (o) { return t[2].indexOf(o.status) !== -1; }).length : orders.length;
+      return '<button class="mp-tab' + (t[0] === tab ? ' active' : '') + '" data-tab="' + t[0] + '">' +
+        L_(t[1]) + ' (' + n + ')</button>';
+    }).join('') + '</div>';
 
-            // Auto-request MsouWout driver for delivery orders
-            if (order && order.deliveryType === 'delivery') {
-                requestDriver(orderId);
-            }
-        }
-    };
-
-    window.declineOrder = async function(orderId) {
-        if (!confirm('Decline this order?')) return;
-        var res = await API.updateOrderStatus(orderId, 'cancelled', 'Declined by merchant');
-        if (res.success) {
-            allOrders = allOrders.filter(function(o) { return o._id !== orderId; });
-            renderOrders();
-        }
-    };
-
-    window.requestDriver = async function(orderId) {
-        var btn = document.querySelector('[data-id="' + orderId + '"] .order-actions button');
-        if (btn) { btn.disabled = true; btn.textContent = 'Requesting driver...'; }
-
-        var res = await API.requestDriver(orderId);
-        if (res.success) {
-            var order = allOrders.find(function(o) { return o._id === orderId; });
-            if (order) order.msouwoutRideId = res.rideId || true;
-            renderOrders();
-            alert('Driver requested! Tracking: ' + (res.trackingCode || 'Searching...'));
-        } else {
-            if (btn) { btn.disabled = false; btn.textContent = 'Request MsouWout Driver'; }
-            alert(res.message || 'Could not request driver. Try again.');
-        }
-    };
-
-    // Load store and orders
-    async function loadOrders() {
-        if (!myStore) {
-            var storeRes = await API.getMyStore();
-            if (storeRes.success && storeRes.data) {
-                myStore = storeRes.data.store;
-                // Update sidebar store name
-                var nameEl = document.querySelector('.sidebar div[style*="font-weight:700"]');
-                if (nameEl && myStore.name) nameEl.textContent = myStore.name;
-            } else {
-                document.getElementById('ordersGrid').innerHTML =
-                    '<div style="text-align:center;padding:60px;color:var(--text-muted);">' +
-                    '<div style="font-weight:600;margin-bottom:8px;">No store found</div>' +
-                    '<div style="font-size:var(--text-sm);">Create a store first using the <a href="../store-designer.html">Store Designer</a></div></div>';
-                return;
-            }
-        }
-
-        var ordersRes = await API.getStoreOrders(myStore._id, 1);
-        if (ordersRes.success && ordersRes.data) {
-            allOrders = ordersRes.data;
-        }
-        renderOrders();
+    if (!list.length) {
+      html += '<div class="mp-empty"><div class="mp-empty-icon">🧾</div><p>' + L_('none') + '</p>' +
+        '<button class="mp-btn mp-btn-ghost" id="btnRefresh">' + L_('refresh') + '</button></div>';
+    } else {
+      html += list.map(card).join('');
+      html += '<button class="mp-btn mp-btn-ghost mp-btn-block" id="btnRefresh">' + L_('refresh') + '</button>';
     }
 
-    loadOrders();
-    setInterval(loadOrders, 10000);
+    document.getElementById('mpBody').innerHTML = html;
+
+    document.querySelectorAll('[data-tab]').forEach(function (b) {
+      b.addEventListener('click', function () { tab = b.dataset.tab; render(); });
+    });
+    var r = document.getElementById('btnRefresh');
+    if (r) r.addEventListener('click', function () { r.disabled = true; load(); });
+    document.querySelectorAll('[data-adv]').forEach(function (b) {
+      b.addEventListener('click', function () { advance(b.dataset.adv, b.dataset.to, b); });
+    });
+    document.querySelectorAll('[data-cancel]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (!confirm(L_('confirmCancel'))) return;
+        advance(b.dataset.cancel, 'cancelled', b);
+      });
+    });
+  }
+
+  function card(o) {
+    var cust = (o.customer && o.customer.name) || '';
+    var phone = (o.customer && o.customer.phone) || '';
+    var next = NEXT[o.status];
+    var items = (o.items || []).map(function (it) {
+      return '<div><span>' + (it.quantity || 1) + '× ' + MP.esc(it.name || '') + '</span><span>' + MP.money(it.subtotal || 0) + '</span></div>';
+    }).join('');
+
+    var actions = '';
+    if (next) {
+      actions += '<button class="mp-btn ' + next.cls + '" style="flex:1;" data-adv="' + o._id + '" data-to="' + next.to + '">' + L_(next.label) + '</button>';
+    }
+    if (o.status === 'ready' || o.status === 'picked_up' || o.status === 'delivering') {
+      if (o.deliveryType === 'pickup') {
+        actions += '<button class="mp-btn mp-btn-red" style="flex:1;" data-adv="' + o._id + '" data-to="delivered">' + L_('deliv') + '</button>';
+      }
+    }
+    if (['pending', 'confirmed', 'preparing'].indexOf(o.status) !== -1) {
+      actions += '<button class="mp-btn mp-btn-ghost mp-btn-sm" data-cancel="' + o._id + '">' + L_('cancel') + '</button>';
+    }
+
+    return '<div class="mp-order">' +
+      '<div class="mp-order-top">' +
+        '<div><div class="mp-order-num">#' + MP.esc(o.orderNumber || '') + '</div>' +
+          '<div class="mp-row-sub">' + MP.esc(cust) + (phone ? ' · ' + MP.esc(phone) : '') + ' · ' + MP.when(o.createdAt) + '</div>' +
+          '<div class="mp-row-sub">' + (o.deliveryType === 'pickup' ? L_('pickup') : L_('delivery')) +
+            (o.rider && o.rider.name ? ' · ' + L_('driver') + ': ' + MP.esc(o.rider.name) : '') +
+            (o.deliveryPin ? ' · ' + L_('pin') + ' ' + MP.esc(o.deliveryPin) : '') + '</div>' +
+        '</div>' +
+        '<div style="text-align:right;flex-shrink:0;">' +
+          '<div class="mp-price">' + MP.money(o.total) + '</div>' +
+          '<span class="mp-status ' + MP.esc(o.status) + '">' + MP.esc(o.status) + '</span>' +
+          '<div class="mp-row-sub">' + (o.paymentStatus === 'paid' ? '✅ ' + L_('paid') : '⏳ ' + L_('unpaid')) + '</div>' +
+        '</div>' +
+      '</div>' +
+      (items ? '<div class="mp-order-items">' + items + '</div>' : '') +
+      (actions ? '<div class="mp-order-actions">' + actions + '</div>' : '') +
+    '</div>';
+  }
+
+  function advance(id, to, btn) {
+    btn.disabled = true;
+    MP.req('PUT', '/api/orders/' + id + '/status', { status: to }).then(function (d) {
+      if (!d || !d.success) throw new Error((d && d.message) || 'failed');
+      MP.toast(MP.t('saved'), 'success');
+      return load();
+    }).catch(function () {
+      btn.disabled = false;
+      MP.toast(MP.t('saveFail'), 'error');
+    });
+  }
+
+  langBar();
+  MP.boot('orders', function (data) {
+    storeId = data.store._id;
+    load();
+  });
 })();
 </script>
-
-<script src="/js/api.js"></script>
-<script src="/js/i18n.js"></script>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
 </body>
 </html>
