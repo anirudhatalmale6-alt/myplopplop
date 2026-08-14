@@ -119,7 +119,7 @@
         kv(L_('name'), RD.esc(u.name || (p.user && p.user.name))) +
         kv(L_('phone'), RD.esc(u.phone || (p.user && p.user.phone))) +
         kv(L_('status'), '<span class="rd-badge ' + RD.esc(st) + '">' + RD.esc(st) + '</span>') +
-        (stats.grade ? kv(L_('grade'), RD.esc(stats.grade)) : '') +
+        (RD.gradeName(stats) ? kv(L_('grade'), RD.esc(RD.gradeName(stats))) : '') +
       '</div>' +
 
       '<div class="rd-card"><h4>' + L_('vehicle') + '</h4>' +

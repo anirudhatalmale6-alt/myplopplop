@@ -122,6 +122,13 @@
     }
   }
 
+  /* the API returns grade as {tier,badge,color}, not a string */
+  function gradeName(stats) {
+    var g = stats && stats.grade;
+    if (!g) return '';
+    return typeof g === 'string' ? g : (g.tier || g.name || '');
+  }
+
   var _stats = null;
   function header(stats) {
     var el = document.getElementById('rdDriver');
@@ -135,7 +142,7 @@
       '<div class="rd-driver-sub"><span class="rd-dot ' + (on ? 'on' : '') + '"></span>' +
       (on ? t('online') : t('offline')) +
       (stats && stats.rating ? ' · ⭐ ' + Number(stats.rating).toFixed(1) : '') +
-      (stats && stats.grade ? ' · ' + esc(stats.grade) : '') + '</div></div>';
+      (gradeName(stats) ? ' · ' + esc(gradeName(stats)) : '') + '</div></div>';
   }
 
   /* boot: guard the token, fetch the driver profile, hand the page real data */
@@ -169,7 +176,7 @@
   global.RD = {
     API_BASE: API_BASE, req: req, token: token, user: user, logout: logout,
     boot: boot, stats: function () { return _stats; }, header: header,
-    toast: toast, esc: esc, money: money, shortMoney: shortMoney, when: when,
+    toast: toast, esc: esc, money: money, shortMoney: shortMoney, when: when, gradeName: gradeName,
     t: t, pick: pick, lang: lang, svg: svg
   };
 })(window);
