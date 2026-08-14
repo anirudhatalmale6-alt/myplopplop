@@ -123,13 +123,15 @@
       '</div>' +
 
       '<div class="rd-card"><h4>' + L_('daily') + '</h4>' +
-        '<div class="rd-bars">' + days.map(function (d) {
+        (peak <= 1
+          ? '<div class="rd-empty" style="padding:var(--space-lg) 0;"><p style="margin:0;">' + L_('none') + '</p></div>'
+          : '<div class="rd-bars">' + days.map(function (d) {
           var h = Math.max(3, Math.round(d.sum / peak * 100));
           return '<div class="rd-bar-wrap">' +
                  '<div class="rd-bar' + (d.today ? ' today' : '') + '" style="height:' + h + '%;">' +
                  (d.sum ? '<span class="val">' + RD.shortMoney(d.sum) + '</span>' : '') + '</div>' +
                  '<span class="rd-bar-label">' + d.label + '</span></div>';
-        }).join('') + '</div>' +
+        }).join('') + '</div>') +
       '</div>' +
 
       '<div class="rd-card"><h4>' + L_('recent') + '</h4>' +
