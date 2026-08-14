@@ -1,494 +1,167 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#D21034">
 <meta property="og:image" content="https://myplopplop.com/assets/og-myplopplop.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<title>Profile — MyPlopPlop Rider</title>
+<title>Pwofil Chofè — MyPlopPlop</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
 <link rel="shortcut icon" href="../favicon.ico">
 <link rel="stylesheet" href="../css/variables.css">
 <link rel="stylesheet" href="../css/base.css">
-<link rel="stylesheet" href="../css/components.css">
-<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/rider.css">
 <style>
-/* ===== Profile Header ===== */
-.profile-hero {
-    background: linear-gradient(135deg, var(--primary-blue) 0%, #001247 100%);
-    padding: var(--space-xl) var(--content-padding) var(--space-2xl);
-    text-align: center;
-    color: var(--white);
-    position: relative;
-}
-.profile-avatar {
-    width: 88px;
-    height: 88px;
-    border-radius: 50%;
-    background: var(--gray-200);
-    margin: 0 auto var(--space-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 40px;
-    border: 4px solid var(--white);
-    box-shadow: var(--shadow-lg);
-}
-.profile-name {
-    font-family: var(--font-heading);
-    font-size: var(--text-xl);
-    font-weight: 700;
-    margin-bottom: 4px;
-}
-.profile-phone {
-    font-size: var(--text-sm);
-    opacity: 0.8;
-    margin-bottom: var(--space-sm);
-}
-.profile-rating {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-xs);
-    background: rgba(255,255,255,0.15);
-    padding: 6px 14px;
-    border-radius: var(--radius-full);
-    font-size: var(--text-sm);
-    font-weight: 600;
-}
-.profile-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-sm);
-    margin: calc(-1 * var(--space-lg)) var(--content-padding) 0;
-    position: relative;
-    z-index: 1;
-}
-.profile-stat-card {
-    background: var(--white);
-    border-radius: var(--radius-md);
-    padding: var(--space-md);
-    text-align: center;
-    box-shadow: var(--shadow-card);
-}
-.profile-stat-card .value {
-    font-family: var(--font-heading);
-    font-size: var(--text-xl);
-    font-weight: 700;
-    color: var(--text-dark);
-}
-.profile-stat-card .label {
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-    margin-top: 2px;
-}
-
-/* ===== Profile Sections ===== */
-.profile-section {
-    margin: var(--space-lg) var(--content-padding) 0;
-}
-.profile-section-title {
-    font-family: var(--font-heading);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: var(--space-sm);
-}
-.profile-card {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-card);
-    overflow: hidden;
-}
-.profile-row {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-    padding: var(--space-md);
-    border-bottom: 1px solid var(--gray-100);
-    transition: background var(--transition-fast);
-}
-.profile-row:last-child { border-bottom: none; }
-.profile-row:hover { background: var(--gray-50); }
-.profile-row-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-}
-.profile-row-content {
-    flex: 1;
-    min-width: 0;
-}
-.profile-row-content .title {
-    font-size: var(--text-sm);
-    font-weight: 500;
-    color: var(--text-dark);
-}
-.profile-row-content .detail {
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-    margin-top: 2px;
-}
-.profile-row-action {
-    flex-shrink: 0;
-    color: var(--gray-400);
-}
-.profile-row-action svg { width: 18px; height: 18px; }
-
-/* ===== Document Status ===== */
-.doc-status {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
-}
-
-/* ===== Settings Row ===== */
-.settings-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--space-md);
-    border-bottom: 1px solid var(--gray-100);
-    cursor: pointer;
-    transition: background var(--transition-fast);
-}
-.settings-row:last-child { border-bottom: none; }
-.settings-row:hover { background: var(--gray-50); }
-.settings-left {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-}
-.settings-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-}
-.settings-label {
-    font-size: var(--text-sm);
-    font-weight: 500;
-    color: var(--text-dark);
-}
-.settings-sub {
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-    margin-top: 2px;
-}
-
-/* ===== Logout ===== */
-.logout-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm);
-    width: calc(100% - var(--content-padding) * 2);
-    margin: var(--space-xl) var(--content-padding) var(--space-lg);
-    padding: 14px;
-    border: 2px solid var(--error);
-    border-radius: var(--radius-md);
-    background: transparent;
-    color: var(--error);
-    font-family: var(--font-heading);
-    font-weight: 600;
-    font-size: var(--text-sm);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-}
-.logout-btn:hover {
-    background: var(--error);
-    color: var(--white);
-}
-
-/* ===== Rider Bottom Nav ===== */
-.rider-bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: var(--bottom-nav-height);
-    background: var(--white);
-    border-top: 1px solid var(--gray-200);
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    z-index: 1000;
-    padding-bottom: env(safe-area-inset-bottom, 0);
-}
-.rider-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    padding: 6px 12px;
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--gray-400);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-}
-.rider-nav-item svg { width: 24px; height: 24px; }
-.rider-nav-item.active { color: var(--primary-red); }
-
-@media (min-width: 768px) {
-    .rider-bottom-nav { display: none; }
-}
+.rd-status { display:flex; align-items:center; justify-content:space-between; gap:var(--space-md);
+  padding:var(--space-md); border-radius:var(--radius-lg); margin-bottom:var(--space-md); background:var(--success-light); }
+.rd-status.off { background:var(--gray-100); }
+.rd-status .lbl { font-weight:700; font-size:var(--text-sm); color:var(--text-dark); }
+.rd-status .sub { font-size:var(--text-xs); color:var(--text-muted); margin-top:2px; }
+.rd-switch { width:50px; height:28px; border-radius:var(--radius-full); border:none; cursor:pointer;
+  background:var(--gray-300); position:relative; flex-shrink:0; transition:background var(--transition-normal); }
+.rd-switch::after { content:''; position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%;
+  background:var(--white); transition:transform var(--transition-normal); box-shadow:var(--shadow-sm); }
+.rd-switch.on { background:var(--success); }
+.rd-switch.on::after { transform:translateX(22px); }
+.rd-kv { display:flex; justify-content:space-between; gap:var(--space-md); padding:10px 0; border-bottom:1px solid var(--gray-100); font-size:var(--text-sm); }
+.rd-kv:last-child { border-bottom:none; }
+.rd-kv .k { color:var(--text-muted); }
+.rd-kv .v { font-weight:600; color:var(--text-dark); text-align:right; word-break:break-word; }
+.rd-badge { display:inline-block; padding:3px 10px; border-radius:var(--radius-full); font-size:10px; font-weight:700; text-transform:uppercase; }
+.rd-badge.approved { background:var(--success-light); color:#065F46; }
+.rd-badge.pending { background:var(--warning-light); color:#92400E; }
+.rd-badge.rejected,.rd-badge.suspended { background:var(--error-light); color:#991B1B; }
 </style>
 </head>
-<body>
+<body style="background:var(--bg-light);">
 
-<!-- TOP BAR -->
-<div class="top-bar">
-    <div style="display:flex;align-items:center;gap:var(--space-sm);">
-        <span>🏍️ Rider Portal</span>
-        <span style="opacity:0.5">|</span>
-        <span>Port-au-Prince</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:var(--space-md);">
-        <a href="#" data-lang="fr">🇫🇷 Français</a>
-        <a href="#" data-lang="en">🇬🇧 English</a>
-        <a href="#" data-lang="kr">🇭🇹 Kreyòl</a>
-        <a href="#" data-lang="es">🇪🇸 Español</a>
-    </div>
+<div class="rd-topbar">
+  <a class="rd-brand" href="../index.html"><img src="../assets/icon-192.png" alt="MyPlopPlop"><span>Chofè</span></a>
+  <div class="rd-langs" id="rdLangs"></div>
 </div>
 
-<!-- HEADER -->
-<header class="header" style="top: 28px;">
-    <div class="header-inner">
-        <a href="../index.html" class="header-logo">
-            <img src="../assets/myplopplop-icon.png" alt="MyPlopPlop" style="height:40px;">
-        </a>
-        <div class="header-actions">
-            <a href="#" class="header-icon" title="Notifications">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            </a>
-            <a href="dashboard.html" class="header-icon" title="Dashboard">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            </a>
-        </div>
-    </div>
-</header>
+<div class="rd-driver" id="rdDriver"></div>
 
-<!-- MAIN -->
-<main class="main" style="margin-top: calc(var(--header-height) + 28px); padding-bottom: calc(var(--bottom-nav-height) + 16px);">
-
-    <div class="dashboard-layout">
-        <!-- SIDEBAR (Desktop) -->
-        <aside class="sidebar">
-            <a class="sidebar-item" href="dashboard.html">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-                <span>Home</span>
-            </a>
-            <a class="sidebar-item" href="history.html">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                <span>Deliveries</span>
-            </a>
-            <a class="sidebar-item" href="earnings.html">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                <span>Earnings</span>
-            </a>
-            <a class="sidebar-item" href="wallet.html">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                <span>Wallet</span>
-            </a>
-            <a class="sidebar-item active" href="profile.html">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                <span>Profile</span>
-            </a>
-        </aside>
-
-        <!-- CONTENT -->
-        <div class="dashboard-content" style="padding: 0;">
-
-            <!-- Profile Hero -->
-            <div class="profile-hero">
-                <div class="profile-avatar">🧑</div>
-                <div class="profile-name">Jean-Baptiste Pierre</div>
-                <div class="profile-phone">+509 3456-7890</div>
-                <div class="profile-rating">
-                    <span style="color: var(--warning);">&#9733;</span> 4.9 Rating &bull; 248 Deliveries
-                </div>
-            </div>
-
-            <!-- Stats -->
-            <div class="profile-stats">
-                <div class="profile-stat-card">
-                    <div class="value">248</div>
-                    <div class="label">Total Deliveries</div>
-                </div>
-                <div class="profile-stat-card">
-                    <div class="value">98%</div>
-                    <div class="label">Completion</div>
-                </div>
-                <div class="profile-stat-card">
-                    <div class="value">4.9</div>
-                    <div class="label">Avg Rating</div>
-                </div>
-            </div>
-
-            <!-- Vehicle Info -->
-            <div class="profile-section">
-                <div class="profile-section-title">Vehicle Information</div>
-                <div class="profile-card">
-                    <div class="profile-row">
-                        <div class="profile-row-icon" style="background: var(--primary-blue-light);">🏍️</div>
-                        <div class="profile-row-content">
-                            <div class="title">Vehicle Type</div>
-                            <div class="detail">Motorcycle</div>
-                        </div>
-                        <div class="profile-row-action">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-                        </div>
-                    </div>
-                    <div class="profile-row">
-                        <div class="profile-row-icon" style="background: var(--gray-100);">🔢</div>
-                        <div class="profile-row-content">
-                            <div class="title">Plate Number</div>
-                            <div class="detail">HT-4521-AB</div>
-                        </div>
-                        <div class="profile-row-action">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Documents -->
-            <div class="profile-section">
-                <div class="profile-section-title">Documents</div>
-                <div class="profile-card">
-                    <div class="profile-row">
-                        <div class="profile-row-icon" style="background: var(--success-light);">🪪</div>
-                        <div class="profile-row-content">
-                            <div class="title">National ID (CIN)</div>
-                            <div class="detail">Uploaded Mar 15, 2026</div>
-                        </div>
-                        <div class="doc-status">
-                            <span class="badge badge-green">Verified</span>
-                        </div>
-                    </div>
-                    <div class="profile-row">
-                        <div class="profile-row-icon" style="background: var(--success-light);">📄</div>
-                        <div class="profile-row-content">
-                            <div class="title">Driver's License</div>
-                            <div class="detail">Uploaded Mar 15, 2026</div>
-                        </div>
-                        <div class="doc-status">
-                            <span class="badge badge-green">Verified</span>
-                        </div>
-                    </div>
-                    <div class="profile-row">
-                        <div class="profile-row-icon" style="background: var(--warning-light);">🛡️</div>
-                        <div class="profile-row-content">
-                            <div class="title">Vehicle Insurance</div>
-                            <div class="detail">Uploaded Mar 20, 2026</div>
-                        </div>
-                        <div class="doc-status">
-                            <span class="badge badge-yellow">Pending</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Account Settings -->
-            <div class="profile-section">
-                <div class="profile-section-title">Account Settings</div>
-                <div class="profile-card">
-                    <div class="settings-row" onclick="alert('Change PIN screen')">
-                        <div class="settings-left">
-                            <div class="settings-icon" style="background: var(--primary-red-light);">🔒</div>
-                            <div>
-                                <div class="settings-label">Change PIN</div>
-                                <div class="settings-sub">Update your 4-digit PIN</div>
-                            </div>
-                        </div>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-                    </div>
-                    <div class="settings-row" onclick="alert('Notification settings')">
-                        <div class="settings-left">
-                            <div class="settings-icon" style="background: var(--info-light);">🔔</div>
-                            <div>
-                                <div class="settings-label">Notifications</div>
-                                <div class="settings-sub">Push, SMS, email preferences</div>
-                            </div>
-                        </div>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-                    </div>
-                    <div class="settings-row" onclick="alert('Language settings')">
-                        <div class="settings-left">
-                            <div class="settings-icon" style="background: var(--gray-100);">🌐</div>
-                            <div>
-                                <div class="settings-label">Language</div>
-                                <div class="settings-sub">Kreyol</div>
-                            </div>
-                        </div>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-                    </div>
-                    <div class="settings-row" onclick="alert('Help center')">
-                        <div class="settings-left">
-                            <div class="settings-icon" style="background: var(--success-light);">❓</div>
-                            <div>
-                                <div class="settings-label">Help & Support</div>
-                                <div class="settings-sub">FAQs, contact support</div>
-                            </div>
-                        </div>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Logout -->
-            <button class="logout-btn" onclick="alert('Logged out')">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                Log Out
-            </button>
-
-        </div>
-    </div>
-
+<main class="rd-main">
+  <h1 class="rd-title" id="rdTitle">Pwofil</h1>
+  <div id="rdBody"></div>
 </main>
 
-<!-- RIDER BOTTOM NAV -->
-<nav class="rider-bottom-nav">
-    <a href="dashboard.html" class="rider-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        <span>Home</span>
-    </a>
-    <a href="history.html" class="rider-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        <span>Deliveries</span>
-    </a>
-    <a href="earnings.html" class="rider-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        <span>Earnings</span>
-    </a>
-    <a href="wallet.html" class="rider-nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        <span>Wallet</span>
-    </a>
-    <a href="profile.html" class="rider-nav-item active">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <span>Profile</span>
-    </a>
-</nav>
+<nav class="rider-bottom-nav" id="rdNav"></nav>
 
-<script src="/js/api.js"></script>
-<script src="/js/i18n.js"></script>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
+<script src="../js/rider.js"></script>
+<script>
+(function () {
+  var L = {
+    title:   { kr:'Pwofil Mwen', fr:'Mon Profil', en:'My Profile', es:'Mi Perfil' },
+    online:  { kr:'Mwen an liy', fr:'Je suis en ligne', en:"I'm online", es:'Estoy en línea' },
+    onSub:   { kr:'W ap resevwa nouvo kous', fr:'Vous recevez de nouvelles courses', en:'You will receive new jobs', es:'Recibirás nuevos viajes' },
+    offline: { kr:'Mwen dekonekte', fr:'Je suis hors ligne', en:"I'm offline", es:'Estoy desconectado' },
+    offSub:  { kr:'Ou p ap resevwa kous', fr:'Vous ne recevez pas de courses', en:'You will not receive jobs', es:'No recibirás viajes' },
+    me:      { kr:'Enfòmasyon mwen', fr:'Mes informations', en:'My information', es:'Mi información' },
+    name:    { kr:'Non', fr:'Nom', en:'Name', es:'Nombre' },
+    phone:   { kr:'Telefòn', fr:'Téléphone', en:'Phone', es:'Teléfono' },
+    status:  { kr:'Estati kont lan', fr:'Statut du compte', en:'Account status', es:'Estado' },
+    grade:   { kr:'Nivo', fr:'Niveau', en:'Grade', es:'Nivel' },
+    vehicle: { kr:'Machin mwen', fr:'Mon véhicule', en:'My vehicle', es:'Mi vehículo' },
+    vtype:   { kr:'Kalite', fr:'Type', en:'Type', es:'Tipo' },
+    plate:   { kr:'Plak', fr:'Plaque', en:'Plate', es:'Placa' },
+    model:   { kr:'Modèl', fr:'Modèle', en:'Model', es:'Modelo' },
+    color:   { kr:'Koulè', fr:'Couleur', en:'Colour', es:'Color' },
+    licence: { kr:'Nimewo lisans', fr:'Numéro de permis', en:'Licence number', es:'N.º de licencia' },
+    services:{ kr:'Sèvis', fr:'Services', en:'Services', es:'Servicios' },
+    perf:    { kr:'Pèfòmans', fr:'Performance', en:'Performance', es:'Rendimiento' },
+    trips:   { kr:'Kous', fr:'Courses', en:'Trips', es:'Viajes' },
+    deliv:   { kr:'Livrezon', fr:'Livraisons', en:'Deliveries', es:'Entregas' },
+    rating:  { kr:'Nòt', fr:'Note', en:'Rating', es:'Calificación' },
+    earned:  { kr:'Total', fr:'Total', en:'Total', es:'Total' },
+    edit:    { kr:'Pou chanje enfòmasyon machin ou, kontakte sipò MyPlopPlop sou WhatsApp.', fr:'Pour modifier les informations du véhicule, contactez le support MyPlopPlop sur WhatsApp.', en:'To change your vehicle details, contact MyPlopPlop support on WhatsApp.', es:'Para cambiar los datos del vehículo, contacta con soporte por WhatsApp.' },
+    support: { kr:'Kontakte sipò', fr:'Contacter le support', en:'Contact support', es:'Contactar soporte' },
+    logout:  { kr:'Dekonekte', fr:'Se déconnecter', en:'Log out', es:'Cerrar sesión' },
+    none:    { kr:'—', fr:'—', en:'—', es:'—' }
+  };
+  function L_(k) { return RD.pick(L[k]) || k; }
+  var WA = 'https://wa.me/50946859702';
+
+  function kv(k, v) {
+    return '<div class="rd-kv"><span class="k">' + k + '</span><span class="v">' + (v || L_('none')) + '</span></div>';
+  }
+
+  function render(stats, profile) {
+    document.getElementById('rdTitle').textContent = L_('title');
+    var u = RD.user() || {};
+    var p = profile || {};
+    var on = !!stats.isOnline;
+    var st = p.status || stats.status || 'pending';
+
+    document.getElementById('rdBody').innerHTML =
+      '<div class="rd-status' + (on ? '' : ' off') + '" id="stRow">' +
+        '<div><div class="lbl" id="stLbl">' + (on ? L_('online') : L_('offline')) + '</div>' +
+        '<div class="sub" id="stSub">' + (on ? L_('onSub') : L_('offSub')) + '</div></div>' +
+        '<button class="rd-switch' + (on ? ' on' : '') + '" id="stBtn" aria-label="online"></button>' +
+      '</div>' +
+
+      '<div class="rd-stats">' +
+        '<div class="rd-stat"><div class="v">' + (stats.totalRides || 0) + '</div><div class="l">' + L_('trips') + '</div></div>' +
+        '<div class="rd-stat"><div class="v">' + (stats.totalDeliveries || 0) + '</div><div class="l">' + L_('deliv') + '</div></div>' +
+        '<div class="rd-stat"><div class="v">' + (Number(stats.rating) || 0).toFixed(1) + '</div><div class="l">' + L_('rating') + '</div></div>' +
+        '<div class="rd-stat"><div class="v">' + RD.shortMoney(stats.totalEarnings || 0) + '</div><div class="l">' + L_('earned') + '</div></div>' +
+      '</div>' +
+
+      '<div class="rd-card"><h4>' + L_('me') + '</h4>' +
+        kv(L_('name'), RD.esc(u.name || (p.user && p.user.name))) +
+        kv(L_('phone'), RD.esc(u.phone || (p.user && p.user.phone))) +
+        kv(L_('status'), '<span class="rd-badge ' + RD.esc(st) + '">' + RD.esc(st) + '</span>') +
+        (stats.grade ? kv(L_('grade'), RD.esc(stats.grade)) : '') +
+      '</div>' +
+
+      '<div class="rd-card"><h4>' + L_('vehicle') + '</h4>' +
+        kv(L_('vtype'), RD.esc(p.vehicleType)) +
+        kv(L_('plate'), RD.esc(p.vehiclePlate)) +
+        kv(L_('model'), RD.esc(p.vehicleModel)) +
+        kv(L_('color'), RD.esc(p.vehicleColor)) +
+        kv(L_('licence'), RD.esc(p.licenseNumber)) +
+        kv(L_('services'), RD.esc((p.services || []).join(', '))) +
+        '<p style="font-size:var(--text-xs);color:var(--text-muted);margin:var(--space-md) 0 var(--space-sm);">' + L_('edit') + '</p>' +
+        '<a class="rd-btn rd-btn-ghost" href="' + WA + '?text=' +
+          encodeURIComponent('Bonjou MyPlopPlop, mwen se ' + (u.name || '') + ' (chofè). Mwen bezwen chanje enfòmasyon machin mwen.') +
+          '" target="_blank" rel="noopener">' + L_('support') + '</a>' +
+      '</div>' +
+
+      '<button class="rd-btn rd-btn-ghost" id="rdOut" style="color:var(--error);">' + L_('logout') + '</button>';
+
+    document.getElementById('stBtn').addEventListener('click', function () {
+      var btn = this;
+      var next = !btn.classList.contains('on');
+      btn.disabled = true;
+      RD.req('PUT', '/api/drivers/online', { isOnline: next }).then(function (d) {
+        btn.disabled = false;
+        if (!d || !d.success) { RD.toast(RD.t('failed'), 'error'); return; }
+        btn.classList.toggle('on', d.isOnline);
+        document.getElementById('stRow').classList.toggle('off', !d.isOnline);
+        document.getElementById('stLbl').textContent = d.isOnline ? L_('online') : L_('offline');
+        document.getElementById('stSub').textContent = d.isOnline ? L_('onSub') : L_('offSub');
+        stats.isOnline = d.isOnline;
+        RD.header(stats);
+        RD.toast(RD.t('saved'), 'success');
+      }).catch(function () { btn.disabled = false; RD.toast(RD.t('failed'), 'error'); });
+    });
+    document.getElementById('rdOut').addEventListener('click', RD.logout);
+  }
+
+  RD.boot('profile', function (stats) {
+    RD.req('GET', '/api/drivers/profile').then(function (d) {
+      render(stats, (d && d.profile) || null);
+    }).catch(function () { render(stats, null); });
+  });
+})();
+</script>
 </body>
 </html>

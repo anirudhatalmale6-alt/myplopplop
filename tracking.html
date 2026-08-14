@@ -351,6 +351,9 @@
     }
 }
 </style>
+<!-- api.js/i18n.js must load BEFORE the inline page script: it calls API.* at parse time -->
+<script src="/js/api.js"></script>
+<script src="/js/i18n.js"></script>
 </head>
 <body>
 
@@ -431,7 +434,7 @@
 
 <!-- Report Issue -->
 <div class="report-section">
-    <button class="btn btn-outline btn-full" onclick="alert('Report submitted. Our support team will contact you shortly.')">
+    <button class="btn btn-outline btn-full" onclick="reportIssue()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <span data-i18n="tracking.report">Report Issue</span>
     </button>
@@ -502,6 +505,20 @@
 </nav>
 
 <script>
+/* Report Issue used to pop a fake "Report submitted" and do nothing at all.
+   It now opens WhatsApp support with the tracking code already filled in. */
+function reportIssue() {
+  var code = '';
+  var el = document.getElementById('trackingCode') || document.getElementById('trackInput');
+  if (el && el.value) code = el.value.trim();
+  if (!code) {
+    var m = location.search.match(/[?&](code|order|id)=([^&]+)/);
+    if (m) code = decodeURIComponent(m[2]);
+  }
+  var msg = 'Bonjou MyPlopPlop, mwen gen yon pwoblem ak yon komand.' + (code ? ' Nimewo: ' + code : '');
+  window.open('https://wa.me/50946859702?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+}
+
 (function() {
     const params = new URLSearchParams(window.location.search);
     const rideId = params.get('id');
@@ -659,7 +676,7 @@
                     '<div id="rateStars" style="display:flex;gap:8px;justify-content:center;font-size:28px;cursor:pointer;">' +
                         '<span data-r="1">&#9734;</span><span data-r="2">&#9734;</span><span data-r="3">&#9734;</span><span data-r="4">&#9734;</span><span data-r="5">&#9734;</span>' +
                     '</div></div>' +
-                    '<button class="btn btn-outline btn-full" onclick="alert(\'Report submitted. Our support team will contact you shortly.\')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Report Issue</button>';
+                    '<button class="btn btn-outline btn-full" onclick="reportIssue()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Report Issue</button>';
 
                 document.getElementById('rateStars').addEventListener('click', async function(e) {
                     const rating = parseInt(e.target.dataset.r);
@@ -695,8 +712,6 @@
 })();
 </script>
 
-<script src="/js/api.js"></script>
-<script src="/js/i18n.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
 </body>
 </html>

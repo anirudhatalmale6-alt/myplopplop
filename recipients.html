@@ -300,140 +300,12 @@
 
 <!-- RECIPIENT CARDS -->
 <div class="recipients-list">
-
-    <!-- Marie Dupont -->
-    <div class="recipient-card">
-        <div class="recipient-header">
-            <div class="recipient-avatar">👩</div>
-            <div class="recipient-name-row">
-                <div class="recipient-name">
-                    Marie Dupont
-                    <span class="relationship-badge">Sister</span>
-                    <span class="default-badge">★ Default</span>
-                </div>
-            </div>
-        </div>
-        <div class="recipient-details">
-            <div class="recipient-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                <span>45 Rue Capois, Port-au-Prince</span>
-            </div>
-            <div class="recipient-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                <span>+509 3456 7890</span>
-            </div>
-        </div>
-        <div class="recipient-actions">
-            <a href="shop.html" class="recipient-action primary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-                Order for them
-            </a>
-            <div class="action-divider"></div>
-            <a href="wallet.html" class="recipient-action blue">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                Send credit
-            </a>
-            <div class="action-divider"></div>
-            <button class="recipient-action" onclick="openEditRecipient('Marie Dupont')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                Edit
-            </button>
-            <div class="action-divider"></div>
-            <button class="recipient-action" onclick="confirmDelete('Marie Dupont')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                Delete
-            </button>
-        </div>
+    <div id="recipientsList"></div>
+    <div id="recipientsEmpty" class="hidden" style="text-align:center;padding:40px 16px;color:var(--text-muted);">
+        <div style="font-size:40px;margin-bottom:8px;">👥</div>
+        <p style="font-size:var(--text-sm);margin-bottom:16px;" id="emptyText">No recipients saved yet.</p>
+        <button class="btn btn-red" onclick="openAddRecipient()" id="emptyBtn">Add your first recipient</button>
     </div>
-
-    <!-- Jean Dupont -->
-    <div class="recipient-card">
-        <div class="recipient-header">
-            <div class="recipient-avatar">👨</div>
-            <div class="recipient-name-row">
-                <div class="recipient-name">
-                    Jean Dupont
-                    <span class="relationship-badge">Father</span>
-                </div>
-            </div>
-        </div>
-        <div class="recipient-details">
-            <div class="recipient-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                <span>12 Ave Christophe, Cap-Haitien</span>
-            </div>
-            <div class="recipient-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                <span>+509 3412 5678</span>
-            </div>
-        </div>
-        <div class="recipient-actions">
-            <a href="shop.html" class="recipient-action primary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-                Order for them
-            </a>
-            <div class="action-divider"></div>
-            <a href="wallet.html" class="recipient-action blue">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                Send credit
-            </a>
-            <div class="action-divider"></div>
-            <button class="recipient-action" onclick="openEditRecipient('Jean Dupont')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                Edit
-            </button>
-            <div class="action-divider"></div>
-            <button class="recipient-action" onclick="confirmDelete('Jean Dupont')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                Delete
-            </button>
-        </div>
-    </div>
-
-    <!-- Sophie Pierre -->
-    <div class="recipient-card">
-        <div class="recipient-header">
-            <div class="recipient-avatar">👩</div>
-            <div class="recipient-name-row">
-                <div class="recipient-name">
-                    Sophie Pierre
-                    <span class="relationship-badge">Friend</span>
-                </div>
-            </div>
-        </div>
-        <div class="recipient-details">
-            <div class="recipient-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                <span>Delmas 33, Port-au-Prince</span>
-            </div>
-            <div class="recipient-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                <span>+509 3789 0123</span>
-            </div>
-        </div>
-        <div class="recipient-actions">
-            <a href="shop.html" class="recipient-action primary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-                Order for them
-            </a>
-            <div class="action-divider"></div>
-            <a href="wallet.html" class="recipient-action blue">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                Send credit
-            </a>
-            <div class="action-divider"></div>
-            <button class="recipient-action" onclick="openEditRecipient('Sophie Pierre')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                Edit
-            </button>
-            <div class="action-divider"></div>
-            <button class="recipient-action" onclick="confirmDelete('Sophie Pierre')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                Delete
-            </button>
-        </div>
-    </div>
-
 </div>
 
 </main>
@@ -553,36 +425,127 @@
 
 <script src="js/mock-data.js"></script>
 <script>
+/* Recipients are saved on this device. The page used to show three invented
+   people and pop "saved successfully!" without storing anything. */
+var RCP_KEY = 'pp_recipients';
+var editingId = null;
+
+var RL = {
+    kr: { empty:'Ou poko anrejistre pèsonn.', add:'Ajoute premye moun nan', save:'Anrejistre', saved:'Anrejistre !', removed:'Retire.', needName:'Mete yon non.', del:'Retire %s nan lis la ?', title:'Moun mwen yo', addNew:'Ajoute', dflt:'Prensipal', order:'Kòmande pou li' },
+    fr: { empty:'Aucun destinataire enregistré.', add:'Ajouter le premier', save:'Enregistrer', saved:'Enregistré !', removed:'Supprimé.', needName:'Indiquez un nom.', del:'Retirer %s de la liste ?', title:'Mes destinataires', addNew:'Ajouter', dflt:'Principal', order:'Commander pour lui' },
+    en: { empty:'No recipients saved yet.', add:'Add your first recipient', save:'Save', saved:'Saved!', removed:'Removed.', needName:'Please enter a name.', del:'Remove %s from your recipients?', title:'My Recipients', addNew:'Add New', dflt:'Default', order:'Order for them' },
+    es: { empty:'Sin destinatarios guardados.', add:'Añadir el primero', save:'Guardar', saved:'¡Guardado!', removed:'Eliminado.', needName:'Escribe un nombre.', del:'¿Quitar a %s?', title:'Mis destinatarios', addNew:'Añadir', dflt:'Principal', order:'Pedir para él' }
+};
+function rl(k) {
+    var lg = localStorage.getItem('pp_lang') || 'fr';
+    return (RL[lg] || RL.en)[k] || (RL.en[k] || k);
+}
+function rEsc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+        return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+    });
+}
+function loadRecipients() {
+    try { return JSON.parse(localStorage.getItem(RCP_KEY) || '[]'); } catch (e) { return []; }
+}
+function storeRecipients(list) {
+    localStorage.setItem(RCP_KEY, JSON.stringify(list));
+}
+function renderRecipients() {
+    var list = loadRecipients();
+    var box = document.getElementById('recipientsList');
+    var empty = document.getElementById('recipientsEmpty');
+    document.getElementById('emptyText').textContent = rl('empty');
+    document.getElementById('emptyBtn').textContent = rl('add');
+    if (!list.length) {
+        box.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+    }
+    empty.classList.add('hidden');
+    box.innerHTML = list.map(function(r) {
+        return '<div class="recipient-card">' +
+            '<div class="recipient-header">' +
+                '<div class="recipient-avatar">' + (r.emoji || '👤') + '</div>' +
+                '<div class="recipient-name-row"><div class="recipient-name">' + rEsc(r.name) +
+                    (r.relationship ? ' <span class="relationship-badge">' + rEsc(r.relationship) + '</span>' : '') +
+                    (r.isDefault ? ' <span class="default-badge">★ ' + rl('dflt') + '</span>' : '') +
+                '</div></div>' +
+            '</div>' +
+            '<div class="recipient-details">' +
+                (r.address ? '<div class="recipient-detail"><span>📍</span><span>' + rEsc(r.address) + '</span></div>' : '') +
+                (r.phone ? '<div class="recipient-detail"><span>📞</span><span>' + rEsc(r.phone) + '</span></div>' : '') +
+            '</div>' +
+            '<div class="recipient-actions">' +
+                '<button class="recipient-action" onclick="openEditRecipient(\'' + r.id + '\')">✏️</button>' +
+                '<button class="recipient-action" onclick="confirmDelete(\'' + r.id + '\')">🗑️</button>' +
+                '<a class="recipient-action" href="shop.html">' + rl('order') + '</a>' +
+            '</div>' +
+        '</div>';
+    }).join('');
+}
 function openAddRecipient() {
     document.getElementById('addRecipientModal').classList.add('show');
 }
 function closeAddRecipient() {
     document.getElementById('addRecipientModal').classList.remove('show');
-    // Clear form
+    editingId = null;
     document.getElementById('recipientName').value = '';
     document.getElementById('recipientPhone').value = '';
     document.getElementById('recipientAddress').value = '';
     document.getElementById('recipientRelationship').selectedIndex = 0;
-    document.getElementById('setDefault').checked = false;
+    var d = document.getElementById('setDefault');
+    if (d) d.checked = false;
 }
 function saveRecipient() {
-    const name = document.getElementById('recipientName').value.trim();
-    if (!name) {
-        alert('Please enter a name.');
-        return;
-    }
-    alert('Recipient "' + name + '" saved successfully!');
+    var name = document.getElementById('recipientName').value.trim();
+    if (!name) { alert(rl('needName')); return; }
+    var sel = document.getElementById('recipientRelationship');
+    var dflt = document.getElementById('setDefault');
+    var rec = {
+        id: editingId || ('r' + Date.now()),
+        name: name,
+        phone: document.getElementById('recipientPhone').value.trim(),
+        address: document.getElementById('recipientAddress').value.trim(),
+        relationship: sel && sel.selectedIndex > 0 ? sel.options[sel.selectedIndex].text : '',
+        isDefault: !!(dflt && dflt.checked)
+    };
+    var list = loadRecipients();
+    if (rec.isDefault) list.forEach(function(r) { r.isDefault = false; });
+    var i = list.findIndex(function(r) { return r.id === rec.id; });
+    if (i >= 0) list[i] = rec; else list.push(rec);
+    storeRecipients(list);
+    renderRecipients();
     closeAddRecipient();
+    alert(rl('saved'));
 }
-function openEditRecipient(name) {
-    document.getElementById('recipientName').value = name;
+function openEditRecipient(id) {
+    var r = loadRecipients().filter(function(x) { return x.id === id; })[0];
+    if (!r) return;
+    editingId = id;
+    document.getElementById('recipientName').value = r.name || '';
+    document.getElementById('recipientPhone').value = r.phone || '';
+    document.getElementById('recipientAddress').value = r.address || '';
+    var d = document.getElementById('setDefault');
+    if (d) d.checked = !!r.isDefault;
+    var sel = document.getElementById('recipientRelationship');
+    if (sel && r.relationship) {
+        for (var i = 0; i < sel.options.length; i++) {
+            if (sel.options[i].text === r.relationship) { sel.selectedIndex = i; break; }
+        }
+    }
     openAddRecipient();
 }
-function confirmDelete(name) {
-    if (confirm('Remove ' + name + ' from your recipients?')) {
-        alert(name + ' has been removed.');
-    }
+function confirmDelete(id) {
+    var list = loadRecipients();
+    var r = list.filter(function(x) { return x.id === id; })[0];
+    if (!r) return;
+    if (!confirm(rl('del').replace('%s', r.name))) return;
+    storeRecipients(list.filter(function(x) { return x.id !== id; }));
+    renderRecipients();
 }
+document.addEventListener('DOMContentLoaded', renderRecipients);
+if (document.readyState !== 'loading') renderRecipients();
 // Close modal on overlay click
 document.getElementById('addRecipientModal').addEventListener('click', function(e) {
     if (e.target === this) closeAddRecipient();

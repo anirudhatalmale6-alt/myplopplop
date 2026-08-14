@@ -278,7 +278,11 @@
         grid-template-columns: repeat(4, 1fr);
     }
 }
+@keyframes txSpin { to { transform: rotate(360deg); } }
 </style>
+<!-- api.js/i18n.js must load BEFORE the inline page script: it calls API.* at parse time -->
+<script src="/js/api.js"></script>
+<script src="/js/i18n.js"></script>
 </head>
 <body>
 
@@ -360,79 +364,9 @@
             <a href="#" class="section-link">See all →</a>
         </div>
         <div class="transaction-list">
-            <!-- 1 -->
-            <div class="transaction-item">
-                <div class="transaction-icon tx-debit">🍽️</div>
-                <div class="transaction-info">
-                    <div class="transaction-desc">Order Payment</div>
-                    <div class="transaction-sub">Lakay Kreyol — Griot ak Bannann</div>
-                </div>
-                <div>
-                    <div class="transaction-amount amount-debit">-350 HTG</div>
-                    <div class="transaction-date">Mar 31</div>
-                </div>
-            </div>
-            <!-- 2 -->
-            <div class="transaction-item">
-                <div class="transaction-icon tx-credit">💳</div>
-                <div class="transaction-info">
-                    <div class="transaction-desc">Top Up</div>
-                    <div class="transaction-sub">Card ending 4829</div>
-                </div>
-                <div>
-                    <div class="transaction-amount amount-credit">+2,000 HTG</div>
-                    <div class="transaction-date">Mar 30</div>
-                </div>
-            </div>
-            <!-- 3 -->
-            <div class="transaction-item">
-                <div class="transaction-icon tx-debit">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                </div>
-                <div class="transaction-info">
-                    <div class="transaction-desc">Send to Recipient</div>
-                    <div class="transaction-sub">Marie Dupont</div>
-                </div>
-                <div>
-                    <div class="transaction-amount amount-debit">-500 HTG</div>
-                    <div class="transaction-date">Mar 29</div>
-                </div>
-            </div>
-            <!-- 4 -->
-            <div class="transaction-item">
-                <div class="transaction-icon tx-debit">🛵</div>
-                <div class="transaction-info">
-                    <div class="transaction-desc">Delivery Payment</div>
-                    <div class="transaction-sub">Caribbean Supermarket</div>
-                </div>
-                <div>
-                    <div class="transaction-amount amount-debit">-150 HTG</div>
-                    <div class="transaction-date">Mar 28</div>
-                </div>
-            </div>
-            <!-- 5 -->
-            <div class="transaction-item">
-                <div class="transaction-icon tx-credit">💳</div>
-                <div class="transaction-info">
-                    <div class="transaction-desc">Top Up</div>
-                    <div class="transaction-sub">Card ending 4829</div>
-                </div>
-                <div>
-                    <div class="transaction-amount amount-credit">+1,000 HTG</div>
-                    <div class="transaction-date">Mar 27</div>
-                </div>
-            </div>
-            <!-- 6 -->
-            <div class="transaction-item">
-                <div class="transaction-icon tx-debit">💊</div>
-                <div class="transaction-info">
-                    <div class="transaction-desc">Order Payment</div>
-                    <div class="transaction-sub">Pharma Plus Haiti — Vitamins</div>
-                </div>
-                <div>
-                    <div class="transaction-amount amount-debit">-425 HTG</div>
-                    <div class="transaction-date">Mar 26</div>
-                </div>
+            <div class="tx-loading" id="txLoading" style="text-align:center;padding:28px 12px;color:var(--text-muted);font-size:var(--text-sm);">
+                <div style="width:26px;height:26px;margin:0 auto 10px;border:3px solid var(--gray-200);border-top-color:var(--primary-red);border-radius:50%;animation:txSpin .8s linear infinite;"></div>
+                <span data-i18n="wallet.loading">Loading...</span>
             </div>
         </div>
     </div>
@@ -597,34 +531,61 @@ function loadWallet() {
     });
 }
 
-function loadTransactions() {
-    API.paymentHistory().then(function(data) {
-        if (data.success && data.transactions && data.transactions.length > 0) {
-            var list = document.querySelector('.transaction-list');
-            list.innerHTML = '';
-            data.transactions.forEach(function(tx) {
-                var isCredit = (tx.type === 'topup' || tx.type === 'earning');
-                var icon = tx.type === 'topup' ? '💳' : tx.type === 'earning' ? '💰' : tx.type === 'payment' ? '🛵' : '📤';
-                var methodLabel = tx.method ? ' via ' + tx.method.charAt(0).toUpperCase() + tx.method.slice(1) : '';
-                var date = new Date(tx.createdAt);
-                var dateStr = date.toLocaleDateString('fr-HT', { month: 'short', day: 'numeric' });
-                var desc = tx.description || tx.type;
-                var rideInfo = tx.ride ? (tx.ride.pickup ? tx.ride.pickup.address : '') : '';
+function txEsc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+        return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+}
 
-                list.innerHTML += '<div class="transaction-item">' +
-                    '<div class="transaction-icon ' + (isCredit ? 'tx-credit' : 'tx-debit') + '">' + icon + '</div>' +
-                    '<div class="transaction-info">' +
-                        '<div class="transaction-desc">' + desc + '</div>' +
-                        '<div class="transaction-sub">' + (rideInfo || methodLabel) + '</div>' +
-                    '</div>' +
-                    '<div>' +
-                        '<div class="transaction-amount ' + (isCredit ? 'amount-credit' : 'amount-debit') + '">' +
-                            (isCredit ? '+' : '-') + tx.amount.toLocaleString('fr-HT') + ' HTG</div>' +
-                        '<div class="transaction-date">' + dateStr + '</div>' +
-                    '</div>' +
-                '</div>';
-            });
-        }
+function txMessage(text) {
+    document.querySelector('.transaction-list').innerHTML =
+        '<div style="text-align:center;padding:32px 12px;color:var(--text-muted);">' +
+            '<div style="font-size:34px;margin-bottom:8px;">🧾</div>' +
+            '<div style="font-size:var(--text-sm);">' + txEsc(text) + '</div>' +
+        '</div>';
+}
+
+function loadTransactions() {
+    var EMPTY = { fr:"Aucune transaction pour le moment.", en:'No transactions yet.',
+                  kr:'Pa gen tranzaksyon ankò.', es:'Sin transacciones aún.' };
+    var FAIL  = { fr:'Impossible de charger. Réessayez.', en:'Could not load. Please try again.',
+                  kr:'Nou pa t ka chaje. Eseye ankò.', es:'No se pudo cargar.' };
+    var lg = localStorage.getItem('pp_lang') || 'fr';
+
+    API.paymentHistory().then(function(data) {
+        var list = document.querySelector('.transaction-list');
+        // An empty history used to leave the hardcoded demo rows on screen, so a
+        // brand-new user saw invented purchases. Always paint the real result.
+        if (!data || !data.success) { txMessage(FAIL[lg] || FAIL.en); return; }
+        var txs = data.transactions || [];
+        if (!txs.length) { txMessage(EMPTY[lg] || EMPTY.en); return; }
+
+        var html = '';
+        txs.forEach(function(tx) {
+            var isCredit = (tx.type === 'topup' || tx.type === 'earning');
+            var icon = tx.type === 'topup' ? '💳' : tx.type === 'earning' ? '💰' : tx.type === 'payment' ? '🛵' : '📤';
+            var methodLabel = tx.method ? ' via ' + tx.method.charAt(0).toUpperCase() + tx.method.slice(1) : '';
+            var date = new Date(tx.createdAt);
+            var dateStr = isNaN(date) ? '' : date.toLocaleDateString('fr-HT', { month: 'short', day: 'numeric' });
+            var desc = tx.description || tx.type || '';
+            var rideInfo = (tx.ride && tx.ride.pickup) ? tx.ride.pickup.address : '';
+
+            html += '<div class="transaction-item">' +
+                '<div class="transaction-icon ' + (isCredit ? 'tx-credit' : 'tx-debit') + '">' + icon + '</div>' +
+                '<div class="transaction-info">' +
+                    '<div class="transaction-desc">' + txEsc(desc) + '</div>' +
+                    '<div class="transaction-sub">' + txEsc(rideInfo || methodLabel) + '</div>' +
+                '</div>' +
+                '<div>' +
+                    '<div class="transaction-amount ' + (isCredit ? 'amount-credit' : 'amount-debit') + '">' +
+                        (isCredit ? '+' : '-') + (Number(tx.amount) || 0).toLocaleString('fr-HT') + ' HTG</div>' +
+                    '<div class="transaction-date">' + dateStr + '</div>' +
+                '</div>' +
+            '</div>';
+        });
+        list.innerHTML = html;
+    }).catch(function() {
+        txMessage(FAIL[lg] || FAIL.en);
     });
 }
 
@@ -699,8 +660,6 @@ document.getElementById('topUpModal').addEventListener('click', function(e) {
 });
 </script>
 
-<script src="/js/api.js"></script>
-<script src="/js/i18n.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}</script>
 </body>
 </html>
