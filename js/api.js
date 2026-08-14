@@ -157,6 +157,28 @@ const API = (() => {
         return await request('GET', '/api/admin/transactions' + qs);
     }
 
+    async function adminUsers(role = '', page = 1) {
+        const qs = role ? `?role=${role}&page=${page}` : `?page=${page}`;
+        return await request('GET', '/api/admin/users' + qs);
+    }
+
+    async function adminOrders(status = '', page = 1) {
+        const qs = status ? `?status=${status}&page=${page}` : `?page=${page}`;
+        return await request('GET', '/api/admin/orders' + qs);
+    }
+
+    async function adminStores(status = '') {
+        return await request('GET', '/api/admin/stores' + (status ? '?status=' + status : ''));
+    }
+
+    async function adminStoreAction(id, action) {
+        return await request('PATCH', '/api/admin/stores/' + id, { action });
+    }
+
+    async function adminMarketplaceSettings() {
+        return await request('GET', '/api/marketplace/settings');
+    }
+
     // Payments
     async function moncashTopup(amount) {
         return await request('POST', '/api/payments/moncash/topup', { amount });
@@ -375,6 +397,7 @@ const API = (() => {
         driverOnboard, driverProfile, driverGoOnline, driverGoOffline, driverUpdateLocation, driverStats,
         createRide, getMyRides, getAvailableRides, getRide, acceptRide, updateRideStatus, cancelRide, rateRide,
         adminDashboard, adminDrivers, adminVerifyDriver, adminRides, adminTransactions,
+        adminUsers, adminOrders, adminStores, adminStoreAction, adminMarketplaceSettings,
         moncashTopup, moncashPayRide, natcashTopup, natcashPayRide, walletPayRide, paymentHistory, verifyMoncash,
         getChatMessages, sendChatMessage, getUnreadCount, getQuickReplies,
         subscribeToPush, health, updateNavForUser,
