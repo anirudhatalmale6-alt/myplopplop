@@ -132,6 +132,7 @@ details[open] summary { margin-bottom: 10px; }
     <button data-lang="ht" onclick="setLang('ht')">HT</button>
     <button data-lang="fr" onclick="setLang('fr')">FR</button>
     <button data-lang="en" onclick="setLang('en')">EN</button>
+    <button data-lang="pt" onclick="setLang('pt')">PT</button>
   </div>
 </div>
 
@@ -307,6 +308,45 @@ const T = {
     st_status: 'Eta', st_last: 'Dènye fwa', st_live: 'Pwodwi an liy', st_from: 'Soti nan Odoo',
     st_never: 'Poko janm kouri', st_ok: 'OK', st_err: 'Erè',
     hook_url: 'Adrès', hook_token: 'Tokèn', copy: 'Kopye', copied: 'Kopye!'
+  },
+  pt: {
+    back: 'Estoque',
+    title: 'Conectar o Odoo',
+    subtitle: "Os preços mudam o tempo todo? Ligue o seu Odoo ao MyPlopPlop e o catálogo se mantém sozinho — sem mais arquivos CSV.",
+    no_store: 'Nenhuma loja encontrada nesta conta.',
+    s1_title: 'No Odoo (só uma vez)',
+    s1_hint: "Para quem administra o seu Odoo. Nós apenas LEMOS os seus produtos — nunca gravamos nada no seu Odoo.",
+    s1_a: "Crie um usuário dedicado, por exemplo myplopplop@suaempresa.com, com acesso de leitura a Vendas e Estoque.",
+    s1_b: "Entre com esse usuário: Preferências → Segurança da Conta → Nova chave de API. Copie a chave (ela só aparece uma vez).",
+    s1_c: "Garanta que o seu Odoo esteja acessível pela internet via HTTPS. Instalações locais precisam do /jsonrpc aberto.",
+    s1_d: "Anote o nome exato do banco de dados do Odoo.",
+    s2_title: 'Conexão',
+    f_url: 'Endereço do Odoo', f_url_note: 'Sem barra no final',
+    f_db: 'Banco de dados', f_user: 'Usuário', f_key: 'Chave de API',
+    f_key_note: 'Deixe em branco para manter a chave já salva',
+    s3_title: 'Preços e catálogo',
+    s3_hint: 'Como o preço do Odoo vira o preço mostrado no MyPlopPlop.',
+    f_pricefield: 'Campo de preço', f_pricelist: 'Lista de preços (opcional)',
+    f_pricelist_note: 'ID de uma lista de preços do Odoo, 0 = nenhuma',
+    f_currency: 'Moeda no Odoo', f_rate: 'Câmbio USD → HTG', f_markup: 'Margem (%)',
+    f_round: 'Arredondar para (HTG)', f_round_note: '0 = sem arredondamento',
+    f_interval: 'A cada N minutos', f_defcat: 'Categoria padrão',
+    f_saleok: 'Somente itens marcados como "pode ser vendido"', f_stock: 'Trazer as quantidades em estoque',
+    f_zero: 'Ignorar itens com preço 0', f_images: 'Importar as fotos dos produtos',
+    f_missing: 'Ocultar o que sumir do Odoo', f_active: 'Sincronização automática ativada',
+    btn_save: 'Salvar', btn_test: 'Testar conexão', btn_sync: 'Sincronizar agora',
+    s4_title: 'Situação', loading: 'Carregando…',
+    s5_title: 'Atualizações instantâneas (opcional)',
+    s5_hint: "Por padrão relemos o Odoo de tempos em tempos. Com uma ação automatizada no Odoo, uma mudança de preço chega ao MyPlopPlop em segundos.",
+    s5_more: 'Mostrar o código para colar no Odoo',
+    s5_steps: 'Odoo → Configurações → Técnico → Ações automatizadas → Novo. Modelo: product.template, Gatilho: ao atualizar, Ação: Executar código Python.',
+    saved: 'Salvo', testing: 'Testando…', syncing: 'Sincronizando…',
+    r_version: 'Versão do Odoo', r_count: 'Produtos correspondentes', r_sample: 'Exemplo — este é o preço que apareceria no MyPlopPlop:',
+    c_name: 'Nome', c_sku: 'Código', c_odoo: 'Preço no Odoo', c_cat: 'Categoria', c_stock: 'Estoque', c_mpp: 'Preço no MyPlopPlop',
+    sync_done: '{c} criados, {u} atualizados, {s} ignorados, {d} ocultados',
+    st_status: 'Situação', st_last: 'Última execução', st_live: 'Produtos no ar', st_from: 'Vindos do Odoo',
+    st_never: 'Nunca executado', st_ok: 'OK', st_err: 'Erro',
+    hook_url: 'URL', hook_token: 'Token', copy: 'Copiar', copied: 'Copiado!'
   },
   en: {
     back: 'Inventory',
