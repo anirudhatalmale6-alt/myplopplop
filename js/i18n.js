@@ -12,6 +12,27 @@
   var translations = {
 
     // ── Store Page Tabs ──
+    'sticky_koutye_diaspora': {
+      fr: '💰 Diaspora ? Parrainez Haïti. Gagnez en USD.',
+      en: '💰 Diaspora? Refer Haiti. Earn USD.',
+      kr: '💰 Dyaspora? Envite Ayiti. Touche USD.',
+      es: '💰 ¿Diáspora? Refiere a Haití. Gana en USD.',
+      pt: '💰 Está na diáspora? Indique o Haiti e ganhe em dólar.'
+    },
+    'sticky_koutye_shop': {
+      fr: '💰 Invitez des marchands — gagnez sur chaque transaction',
+      en: '💰 Invite merchants — earn on every transaction',
+      kr: '💰 Envite machann — touche sou chak tranzaksyon',
+      es: '💰 Invita comerciantes — gana en cada transacción',
+      pt: '💰 Indique lojistas — ganhe em cada transação'
+    },
+    'sticky_koutye_checkout': {
+      fr: '💰 Vous pouvez gagner 10% sur cet achat — devenez Parenaj Biznis',
+      en: '💰 You can earn 10% on what you just bought — become a Parenaj Biznis',
+      kr: '💰 Ou ka touche 10% sou sa ou sot achte a — vin Parenaj Biznis',
+      es: '💰 Puedes ganar 10% sobre esta compra — hazte Parenaj Biznis',
+      pt: '💰 Você pode ganhar 10% sobre esta compra — vire um parceiro de indicações'
+    },
     'store.products': {
       fr: 'Produits',
       en: 'Products',
@@ -1380,6 +1401,39 @@
   // Bulk text map: English text -> translations for all languages
   // This auto-translates page content without needing data-i18n attributes
   var bulkTextMap = {
+    'Add New': { fr: 'Ajouter', kr: 'Ajoute', es: 'Añadir', pt: 'Adicionar' },
+    'Featured': { fr: 'En vedette', kr: 'An Vedèt', es: 'Destacados', pt: 'Em destaque' },
+    'Highest Rated': { fr: 'Mieux notés', kr: 'Pi Byen Note', es: 'Mejor calificados', pt: 'Melhor avaliados' },
+    'Fastest Delivery': { fr: 'Livraison la plus rapide', kr: 'Livrezon Pi Rapid', es: 'Entrega más rápida', pt: 'Entrega mais rápida' },
+    'Fee: Low to High': { fr: 'Frais : croissant', kr: 'Frè: Ba pou Wo', es: 'Tarifa: menor a mayor', pt: 'Taxa: menor para maior' },
+    'Name: A-Z': { fr: 'Nom : A-Z', kr: 'Non: A-Z', es: 'Nombre: A-Z', pt: 'Nome: A-Z' },
+    'Browse All Stores': { fr: 'Parcourir toutes les boutiques', kr: 'Gade tout magazen yo', es: 'Ver todas las tiendas', pt: 'Ver todas as lojas' },
+    'Browse Other Categories': { fr: 'Parcourir d’autres catégories', kr: 'Gade lòt kategori', es: 'Ver otras categorías', pt: 'Ver outras categorias' },
+    'stores found': { fr: 'boutiques trouvées', kr: 'magazen jwenn', es: 'tiendas encontradas', pt: 'lojas encontradas' },
+    'stores available': { fr: 'boutiques disponibles', kr: 'magazen disponib', es: 'tiendas disponibles', pt: 'lojas disponíveis' },
+    'Looks like you haven\'t added anything yet. Browse our stores and find what you need!': { fr: 'Vous n’avez encore rien ajouté. Parcourez nos boutiques et trouvez ce qu’il vous faut !', kr: 'Ou poko ajoute anyen. Gade magazen nou yo epi jwenn sa ou bezwen!', es: 'Todavía no has agregado nada. Explora nuestras tiendas y encuentra lo que necesitas.', pt: 'Você ainda não adicionou nada. Veja as nossas lojas e ache o que precisa!' },
+    'No ride ID provided': { fr: 'Aucun identifiant de course fourni', kr: 'Pa gen idantifyan kous', es: 'No se indicó un ID de viaje', pt: 'Nenhum código de corrida informado' },
+    'Go to your orders to track a delivery.': { fr: 'Allez dans vos commandes pour suivre une livraison.', kr: 'Ale nan kòmand ou yo pou swiv yon livrezon.', es: 'Ve a tus pedidos para rastrear una entrega.', pt: 'Vá até os seus pedidos para acompanhar uma entrega.' },
+    'View My Orders': { fr: 'Voir mes commandes', kr: 'Gade kòmand mwen yo', es: 'Ver mis pedidos', pt: 'Ver meus pedidos' },
+    'Add New Recipient': { fr: 'Ajouter un destinataire', kr: 'Ajoute yon moun', es: 'Añadir destinatario', pt: 'Cadastrar uma pessoa' },
+    'Save a recipient to quickly order for them': { fr: 'Enregistrez un destinataire pour commander rapidement pour lui', kr: 'Anrejistre yon moun pou kòmande pou li pi vit', es: 'Guarda un destinatario para pedir por él rápidamente', pt: 'Salve uma pessoa para pedir para ela mais rápido' },
+    'Full Name': { fr: 'Nom complet', kr: 'Non konplè', es: 'Nombre completo', pt: 'Nome completo' },
+    'Phone Number': { fr: 'Numéro de téléphone', kr: 'Nimewo telefòn', es: 'Número de teléfono', pt: 'Número de telefone' },
+    'Delivery Address': { fr: 'Adresse de livraison', kr: 'Adrès livrezon', es: 'Dirección de entrega', pt: 'Endereço de entrega' },
+    'Relationship': { fr: 'Lien de parenté', kr: 'Relasyon', es: 'Parentesco', pt: 'Parentesco' },
+    'Set as default recipient': { fr: 'Définir comme destinataire principal', kr: 'Mete kòm moun prensipal', es: 'Marcar como destinatario principal', pt: 'Definir como pessoa principal' },
+    'Save Recipient': { fr: 'Enregistrer le destinataire', kr: 'Anrejistre moun nan', es: 'Guardar destinatario', pt: 'Salvar pessoa' },
+    'Cancel': { fr: 'Annuler', kr: 'Anile', es: 'Cancelar', pt: 'Cancelar' },
+    'Ride Status': { fr: 'Statut de la course', kr: 'Estati kous la', es: 'Estado del viaje', pt: 'Situação da corrida' },
+    'Driver assigned': { fr: 'Chauffeur assigné', kr: 'Chofè asiyen', es: 'Conductor asignado', pt: 'Motorista designado' },
+    'Driver en route to you': { fr: 'Chauffeur en route vers vous', kr: 'Chofè ap vin jwenn ou', es: 'Conductor en camino hacia ti', pt: 'Motorista a caminho de você' },
+    'En route to destination': { fr: 'En route vers la destination', kr: 'Sou wout pou destinasyon an', es: 'En camino al destino', pt: 'A caminho do destino' },
+    'Arrived': { fr: 'Arrivé', kr: 'Rive', es: 'Llegó', pt: 'Chegou' },
+    'Powered by': { fr: 'Propulsé par', kr: 'Pouse pa', es: 'Impulsado por', pt: 'Uma solução' },
+    'Orders': { fr: 'Commandes', kr: 'Kòmand', es: 'Pedidos', pt: 'Pedidos' },
+    'Home': { fr: 'Accueil', kr: 'Akèy', es: 'Inicio', pt: 'Início' },
+    'Cart': { fr: 'Panier', kr: 'Panye', es: 'Carrito', pt: 'Carrinho' },
+    'Search': { fr: 'Rechercher', kr: 'Chèche', es: 'Buscar', pt: 'Buscar' },
     // Rides page
     'Choose Your Ride': { fr: 'Choisissez votre Trajet', kr: 'Chwazi Transpò Ou', es: 'Elija su Viaje', pt: 'Escolha sua corrida'},
     'From budget-friendly to premium comfort': { fr: 'Du plus économique au plus confortable', kr: 'Soti nan pi bon mache rive nan pi konfòtab', es: 'Desde económico hasta premium', pt: 'Do mais econômico ao conforto premium'},

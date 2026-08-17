@@ -435,10 +435,11 @@ var RL = {
     kr: { empty:'Ou poko anrejistre pèsonn.', add:'Ajoute premye moun nan', save:'Anrejistre', saved:'Anrejistre !', removed:'Retire.', needName:'Mete yon non.', del:'Retire %s nan lis la ?', title:'Moun mwen yo', addNew:'Ajoute', dflt:'Prensipal', order:'Kòmande pou li' },
     fr: { empty:'Aucun destinataire enregistré.', add:'Ajouter le premier', save:'Enregistrer', saved:'Enregistré !', removed:'Supprimé.', needName:'Indiquez un nom.', del:'Retirer %s de la liste ?', title:'Mes destinataires', addNew:'Ajouter', dflt:'Principal', order:'Commander pour lui' },
     en: { empty:'No recipients saved yet.', add:'Add your first recipient', save:'Save', saved:'Saved!', removed:'Removed.', needName:'Please enter a name.', del:'Remove %s from your recipients?', title:'My Recipients', addNew:'Add New', dflt:'Default', order:'Order for them' },
+    pt: { empty:'Nenhuma pessoa cadastrada ainda.', add:'Cadastrar a primeira pessoa', save:'Salvar', saved:'Salvo!', removed:'Removido.', needName:'Digite um nome.', del:'Remover %s da lista?', title:'Quem eu ajudo', addNew:'Adicionar', dflt:'Principal', order:'Pedir para essa pessoa' },
     es: { empty:'Sin destinatarios guardados.', add:'Añadir el primero', save:'Guardar', saved:'¡Guardado!', removed:'Eliminado.', needName:'Escribe un nombre.', del:'¿Quitar a %s?', title:'Mis destinatarios', addNew:'Añadir', dflt:'Principal', order:'Pedir para él' }
 };
 function rl(k) {
-    var lg = localStorage.getItem('pp_lang') || 'fr';
+    var lg = localStorage.getItem('myplopplop_lang') || localStorage.getItem('pp_lang') || 'fr';
     return (RL[lg] || RL.en)[k] || (RL.en[k] || k);
 }
 function rEsc(s) {
