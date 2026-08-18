@@ -212,9 +212,51 @@ img{max-width:100%;display:block}
   .mp-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .c-vann{grid-column:1 / -1}
 }
+
+/* ---------- install bar ---------- */
+#installBar{display:flex;align-items:center;gap:10px;padding:11px 14px;
+  background:linear-gradient(90deg,#E63946,#ff5560);color:#fff;font-weight:700;
+  font-size:.92rem;position:sticky;top:0;z-index:900}
+#installBar #installText{flex:1;min-width:0;line-height:1.3}
+#installBar #installGo{flex:0 0 auto;background:#fff;color:#E63946;border:0;
+  border-radius:999px;padding:9px 18px;font-weight:800;font-size:.9rem;cursor:pointer}
+#installBar #installX{flex:0 0 auto;background:none;border:0;color:#fff;
+  font-size:1.4rem;line-height:1;cursor:pointer;padding:0 2px}
+#installHelp{display:none;position:fixed;inset:0;background:rgba(8,12,22,.55);
+  z-index:1200;align-items:flex-end;justify-content:center}
+#installHelp.open{display:flex}
+#installHelp .ih-box{background:#fff;width:100%;max-width:560px;
+  border-radius:18px 18px 0 0;padding:22px 20px 26px}
+#installHelp h3{margin:0 0 10px;font-size:1.15rem}
+#installHelp p{margin:0 0 18px;line-height:1.6;color:#374151;font-size:.95rem}
+#installHelp .ih-close{width:100%;padding:14px;border:0;border-radius:14px;
+  background:#0D1117;color:#fff;font-weight:700;font-size:1rem;cursor:pointer}
+
 </style>
 </head>
 <body class="mp-home">
+
+<!-- ============ INSTALL THE APP ============
+     Shown to everyone until the app is actually installed. Chrome's own
+     beforeinstallprompt does NOT reliably fire on the phones these users
+     have - that was proven on the HaitiBiznis POS - so the bar never waits
+     for it. If the native prompt exists we use it, otherwise we show the
+     manual steps for that device. It is a full-width BAR, never a button in
+     a flex header row: a variable-width button there overflowed narrow
+     phones on the POS and cut off the left edge of the page. -->
+<div id="installBar" style="display:none">
+  <span id="installText">Mete MyPlopPlop sou telefòn ou</span>
+  <button id="installGo" onclick="mpInstall()">Enstale</button>
+  <button id="installX" onclick="mpHideBar()" aria-label="X">&times;</button>
+</div>
+<div id="installHelp" onclick="if(event.target===this)mpCloseHelp()">
+  <div class="ih-box">
+    <h3 id="ihTitle">Enstale MyPlopPlop</h3>
+    <p id="ihSteps"></p>
+    <button class="ih-close" onclick="mpCloseHelp()" id="ihClose">Fèmen</button>
+  </div>
+</div>
+
 
 <!-- ═══ LANGUAGE BAR ═══ -->
 <div class="mp-lang">
@@ -433,7 +475,8 @@ const T = {
     footer_powered:'Yon platfòm HaitiBiznis',
     wa_popup_head:'Ki sa ou bezwen?', wa_opt_earn:'💰 Mwen vle kòmanse fè lajan', wa_opt_drive:'🛵 Mwen vle vin chofè', wa_opt_biz:'🏪 Mwen gen biznis',
     nav_home:'Akèy', nav_search:'Chèche', nav_cart:'Panye', nav_orders:'Kòmand', nav_account:'Kont',
-    menu_sell:'Vann sou MyPlopPlop', menu_earn:'Parenaj Biznis', menu_driver:'Vin Chofè MsouWout', menu_shop:'Achte nan Magazen', menu_intl:'Achte Entènasyonal', menu_support:'Sipòte Fanmi', menu_orders:'Kòmand Mwen', menu_account:'Kont Mwen', menu_help:'Èd'
+    menu_sell:'Vann sou MyPlopPlop', menu_earn:'Parenaj Biznis', menu_driver:'Vin Chofè MsouWout', menu_shop:'Achte nan Magazen', menu_intl:'Achte Entènasyonal', menu_support:'Sipòte Fanmi', menu_orders:'Kòmand Mwen', menu_account:'Kont Mwen', menu_help:'Èd',
+    inst_bar:'Mete MyPlopPlop sou telefòn ou', inst_btn:'Enstale', inst_t:'Enstale MyPlopPlop', inst_and:'Peze meni an (⋮ oswa ≡) anwo nan Chrome, epi chwazi \u00ab Enstale app \u00bb oswa \u00ab Ajoute sou ekran akèy \u00bb.', inst_ios:'Peze bouton Pataje a (anba, kare ak flèch), epi chwazi \u00ab Add to Home Screen \u00bb.', inst_close:'Fèmen', inst_done:'Byen! W ap jwenn ikòn nan sou ekran akèy ou.'
   },
   en: {
     tagline:'Build a Business • Earn Money • Move Safely',
@@ -450,7 +493,8 @@ const T = {
     footer_powered:'A HaitiBiznis platform',
     wa_popup_head:'What do you need?', wa_opt_earn:'💰 I want to start earning', wa_opt_drive:'🛵 I want to become a driver', wa_opt_biz:'🏪 I have a business',
     nav_home:'Home', nav_search:'Search', nav_cart:'Cart', nav_orders:'Orders', nav_account:'Account',
-    menu_sell:'Sell on MyPlopPlop', menu_earn:'Business Partner', menu_driver:'Become a Driver', menu_shop:'Shop Stores', menu_intl:'Shop International', menu_support:'Support Family', menu_orders:'My Orders', menu_account:'My Account', menu_help:'Help'
+    menu_sell:'Sell on MyPlopPlop', menu_earn:'Business Partner', menu_driver:'Become a Driver', menu_shop:'Shop Stores', menu_intl:'Shop International', menu_support:'Support Family', menu_orders:'My Orders', menu_account:'My Account', menu_help:'Help',
+    inst_bar:'Put MyPlopPlop on your phone', inst_btn:'Install', inst_t:'Install MyPlopPlop', inst_and:'Open the menu (⋮ or ≡) at the top of Chrome, then choose \u201cInstall app\u201d or \u201cAdd to Home screen\u201d.', inst_ios:'Tap the Share button (the square with an arrow), then choose \u201cAdd to Home Screen\u201d.', inst_close:'Close', inst_done:'Done. The icon is now on your home screen.'
   },
   fr: {
     tagline:'Créez un Business • Gagnez de l’Argent • Déplacez-vous en Sécurité',
@@ -467,7 +511,8 @@ const T = {
     footer_powered:'Une plateforme HaitiBiznis',
     wa_popup_head:'De quoi avez-vous besoin ?', wa_opt_earn:'💰 Je veux commencer à gagner', wa_opt_drive:'🛵 Je veux devenir chauffeur', wa_opt_biz:'🏪 J’ai un commerce',
     nav_home:'Accueil', nav_search:'Chercher', nav_cart:'Panier', nav_orders:'Commandes', nav_account:'Compte',
-    menu_sell:'Vendre sur MyPlopPlop', menu_earn:'Partenaire Business', menu_driver:'Devenir Chauffeur', menu_shop:'Boutiques', menu_intl:'Achat International', menu_support:'Soutenir la Famille', menu_orders:'Mes Commandes', menu_account:'Mon Compte', menu_help:'Aide'
+    menu_sell:'Vendre sur MyPlopPlop', menu_earn:'Partenaire Business', menu_driver:'Devenir Chauffeur', menu_shop:'Boutiques', menu_intl:'Achat International', menu_support:'Soutenir la Famille', menu_orders:'Mes Commandes', menu_account:'Mon Compte', menu_help:'Aide',
+    inst_bar:'Mettez MyPlopPlop sur votre téléphone', inst_btn:'Installer', inst_t:'Installer MyPlopPlop', inst_and:'Ouvrez le menu (⋮ ou ≡) en haut de Chrome, puis choisissez \u00ab Installer l\u2019application \u00bb ou \u00ab Ajouter à l\u2019écran d\u2019accueil \u00bb.', inst_ios:'Touchez le bouton Partager (le carré avec une flèche), puis \u00ab Sur l\u2019écran d\u2019accueil \u00bb.', inst_close:'Fermer', inst_done:'C\u2019est fait. L\u2019icône est sur votre écran d\u2019accueil.'
   },
   pt: {
     tagline:'Monte um negócio • Ganhe dinheiro • Ande com segurança',
@@ -484,7 +529,8 @@ const T = {
     footer_powered:'Uma plataforma HaitiBiznis',
     wa_popup_head:'Do que você precisa?', wa_opt_earn:'💰 Quero começar a ganhar', wa_opt_drive:'🛵 Quero ser motorista', wa_opt_biz:'🏪 Tenho um negócio',
     nav_home:'Início', nav_search:'Buscar', nav_cart:'Carrinho', nav_orders:'Pedidos', nav_account:'Conta',
-    menu_sell:'Vender no MyPlopPlop', menu_earn:'Parceiro de negócios', menu_driver:'Quero ser motorista', menu_shop:'Ver lojas', menu_intl:'Comprar do exterior', menu_support:'Ajudar a família', menu_orders:'Meus pedidos', menu_account:'Minha conta', menu_help:'Ajuda'
+    menu_sell:'Vender no MyPlopPlop', menu_earn:'Parceiro de negócios', menu_driver:'Quero ser motorista', menu_shop:'Ver lojas', menu_intl:'Comprar do exterior', menu_support:'Ajudar a família', menu_orders:'Meus pedidos', menu_account:'Minha conta', menu_help:'Ajuda',
+    inst_bar:'Coloque o MyPlopPlop no seu celular', inst_btn:'Instalar', inst_t:'Instalar o MyPlopPlop', inst_and:'Abra o menu (⋮ ou ≡) no topo do Chrome e escolha \u201cInstalar app\u201d ou \u201cAdicionar à tela inicial\u201d.', inst_ios:'Toque no botão Compartilhar (o quadrado com a seta) e escolha \u201cAdicionar à Tela de Início\u201d.', inst_close:'Fechar', inst_done:'Pronto. O ícone está na sua tela inicial.'
   },
   es: {
     tagline:'Crea un Negocio • Gana Dinero • Muévete Seguro',
@@ -501,7 +547,8 @@ const T = {
     footer_powered:'Una plataforma HaitiBiznis',
     wa_popup_head:'¿Qué necesitas?', wa_opt_earn:'💰 Quiero empezar a ganar', wa_opt_drive:'🛵 Quiero ser conductor', wa_opt_biz:'🏪 Tengo un negocio',
     nav_home:'Inicio', nav_search:'Buscar', nav_cart:'Carrito', nav_orders:'Pedidos', nav_account:'Cuenta',
-    menu_sell:'Vender en MyPlopPlop', menu_earn:'Socio de Negocios', menu_driver:'Ser Conductor', menu_shop:'Tiendas', menu_intl:'Compras Internacionales', menu_support:'Apoyar Familia', menu_orders:'Mis Pedidos', menu_account:'Mi Cuenta', menu_help:'Ayuda'
+    menu_sell:'Vender en MyPlopPlop', menu_earn:'Socio de Negocios', menu_driver:'Ser Conductor', menu_shop:'Tiendas', menu_intl:'Compras Internacionales', menu_support:'Apoyar Familia', menu_orders:'Mis Pedidos', menu_account:'Mi Cuenta', menu_help:'Ayuda',
+    inst_bar:'Pon MyPlopPlop en tu teléfono', inst_btn:'Instalar', inst_t:'Instalar MyPlopPlop', inst_and:'Abre el menú (⋮ o ≡) arriba en Chrome y elige \u201cInstalar aplicación\u201d o \u201cAñadir a pantalla de inicio\u201d.', inst_ios:'Toca el botón Compartir (el cuadro con la flecha) y elige \u201cAñadir a pantalla de inicio\u201d.', inst_close:'Cerrar', inst_done:'Listo. El icono ya está en tu pantalla de inicio.'
   }
 };
 
@@ -516,6 +563,9 @@ function setLang(lang){
   const t = T[lang] || T.ht;
   document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.getAttribute('data-i18n'); if(t[k]) el.textContent = t[k]; });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { const k = el.getAttribute('data-i18n-placeholder'); if(t[k]) el.placeholder = t[k]; });
+  var _it=document.getElementById('installText'), _ig=document.getElementById('installGo');
+  if(_it&&t.inst_bar)_it.textContent=t.inst_bar;
+  if(_ig&&t.inst_btn)_ig.textContent=t.inst_btn;
 }
 function handleSearch(val){ if(val && val.trim().length > 1){ window.location.href = 'shop.html?q=' + encodeURIComponent(val.trim()); } }
 function toggleWaPopup(){ var p=document.getElementById('waPopup'), o=document.getElementById('waOverlay'); if(p.classList.contains('open')){p.classList.remove('open');o.classList.remove('open');} else {p.classList.add('open');o.classList.add('open');} }
@@ -544,6 +594,55 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.mp-reveal').forEach(el => observer.observe(el));
 
 setLang(currentLang);
+
+/* ================= INSTALL / SERVICE WORKER =================
+   The home page never registered the service worker - only the inner pages
+   did. Chrome will not offer to install a site whose landing page has no
+   service worker, and the landing page is exactly where people arrive from
+   a Google search. That was the reason nobody could install the app. */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
+  });
+}
+var mpPrompt=null;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();mpPrompt=e;});
+function mpInstalled(){
+  return window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone===true;
+}
+function mpIsIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent);}
+function mpShowBar(){
+  if(mpInstalled())return;
+  try{if(sessionStorage.getItem('mp-inst-hide'))return;}catch(e){}
+  var b=document.getElementById('installBar'); if(b)b.style.display='flex';
+}
+function mpHideBar(){
+  var b=document.getElementById('installBar'); if(b)b.style.display='none';
+  try{sessionStorage.setItem('mp-inst-hide','1');}catch(e){}   /* this visit only */
+}
+function mpInstall(){
+  if(mpPrompt){
+    mpPrompt.prompt();
+    mpPrompt.userChoice.then(function(c){
+      if(c && c.outcome==='accepted') mpHideBar();
+      mpPrompt=null;
+    });
+    return;
+  }
+  mpOpenHelp();
+}
+function mpOpenHelp(){
+  var t=T[currentLang]||T.ht;
+  document.getElementById('ihTitle').textContent=t.inst_t;
+  document.getElementById('ihSteps').textContent=mpIsIOS()?t.inst_ios:t.inst_and;
+  document.getElementById('ihClose').textContent=t.inst_close;
+  document.getElementById('installHelp').classList.add('open');
+}
+function mpCloseHelp(){document.getElementById('installHelp').classList.remove('open');}
+window.addEventListener('appinstalled',function(){mpHideBar();});
+mpShowBar();
+
 </script>
 <script src="js/assistant.js" defer></script>
 </body>

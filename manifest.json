@@ -3,13 +3,17 @@
   "short_name": "MyPlopPlop",
   "description": "Livrezon rapid nan tout Ayiti - Food, grocery, pharmacy delivery",
   "start_url": "/",
-  "display": "minimal-ui",
+  "display": "standalone",
   "background_color": "#0D1117",
   "theme_color": "#E63946",
   "orientation": "any",
   "scope": "/",
   "lang": "ht",
-  "categories": ["food", "shopping", "lifestyle"],
+  "categories": [
+    "food",
+    "shopping",
+    "lifestyle"
+  ],
   "icons": [
     {
       "src": "/assets/icon-192.png",
