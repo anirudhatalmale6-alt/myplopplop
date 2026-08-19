@@ -768,18 +768,18 @@
                 <div class="form-section-title">💳 Payment Method</div>
                 <div class="payment-methods" id="paymentMethods">
 
-                    <div class="payment-method selected" data-method="san_cash" onclick="selectPayment(this)">
+                    <div class="payment-method" data-method="san_cash" onclick="selectPayment(this)">
                         <div class="payment-icon" style="background:var(--success-light);">💰</div>
                         <div class="payment-details">
                             <strong>San Cash Wallet</strong>
-                            <span>Balance: 5,000 HTG</span>
+                            <span>Pay from your San Cash balance</span>
                         </div>
                         <div class="payment-check">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
                         </div>
                     </div>
 
-                    <div class="payment-method" data-method="moncash" onclick="selectPayment(this)">
+                    <div class="payment-method selected" data-method="moncash" onclick="selectPayment(this)">
                         <div class="payment-icon" style="background:#FFF3E0;">📱</div>
                         <div class="payment-details">
                             <strong>MonCash</strong>
@@ -1000,7 +1000,7 @@
 (function() {
     const CART_KEY = 'myplopplop_cart';
     let currentStep = 1;
-    let selectedPayment = 'san_cash';
+    let selectedPayment = 'moncash';
 
     // Payment method display names
     const PAYMENT_LABELS = {
