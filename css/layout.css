@@ -98,6 +98,27 @@
     .top-bar .flex:first-child { display: none; }
     .top-bar { justify-content: center; }
     .top-bar .flex:last-child { gap: 4px !important; }
+
+    /* Five language pills measured 354px of content inside a 28px-tall bar with
+       no room for them, so the row wrapped onto a second line: the first line was
+       clipped above the bar and "Portugues" was half hidden behind the header.
+       Keep them on one line, shrink them enough to fit a 390px phone, and let the
+       bar scroll sideways on anything narrower rather than wrap again. */
+    .top-bar {
+        height: auto;
+        min-height: 28px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+    .top-bar::-webkit-scrollbar { display: none; }
+    .top-bar .flex:last-child { flex-wrap: nowrap !important; }
+    .top-bar [data-lang] {
+        flex: 0 0 auto;
+        font-size: 9px;
+        padding: 3px 6px;
+    }
 }
 
 /* ===== Bottom Navigation (Mobile) ===== */
