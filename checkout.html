@@ -768,7 +768,8 @@
                 <div class="form-section-title">💳 Payment Method</div>
                 <div class="payment-methods" id="paymentMethods">
 
-                    <div class="payment-method" data-method="san_cash" onclick="selectPayment(this)">
+                    <div class="payment-method" data-method="san_cash" onclick="selectPayment(this)"
+                         style="display:none" data-disabled-reason="wallet not wired for orders">
                         <div class="payment-icon" style="background:var(--success-light);">💰</div>
                         <div class="payment-details">
                             <strong>San Cash Wallet</strong>
@@ -1395,8 +1396,19 @@
 
         var orderId = apiOrders.length > 0 ? apiOrders[0].orderNumber : ('MPP-' + Date.now() + '-' + Math.floor(Math.random() * 1000));
 
-        // For wallet or zero total, complete directly
-        if (selectedPayment === 'san_cash' || total < 20) {
+        // San Cash is switched off until the wallet can actually be charged.
+        // completeOrder() below confirms an order without taking any money, and
+        // the API has no wallet debit for marketplace orders - only for rides -
+        // so choosing it meant the goods went out unpaid.
+        if (selectedPayment === 'san_cash') {
+            btn.disabled = false;
+            btn.textContent = 'Place Order';
+            alert('San Cash Wallet is not available for shop orders yet. Please pay with MonCash, NatCash or a card.');
+            return;
+        }
+
+        // Zero-value orders still complete directly - the gateway rejects them.
+        if (total < 20) {
             completeOrder(orderId, apiOrders[0] ? apiOrders[0]._id : null);
             return;
         }
