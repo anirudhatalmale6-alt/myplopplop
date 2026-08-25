@@ -68,10 +68,6 @@ body {
 .designer-topbar-right > * { flex: 0 0 auto; }
 .designer-topbar { gap: var(--space-sm); }
 .designer-topbar-brand { min-width: 0; flex: 0 1 auto; overflow: hidden; white-space: nowrap; }
-@media (max-width: 520px) {
-  .designer-topbar-brand { font-size: var(--text-base); }
-  .lang-btn { padding: 4px 8px; }
-}
 .lang-btn {
   background: rgba(255,255,255,0.15);
   border: 1px solid rgba(255,255,255,0.3);
@@ -85,6 +81,33 @@ body {
 }
 .lang-btn:hover, .lang-btn.active {
   background: rgba(255,255,255,0.3);
+}
+
+/* These phone rules MUST stay below the base .lang-btn rule above. A media
+   query adds no specificity, so when they sat higher up the plain .lang-btn
+   simply overrode them and the pills never actually shrank. */
+@media (max-width: 520px) {
+  /* Five language pills + Back could not fit beside the wordmark on a 390px
+     phone: the pills rode over "MyPlopPlop" and Back sat ~28px off-screen
+     inside a scroller with no visible affordance. Give the brand its space,
+     shrink the pills, and reduce Back to its arrow (the arrow is already in
+     every translation of nav.back, so nothing there has to change). */
+  .designer-topbar { padding: 0 12px; gap: 8px; }
+  .designer-topbar-brand { font-size: var(--text-base); flex-shrink: 0; overflow: visible; }
+  .designer-topbar-right { gap: 5px; }
+  .lang-btn { padding: 3px 7px; font-size: 11px; }
+  /* a bare arrow is a 17px tap target; pad it out to something a thumb can hit */
+  .topbar-back { font-size: 0 !important; margin-left: 4px !important;
+                 display: inline-flex; align-items: center; justify-content: center;
+                 min-width: 30px; height: 34px; }
+  .topbar-back::before { content: "\2190"; font-size: 17px; line-height: 1; }
+}
+@media (max-width: 400px) {
+  /* 360px phones are common here and the five pills still pushed Back off the
+     edge, so they tighten once more at this width */
+  .designer-topbar { padding: 0 10px; gap: 6px; }
+  .designer-topbar-right { gap: 4px; }
+  .lang-btn { padding: 2px 5px; font-size: 10px; }
 }
 
 /* ===== HERO BANNER ===== */
@@ -300,20 +323,28 @@ body {
 .mobile-preview-toggle {
   display: none;
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  /* The action bar is stuck to the bottom of the screen and the chat bubble
+     owns the bottom-right corner, so this button was landing on top of both.
+     It sits on the left and rides above whatever height the action bar is
+     (--actionbar-h is measured in JS, since the bar stacks on small phones). */
+  bottom: calc(var(--actionbar-h, 0px) + 16px);
+  left: 16px;
   z-index: 150;
   background: var(--primary-blue);
   color: var(--white);
   border: none;
   border-radius: var(--radius-full);
-  padding: 14px 20px;
-  font-size: var(--text-sm);
-  font-weight: 700;
+  /* icon only: the action bar already has a button reading "Preview", and two
+     controls with the same word on one screen is the clutter he flagged. This
+     one opens the phone mock, so it keeps the eye and drops the label — which
+     also means it covers far less of the page behind it. */
+  width: 52px;
+  height: 52px;
+  padding: 0;
   cursor: pointer;
   box-shadow: 0 4px 16px rgba(0,32,159,0.4);
   align-items: center;
-  gap: 8px;
+  justify-content: center;
 }
 .mobile-preview-close {
   display: none;
@@ -1304,7 +1335,7 @@ body {
     <button class="lang-btn" data-lang="kr">KR</button>
     <button class="lang-btn" data-lang="es">ES</button>
     <button class="lang-btn" data-lang="pt">PT</button>
-    <a href="index.html" style="color:rgba(255,255,255,0.7);font-size:var(--text-sm);margin-left:var(--space-sm);" data-i18n="nav.back">← Back</a>
+    <a href="index.html" class="topbar-back" aria-label="Back" style="color:rgba(255,255,255,0.7);font-size:var(--text-sm);margin-left:var(--space-sm);" data-i18n="nav.back">← Back</a>
   </div>
 </header>
 
@@ -1621,9 +1652,8 @@ body {
   <!-- END FORM COLUMN -->
 
   <!-- RIGHT: PREVIEW COLUMN -->
-  <button class="mobile-preview-toggle" onclick="document.querySelector('.preview-col').classList.add('mobile-show')">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-    Preview
+  <button class="mobile-preview-toggle" aria-label="Preview" title="Preview" onclick="document.querySelector('.preview-col').classList.add('mobile-show')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
   </button>
   <div class="preview-col">
     <button class="mobile-preview-close" onclick="document.querySelector('.preview-col').classList.remove('mobile-show')">✕</button>
@@ -2797,6 +2827,21 @@ updateProgress();
 
 // Initialize hours display
 updateHours();
+
+// Keep the floating Preview button clear of the action bar. The bar stacks its
+// buttons on narrow phones so its height is not a constant, and a fixed guess
+// put the button straight on top of Share.
+(function () {
+  var bar = document.querySelector('.action-bar');
+  if (!bar) return;
+  function sync() {
+    document.documentElement.style.setProperty(
+      '--actionbar-h', Math.round(bar.getBoundingClientRect().height) + 'px');
+  }
+  sync();
+  window.addEventListener('resize', sync);
+  if (window.ResizeObserver) new ResizeObserver(sync).observe(bar);
+})();
 </script>
 <script src="js/assistant.js" defer></script>
 </body>
