@@ -2601,7 +2601,8 @@ function publishStore() {
     setTimeout(function() { window.location.href = 'login.html?redirect=store-designer.html'; }, 1500);
     return;
   }
-  var catMap = { restaurant:'restaurant', supermarket:'supermarket', pharmacy:'pharmacy', hardware:'hardware', clothing:'retail', electronics:'retail', beauty:'retail', wholesale:'wholesale', bakery:'bakery', other:'other' };
+  /* Keep in step with MPP_CAT in the LajanMaker POS - both write the same store. */
+  var catMap = { restaurant:'restaurant', supermarket:'supermarket', pharmacy:'pharmacy', hardware:'hardware', clothing:'retail', electronics:'retail', beauty:'retail', homegoods:'retail', wholesale:'wholesale', bakery:'bakery', other:'other' };
 
   // The logo is already downscaled by shrinkImage() on upload, so it fits.
   var logoVal = state.logo || '';
