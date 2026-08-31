@@ -79,7 +79,17 @@
     copied:     { kr:'Lyen kopye !', fr:'Lien copié !', en:'Link copied!', es:'¡Enlace copiado!' },
     open:       { kr:'Louvri', fr:'Ouvrir', en:'Open', es:'Abrir' },
     tooBig:     { kr:'Imaj la twò gwo. Eseye yon lòt.', fr:"L'image est trop lourde. Essayez-en une autre.", en:'That image is too heavy. Try another.', es:'La imagen es muy pesada.' },
-    saving:     { kr:'Ap anrejistre...', fr:'Enregistrement...', en:'Saving...', es:'Guardando...' }
+    saving:     { kr:'Ap anrejistre...', fr:'Enregistrement...', en:'Saving...', es:'Guardando...' },
+    security:   { kr:'Kòd Sekrè W', fr:'Votre code secret', en:'Your PIN', es:'Tu PIN' },
+    pinHint:    { kr:'Chanje PIN ou lè w vle. Se ak li ou konekte sou boutik ou.', fr:'Changez votre PIN quand vous voulez. C\'est avec lui que vous entrez dans votre boutique.', en:'Change your PIN whenever you like. It is what gets you into your shop.', es:'Cambia tu PIN cuando quieras. Es con lo que entras a tu tienda.' },
+    curPin:     { kr:'PIN ou kounye a', fr:'PIN actuel', en:'Current PIN', es:'PIN actual' },
+    newPin:     { kr:'Nouvo PIN (4 chif)', fr:'Nouveau PIN (4 chiffres)', en:'New PIN (4 digits)', es:'PIN nuevo (4 dígitos)' },
+    repPin:     { kr:'Repete nouvo PIN an', fr:'Répétez le nouveau PIN', en:'Repeat the new PIN', es:'Repite el PIN nuevo' },
+    changePin:  { kr:'Chanje PIN an', fr:'Changer le PIN', en:'Change PIN', es:'Cambiar PIN' },
+    pinLen:     { kr:'PIN an dwe gen 4 chif', fr:'Le PIN doit avoir 4 chiffres', en:'The PIN must be 4 digits', es:'El PIN debe tener 4 dígitos' },
+    pinNoMatch: { kr:'De nouvo PIN yo pa menm', fr:'Les deux nouveaux PIN sont différents', en:'The two new PINs are not the same', es:'Los dos PIN nuevos no son iguales' },
+    pinBad:     { kr:'PIN ou kounye a pa bon', fr:'Votre PIN actuel est incorrect', en:'Your current PIN is not right', es:'Tu PIN actual no es correcto' },
+    pinDone:    { kr:'PIN ou chanje', fr:'Votre PIN est changé', en:'Your PIN is changed', es:'Tu PIN fue cambiado' }
   };
   function L_(k) { var e = L[k]; return e ? (e[MP.lang()] || e.en) : k; }
 
@@ -203,6 +213,19 @@
           '<button class="mp-btn mp-btn-blue mp-btn-sm" id="copyLink">' + L_('copy') + '</button>' +
           '<a class="mp-btn mp-btn-ghost mp-btn-sm" href="' + storeUrl + '" target="_blank" rel="noopener">' + L_('open') + '</a>' +
         '</div>' +
+      '</div>' +
+
+      /* The merchant owns their own PIN — nobody has to ask an agent to change it. */
+      '<div class="mp-card">' +
+        '<div class="mp-card-title">' + MP.svg('<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>') + L_('security') + '</div>' +
+        '<p class="mp-hint" style="margin-bottom:var(--space-sm);">' + L_('pinHint') + '</p>' +
+        '<div class="mp-field"><label>' + L_('curPin') + '</label>' +
+          '<input class="mp-input" id="curPin" type="password" inputmode="numeric" maxlength="4" autocomplete="off"></div>' +
+        '<div class="mp-field"><label>' + L_('newPin') + '</label>' +
+          '<input class="mp-input" id="newPin" type="password" inputmode="numeric" maxlength="4" autocomplete="off"></div>' +
+        '<div class="mp-field"><label>' + L_('repPin') + '</label>' +
+          '<input class="mp-input" id="repPin" type="password" inputmode="numeric" maxlength="4" autocomplete="off"></div>' +
+        '<button class="mp-btn mp-btn-red mp-btn-block" id="savePin">' + L_('changePin') + '</button>' +
       '</div>';
 
     wire(s);
@@ -337,6 +360,34 @@
         btn.disabled = false; btn.textContent = old;
         MP.toast(MP.t('saveFail'), 'error');
       });
+    });
+
+    /* change PIN */
+    document.getElementById('savePin').addEventListener('click', function () {
+      var btn = this;
+      var cur = document.getElementById('curPin').value.trim();
+      var nu  = document.getElementById('newPin').value.trim();
+      var rp  = document.getElementById('repPin').value.trim();
+      if (!/^[0-9]{4}$/.test(nu)) { MP.toast(L_('pinLen'), 'error'); return; }
+      if (nu !== rp) { MP.toast(L_('pinNoMatch'), 'error'); return; }
+      var old = btn.textContent;
+      btn.disabled = true; btn.textContent = L_('saving');
+      MP.req('PUT', '/api/auth/change-pin', { currentPin: cur, newPin: nu })
+        .then(function (d) {
+          btn.disabled = false; btn.textContent = old;
+          if (d && d.success) {
+            document.getElementById('curPin').value = '';
+            document.getElementById('newPin').value = '';
+            document.getElementById('repPin').value = '';
+            MP.toast(L_('pinDone'), 'success');
+          } else {
+            MP.toast(d && d.code === 'WRONG_PIN' ? L_('pinBad') : (d && d.message) || MP.t('saveFail'), 'error');
+          }
+        })
+        .catch(function () {
+          btn.disabled = false; btn.textContent = old;
+          MP.toast(MP.t('saveFail'), 'error');
+        });
     });
 
     /* copy link */

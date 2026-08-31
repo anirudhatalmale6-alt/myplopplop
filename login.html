@@ -445,27 +445,25 @@
 <!-- Forgot PIN Modal -->
 <div id="forgotPinModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;padding:16px;">
     <div style="background:#fff;border-radius:16px;padding:28px 24px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-        <h3 style="font-family:var(--font-heading);font-size:1.25rem;margin-bottom:4px;">Reset Your PIN</h3>
-        <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:20px;">Enter your phone number and a new 4-digit PIN.</p>
-        <form id="forgotPinForm" onsubmit="return false;">
-            <div class="input-group">
-                <label>Phone Number</label>
-                <div class="phone-input-group">
-                    <input type="text" class="phone-prefix" value="+509" readonly>
-                    <input type="tel" class="input" id="resetPhone" placeholder="3456 7890" maxlength="9" required>
-                </div>
-            </div>
-            <div class="input-group">
-                <label>New PIN (4 digits)</label>
-                <input type="password" class="input" id="resetNewPin" placeholder="Enter new 4-digit PIN" maxlength="4" pattern="\d{4}" required>
-            </div>
-            <div class="input-group">
-                <label>Confirm New PIN</label>
-                <input type="password" class="input" id="resetConfirmPin" placeholder="Confirm new PIN" maxlength="4" pattern="\d{4}" required>
-            </div>
-            <button type="submit" class="btn btn-red btn-full btn-lg" style="border-radius:var(--radius-md);margin-top:8px;">Reset PIN</button>
-            <button type="button" onclick="closeForgotPin()" style="display:block;width:100%;padding:12px;margin-top:8px;border:none;background:none;color:var(--text-muted);font-weight:600;cursor:pointer;">Cancel</button>
-        </form>
+        <!-- This form used to set a new PIN on any account given nothing but a
+             phone number, and phone numbers are printed on the public shop
+             pages. It no longer resets anything: the agent who signed the shop
+             up does it, and anyone who still knows their PIN changes it
+             themselves in Settings. -->
+        <h3 style="font-family:var(--font-heading);font-size:1.25rem;margin-bottom:4px;">Forgot your PIN?</h3>
+        <p style="color:var(--text-muted);font-size:0.9375rem;line-height:1.55;margin-bottom:14px;">
+            For your security, a PIN cannot be reset from this page — otherwise anyone
+            who knows your phone number could take over your shop.
+        </p>
+        <p style="color:var(--text-muted);font-size:0.9375rem;line-height:1.55;margin-bottom:14px;">
+            Contact the agent who registered your shop. They can reset it for you in
+            a few seconds, and you can change it to whatever you like afterwards.
+        </p>
+        <p style="font-size:0.875rem;line-height:1.55;margin-bottom:20px;background:#f5f7fb;border-radius:10px;padding:12px 14px;">
+            Still know your PIN and just want a different one? Log in, then go to
+            <strong>Settings &rarr; Change PIN</strong>.
+        </p>
+        <button type="button" onclick="closeForgotPin()" class="btn btn-red btn-full btn-lg" style="border-radius:var(--radius-md);">Got it</button>
     </div>
 </div>
 </main>
@@ -516,49 +514,7 @@ function showForgotPin(e) {
 }
 function closeForgotPin() {
     document.getElementById('forgotPinModal').style.display = 'none';
-    document.getElementById('forgotPinForm').reset();
 }
-
-document.getElementById('forgotPinForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    var prefix = this.querySelector('.phone-prefix').value;
-    var phone = prefix + document.getElementById('resetPhone').value.replace(/\s/g, '');
-    var newPin = document.getElementById('resetNewPin').value;
-    var confirmPin = document.getElementById('resetConfirmPin').value;
-
-    if (newPin !== confirmPin) {
-        API.toast('PINs do not match', 'error');
-        return;
-    }
-    if (!/^\d{4}$/.test(newPin)) {
-        API.toast('PIN must be exactly 4 digits', 'error');
-        return;
-    }
-
-    var btn = this.querySelector('button[type="submit"]');
-    btn.textContent = 'Resetting...';
-    btn.disabled = true;
-
-    var res = await fetch(API.BASE_URL + '/api/auth/forgot-pin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: phone, newPin: newPin })
-    });
-    var data = await res.json();
-    if (data.success) {
-        API.toast('PIN reset! You are now logged in.', 'success');
-        if (data.token) {
-            API.setToken(data.token);
-            API.setUser(data.user);
-        }
-        closeForgotPin();
-        setTimeout(function() { window.location.href = 'index.html'; }, 800);
-    } else {
-        API.toast(data.message || 'Reset failed', 'error');
-        btn.textContent = 'Reset PIN';
-        btn.disabled = false;
-    }
-});
 
 // Tab toggle
 const tabs = document.querySelectorAll('.auth-tab');

@@ -85,7 +85,17 @@
     edit:    { kr:'Pou chanje enfòmasyon machin ou, kontakte sipò MyPlopPlop sou WhatsApp.', fr:'Pour modifier les informations du véhicule, contactez le support MyPlopPlop sur WhatsApp.', en:'To change your vehicle details, contact MyPlopPlop support on WhatsApp.', es:'Para cambiar los datos del vehículo, contacta con soporte por WhatsApp.' },
     support: { kr:'Kontakte sipò', fr:'Contacter le support', en:'Contact support', es:'Contactar soporte' },
     logout:  { kr:'Dekonekte', fr:'Se déconnecter', en:'Log out', es:'Cerrar sesión' },
-    none:    { kr:'—', fr:'—', en:'—', es:'—' }
+    none:    { kr:'—', fr:'—', en:'—', es:'—' },
+    sec:     { kr:'Kòd Sekrè W', fr:'Votre code secret', en:'Your PIN', es:'Tu PIN' },
+    pinHint: { kr:'Chanje PIN ou lè w vle. Se ak li ou konekte.', fr:'Changez votre PIN quand vous voulez. C\'est avec lui que vous vous connectez.', en:'Change your PIN whenever you like. It is what you log in with.', es:'Cambia tu PIN cuando quieras. Es con lo que inicias sesión.' },
+    curPin:  { kr:'PIN ou kounye a', fr:'PIN actuel', en:'Current PIN', es:'PIN actual' },
+    newPin:  { kr:'Nouvo PIN (4 chif)', fr:'Nouveau PIN (4 chiffres)', en:'New PIN (4 digits)', es:'PIN nuevo (4 dígitos)' },
+    repPin:  { kr:'Repete nouvo PIN an', fr:'Répétez le nouveau PIN', en:'Repeat the new PIN', es:'Repite el PIN nuevo' },
+    doPin:   { kr:'Chanje PIN an', fr:'Changer le PIN', en:'Change PIN', es:'Cambiar PIN' },
+    pinLen:  { kr:'PIN an dwe gen 4 chif', fr:'Le PIN doit avoir 4 chiffres', en:'The PIN must be 4 digits', es:'El PIN debe tener 4 dígitos' },
+    pinNo:   { kr:'De nouvo PIN yo pa menm', fr:'Les deux nouveaux PIN sont différents', en:'The two new PINs are not the same', es:'Los dos PIN nuevos no son iguales' },
+    pinBad:  { kr:'PIN ou kounye a pa bon', fr:'Votre PIN actuel est incorrect', en:'Your current PIN is not right', es:'Tu PIN actual no es correcto' },
+    pinDone: { kr:'PIN ou chanje', fr:'Votre PIN est changé', en:'Your PIN is changed', es:'Tu PIN fue cambiado' }
   };
   function L_(k) { return RD.pick(L[k]) || k; }
   var WA = 'https://wa.me/50946859702';
@@ -135,7 +145,40 @@
           '" target="_blank" rel="noopener">' + L_('support') + '</a>' +
       '</div>' +
 
+      /* The driver owns their own PIN — no need to ask anyone to change it. */
+      '<div class="rd-card"><h4>' + L_('sec') + '</h4>' +
+        '<p style="font-size:var(--text-xs);color:var(--text-muted);margin:0 0 var(--space-md);">' + L_('pinHint') + '</p>' +
+        '<div class="rd-field"><label>' + L_('curPin') + '</label>' +
+          '<input class="rd-input" id="pCur" type="password" inputmode="numeric" maxlength="4" autocomplete="off"></div>' +
+        '<div class="rd-field"><label>' + L_('newPin') + '</label>' +
+          '<input class="rd-input" id="pNew" type="password" inputmode="numeric" maxlength="4" autocomplete="off"></div>' +
+        '<div class="rd-field"><label>' + L_('repPin') + '</label>' +
+          '<input class="rd-input" id="pRep" type="password" inputmode="numeric" maxlength="4" autocomplete="off"></div>' +
+        '<button class="rd-btn rd-btn-red" id="pSave">' + L_('doPin') + '</button>' +
+      '</div>' +
+
       '<button class="rd-btn rd-btn-ghost" id="rdOut" style="color:var(--error);">' + L_('logout') + '</button>';
+
+    document.getElementById('pSave').addEventListener('click', function () {
+      var btn = this;
+      var cur = document.getElementById('pCur').value.trim();
+      var nu  = document.getElementById('pNew').value.trim();
+      var rp  = document.getElementById('pRep').value.trim();
+      if (!/^[0-9]{4}$/.test(nu)) { RD.toast(L_('pinLen'), 'error'); return; }
+      if (nu !== rp) { RD.toast(L_('pinNo'), 'error'); return; }
+      btn.disabled = true;
+      RD.req('PUT', '/api/auth/change-pin', { currentPin: cur, newPin: nu }).then(function (d) {
+        btn.disabled = false;
+        if (d && d.success) {
+          document.getElementById('pCur').value = '';
+          document.getElementById('pNew').value = '';
+          document.getElementById('pRep').value = '';
+          RD.toast(L_('pinDone'), 'success');
+        } else {
+          RD.toast(d && d.code === 'WRONG_PIN' ? L_('pinBad') : (d && d.message) || RD.t('failed'), 'error');
+        }
+      }).catch(function () { btn.disabled = false; RD.toast(RD.t('failed'), 'error'); });
+    });
 
     document.getElementById('stBtn').addEventListener('click', function () {
       var btn = this;
