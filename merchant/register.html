@@ -75,6 +75,12 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:1
 .field select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235A5A72' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .field-hint{font-size:.7rem;color:var(--text-sub);margin-top:4px}
+.phone-group{display:flex;gap:8px}
+.phone-group .prefix{flex:0 0 74px;padding-left:6px;padding-right:6px;text-align:center;font-weight:700;color:var(--text-sub);background:#EDF0F6;cursor:default}
+.phone-group input[type=tel]{flex:1}
+.err-box{display:none;background:var(--red-light);border:1.5px solid var(--red);color:var(--red-dark);border-radius:12px;padding:12px 14px;font-size:.82rem;line-height:1.5;margin-top:16px;font-weight:600}
+.err-box.show{display:block}
+.err-box a{color:var(--red-dark);font-weight:800}
 
 /* Submit */
 .submit-btn{width:100%;padding:16px;border-radius:14px;background:var(--red);color:#fff;font-family:var(--heading);font-size:1rem;font-weight:800;border:none;cursor:pointer;transition:all .25s;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(210,16,52,.3);margin-top:20px}
@@ -90,6 +96,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:1
 .success-msg p{font-size:.88rem;color:var(--text-sub);line-height:1.6;margin-bottom:20px}
 .success-wa{display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;padding:14px 28px;border-radius:14px;font-weight:700;font-size:.92rem;text-decoration:none;transition:all .25s;box-shadow:0 4px 16px rgba(37,211,102,.3)}
 .success-wa:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,211,102,.4)}
+.success-msg .success-wa{display:flex;max-width:280px;margin:0 auto;justify-content:center}
 .success-home{display:block;margin-top:14px;color:var(--blue);font-size:.85rem;font-weight:600;text-decoration:none}
 
 /* Footer nav */
@@ -175,21 +182,32 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:1
         </select>
       </div>
 
-      <div class="field-row">
-        <div class="field">
-          <label data-i18n="lbl_owner">Non Pwopriyetè<span class="req">*</span></label>
-          <input type="text" id="ownerName" required data-i18n-placeholder="ph_owner" placeholder="Non konplè ou">
-        </div>
-        <div class="field">
-          <label data-i18n="lbl_phone">Telefòn<span class="req">*</span></label>
-          <input type="tel" id="phone" required placeholder="+509 XXXX XXXX">
+      <div class="field">
+        <label data-i18n="lbl_owner">Non Pwopriyetè<span class="req">*</span></label>
+        <input type="text" id="ownerName" required data-i18n-placeholder="ph_owner" placeholder="Non konplè ou">
+      </div>
+
+      <div class="field">
+        <label data-i18n="lbl_phone">Telefòn<span class="req">*</span></label>
+        <div class="phone-group">
+          <input type="text" class="prefix" value="+509" readonly tabindex="-1">
+          <input type="tel" id="phone" required inputmode="numeric" maxlength="12" placeholder="4498 6608">
         </div>
       </div>
 
       <div class="field">
         <label data-i18n="lbl_whatsapp">Nimewo WhatsApp</label>
-        <input type="tel" id="whatsapp" data-i18n-placeholder="ph_wa" placeholder="Menm nimewo oswa yon lòt">
+        <div class="phone-group">
+          <input type="text" class="prefix" value="+509" readonly tabindex="-1">
+          <input type="tel" id="whatsapp" inputmode="numeric" maxlength="12" data-i18n-placeholder="ph_wa" placeholder="Menm nimewo oswa yon lòt">
+        </div>
         <div class="field-hint" data-i18n="hint_wa">Kliyan ap kontakte ou sou WhatsApp</div>
+      </div>
+
+      <div class="field">
+        <label data-i18n="lbl_pin">Kòd Sekrè (4 chif)<span class="req">*</span></label>
+        <input type="tel" id="storePin" required inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="1234" autocomplete="new-password">
+        <div class="field-hint" data-i18n="hint_pin">Sonje kòd sa a. Se avè l ou pral konekte pou jere magazen ou.</div>
       </div>
 
       <div class="field">
@@ -216,8 +234,10 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:1
       </div>
 
       <button type="submit" class="submit-btn" id="submitBtn">
-        <span data-i18n="btn_submit">🏪 Kreye Magazen Mwen</span>
+        <span id="submitLabel" data-i18n="btn_submit">🏪 Kreye Magazen Mwen</span>
       </button>
+
+      <div class="err-box" id="errBox"></div>
     </form>
   </div>
 
@@ -225,8 +245,10 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:1
   <div class="success-msg" id="successMsg">
     <div class="success-icon">✅</div>
     <h2 data-i18n="suc_title">Magazen Ou Kreye!</h2>
-    <p data-i18n="suc_desc">Nou resevwa demann ou. Ekip MyPlopPlop ap kontakte ou sou WhatsApp pou aktive magazen ou.</p>
-    <a id="waLink" href="#" target="_blank" class="success-wa">💬 <span data-i18n="suc_wa">Kontakte Nou sou WhatsApp</span></a>
+    <p id="sucDesc" data-i18n="suc_desc">Magazen ou kreye vre e li aktif kounye a. Pou konekte: nimewo telefòn ou ak kòd 4 chif la.</p>
+    <a id="storeLink" href="#" class="success-wa" style="background:var(--blue);box-shadow:0 4px 16px rgba(0,32,159,.3)">🏪 <span data-i18n="suc_view">Wè Magazen Ou</span></a>
+    <a id="addProducts" href="../store-designer.html" class="success-wa" style="background:var(--red);box-shadow:0 4px 16px rgba(210,16,52,.3);margin-top:10px">➕ <span data-i18n="suc_products">Ajoute Pwodwi Ou</span></a>
+    <a id="waLink" href="#" target="_blank" class="success-home" style="color:#128C3E">💬 <span data-i18n="suc_wa">Kontakte Nou sou WhatsApp</span></a>
     <a href="../index.html" class="success-home" data-i18n="suc_home">&larr; Retounen sou MyPlopPlop</a>
   </div>
 </div>
@@ -257,6 +279,17 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:1
 
 <script>
 const WA_NUMBER = '50946859702';
+const API_BASE = 'https://myplopplop-api.onrender.com';
+
+/* The form used to build a WhatsApp message and stop there - nothing was ever
+   saved, while the screen said the store was created. It now creates the
+   merchant account and the store on the server, and only then says so. */
+const CAT_MAP = {
+  restoran:'restaurant', sipemache:'supermarket', famasi:'pharmacy',
+  rad:'retail', elektwonik:'retail', bote:'retail', mezon:'retail', lot:'other'
+};
+/* User.language only accepts these four; Kreyol is stored as 'kr'. */
+const LANG_MAP = { ht:'kr', en:'en', fr:'fr', es:'es', pt:'fr' };
 
 const T = {
   ht: {
@@ -269,7 +302,12 @@ const T = {
     cat_select:'-- Chwazi kategori --',cat_rest:'🍽️ Restoran / Manje',cat_groc:'🛒 Sipèmache / Makèt',cat_pharm:'💊 Famasi',cat_cloth:'👕 Rad / Mòd',cat_elec:'📱 Elektwonik',cat_beauty:'💄 Bote / Swen Pèsonèl',cat_home:'🏠 Atik Mezon',cat_other:'📦 Lòt',
     lbl_referral:'Patnè Referans',ref_select:'-- Kijan ou te tande pale de MyPlopPlop? --',ref_friend:'Zanmi / Fanmi',ref_other:'Lòt',
     btn_submit:'🏪 Kreye Magazen Mwen',
-    suc_title:'Magazen Ou Kreye!',suc_desc:'Nou resevwa demann ou. Ekip MyPlopPlop ap kontakte ou sou WhatsApp pou aktive magazen ou.',suc_wa:'Kontakte Nou sou WhatsApp',suc_home:'← Retounen sou MyPlopPlop',
+    lbl_pin:'Kòd Sekrè (4 chif)',hint_pin:'Sonje kòd sa a. Se avè l ou pral konekte pou jere magazen ou.',
+    btn_working:'Ap konekte ak sèvè a...',btn_creating:'Ap kreye kont ou...',btn_store:'Ap kreye magazen ou...',
+    err_phone:'Antre nimewo telefòn ou (8 chif).',err_pin:'Kòd sekrè a dwe gen 4 chif.',
+    err_exists:'Nimewo sa a gen yon kont deja, men kòd la pa bon.',err_login_link:'Konekte',
+    err_offline:'Sèvè a pa reponn. Tanpri eseye ankò nan yon minit.',err_generic:'Nou pa t kapab kreye magazen an: ',
+    suc_title:'Magazen Ou Kreye!',suc_desc:'Magazen ou kreye vre e li aktif kounye a. Pou konekte pita: nimewo telefòn ou ak kòd 4 chif la.',suc_view:'Wè Magazen Ou',suc_products:'Ajoute Pwodwi Ou',suc_wa:'Voye enfo a sou WhatsApp',suc_home:'← Retounen sou MyPlopPlop',
     nav_home:'Akèy',nav_search:'Chèche',nav_cart:'Panye',nav_orders:'Kòmand',nav_account:'Kont'
   },
   pt: {
@@ -282,7 +320,12 @@ const T = {
     cat_select:'-- Escolha a categoria --',cat_rest:'🍽️ Restaurante / Comida',cat_groc:'🛒 Mercado / Feira',cat_pharm:'💊 Farmácia',cat_cloth:'👕 Roupas / Moda',cat_elec:'📱 Eletrônicos',cat_beauty:'💄 Beleza / Cuidados pessoais',cat_home:'🏠 Casa',cat_other:'📦 Outro',
     lbl_referral:'Parceiro que indicou',ref_select:'-- Como você conheceu o MyPlopPlop? --',ref_friend:'Amigo / Família',ref_other:'Outro',
     btn_submit:'🏪 Criar minha loja',
-    suc_title:'Sua loja foi criada!',suc_desc:'Recebemos o seu pedido. A equipe do MyPlopPlop vai falar com você no WhatsApp para ativar a sua loja.',suc_wa:'Fale conosco no WhatsApp',suc_home:'← Voltar ao MyPlopPlop',
+    lbl_pin:'Código secreto (4 dígitos)',hint_pin:'Guarde este código. Você vai usá-lo para entrar e gerenciar a sua loja.',
+    btn_working:'Conectando ao servidor...',btn_creating:'Criando a sua conta...',btn_store:'Criando a sua loja...',
+    err_phone:'Digite o seu número de telefone (8 dígitos).',err_pin:'O código secreto precisa ter 4 dígitos.',
+    err_exists:'Este número já tem uma conta, mas o código não confere.',err_login_link:'Entrar',
+    err_offline:'O servidor não respondeu. Tente de novo em um minuto.',err_generic:'Não foi possível criar a loja: ',
+    suc_title:'Sua loja foi criada!',suc_desc:'A sua loja foi realmente criada e já está no ar. Para entrar depois: o seu número e o seu código de 4 dígitos.',suc_view:'Ver a sua loja',suc_products:'Adicionar seus produtos',suc_wa:'Enviar os dados no WhatsApp',suc_home:'← Voltar ao MyPlopPlop',
     nav_home:'Início',nav_search:'Buscar',nav_cart:'Carrinho',nav_orders:'Pedidos',nav_account:'Conta'
   },
   en: {
@@ -295,7 +338,12 @@ const T = {
     cat_select:'-- Choose category --',cat_rest:'🍽️ Restaurant / Food',cat_groc:'🛒 Grocery / Market',cat_pharm:'💊 Pharmacy',cat_cloth:'👕 Clothing / Fashion',cat_elec:'📱 Electronics',cat_beauty:'💄 Beauty / Personal Care',cat_home:'🏠 Home Goods',cat_other:'📦 Other',
     lbl_referral:'Referral Partner',ref_select:'-- How did you hear about MyPlopPlop? --',ref_friend:'Friend / Family',ref_other:'Other',
     btn_submit:'🏪 Create My Store',
-    suc_title:'Your Store is Created!',suc_desc:'We received your request. The MyPlopPlop team will contact you on WhatsApp to activate your store.',suc_wa:'Contact Us on WhatsApp',suc_home:'← Back to MyPlopPlop',
+    lbl_pin:'Secret Code (4 digits)',hint_pin:'Remember this code. You will use it to log in and manage your store.',
+    btn_working:'Connecting to the server...',btn_creating:'Creating your account...',btn_store:'Creating your store...',
+    err_phone:'Enter your phone number (8 digits).',err_pin:'The secret code must be 4 digits.',
+    err_exists:'This number already has an account, but the code does not match.',err_login_link:'Log in',
+    err_offline:'The server did not answer. Please try again in a minute.',err_generic:'We could not create the store: ',
+    suc_title:'Your Store is Created!',suc_desc:'Your store really is created and it is live now. To log in later: your phone number and your 4-digit code.',suc_view:'View Your Store',suc_products:'Add Your Products',suc_wa:'Send the details on WhatsApp',suc_home:'← Back to MyPlopPlop',
     nav_home:'Home',nav_search:'Search',nav_cart:'Cart',nav_orders:'Orders',nav_account:'Account'
   },
   fr: {
@@ -308,7 +356,12 @@ const T = {
     cat_select:'-- Choisir catégorie --',cat_rest:'🍽️ Restaurant / Nourriture',cat_groc:'🛒 Supermarché / Marché',cat_pharm:'💊 Pharmacie',cat_cloth:'👕 Vêtements / Mode',cat_elec:'📱 Électronique',cat_beauty:'💄 Beauté / Soins',cat_home:'🏠 Articles Maison',cat_other:'📦 Autre',
     lbl_referral:'Partenaire de Référence',ref_select:'-- Comment avez-vous entendu parler de MyPlopPlop? --',ref_friend:'Ami / Famille',ref_other:'Autre',
     btn_submit:'🏪 Créer Ma Boutique',
-    suc_title:'Votre Boutique est Créée!',suc_desc:'Nous avons reçu votre demande. L\'équipe MyPlopPlop vous contactera sur WhatsApp pour activer votre boutique.',suc_wa:'Contactez-nous sur WhatsApp',suc_home:'← Retour à MyPlopPlop',
+    lbl_pin:'Code Secret (4 chiffres)',hint_pin:'Retenez ce code. Vous l\'utiliserez pour vous connecter et gérer votre boutique.',
+    btn_working:'Connexion au serveur...',btn_creating:'Création de votre compte...',btn_store:'Création de votre boutique...',
+    err_phone:'Entrez votre numéro de téléphone (8 chiffres).',err_pin:'Le code secret doit contenir 4 chiffres.',
+    err_exists:'Ce numéro a déjà un compte, mais le code ne correspond pas.',err_login_link:'Se connecter',
+    err_offline:'Le serveur ne répond pas. Réessayez dans une minute.',err_generic:'Nous n\'avons pas pu créer la boutique : ',
+    suc_title:'Votre Boutique est Créée!',suc_desc:'Votre boutique est réellement créée et elle est en ligne. Pour vous connecter plus tard : votre numéro et votre code à 4 chiffres.',suc_view:'Voir Votre Boutique',suc_products:'Ajouter Vos Produits',suc_wa:'Envoyer les infos sur WhatsApp',suc_home:'← Retour à MyPlopPlop',
     nav_home:'Accueil',nav_search:'Recherche',nav_cart:'Panier',nav_orders:'Commandes',nav_account:'Compte'
   },
   es: {
@@ -321,7 +374,12 @@ const T = {
     cat_select:'-- Elegir categoría --',cat_rest:'🍽️ Restaurante / Comida',cat_groc:'🛒 Supermercado / Mercado',cat_pharm:'💊 Farmacia',cat_cloth:'👕 Ropa / Moda',cat_elec:'📱 Electrónica',cat_beauty:'💄 Belleza / Cuidado Personal',cat_home:'🏠 Artículos del Hogar',cat_other:'📦 Otro',
     lbl_referral:'Socio de Referencia',ref_select:'-- Como se entero de MyPlopPlop? --',ref_friend:'Amigo / Familia',ref_other:'Otro',
     btn_submit:'🏪 Crear Mi Tienda',
-    suc_title:'Tu Tienda Está Creada!',suc_desc:'Recibimos tu solicitud. El equipo de MyPlopPlop te contactará en WhatsApp para activar tu tienda.',suc_wa:'Contáctanos en WhatsApp',suc_home:'← Volver a MyPlopPlop',
+    lbl_pin:'Código Secreto (4 dígitos)',hint_pin:'Recuerda este código. Lo usarás para entrar y administrar tu tienda.',
+    btn_working:'Conectando con el servidor...',btn_creating:'Creando tu cuenta...',btn_store:'Creando tu tienda...',
+    err_phone:'Escribe tu número de teléfono (8 dígitos).',err_pin:'El código secreto debe tener 4 dígitos.',
+    err_exists:'Este número ya tiene una cuenta, pero el código no coincide.',err_login_link:'Entrar',
+    err_offline:'El servidor no responde. Intenta de nuevo en un minuto.',err_generic:'No pudimos crear la tienda: ',
+    suc_title:'Tu Tienda Está Creada!',suc_desc:'Tu tienda está realmente creada y ya está activa. Para entrar más tarde: tu número y tu código de 4 dígitos.',suc_view:'Ver Tu Tienda',suc_products:'Agregar Tus Productos',suc_wa:'Enviar los datos por WhatsApp',suc_home:'← Volver a MyPlopPlop',
     nav_home:'Inicio',nav_search:'Buscar',nav_cart:'Carrito',nav_orders:'Pedidos',nav_account:'Cuenta'
   }
 };
@@ -345,27 +403,162 @@ function setLang(lang) {
   });
 }
 
+/* Render's free tier puts the API to sleep, so a cold first request can take the
+   best part of a minute. Wake it while the merchant is still typing. */
+var _apiReady = false;
+(function wakeAPI() {
+  fetch(API_BASE + '/api/health').then(function() { _apiReady = true; })
+    .catch(function() { setTimeout(wakeAPI, 5000); });
+})();
+
+function fetchWithTimeout(url, opts, timeoutMs) {
+  return new Promise(function(resolve, reject) {
+    var controller = new AbortController();
+    var timer = setTimeout(function() { controller.abort(); reject(new Error('TIMEOUT')); }, timeoutMs || 60000);
+    opts = opts || {};
+    opts.signal = controller.signal;
+    fetch(url, opts).then(function(r) { clearTimeout(timer); resolve(r); })
+      .catch(function(e) { clearTimeout(timer); reject(e); });
+  });
+}
+
+function setBusy(label, busy) {
+  var btn = document.getElementById('submitBtn');
+  document.getElementById('submitLabel').textContent = label;
+  btn.disabled = !!busy;
+}
+
+function showErr(text, withLoginLink) {
+  var box = document.getElementById('errBox');
+  box.textContent = text;
+  if (withLoginLink) {
+    var a = document.createElement('a');
+    a.href = '../login.html?redirect=store-designer.html';
+    a.textContent = ' → ' + ((T[currentLang] || T.ht).err_login_link);
+    box.appendChild(a);
+  }
+  box.classList.add('show');
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
 function handleSubmit(e) {
   e.preventDefault();
-  const name = document.getElementById('storeName').value.trim();
-  const cat = document.getElementById('storeCategory').value;
-  const owner = document.getElementById('ownerName').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const wa = document.getElementById('whatsapp').value.trim() || phone;
-  const loc = document.getElementById('location').value.trim();
-  const desc = document.getElementById('storeDesc').value.trim();
-  const referral = document.getElementById('referralPartner').value;
+  var t = T[currentLang] || T.ht;
+  document.getElementById('errBox').classList.remove('show');
 
-  const msg = `🏪 NOUVO MAGAZEN - MyPlopPlop\n\nNon Magazen: ${name}\nKategori: ${cat}\nPwopriyetè: ${owner}\nTelefòn: ${phone}\nWhatsApp: ${wa}\nLokasyon: ${loc}\nDeskripsyon: ${desc || 'N/A'}\nPatnè Referans: ${referral || 'N/A'}`;
+  var name = document.getElementById('storeName').value.trim();
+  var cat = document.getElementById('storeCategory').value;
+  var owner = document.getElementById('ownerName').value.trim();
+  var phoneDigits = document.getElementById('phone').value.replace(/\D/g, '');
+  var waDigits = document.getElementById('whatsapp').value.replace(/\D/g, '');
+  var loc = document.getElementById('location').value.trim();
+  var desc = document.getElementById('storeDesc').value.trim();
+  var referral = document.getElementById('referralPartner').value;
+  var pin = document.getElementById('storePin').value.replace(/\D/g, '');
 
-  const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
-  document.getElementById('waLink').href = waUrl;
+  if (phoneDigits.length < 8) { showErr(t.err_phone); return false; }
+  if (!/^\d{4}$/.test(pin)) { showErr(t.err_pin); return false; }
 
-  document.getElementById('formCard').style.display = 'none';
-  document.getElementById('successMsg').classList.add('show');
+  /* Built exactly the way login.html builds it, so the number she registers
+     with is the number that logs her back in. */
+  var phone = '+509' + phoneDigits;
+  var waPhone = waDigits ? '+509' + waDigits : phone;
 
-  window.open(waUrl, '_blank');
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  var msg = '🏪 NOUVO MAGAZEN - MyPlopPlop\n\nNon Magazen: ' + name +
+    '\nKategori: ' + cat + '\nPwopriyetè: ' + owner + '\nTelefòn: ' + phone +
+    '\nWhatsApp: ' + waPhone + '\nLokasyon: ' + loc +
+    '\nDeskripsyon: ' + (desc || 'N/A') + '\nPatnè Referans: ' + (referral || 'N/A');
+  var waUrl = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(msg);
+
+  setBusy(t.btn_working, true);
+  var authToken = null;
+
+  var wake = _apiReady ? Promise.resolve()
+    : fetchWithTimeout(API_BASE + '/api/health', {}, 90000).then(function() { _apiReady = true; });
+
+  wake.then(function() {
+    setBusy(t.btn_creating, true);
+    return fetchWithTimeout(API_BASE + '/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: owner, phone: phone, pin: pin, role: 'merchant',
+        language: LANG_MAP[currentLang] || 'fr'
+      })
+    }, 60000).then(function(r) { return r.json(); });
+  })
+  .then(function(reg) {
+    if (reg.success && reg.token) return reg.token;
+    /* She already has an account: the same PIN signs her in, so one form still
+       ends with one working store instead of a dead end. */
+    if (reg.message && /already registered/i.test(reg.message)) {
+      return fetchWithTimeout(API_BASE + '/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: phone, pin: pin })
+      }, 60000).then(function(r) { return r.json(); }).then(function(l) {
+        if (l.success && l.token) return l.token;
+        var e = new Error('EXISTS'); e.code = 'EXISTS'; throw e;
+      });
+    }
+    var m = reg.message || (reg.errors && reg.errors[0] && reg.errors[0].msg) || 'register failed';
+    throw new Error(m);
+  })
+  .then(function(token) {
+    authToken = token;
+    setBusy(t.btn_store, true);
+    var payload = {
+      name: name,
+      description: desc,
+      category: CAT_MAP[cat] || 'other',
+      phone: waPhone,
+      address: { street: loc },
+      deliveryOptions: { delivery: true, selfPickup: true },
+      referralPartner: referral || undefined
+    };
+    /* Sending the form twice must not leave her with two half-empty stores. */
+    return fetchWithTimeout(API_BASE + '/api/stores/merchant/my-store', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    }, 60000).then(function(r) { return r.json(); }).then(function(mine) {
+      if (mine.success && mine.data && mine.data.store) {
+        return fetchWithTimeout(API_BASE + '/api/stores/' + mine.data.store._id, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify(payload)
+        }, 60000).then(function(r) { return r.json(); });
+      }
+      return fetchWithTimeout(API_BASE + '/api/stores', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify(payload)
+      }, 60000).then(function(r) { return r.json(); });
+    });
+  })
+  .then(function(d) {
+    if (!d.success || !d.data || !d.data._id) {
+      throw new Error(d.message || (d.errors && d.errors[0] && d.errors[0].msg) || 'store failed');
+    }
+    /* Signed in already, so "Add Your Products" walks straight into the builder. */
+    try {
+      localStorage.setItem('pp_token', authToken);
+      localStorage.setItem('pp_user', JSON.stringify({ name: owner, phone: phone, role: 'merchant' }));
+    } catch (err) {}
+
+    document.getElementById('storeLink').href = '../store.html?id=' + d.data._id;
+    document.getElementById('waLink').href = waUrl;
+    document.getElementById('formCard').style.display = 'none';
+    document.getElementById('successMsg').classList.add('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  })
+  .catch(function(err) {
+    setBusy(t.btn_submit, false);
+    if (err && err.code === 'EXISTS') { showErr(t.err_exists, true); return; }
+    if (err && (err.message === 'TIMEOUT' || err.name === 'AbortError' || err.message === 'Failed to fetch')) {
+      showErr(t.err_offline); return;
+    }
+    showErr(t.err_generic + (err && err.message ? err.message : ''));
+  });
+
   return false;
 }
 
