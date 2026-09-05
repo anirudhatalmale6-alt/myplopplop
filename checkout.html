@@ -1355,7 +1355,13 @@
                         : undefined
                 },
                 recipient: { name: name, phone: phone, address: addr },
-                notes: notes
+                notes: notes,
+                // The distance-based delivery price this shopper was shown and is
+                // about to be charged. Without it the order recorded the store's
+                // flat fee and the rider's cut came out of nothing.
+                // One trip is quoted for the whole basket, so it belongs to the
+                // first order only - putting it on each would pay two riders.
+                deliveryFee: s === 0 ? ((getFinalSummary() || {}).deliveryFee || 0) : 0
             };
 
             try {
@@ -1367,7 +1373,8 @@
                     orderData.deliveryAddress,
                     false,
                     orderData.recipient,
-                    orderData.notes
+                    orderData.notes,
+                    orderData.deliveryFee
                 );
                 if (result.success && result.data) {
                     createdOrders.push(result.data);
@@ -1388,13 +1395,30 @@
         const summary = getFinalSummary();
         const total = summary ? summary.total : 0;
 
-        // Try creating real API order if logged in
-        var apiOrders = [];
-        if (typeof API !== 'undefined' && API.isLoggedIn()) {
-            apiOrders = await createAPIOrder() || [];
+        // An order needs an account: Order.customer is required and POST /api/orders
+        // is authenticated, so a shopper without one used to be sent to MonCash with
+        // a locally invented order number - money out, and no order for the merchant
+        // to see or anyone to deliver. Send them to log in first; the basket is in
+        // localStorage and survives the trip.
+        if (typeof API === 'undefined' || !API.isLoggedIn()) {
+            btn.disabled = false;
+            btn.textContent = 'Place Order';
+            alert('Konekte pou nou ka voye kòmand ou bay machann nan.\n\nPlease log in so we can send your order to the shop.');
+            window.location.href = 'login.html?redirect=checkout.html';
+            return;
         }
 
-        var orderId = apiOrders.length > 0 ? apiOrders[0].orderNumber : ('MPP-' + Date.now() + '-' + Math.floor(Math.random() * 1000));
+        var apiOrders = await createAPIOrder() || [];
+
+        // Never take money for an order the server does not have.
+        if (!apiOrders.length) {
+            btn.disabled = false;
+            btn.textContent = 'Place Order';
+            alert('Nou pa t kapab anrejistre kòmand ou. Pa peye - eseye ankò.\n\nWe could not save your order, so we have not charged you. Please try again.');
+            return;
+        }
+
+        var orderId = apiOrders[0].orderNumber;
 
         // San Cash is switched off until the wallet can actually be charged.
         // completeOrder() below confirms an order without taking any money, and

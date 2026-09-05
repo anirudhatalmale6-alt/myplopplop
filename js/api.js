@@ -269,12 +269,16 @@ const API = (() => {
     async function solGetAudit(id) { return await request('GET', '/api/sol/' + id + '/audit'); }
 
     // ─── Store Orders ───
-    async function createOrder(storeId, items, paymentMethod, deliveryType, deliveryAddress, isDiasporaOrder, recipient, notes) {
+    async function createOrder(storeId, items, paymentMethod, deliveryType, deliveryAddress, isDiasporaOrder, recipient, notes, deliveryFee) {
         const body = { storeId, items, paymentMethod, deliveryType: deliveryType || 'delivery' };
         if (deliveryAddress) body.deliveryAddress = deliveryAddress;
         if (isDiasporaOrder) body.isDiasporaOrder = true;
         if (recipient) body.recipient = recipient;
         if (notes) body.notes = notes;
+        // The delivery price the shopper was quoted for this exact trip; the
+        // server caps it, but without it the order is recorded fee-free while
+        // the customer is charged for delivery.
+        if (deliveryFee) body.deliveryFee = deliveryFee;
         return await request('POST', '/api/orders', body);
     }
 
