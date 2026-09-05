@@ -1518,7 +1518,14 @@
                 localStorage.removeItem('mpp_pending_order');
                 return;
             }
-            // Verify payment
+            // Verify payment.
+            //
+            // This used to check with the gateway here and then just draw the
+            // success screen - the API was never told, so every paid order sat
+            // at "pending" for ever, the shop was never credited when it was
+            // delivered and nothing was ever eligible for payout. The server now
+            // asks the gateway itself (it will not take the browser's word for
+            // it) and marks the order paid.
             fetch(PAYMENT_API + '/paiement-verify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1527,7 +1534,12 @@
             .then(function(r) { return r.json(); })
             .then(function(data) {
                 if (data.status === true && data.trans_status === 'ok') {
-                    completeOrder(order.orderId);
+                    var done = function () { completeOrder(order.orderId, order.apiOrderId); };
+                    if (order.apiOrderId && typeof API !== 'undefined' && API.confirmOrderPayment) {
+                        API.confirmOrderPayment(order.apiOrderId).then(done).catch(done);
+                    } else {
+                        done();
+                    }
                 } else {
                     // Payment not yet confirmed - could still be processing
                     localStorage.removeItem('mpp_pending_order');

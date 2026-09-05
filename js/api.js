@@ -282,6 +282,13 @@ const API = (() => {
         return await request('POST', '/api/orders', body);
     }
 
+    // Ask the server to confirm this order really was paid. The server checks
+    // with the gateway itself - it does not take our word for it - and only then
+    // marks the order paid, which is what releases the shop's money later.
+    async function confirmOrderPayment(orderId) {
+        return await request('POST', '/api/payments/order/verify', { orderId });
+    }
+
     async function getMyOrders(page = 1, limit = 20) {
         return await request('GET', '/api/orders/my-orders?page=' + page + '&limit=' + limit);
     }
@@ -405,7 +412,7 @@ const API = (() => {
         moncashTopup, moncashPayRide, natcashTopup, natcashPayRide, walletPayRide, paymentHistory, verifyMoncash,
         getChatMessages, sendChatMessage, getUnreadCount, getQuickReplies,
         subscribeToPush, health, updateNavForUser,
-        createOrder, getMyOrders, getOrder, updateOrderStatus, rateOrder,
+        createOrder, confirmOrderPayment, getMyOrders, getOrder, updateOrderStatus, rateOrder,
         getMyStore, getStoreOrders, requestDriver,
         solCreateGroup, solGetGroups, solGetGroup, solUpdateGroup, solPublish, solPause, solClose,
         solMyGroups, solJoin, solJoinByCode, solInvite, solGetMembers, solUpdateMember, solRemoveMember,
