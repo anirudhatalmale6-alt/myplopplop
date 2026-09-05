@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Vin Livrè MyPlopPlop — Enskri</title>
+<meta name="description" content="Enskri kòm livrè MyPlopPlop. Livre komann boutik yo epi touche lajan ou chak livrezon.">
+
+<!-- The MyPlopPlop DELIVERY driver registration.
+     Until this page existed, the only "become a driver" form on myplopplop.com
+     was driver-onboarding.html, which is a MsouWout PASSENGER driver form
+     posting to the MsouWout database. So somebody who wanted to deliver
+     parcels for MyPlopPlop was signed up to carry passengers for MsouWout,
+     in a different system, and the MyPlopPlop dispatch never saw them - which
+     is why its list of available riders was permanently empty.
+
+     This one registers against the MyPlopPlop API with services = delivery
+     only, so the driver lands in the delivery approval queue and nowhere else.
+     The two driver pools stay apart. -->
+
+<meta property="og:title" content="Vin Livrè MyPlopPlop">
+<meta property="og:description" content="Livre komann boutik yo epi touche lajan ou chak livrezon.">
+<meta property="og:image" content="https://myplopplop.com/assets/img/og-preview.jpg">
+<meta property="og:url" content="https://myplopplop.com/delivery-driver-register.html">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#00209F;--blue-dark:#001A7A;--blue-light:#E8EDFF;
+  --red:#D21034;--red-dark:#B00D2B;--red-light:#FFE8EC;
+  --navy:#0A0E27;--white:#FFFFFF;--bg:#F5F7FA;
+  --text:#1A1A2E;--text-sub:#5A5A72;--border:#E0E4ED;
+  --green:#10B981;--green-light:#D1FAE5;--amber:#F59E0B;
+  --heading:'Bricolage Grotesque',system-ui,sans-serif;
+  --body:'DM Sans',system-ui,sans-serif;
+}
+body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+.nav{background:var(--navy);padding:0 16px;height:56px;display:flex;align-items:center;gap:12px}
+.nav-back{width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);border-radius:12px;text-decoration:none;font-size:1.3rem}
+.nav-back:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-title{font-family:var(--heading);font-weight:700;font-size:1rem;color:#fff;letter-spacing:-.02em}
+
+.hero{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;padding:26px 20px 30px;text-align:center}
+.hero .badge{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);
+  padding:5px 13px;border-radius:100px;font-size:.7rem;font-weight:700;letter-spacing:.06em;margin-bottom:12px}
+.hero h1{font-family:var(--heading);font-size:1.6rem;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.hero p{font-size:.9rem;opacity:.88;margin-top:8px;line-height:1.5}
+
+.wrap{max-width:520px;margin:0 auto;padding:18px 16px 60px}
+
+.note{background:var(--blue-light);border:1px solid #C7D2FE;border-radius:14px;padding:13px 15px;margin-bottom:18px}
+.note b{font-family:var(--heading);font-size:.9rem;display:block;margin-bottom:3px;color:var(--blue-dark)}
+.note p{font-size:.82rem;color:var(--text-sub);line-height:1.5}
+.note a{color:var(--blue);font-weight:600}
+
+.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.card h2{font-family:var(--heading);font-size:1.05rem;font-weight:700;margin-bottom:4px}
+.card .sub{font-size:.8rem;color:var(--text-sub);margin-bottom:16px}
+
+label{display:block;font-size:.8rem;font-weight:600;margin-bottom:6px;color:var(--text)}
+label .opt{font-weight:400;color:var(--text-sub)}
+input,select{width:100%;padding:13px 14px;border:1.5px solid var(--border);border-radius:12px;
+  font-family:var(--body);font-size:1rem;background:#fff;color:var(--text);-webkit-appearance:none}
+input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,32,159,.1)}
+.field{margin-bottom:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hint{font-size:.72rem;color:var(--text-sub);margin-top:5px;line-height:1.4}
+
+.phone-wrap{display:flex;gap:8px}
+.phone-wrap select{width:104px;flex:0 0 auto}
+
+.veh{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.veh input{display:none}
+.veh label{display:flex;flex-direction:column;align-items:center;gap:5px;padding:14px 6px;border:1.5px solid var(--border);
+  border-radius:14px;cursor:pointer;text-align:center;font-size:.78rem;font-weight:600;margin:0;transition:all .15s;background:#fff}
+.veh .ic{font-size:1.5rem;line-height:1}
+.veh input:checked+label{border-color:var(--blue);background:var(--blue-light);color:var(--blue-dark);box-shadow:0 0 0 3px rgba(0,32,159,.08)}
+
+.agent{background:var(--green-light);border:1px solid #A7F3D0;border-radius:12px;padding:11px 13px;
+  font-size:.8rem;color:#065F46;display:none;align-items:center;gap:8px;margin-bottom:14px}
+.agent.on{display:flex}
+.agent b{font-family:var(--heading)}
+
+.btn{width:100%;padding:16px;border:none;border-radius:14px;font-family:var(--heading);font-size:1rem;
+  font-weight:700;cursor:pointer;transition:all .15s}
+.btn-primary{background:var(--red);color:#fff;box-shadow:0 4px 14px rgba(210,16,52,.3)}
+.btn-primary:hover:not(:disabled){background:var(--red-dark)}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+
+.msg{padding:12px 14px;border-radius:12px;font-size:.85rem;margin-bottom:14px;display:none;line-height:1.5}
+.msg.on{display:block}
+.msg.err{background:var(--red-light);color:#991B1B;border:1px solid #FCA5A5}
+.msg.ok{background:var(--green-light);color:#065F46;border:1px solid #A7F3D0}
+
+.steps{list-style:none;margin-top:4px}
+.steps li{display:flex;gap:11px;align-items:flex-start;font-size:.84rem;color:var(--text-sub);
+  padding:9px 0;border-bottom:1px solid var(--border);line-height:1.45}
+.steps li:last-child{border-bottom:none}
+.steps .n{flex:0 0 22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;
+  font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:var(--heading)}
+
+.done{display:none;text-align:center;padding:34px 20px}
+.done.on{display:block}
+.done .tick{width:70px;height:70px;border-radius:50%;background:var(--green-light);color:var(--green);
+  font-size:2.2rem;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.done h2{font-family:var(--heading);font-size:1.35rem;margin-bottom:8px}
+.done p{font-size:.9rem;color:var(--text-sub);line-height:1.6;margin-bottom:8px}
+.pill{display:inline-flex;align-items:center;gap:7px;background:#FEF3C7;color:#92400E;
+  padding:8px 15px;border-radius:100px;font-size:.82rem;font-weight:600;margin-top:6px}
+.pill .dot{width:8px;height:8px;border-radius:50%;background:var(--amber)}
+.done .go{display:inline-block;margin-top:20px;padding:14px 26px;background:var(--blue);color:#fff;
+  border-radius:14px;text-decoration:none;font-weight:700;font-family:var(--heading)}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a class="nav-back" href="index.html">&larr;</a>
+  <div class="nav-title">Vin Livrè MyPlopPlop</div>
+</div>
+
+<div class="hero">
+  <div class="badge">LIVREZON MYPLOPPLOP</div>
+  <h1>Livre komann, touche lajan</h1>
+  <p>Boutik yo voye komann. Ou ranmase, ou livre, ou touche.</p>
+</div>
+
+<div class="wrap">
+
+  <section id="formSide">
+    <div class="note">
+      <b>Se pa menm bagay ak MsouWout</b>
+      <p>Paj sa a se pou moun ki vle <b>livre komann boutik</b> pou MyPlopPlop.
+      Si se moun ou vle transpòte, se
+      <a href="driver-onboarding.html">Chofè MsouWout</a> ou bezwen — se de bagay separe,
+      ak de apwobasyon separe.</p>
+    </div>
+
+    <div class="msg err" id="err"></div>
+
+    <div class="agent" id="agentBox">
+      <span>💰</span><span>Ajan LajanMaker <b id="agentCode"></b> ap resevwa kredi pou enskripsyon w.</span>
+    </div>
+
+    <form id="regForm" autocomplete="on">
+      <div class="card">
+        <h2>Kont ou</h2>
+        <p class="sub">Nou bezwen non w, telefòn ou ak yon kòd 4 chif.</p>
+
+        <div class="field">
+          <label for="name">Non konplè</label>
+          <input id="name" name="name" type="text" autocomplete="name" placeholder="Jean Baptiste" required>
+        </div>
+
+        <div class="field">
+          <label for="phone">Telefòn (WhatsApp)</label>
+          <div class="phone-wrap">
+            <select id="prefix" aria-label="Kòd peyi">
+              <option value="+509" selected>🇭🇹 +509</option>
+              <option value="+1">🇺🇸 +1</option>
+            </select>
+            <input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national"
+                   placeholder="3712 3456" required>
+          </div>
+          <p class="hint">Se nimewo sa a w ap itilize pou konekte.</p>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="pin">Kòd 4 chif</label>
+            <input id="pin" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]{4}"
+                   autocomplete="new-password" placeholder="••••" required>
+          </div>
+          <div class="field">
+            <label for="pin2">Repete kòd la</label>
+            <input id="pin2" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]{4}"
+                   autocomplete="new-password" placeholder="••••" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Machin ou</h2>
+        <p class="sub">Sa nou bezwen pou nou ka voye w komann ki bon pou ou.</p>
+
+        <div class="field">
+          <label>Ki sa w ap kondi?</label>
+          <div class="veh">
+            <input type="radio" name="veh" id="v-moto" value="moto" checked>
+            <label for="v-moto"><span class="ic">🛵</span>Moto</label>
+            <input type="radio" name="veh" id="v-car" value="car">
+            <label for="v-car"><span class="ic">🚗</span>Machin</label>
+            <input type="radio" name="veh" id="v-truck" value="truck">
+            <label for="v-truck"><span class="ic">🚚</span>Kamyonèt</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="plate">Nimewo plak</label>
+            <input id="plate" type="text" placeholder="AA-12345" required>
+          </div>
+          <div class="field">
+            <label for="lic">Nimewo lisans</label>
+            <input id="lic" type="text" placeholder="12345678" required>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="model">Modèl <span class="opt">(opsyonèl)</span></label>
+            <input id="model" type="text" placeholder="Honda CG">
+          </div>
+          <div class="field">
+            <label for="color">Koulè <span class="opt">(opsyonèl)</span></label>
+            <input id="color" type="text" placeholder="Wouj">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Kisa k ap pase apre</h2>
+        <ol class="steps">
+          <li><span class="n">1</span><span>Ou voye enskripsyon w — kounye a.</span></li>
+          <li><span class="n">2</span><span>Biwo a gade dokiman w yo epi apwouve w.</span></li>
+          <li><span class="n">3</span><span>Ou konekte, ou mete tèt ou <b>anliy</b>.</span></li>
+          <li><span class="n">4</span><span>Premye komann ki pi pre w rive sou telefòn ou.</span></li>
+        </ol>
+      </div>
+
+      <button class="btn btn-primary" id="submitBtn" type="submit">Voye enskripsyon m</button>
+    </form>
+  </section>
+
+  <section class="done" id="doneSide">
+    <div class="tick">✓</div>
+    <h2>Enskripsyon w rive!</h2>
+    <p>Nou gen enfòmasyon w yo. Biwo a ap gade yo epi apwouve w.</p>
+    <div class="pill"><span class="dot"></span>Anba revizyon</div>
+    <p style="margin-top:18px">Lè w apwouve, konekte epi mete tèt ou anliy pou w kòmanse resevwa komann.</p>
+    <a class="go" href="rider/dashboard.html">Ale nan espas livrè a &rarr;</a>
+  </section>
+
+</div>
+
+<script src="js/referral.js"></script>
+<script src="js/api.js"></script>
+<script>
+(function () {
+  var form = document.getElementById('regForm');
+  var btn = document.getElementById('submitBtn');
+  var err = document.getElementById('err');
+
+  // Show the agent whose link brought them here, so both sides can see the
+  // credit was picked up rather than hoping it was.
+  var agent = (window.Referral && window.Referral.code()) || '';
+  if (agent) {
+    document.getElementById('agentCode').textContent = agent;
+    document.getElementById('agentBox').classList.add('on');
+  }
+
+  function fail(msg) {
+    err.textContent = msg;
+    err.classList.add('on');
+    err.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    btn.disabled = false;
+    btn.textContent = 'Voye enskripsyon m';
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    err.classList.remove('on');
+
+    var name = document.getElementById('name').value.trim();
+    var phone = document.getElementById('prefix').value +
+                document.getElementById('phone').value.replace(/\D/g, '');
+    var pin = document.getElementById('pin').value;
+    var pin2 = document.getElementById('pin2').value;
+    var plate = document.getElementById('plate').value.trim();
+    var lic = document.getElementById('lic').value.trim();
+
+    if (!/^\d{4}$/.test(pin)) return fail('Kòd la dwe gen egzakteman 4 chif.');
+    if (pin !== pin2) return fail('De kòd yo pa menm.');
+    if (phone.replace(/\D/g, '').length < 8) return fail('Antre yon nimewo telefòn valab.');
+    if (!plate || !lic) return fail('Nou bezwen nimewo plak la ak nimewo lisans lan.');
+
+    btn.disabled = true;
+    btn.textContent = 'N ap voye…';
+
+    // 1) the account. API.register attaches the LajanMaker agent code itself.
+    var reg = await API.register(name, phone, pin, 'driver',
+                                 localStorage.getItem('pp_lang') || 'ht');
+    if (!reg.success) {
+      // Somebody who already has a MyPlopPlop account should log in rather than
+      // be told, unhelpfully, that they already exist.
+      if ((reg.message || '').toLowerCase().indexOf('already registered') !== -1) {
+        return fail('Nimewo sa a gen yon kont deja. Konekte, epi retounen sou paj sa a.');
+      }
+      return fail(reg.message || 'Nou pa t ka kreye kont lan. Eseye ankò.');
+    }
+
+    // 2) the driver profile - DELIVERY only, which is what puts them in the
+    //    MyPlopPlop delivery queue and keeps them out of the passenger one.
+    var fd = new FormData();
+    fd.append('vehicleType', document.querySelector('input[name="veh"]:checked').value);
+    fd.append('vehiclePlate', plate);
+    fd.append('licenseNumber', lic);
+    fd.append('vehicleModel', document.getElementById('model').value.trim());
+    fd.append('vehicleColor', document.getElementById('color').value.trim());
+    // Sent as a JSON array, not the plain word 'delivery'. The API accepts
+    // either now, but this page goes live the moment it is pushed while the
+    // API only updates when the server is redeployed - and the older API does
+    // JSON.parse() on this field, so the plain word would throw and every
+    // driver would get "500 Server error" in the gap between the two.
+    fd.append('services', '["delivery"]');
+    if (agent) fd.append('koutyeCode', agent);
+
+    var prof = await API.driverOnboard(fd);
+    if (!prof.success) {
+      return fail(prof.message || 'Kont ou kreye, men enskripsyon livrè a pa pase. Konekte epi eseye ankò.');
+    }
+
+    document.getElementById('formSide').style.display = 'none';
+    document.getElementById('doneSide').classList.add('on');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+</script>
+</body>
+</html>

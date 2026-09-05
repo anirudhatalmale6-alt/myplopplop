@@ -47,6 +47,12 @@ const API = (() => {
     async function register(name, phone, password, role = 'customer', language = 'fr', email = '') {
         const body = { name, phone, pin: password, role, language };
         if (email) body.email = email;
+        // The LajanMaker agent whose link brought this person to the site,
+        // picked up by js/referral.js however many pages ago. Sent on every
+        // sign-up so the agent is credited whoever they turn out to be -
+        // customer, merchant or driver.
+        const agent = (window.Referral && window.Referral.code()) || '';
+        if (agent) body.koutyeCode = agent;
         const data = await request('POST', '/api/auth/register', body);
         if (data.success && data.token) {
             setToken(data.token);
@@ -139,8 +145,11 @@ const API = (() => {
         return await request('GET', '/api/admin/dashboard');
     }
 
-    async function adminDrivers(status = 'pending') {
-        return await request('GET', '/api/admin/drivers?status=' + status);
+    // service: 'delivery' (MyPlopPlop parcels) or 'ride' (passengers), or ''
+    // for both pools together.
+    async function adminDrivers(status = 'pending', service = '') {
+        return await request('GET', '/api/admin/drivers?status=' + status +
+            (service ? '&service=' + service : ''));
     }
 
     async function adminVerifyDriver(id, action, reason = '') {

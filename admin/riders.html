@@ -39,19 +39,34 @@
 
 <nav class="mp-bottom-nav" id="mpBottomNav"></nav>
 
-<script src="/js/api.js"></script>
+<script src="/js/referral.js"></script>
+    <script src="/js/api.js"></script>
 <script src="/js/admin.js"></script>
 <script>
 (function () {
   var cache = {}, tab = 'pending';
   var TABS = [['pending','Ap tann'], ['approved','Apwouve'], ['rejected','Refize']];
 
+  /* Which pool we are looking at. A MyPlopPlop delivery driver and a MsouWout
+     passenger driver are two different approvals, and mixing them in one list
+     is how somebody gets approved for the wrong job. 'delivery' first, because
+     this is the MyPlopPlop console. */
+  var pool = 'delivery';
+  var POOLS = [['delivery','📦 Livrezon'], ['ride','🚗 Pasaje'], ['','Tout']];
+
+  function key() { return pool + ':' + tab; }
+
   function render() {
-    var list = cache[tab] || [];
+    var list = cache[key()] || [];
     var online = list.filter(function (d) { return d.isOnline; }).length;
 
-    var html = '<div class="mp-tabs">' + TABS.map(function (t) {
-      var n = cache[t[0]] ? cache[t[0]].length : '·';
+    var html = '<div class="mp-tabs" style="margin-bottom:6px;">' + POOLS.map(function (p) {
+      return '<button class="mp-tab' + (p[0] === pool ? ' active' : '') + '" data-pool="' + p[0] + '">' +
+             p[1] + '</button>';
+    }).join('') + '</div>';
+
+    html += '<div class="mp-tabs">' + TABS.map(function (t) {
+      var n = cache[pool + ':' + t[0]] ? cache[pool + ':' + t[0]].length : '·';
       return '<button class="mp-tab' + (t[0] === tab ? ' active' : '') + '" data-t="' + t[0] + '">' +
              t[1] + ' (' + n + ')</button>';
     }).join('') + '</div>';
@@ -75,6 +90,13 @@
               '<div class="mp-row-sub">' + ADM.esc(u.phone || '') +
                 (d.vehicleType ? ' · ' + ADM.esc(d.vehicleType) : '') +
                 (d.vehiclePlate ? ' · ' + ADM.esc(d.vehiclePlate) : '') + '</div>' +
+              // What this driver is actually approved to carry, on the row
+              // itself, so nobody approves a parcel rider for passengers by
+              // reading the wrong line.
+              '<div class="mp-row-sub"><b>' +
+                (d.driverType === 'ride' ? '🚗 Pasaje (MsouWout)'
+                  : d.driverType === 'both' ? '📦🚗 Livrezon + Pasaje'
+                  : '📦 Livrezon (MyPlopPlop)') + '</b></div>' +
               '<div class="mp-row-sub">' + (d.totalRides || 0) + ' kous · ⭐ ' +
                 (Number(d.rating) || 0).toFixed(1) + ' · ' + ADM.money(d.totalEarnings || 0) + '</div>' +
             '</div>' +
@@ -97,8 +119,11 @@
     document.querySelectorAll('[data-t]').forEach(function (b) {
       b.addEventListener('click', function () { tab = b.dataset.t; load(); });
     });
+    document.querySelectorAll('[data-pool]').forEach(function (b) {
+      b.addEventListener('click', function () { pool = b.dataset.pool; load(); });
+    });
     var rf = document.getElementById('rf');
-    if (rf) rf.addEventListener('click', function () { rf.disabled = true; cache[tab] = null; load(); });
+    if (rf) rf.addEventListener('click', function () { rf.disabled = true; cache[key()] = null; load(); });
 
     document.querySelectorAll('[data-ok]').forEach(function (b) {
       b.addEventListener('click', function () { act(b, b.dataset.ok, 'approve'); });
@@ -122,10 +147,10 @@
   }
 
   function load() {
-    if (cache[tab]) { render(); return; }
-    API.adminDrivers(tab).then(function (d) {
+    if (cache[key()]) { render(); return; }
+    API.adminDrivers(tab, pool).then(function (d) {
       if (!d || !d.success) { ADM.fail((d && d.message) || 'Pa t ka chaje chofè yo'); return; }
-      cache[tab] = d.drivers || d.data || [];
+      cache[key()] = d.drivers || d.data || [];
       render();
     }).catch(function (e) { ADM.fail(String(e.message || e)); });
   }

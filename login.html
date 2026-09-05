@@ -285,7 +285,8 @@
 .pin-toggle:hover { opacity: 1; }
 </style>
 <!-- api.js/i18n.js must load BEFORE the inline page script: it calls API.* at parse time -->
-<script src="/js/api.js"></script>
+<script src="/js/referral.js"></script>
+    <script src="/js/api.js"></script>
 <script src="/js/i18n.js"></script>
 </head>
 <body>
@@ -612,7 +613,13 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
         var redirectTo = new URLSearchParams(window.location.search).get('redirect');
         setTimeout(() => {
             if (redirectTo) window.location.href = redirectTo;
-            else if (role === 'driver') window.location.href = 'driver-onboarding.html';
+            // Somebody who picked "rider" on MyPlopPlop wants to deliver for
+            // MyPlopPlop. This used to send them to driver-onboarding.html,
+            // which is the MsouWout PASSENGER driver form writing to a
+            // different database - so they were signed up to the wrong
+            // platform, for the wrong job, and MyPlopPlop dispatch never saw
+            // them.
+            else if (role === 'driver') window.location.href = 'delivery-driver-register.html';
             // a brand-new merchant has no store yet, so start them in the builder
             else if (role === 'merchant') window.location.href = 'store-designer.html';
             else window.location.href = 'index.html';
