@@ -304,6 +304,11 @@ img{max-width:100%;display:block}
          different jobs, in two different systems, with two different
          approvals. There was no way into this one at all. -->
     <a href="delivery-driver-register.html"><span class="mi">📦</span> <span data-i18n="menu_livre">Vin Livrè MyPlopPlop</span></a>
+    <!-- "Where is the Sol he cant find it." It was nowhere. sol.html has been
+         live and its backend answers (/api/sol returns a real list), but not one
+         link on this site pointed at it - the only way in was to already know
+         the address. -->
+    <a href="sol.html"><span class="mi">🤝</span> <span data-i18n="menu_sol">Sòl — Epay Ansanm</span></a>
     <a href="shop.html"><span class="mi">🛒</span> <span data-i18n="menu_shop">Achte nan Magazen</span></a>
     <a href="international.html"><span class="mi">🌍</span> <span data-i18n="menu_intl">Achte Entènasyonal</span></a>
     <a href="diaspora.html"><span class="mi">❤️</span> <span data-i18n="menu_support">Sipòte Fanmi</span></a>
@@ -404,6 +409,10 @@ img{max-width:100%;display:block}
   <h2 class="mp-sec-head mp-wrap" data-i18n="more_head" style="padding:0 16px">Plis sèvis</h2>
 </section>
 <div class="mp-scroll mp-reveal">
+  <!-- First chip, not last: it is a finished product with a working dashboard
+       behind it, and it was the one thing nobody could find. No "Byento" badge -
+       this one is actually open. -->
+  <a href="sol.html" class="mp-chip mp-rip"><div class="ce">🤝</div><div class="cn" data-i18n="s_sol">Sòl</div></a>
   <a href="partners/48hoursready.html" class="mp-chip mp-rip"><div class="ce">⚡</div><div class="cn" data-i18n="s_48">48HoursReady</div></a>
   <a href="https://wa.me/50946859702?text=%F0%9F%8E%9F%EF%B8%8F%20Mwen%20enterese%20nan%20Tik%C3%A8%20sou%20MyPlopPlop" class="mp-chip mp-rip"><span class="mp-soon" data-i18n="soon">Byento</span><div class="ce">🎟️</div><div class="cn" data-i18n="s_ticket">Tikè</div></a>
   <a href="https://msouwout.com" class="mp-chip mp-rip"><div class="ce">📦</div><div class="cn" data-i18n="s_deliv">Livrezon</div></a>
@@ -475,12 +484,12 @@ const T = {
     achte_t:'Achte', achte_s:'Achte nan magazen lokal yo', achte_m:'Restoran • Makèt • Famasi',
     intl_t:'🌍 Achte Entènasyonal', intl_p:'Achte nan USA, Lachin, Panama ak Repiblik Dominikèn. Nou jere acha, transpò ak livrezon jiska lakay ou.', intl_cta:'Kòmanse Achte',
     more_head:'Plis sèvis',
-    s_48:'48HoursReady', s_ticket:'Tikè', s_deliv:'Livrezon', s_realestate:'Imobilye', s_jobs:'Travay', s_other:'Lòt sèvis', soon:'Byento',
+    s_sol:'Sòl', s_48:'48HoursReady', s_ticket:'Tikè', s_deliv:'Livrezon', s_realestate:'Imobilye', s_jobs:'Travay', s_other:'Lòt sèvis', soon:'Byento',
     t_pay:'Peman Sekirize', t_verify:'Biznis & Chofè Verifye', t_wa:'Sipò WhatsApp',
     footer_powered:'Yon platfòm HaitiBiznis',
     wa_popup_head:'Ki sa ou bezwen?', wa_opt_earn:'💰 Mwen vle kòmanse fè lajan', wa_opt_drive:'🛵 Mwen vle vin chofè', wa_opt_biz:'🏪 Mwen gen biznis',
     nav_home:'Akèy', nav_search:'Chèche', nav_cart:'Panye', nav_orders:'Kòmand', nav_account:'Kont',
-    menu_sell:'Vann sou MyPlopPlop', menu_earn:'Parenaj Biznis', menu_driver:'Vin Chofè MsouWout', menu_shop:'Achte nan Magazen', menu_intl:'Achte Entènasyonal', menu_support:'Sipòte Fanmi', menu_orders:'Kòmand Mwen', menu_account:'Kont Mwen', menu_help:'Èd',
+    menu_sell:'Vann sou MyPlopPlop', menu_earn:'Parenaj Biznis', menu_driver:'Vin Chofè MsouWout', menu_sol:'Sòl — Epay Ansanm', menu_shop:'Achte nan Magazen', menu_intl:'Achte Entènasyonal', menu_support:'Sipòte Fanmi', menu_orders:'Kòmand Mwen', menu_account:'Kont Mwen', menu_help:'Èd',
     inst_bar:'Mete MyPlopPlop sou telefòn ou', inst_btn:'Enstale', inst_t:'Enstale MyPlopPlop', inst_and:'Peze meni an (⋮ oswa ≡) anwo nan Chrome, epi chwazi \u00ab Enstale app \u00bb oswa \u00ab Ajoute sou ekran akèy \u00bb.', inst_ios:'Peze bouton Pataje a (anba, kare ak flèch), epi chwazi \u00ab Add to Home Screen \u00bb.', inst_close:'Fèmen', inst_done:'Byen! W ap jwenn ikòn nan sou ekran akèy ou.'
   },
   en: {
@@ -493,12 +502,12 @@ const T = {
     achte_t:'Buy', achte_s:'Shop from local stores', achte_m:'Restaurants • Markets • Pharmacies',
     intl_t:'🌍 Shop International', intl_p:'Shop from USA, China, Panama and the Dominican Republic. We handle purchase, shipping and delivery to your door.', intl_cta:'Start Shopping',
     more_head:'More services',
-    s_48:'48HoursReady', s_ticket:'Tickets', s_deliv:'Delivery', s_realestate:'Real Estate', s_jobs:'Jobs', s_other:'Other services', soon:'Soon',
+    s_sol:'Sòl', s_48:'48HoursReady', s_ticket:'Tickets', s_deliv:'Delivery', s_realestate:'Real Estate', s_jobs:'Jobs', s_other:'Other services', soon:'Soon',
     t_pay:'Secure Payment', t_verify:'Verified Businesses & Drivers', t_wa:'WhatsApp Support',
     footer_powered:'A HaitiBiznis platform',
     wa_popup_head:'What do you need?', wa_opt_earn:'💰 I want to start earning', wa_opt_drive:'🛵 I want to become a driver', wa_opt_biz:'🏪 I have a business',
     nav_home:'Home', nav_search:'Search', nav_cart:'Cart', nav_orders:'Orders', nav_account:'Account',
-    menu_sell:'Sell on MyPlopPlop', menu_earn:'Business Partner', menu_driver:'Become a Driver', menu_shop:'Shop Stores', menu_intl:'Shop International', menu_support:'Support Family', menu_orders:'My Orders', menu_account:'My Account', menu_help:'Help',
+    menu_sell:'Sell on MyPlopPlop', menu_earn:'Business Partner', menu_driver:'Become a Driver', menu_sol:'Sòl — Save Together', menu_shop:'Shop Stores', menu_intl:'Shop International', menu_support:'Support Family', menu_orders:'My Orders', menu_account:'My Account', menu_help:'Help',
     inst_bar:'Put MyPlopPlop on your phone', inst_btn:'Install', inst_t:'Install MyPlopPlop', inst_and:'Open the menu (⋮ or ≡) at the top of Chrome, then choose \u201cInstall app\u201d or \u201cAdd to Home screen\u201d.', inst_ios:'Tap the Share button (the square with an arrow), then choose \u201cAdd to Home Screen\u201d.', inst_close:'Close', inst_done:'Done. The icon is now on your home screen.'
   },
   fr: {
@@ -511,12 +520,12 @@ const T = {
     achte_t:'Acheter', achte_s:'Achetez dans les boutiques locales', achte_m:'Restaurants • Marchés • Pharmacies',
     intl_t:'🌍 Achat International', intl_p:'Achetez aux USA, en Chine, au Panama et en République Dominicaine. Nous gérons l’achat, le transport et la livraison chez vous.', intl_cta:'Commencer les achats',
     more_head:'Plus de services',
-    s_48:'48HoursReady', s_ticket:'Billets', s_deliv:'Livraison', s_realestate:'Immobilier', s_jobs:'Emplois', s_other:'Autres services', soon:'Bientôt',
+    s_sol:'Sòl', s_48:'48HoursReady', s_ticket:'Billets', s_deliv:'Livraison', s_realestate:'Immobilier', s_jobs:'Emplois', s_other:'Autres services', soon:'Bientôt',
     t_pay:'Paiement Sécurisé', t_verify:'Commerces & Chauffeurs Vérifiés', t_wa:'Support WhatsApp',
     footer_powered:'Une plateforme HaitiBiznis',
     wa_popup_head:'De quoi avez-vous besoin ?', wa_opt_earn:'💰 Je veux commencer à gagner', wa_opt_drive:'🛵 Je veux devenir chauffeur', wa_opt_biz:'🏪 J’ai un commerce',
     nav_home:'Accueil', nav_search:'Chercher', nav_cart:'Panier', nav_orders:'Commandes', nav_account:'Compte',
-    menu_sell:'Vendre sur MyPlopPlop', menu_earn:'Partenaire Business', menu_driver:'Devenir Chauffeur', menu_shop:'Boutiques', menu_intl:'Achat International', menu_support:'Soutenir la Famille', menu_orders:'Mes Commandes', menu_account:'Mon Compte', menu_help:'Aide',
+    menu_sell:'Vendre sur MyPlopPlop', menu_earn:'Partenaire Business', menu_driver:'Devenir Chauffeur', menu_sol:'Sòl — Épargner Ensemble', menu_shop:'Boutiques', menu_intl:'Achat International', menu_support:'Soutenir la Famille', menu_orders:'Mes Commandes', menu_account:'Mon Compte', menu_help:'Aide',
     inst_bar:'Mettez MyPlopPlop sur votre téléphone', inst_btn:'Installer', inst_t:'Installer MyPlopPlop', inst_and:'Ouvrez le menu (⋮ ou ≡) en haut de Chrome, puis choisissez \u00ab Installer l\u2019application \u00bb ou \u00ab Ajouter à l\u2019écran d\u2019accueil \u00bb.', inst_ios:'Touchez le bouton Partager (le carré avec une flèche), puis \u00ab Sur l\u2019écran d\u2019accueil \u00bb.', inst_close:'Fermer', inst_done:'C\u2019est fait. L\u2019icône est sur votre écran d\u2019accueil.'
   },
   pt: {
@@ -529,12 +538,12 @@ const T = {
     achte_t:'Comprar', achte_s:'Compre nas lojas locais', achte_m:'Restaurantes • Mercados • Farmácias',
     intl_t:'🌍 Comprar do exterior', intl_p:'Compre dos EUA, da China, do Panamá e da República Dominicana. Cuidamos da compra, do envio e da entrega na sua porta.', intl_cta:'Começar a comprar',
     more_head:'Mais serviços',
-    s_48:'48HoursReady', s_ticket:'Ingressos', s_deliv:'Entrega', s_realestate:'Imóveis', s_jobs:'Vagas', s_other:'Outros serviços', soon:'Em breve',
+    s_sol:'Sòl', s_48:'48HoursReady', s_ticket:'Ingressos', s_deliv:'Entrega', s_realestate:'Imóveis', s_jobs:'Vagas', s_other:'Outros serviços', soon:'Em breve',
     t_pay:'Pagamento seguro', t_verify:'Lojas e motoristas verificados', t_wa:'Atendimento no WhatsApp',
     footer_powered:'Uma plataforma HaitiBiznis',
     wa_popup_head:'Do que você precisa?', wa_opt_earn:'💰 Quero começar a ganhar', wa_opt_drive:'🛵 Quero ser motorista', wa_opt_biz:'🏪 Tenho um negócio',
     nav_home:'Início', nav_search:'Buscar', nav_cart:'Carrinho', nav_orders:'Pedidos', nav_account:'Conta',
-    menu_sell:'Vender no MyPlopPlop', menu_earn:'Parceiro de negócios', menu_driver:'Quero ser motorista', menu_shop:'Ver lojas', menu_intl:'Comprar do exterior', menu_support:'Ajudar a família', menu_orders:'Meus pedidos', menu_account:'Minha conta', menu_help:'Ajuda',
+    menu_sell:'Vender no MyPlopPlop', menu_earn:'Parceiro de negócios', menu_driver:'Quero ser motorista', menu_sol:'Sòl — Poupar Juntos', menu_shop:'Ver lojas', menu_intl:'Comprar do exterior', menu_support:'Ajudar a família', menu_orders:'Meus pedidos', menu_account:'Minha conta', menu_help:'Ajuda',
     inst_bar:'Coloque o MyPlopPlop no seu celular', inst_btn:'Instalar', inst_t:'Instalar o MyPlopPlop', inst_and:'Abra o menu (⋮ ou ≡) no topo do Chrome e escolha \u201cInstalar app\u201d ou \u201cAdicionar à tela inicial\u201d.', inst_ios:'Toque no botão Compartilhar (o quadrado com a seta) e escolha \u201cAdicionar à Tela de Início\u201d.', inst_close:'Fechar', inst_done:'Pronto. O ícone está na sua tela inicial.'
   },
   es: {
@@ -547,12 +556,12 @@ const T = {
     achte_t:'Comprar', achte_s:'Compra en tiendas locales', achte_m:'Restaurantes • Mercados • Farmacias',
     intl_t:'🌍 Compras Internacionales', intl_p:'Compra desde USA, China, Panamá y República Dominicana. Gestionamos la compra, el transporte y la entrega hasta tu casa.', intl_cta:'Empezar a Comprar',
     more_head:'Más servicios',
-    s_48:'48HoursReady', s_ticket:'Boletos', s_deliv:'Entrega', s_realestate:'Inmobiliaria', s_jobs:'Empleos', s_other:'Otros servicios', soon:'Pronto',
+    s_sol:'Sòl', s_48:'48HoursReady', s_ticket:'Boletos', s_deliv:'Entrega', s_realestate:'Inmobiliaria', s_jobs:'Empleos', s_other:'Otros servicios', soon:'Pronto',
     t_pay:'Pago Seguro', t_verify:'Negocios y Conductores Verificados', t_wa:'Soporte WhatsApp',
     footer_powered:'Una plataforma HaitiBiznis',
     wa_popup_head:'¿Qué necesitas?', wa_opt_earn:'💰 Quiero empezar a ganar', wa_opt_drive:'🛵 Quiero ser conductor', wa_opt_biz:'🏪 Tengo un negocio',
     nav_home:'Inicio', nav_search:'Buscar', nav_cart:'Carrito', nav_orders:'Pedidos', nav_account:'Cuenta',
-    menu_sell:'Vender en MyPlopPlop', menu_earn:'Socio de Negocios', menu_driver:'Ser Conductor', menu_shop:'Tiendas', menu_intl:'Compras Internacionales', menu_support:'Apoyar Familia', menu_orders:'Mis Pedidos', menu_account:'Mi Cuenta', menu_help:'Ayuda',
+    menu_sell:'Vender en MyPlopPlop', menu_earn:'Socio de Negocios', menu_driver:'Ser Conductor', menu_sol:'Sòl — Ahorrar Juntos', menu_shop:'Tiendas', menu_intl:'Compras Internacionales', menu_support:'Apoyar Familia', menu_orders:'Mis Pedidos', menu_account:'Mi Cuenta', menu_help:'Ayuda',
     inst_bar:'Pon MyPlopPlop en tu teléfono', inst_btn:'Instalar', inst_t:'Instalar MyPlopPlop', inst_and:'Abre el menú (⋮ o ≡) arriba en Chrome y elige \u201cInstalar aplicación\u201d o \u201cAñadir a pantalla de inicio\u201d.', inst_ios:'Toca el botón Compartir (el cuadro con la flecha) y elige \u201cAñadir a pantalla de inicio\u201d.', inst_close:'Cerrar', inst_done:'Listo. El icono ya está en tu pantalla de inicio.'
   }
 };
