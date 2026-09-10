@@ -169,7 +169,7 @@ footer a{color:var(--red);font-weight:600}
     <div class="stat">
       <div class="stat-icon">&#9989;</div>
       <div class="stat-val" id="statActive">0</div>
-      <div class="stat-label">Active Members</div>
+      <div class="stat-label">Brought by an agent</div>
     </div>
     <div class="stat">
       <div class="stat-icon">&#128176;</div>
@@ -182,6 +182,7 @@ footer a{color:var(--red);font-weight:600}
   <div class="table-section">
     <div class="table-head">
       <h3>&#127978; Stores Signed Up</h3>
+      <button class="copy-btn" id="dlStores" style="margin-left:auto">&#11015; Download (Excel/CSV)</button>
     </div>
     <div class="table-wrap">
       <table>
@@ -192,12 +193,13 @@ footer a{color:var(--red);font-weight:600}
             <th>Phone</th>
             <th>Category</th>
             <th>Location</th>
+            <th>Referred by</th>
             <th>Status</th>
             <th>Date</th>
           </tr>
         </thead>
         <tbody id="storesBody">
-          <tr><td colspan="7"><div class="empty-state"><div class="icon">&#127978;</div><h4>No stores yet</h4><p>Stores signed up through your referral link will appear here.</p></div></td></tr>
+          <tr><td colspan="8"><div class="empty-state"><div class="icon">&#127978;</div><h4>No stores yet</h4><p>Stores signed up through your referral link will appear here.</p></div></td></tr>
         </tbody>
       </table>
     </div>
@@ -297,7 +299,7 @@ function paint(d){
   document.title=(o.name||'Partner')+' - Partner Dashboard | MyPlopPlop';
 
   $('statStores').textContent = st.stores!=null?st.stores:'-';
-  $('statActive').textContent = st.activeStores!=null?st.activeStores:'-';
+  $('statActive').textContent = st.withAgent!=null?st.withAgent:'-';
   /* A zero that really means "we could not ask the rides service" is exactly
      the kind of number that gets believed. Say so instead. */
   $('statDrivers').textContent = st.driversReachable===false ? '?' :
@@ -309,12 +311,39 @@ function paint(d){
   $('storesBody').innerHTML = rows.length ? rows.map(function(x){
     return '<tr><td>'+esc(x.name)+'</td><td>'+esc(x.ownerName||'')+'</td><td>'+esc(x.phone||'')+
            '</td><td>'+esc(x.category||'')+'</td><td>'+esc(x.location&&x.location.address||'')+
+           '</td><td>'+esc(x.referredByAgent||'—')+
            '</td><td>'+(x.isVerified?'Verified':'Pending')+'</td><td>'+esc(fmtDate(x.createdAt))+'</td></tr>';
-  }).join('') : '<tr><td colspan="7"><div class="empty-state"><div class="icon">&#127978;</div><h4>No stores yet</h4><p>Stores signed up through your referral link will appear here.</p></div></td></tr>';
+  }).join('') : '<tr><td colspan="8"><div class="empty-state"><div class="icon">&#127978;</div><h4>No stores yet</h4><p>Stores signed up through your referral link will appear here.</p></div></td></tr>';
 
   var slug=o.slug||'';
   var ls=$('linkStore'); if(ls) ls.textContent='myplopplop.com/merchant/register.html?ref='+encodeURIComponent(slug);
   var ld=$('linkDash');  if(ld) ld.textContent='myplopplop.com/partner-dashboard.html';
+}
+
+
+/* A download of what is on the screen. Built here from the data the page
+   already has - no second request, and nothing to go stale between the table
+   and the file. Excel opens a .csv directly.
+   The BOM is what makes Excel read "Église" correctly instead of "Ã‰glise". */
+function csvCell(v){
+  var t=String(v==null?'':v);
+  return /[",\n]/.test(t) ? '"'+t.replace(/"/g,'""')+'"' : t;
+}
+function downloadStores(){
+  if(!ORG||!ORG.stores||!ORG.stores.length){alert('Nothing to download yet.');return;}
+  var head=['Store','Owner','Phone','Category','Location','Referred by','Status','Date'];
+  var lines=[head.join(',')].concat(ORG.stores.map(function(x){
+    return [x.name,x.ownerName||'',x.phone||'',x.category||'',
+            (x.location&&x.location.address)||'',x.referredByAgent||'',
+            x.isVerified?'Verified':'Pending',fmtDate(x.createdAt)].map(csvCell).join(',');
+  }));
+  var name=((ORG.organization&&ORG.organization.slug)||'organization').replace(/[^A-Za-z0-9-]+/g,'-');
+  var blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=name+'-stores.csv';
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);document.body.removeChild(a);},0);
 }
 
 function copyLink(type){
@@ -335,6 +364,7 @@ function copyToClipboard(text){
 }
 document.addEventListener('DOMContentLoaded',function(){
   $('gateGo').onclick=openOrg;
+  var d=$('dlStores'); if(d) d.onclick=downloadStores;
   $('orgCode').addEventListener('keydown',function(e){if(e.key==='Enter')openOrg();});
   /* A name may be pre-filled from the address for convenience. The CODE never
      is - it is the only thing that opens anything. */
