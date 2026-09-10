@@ -116,6 +116,25 @@ footer a{color:var(--red);font-weight:600}
   <span class="nav-badge" id="navBadge">Partner Dashboard</span>
 </nav>
 
+<!-- LOGIN GATE — the page used to decide which partner you were from the web
+     address. It shows real names and phone numbers now, so it asks. -->
+<div id="gate" style="max-width:26rem;margin:40px auto;padding:0 16px">
+  <div style="background:#fff;border:1px solid var(--border,#E2E8F0);border-radius:14px;padding:20px">
+    <h2 style="font-family:var(--heading);font-size:1.15rem;margin-bottom:6px">Partner Dashboard</h2>
+    <p style="font-size:.85rem;color:var(--text-light);margin-bottom:14px">
+      Enter your organization name and the access code you were given.</p>
+    <label style="display:block;font-size:.78rem;font-weight:700;color:var(--text-light);margin-bottom:6px">Organization</label>
+    <input id="orgSlug" autocomplete="off" placeholder="FTPH/COTRASMOTHA"
+      style="width:100%;border:1.5px solid var(--border,#E2E8F0);border-radius:10px;padding:11px 12px;font-size:1rem;margin-bottom:12px">
+    <label style="display:block;font-size:.78rem;font-weight:700;color:var(--text-light);margin-bottom:6px">Access code</label>
+    <input id="orgCode" type="password" autocomplete="off" placeholder="ACCESS CODE"
+      style="width:100%;border:1.5px solid var(--border,#E2E8F0);border-radius:10px;padding:11px 12px;font-size:1rem;letter-spacing:2px">
+    <button id="gateGo" style="width:100%;border:0;background:#00209F;color:#fff;font-weight:800;padding:13px;border-radius:11px;margin-top:14px;cursor:pointer">Open my dashboard</button>
+    <div id="gateErr" style="color:#b91c1c;font-size:.8rem;font-weight:700;min-height:1.1rem;margin-top:8px"></div>
+  </div>
+</div>
+
+<div id="dashWrap" style="display:none">
 <!-- PARTNER HEADER -->
 <div class="partner-header" id="partnerHeader">
   <img src="assets/spap-logo.jpg" alt="SPAP" id="partnerLogo">
@@ -145,6 +164,7 @@ footer a{color:var(--red);font-weight:600}
       <div class="stat-icon">&#128100;</div>
       <div class="stat-val" id="statDrivers">0</div>
       <div class="stat-label">Drivers Registered</div>
+      <div class="stat-label" id="statDriversNote" style="font-size:.7rem;color:#B45309"></div>
     </div>
     <div class="stat">
       <div class="stat-icon">&#9989;</div>
@@ -229,50 +249,98 @@ footer a{color:var(--red);font-weight:600}
   </div>
 </div>
 
+</div><!-- /dashWrap -->
+
 <footer>
   &copy; 2026 <a href="index.html">MyPlopPlop</a>. A <a href="https://haitibiznis.com">HaitiBiznis</a> Platform. | Partner Dashboard
 </footer>
 
 <script>
-var partnerConfig = {
-  'SPAP': {name:'SPAP', full:'Secteur Prive Des Affaires Populaire', logo:'assets/spap-logo.jpg', color:'#2E7D32'},
-  'FTPH/COTRASMOTHA': {name:'FTPH/COTRASMOTHA', full:'Federation des Transporteurs Publics Haitiens', logo:'assets/ftph-logo.jpg', color:'var(--blue)'}
-};
+var API_URL = 'https://myplopplop-api.onrender.com';
+var ORG = null;
 
-(function(){
-  var params = new URLSearchParams(window.location.search);
-  var p = params.get('partner') || 'SPAP';
-  var cfg = partnerConfig[p] || partnerConfig['SPAP'];
-  document.getElementById('partnerName').textContent = cfg.name;
-  document.getElementById('partnerFull').textContent = cfg.full;
-  document.getElementById('partnerLogo').src = cfg.logo;
-  document.getElementById('partnerLogo').style.borderColor = cfg.color;
-  document.getElementById('linkStore').textContent = 'myplopplop.com/merchant/register.html?ref=' + encodeURIComponent(cfg.name);
-  document.getElementById('linkDash').textContent = 'myplopplop.com/partner-dashboard.html?partner=' + encodeURIComponent(cfg.name);
-  document.title = cfg.name + ' - Partner Dashboard | MyPlopPlop';
-})();
+/* This page has had statistic tiles and two tables in it since 18 June and has
+   never asked anybody for the data - the numbers were zeros typed into the
+   page. It asks now, and it asks for one organization only: the one whose
+   access code was typed. Which partner you are is no longer decided by the web
+   address. */
+function $(id){return document.getElementById(id);}
+function esc(x){return String(x==null?'':x).replace(/[&<>"']/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function fmtDate(d){ if(!d) return ''; try{return new Date(d).toLocaleDateString();}catch(e){return '';} }
+
+function openOrg(){
+  var slug=($('orgSlug').value||'').trim();
+  var code=($('orgCode').value||'').trim();
+  if(!slug||!code){$('gateErr').textContent='Fill in both boxes.';return;}
+  var b=$('gateGo');b.disabled=true;b.textContent='Opening...';$('gateErr').textContent='';
+  fetch(API_URL+'/api/organizations/'+encodeURIComponent(slug)+'/open',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({code:code})
+  }).then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
+    .then(function(res){
+      if(!res.ok||!res.j.success){$('gateErr').textContent='That name or code is not right.';return;}
+      ORG=res.j; paint(res.j);
+      $('gate').style.display='none';
+      $('dashWrap').style.display='';
+    })
+    .catch(function(){$('gateErr').textContent='Could not reach the server. Try again.';})
+    .then(function(){b.disabled=false;b.textContent='Open my dashboard';});
+}
+
+function paint(d){
+  var o=d.organization||{}, st=d.stats||{};
+  $('partnerName').textContent=o.name||'';
+  $('partnerFull').textContent=o.fullName||'';
+  if(o.logo){$('partnerLogo').src=o.logo;}else{$('partnerLogo').style.display='none';}
+  if(o.color){$('partnerLogo').style.borderColor=o.color;}
+  document.title=(o.name||'Partner')+' - Partner Dashboard | MyPlopPlop';
+
+  $('statStores').textContent = st.stores!=null?st.stores:'-';
+  $('statActive').textContent = st.activeStores!=null?st.activeStores:'-';
+  /* A zero that really means "we could not ask the rides service" is exactly
+     the kind of number that gets believed. Say so instead. */
+  $('statDrivers').textContent = st.driversReachable===false ? '?' :
+                                 (st.drivers!=null?st.drivers:'-');
+  var dn=$('statDriversNote');
+  if(dn) dn.textContent = st.driversReachable===false ? 'rides service unreachable just now' : '';
+
+  var rows=(d.stores||[]);
+  $('storesBody').innerHTML = rows.length ? rows.map(function(x){
+    return '<tr><td>'+esc(x.name)+'</td><td>'+esc(x.ownerName||'')+'</td><td>'+esc(x.phone||'')+
+           '</td><td>'+esc(x.category||'')+'</td><td>'+esc(x.location&&x.location.address||'')+
+           '</td><td>'+(x.isVerified?'Verified':'Pending')+'</td><td>'+esc(fmtDate(x.createdAt))+'</td></tr>';
+  }).join('') : '<tr><td colspan="7"><div class="empty-state"><div class="icon">&#127978;</div><h4>No stores yet</h4><p>Stores signed up through your referral link will appear here.</p></div></td></tr>';
+
+  var slug=o.slug||'';
+  var ls=$('linkStore'); if(ls) ls.textContent='myplopplop.com/merchant/register.html?ref='+encodeURIComponent(slug);
+  var ld=$('linkDash');  if(ld) ld.textContent='myplopplop.com/partner-dashboard.html';
+}
 
 function copyLink(type){
-  var url;
-  if(type==='store') url = 'https://' + document.getElementById('linkStore').textContent;
-  else url = 'https://' + document.getElementById('linkDriver').textContent;
-  copyToClipboard(url);
+  var el = type==='store' ? $('linkStore') : $('linkDriver');
+  if(el) copyToClipboard('https://'+el.textContent);
 }
-
 function copyText(elId, btn){
-  var text = document.getElementById(elId).textContent;
-  copyToClipboard('https://' + text);
-  btn.classList.add('copied');
-  btn.textContent = 'Copied!';
-  setTimeout(function(){ btn.classList.remove('copied'); btn.textContent = 'Copy'; }, 2000);
+  var t=$(elId); if(!t) return;
+  copyToClipboard('https://'+t.textContent);
+  btn.classList.add('copied'); btn.textContent='Copied!';
+  setTimeout(function(){btn.classList.remove('copied');btn.textContent='Copy';},2000);
 }
-
 function copyToClipboard(text){
-  if(navigator.clipboard){ navigator.clipboard.writeText(text); return; }
-  var ta = document.createElement('textarea'); ta.value = text;
-  ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta);
-  ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  if(navigator.clipboard){navigator.clipboard.writeText(text);return;}
+  var ta=document.createElement('textarea');ta.value=text;
+  ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);
+  ta.select();document.execCommand('copy');document.body.removeChild(ta);
 }
+document.addEventListener('DOMContentLoaded',function(){
+  $('gateGo').onclick=openOrg;
+  $('orgCode').addEventListener('keydown',function(e){if(e.key==='Enter')openOrg();});
+  /* A name may be pre-filled from the address for convenience. The CODE never
+     is - it is the only thing that opens anything. */
+  var p=new URLSearchParams(location.search).get('partner');
+  if(p) $('orgSlug').value=p;
+});
 </script>
 <script src="js/referral.js"></script>
 </body>
