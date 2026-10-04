@@ -803,7 +803,16 @@
                         </div>
                     </div>
 
-                    <div class="payment-method" data-method="credit_card" onclick="selectPayment(this)">
+                    <!-- 🚨 4 Oct 2026, on Jeffery's instruction: "Turn the current
+                         Stripe/card button OFF immediately. We should not have a $1
+                         payment link accepting money when it cannot properly confirm
+                         or credit an order."
+                         The link charged a FLAT $1.00 whatever the basket came to, and
+                         on return the page asked SolutionIP about a payment SolutionIP
+                         had never seen - so the order was never marked paid either.
+                         ⛔ Hidden, not deleted: it comes back the day the real Stripe
+                         integration is built, by flipping MPP_CARD_ENABLED. -->
+                    <div class="payment-method" id="payCreditCard" data-method="credit_card" onclick="selectPayment(this)">
                         <div class="payment-icon" style="background:var(--primary-blue-light);">💳</div>
                         <div class="payment-details">
                             <strong>Credit / Debit Card</strong>
@@ -1295,6 +1304,27 @@
     const PAYMENT_API = 'https://plopplop.solutionip.app/api';
     const PAYMENT_CLIENT_ID = 'pp_1ohu5zz2tcx';
     const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/5kQbIU2y44pW8VqcfjgYU05';
+    /* ⛔ OFF until the real Stripe integration exists: a server-created charge
+       for the exact amount, a webhook that confirms it, and the order marked
+       PAID with the Stripe reference recorded. Until then this link takes $1
+       and credits nobody. Set to true ONLY when that is built. */
+    const MPP_CARD_ENABLED = false;
+    (function hideCardUntilStripeIsReal(){
+      function apply(){
+        var el = document.getElementById('payCreditCard');
+        if (!el) return;
+        if (!MPP_CARD_ENABLED) {
+          el.style.display = 'none';
+          el.removeAttribute('onclick');
+          /* if it was somehow already chosen, drop the choice */
+          if (typeof selectedPayment !== 'undefined' && selectedPayment === 'credit_card') {
+            try { selectedPayment = null; } catch (e) {}
+          }
+        }
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+      else apply();
+    })();
 
     function getSolutionIPMethod(method) {
         if (method === 'moncash') return 'moncash';
@@ -1439,6 +1469,12 @@
         }
 
         // Credit card → Stripe
+        if (selectedPayment === 'credit_card' && !MPP_CARD_ENABLED) {
+            /* Hiding a button is a display decision; this is the rule. Nothing
+               may reach that $1 link while it cannot confirm or credit. */
+            alert('Kat kredi pa disponib pou kounye a. Tanpri chwazi MonCash oswa NatCash.');
+            return;
+        }
         if (selectedPayment === 'credit_card') {
             localStorage.setItem('mpp_pending_order', JSON.stringify({
                 orderId: orderId,
