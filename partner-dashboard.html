@@ -91,6 +91,22 @@ tr:hover td{background:rgba(0,32,159,.02)}
 
 /* EMPTY */
 .empty-state{text-align:center;padding:40px 20px}
+/* per-Ajan QR card (15 Oct) */
+.qr-btn{background:rgba(0,32,159,.08);color:var(--blue);border:none;padding:7px 12px;border-radius:100px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:var(--body)}
+.qr-veil{position:fixed;inset:0;background:rgba(10,12,30,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:200}
+.qr-veil.open{display:flex}
+.qr-card{background:#fff;border-radius:var(--radius);max-width:340px;width:100%;padding:22px 20px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.qr-card h4{font-family:var(--heading);color:var(--dark);font-size:1.05rem}
+.qr-card .who{font-size:.85rem;color:var(--text-light);margin:2px 0 12px}
+.qr-card img{width:220px;height:220px;image-rendering:pixelated;display:block;margin:0 auto}
+.qr-card .code{font-family:monospace;font-weight:800;font-size:1.3rem;letter-spacing:.06em;background:var(--light-gray);border-radius:10px;padding:8px 14px;display:inline-block;margin:12px 0 6px;color:var(--dark)}
+.qr-card .hint{font-size:.78rem;color:var(--text-light);line-height:1.45;margin-bottom:14px;white-space:normal}
+.qr-card .row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.qr-card .row button,.qr-card .row a{border:none;border-radius:100px;padding:10px 16px;font-weight:700;font-size:.8rem;cursor:pointer;font-family:var(--body);text-decoration:none}
+.qr-card .dl{background:var(--blue);color:#fff}
+.qr-card .cp{background:rgba(0,32,159,.08);color:var(--blue)}
+.qr-card .x{background:var(--light-gray);color:var(--text)}
+.rec-filter{border:1px solid rgba(0,0,0,.12);border-radius:100px;padding:7px 12px;font-family:var(--body);font-size:.8rem;background:#fff;color:var(--text)}
 .empty-state .icon{font-size:2.5rem;margin-bottom:8px}
 .empty-state h4{font-family:var(--heading);color:var(--dark);margin-bottom:4px}
 .empty-state p{font-size:.85rem;color:var(--text-light)}
@@ -205,9 +221,42 @@ footer a{color:var(--red);font-weight:600}
     </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Ajan code</th><th>Name</th><th>Status</th><th>Recruited</th><th>Where</th><th>Commission generated</th></tr></thead>
+        <thead><tr><th>Ajan code</th><th>Name</th><th>Status</th><th>Recruited</th><th>Where</th><th>Commission generated</th><th>QR code</th></tr></thead>
         <tbody id="teamBody"></tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- WHO EACH AJAN RECRUITED (15 Oct 2026). Phones arrive from the server
+       already cut to the last 4 digits. -->
+  <div class="table-section" id="recruitSection" style="display:none">
+    <div class="table-head">
+      <h3>&#128101; People our Ajan recruited</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-left:auto">
+        <select class="rec-filter" id="recFilter" aria-label="Show recruits of one Ajan"><option value="">All Ajan</option></select>
+        <button class="copy-btn" id="dlRecruits">&#11015; Download (Excel/CSV)</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Date</th><th>Ajan</th><th>Name</th><th>Type</th><th>Platform</th><th>Phone</th></tr></thead>
+        <tbody id="recruitBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="qr-veil" id="qrVeil" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+    <div class="qr-card">
+      <h4 id="qrTitle">Ajan QR code</h4>
+      <div class="who" id="qrWho"></div>
+      <img id="qrImg" alt="QR code">
+      <div class="code" id="qrCode"></div>
+      <div class="hint">A driver scans this to sign up on MsouWout with this Ajan's code already filled in. On any other platform, the person types the code above.</div>
+      <div class="row">
+        <a class="dl" id="qrDl" download>&#11015; Save image</a>
+        <button class="cp" id="qrCp">Copy link</button>
+        <button class="x" id="qrX">Close</button>
+      </div>
     </div>
   </div>
 
@@ -379,11 +428,69 @@ function paintTeam(t){
   $('tRecruits').textContent=(t.referrals&&t.referrals.total)||0;
   $('tCommission').textContent=fmtHtg(t.commissions&&t.commissions.total);
   $('tPayNote').textContent=t.payoutsEnabled?'':'recorded - payouts not active yet';
+  paintRecruits(t);
   $('teamBody').innerHTML=t.agents.length?t.agents.map(function(a){
     var where=Object.keys(a.byPlatform||{}).map(function(k){return (PLATFORM_LBL[k]||k)+' '+a.byPlatform[k];}).join(', ');
     return '<tr><td><code>'+esc(a.code)+'</code></td><td>'+esc(a.name||'')+'</td><td>'+esc(a.status||'')+
-           '</td><td>'+(a.referrals||0)+'</td><td>'+esc(where||'—')+'</td><td>'+fmtHtg(a.commissionGenerated)+' HTG</td></tr>';
-  }).join(''):'<tr><td colspan="6"><div class="empty-state"><div class="icon">&#129309;</div><h4>No Ajan linked yet</h4><p>HaitiBiznis links your certified Ajan to your organisation from the list you send.</p></div></td></tr>';
+           '</td><td>'+(a.referrals||0)+'</td><td>'+esc(where||'—')+'</td><td>'+fmtHtg(a.commissionGenerated)+' HTG</td>'+
+           '<td><button class="qr-btn" data-qr="'+esc(a.code)+'">&#9638; QR</button></td></tr>';
+  }).join(''):'<tr><td colspan="7"><div class="empty-state"><div class="icon">&#129309;</div><h4>No Ajan linked yet</h4><p>HaitiBiznis links your certified Ajan to your organisation from the list you send.</p></div></td></tr>';
+}
+/* ── per-Ajan QR ──────────────────────────────────────────────────────────
+   The link is the MsouWout driver signup, because driver-register.html reads
+   ?ref= and fills the Ajan code in for the driver (and checks it live).
+   ⛔ Not haitibiznis.com/koutye.html?ref= - that is the page for BECOMING an
+   Ajan and it does not record the code, so a QR to it would credit nobody. */
+function ajanLink(code){return 'https://msouwout.com/driver-register.html?ref='+encodeURIComponent(code);}
+function qrDataURL(text){try{var q=qrcode(0,'M');q.addData(text);q.make();return q.createDataURL(8,4);}catch(e){return null;}}
+function openQr(code){
+  var t=ORG&&ORG.team; var a=t&&t.agents&&t.agents.filter(function(x){return x.code===code;})[0]; if(!a) return;
+  var link=ajanLink(a.code), url=qrDataURL(link);
+  $('qrWho').textContent=a.name||'';
+  $('qrCode').textContent=a.code;
+  $('qrImg').src=url||''; $('qrImg').style.display=url?'':'none';
+  var dl=$('qrDl'); dl.href=url||'#'; dl.download='ajan-'+a.code.replace(/[^A-Za-z0-9-]+/g,'_')+'-qr.png'; dl.style.display=url?'':'none';
+  $('qrCp').onclick=function(){copyToClipboard(link);this.textContent='Copied!';var b=this;setTimeout(function(){b.textContent='Copy link';},2000);};
+  $('qrVeil').classList.add('open'); $('qrX').focus();
+}
+function closeQr(){$('qrVeil').classList.remove('open');}
+
+/* ── who each Ajan recruited ─────────────────────────────────────────────── */
+var TYPE_LBL={driver:'Driver',customer:'Customer',merchant:'Business',business:'Business',professional:'Professional'};
+function shownRecruits(){
+  var t=ORG&&ORG.team, f=$('recFilter')?$('recFilter').value:'';
+  return ((t&&t.recruits)||[]).filter(function(r){return !f||r.agent===f;});
+}
+function paintRecruitRows(){
+  var rows=shownRecruits();
+  $('recruitBody').innerHTML=rows.length?rows.map(function(r){
+    return '<tr><td>'+esc(fmtDate(r.date))+'</td><td><code>'+esc(r.agent)+'</code></td><td>'+esc(r.name||'—')+
+           '</td><td>'+esc(TYPE_LBL[r.type]||r.type||'')+'</td><td>'+esc(PLATFORM_LBL[r.platform]||r.platform||'')+
+           '</td><td>'+esc(r.phone||'—')+'</td></tr>';
+  }).join(''):'<tr><td colspan="6"><div class="empty-state"><div class="icon">&#128101;</div><h4>Nobody recruited yet</h4><p>Drivers, businesses and customers who sign up with one of your Ajan codes will appear here.</p></div></td></tr>';
+}
+function paintRecruits(t){
+  var sec=$('recruitSection'); if(!sec) return;
+  /* An older server sends no list: hide the section rather than claim "nobody". */
+  if(!t||!Array.isArray(t.recruits)){sec.style.display='none';return;}
+  sec.style.display='';
+  var sel=$('recFilter'), keep=sel.value;
+  sel.innerHTML='<option value="">All Ajan</option>'+(t.agents||[]).map(function(a){
+    return '<option value="'+esc(a.code)+'">'+esc(a.code)+(a.name?' - '+esc(a.name):'')+'</option>';}).join('');
+  sel.value=keep;
+  paintRecruitRows();
+}
+function downloadRecruits(){
+  var rows=shownRecruits(); if(!rows.length){alert('Nothing to download yet.');return;}
+  var head=['Date','Ajan code','Name','Type','Platform','Phone (last 4)'];
+  var lines=[head.join(',')].concat(rows.map(function(r){
+    return [fmtDate(r.date),r.agent,r.name||'',TYPE_LBL[r.type]||r.type||'',PLATFORM_LBL[r.platform]||r.platform||'',r.phone||''].map(csvCell).join(',');
+  }));
+  var name=((ORG.organization&&ORG.organization.slug)||'organization').replace(/[^A-Za-z0-9-]+/g,'-');
+  var blob=new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name+'-recruits.csv';
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);document.body.removeChild(a);},0);
 }
 function downloadTeam(){
   var t=ORG&&ORG.team; if(!t||!t.agents||!t.agents.length){alert('Nothing to download yet.');return;}
@@ -444,6 +551,12 @@ document.addEventListener('DOMContentLoaded',function(){
   $('gateGo').onclick=openOrg;
   var d=$('dlStores'); if(d) d.onclick=downloadStores;
   var dt=$('dlTeam'); if(dt) dt.onclick=downloadTeam;
+  var dr=$('dlRecruits'); if(dr) dr.onclick=downloadRecruits;
+  var rf=$('recFilter'); if(rf) rf.onchange=paintRecruitRows;
+  var tb=$('teamBody'); if(tb) tb.addEventListener('click',function(e){var b=e.target.closest('[data-qr]'); if(b) openQr(b.getAttribute('data-qr'));});
+  $('qrX').onclick=closeQr;
+  $('qrVeil').addEventListener('click',function(e){if(e.target===this)closeQr();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQr();});
   $('orgCode').addEventListener('keydown',function(e){if(e.key==='Enter')openOrg();});
   /* A name may be pre-filled from the address for convenience. The CODE never
      is - it is the only thing that opens anything. */
@@ -451,6 +564,7 @@ document.addEventListener('DOMContentLoaded',function(){
   if(p) $('orgSlug').value=p;
 });
 </script>
+<script src="js/qrcode.js"></script>
 <script src="js/referral.js"></script>
 </body>
 </html>
