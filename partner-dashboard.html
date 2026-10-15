@@ -397,6 +397,7 @@ function paint(d){
            '</td><td>'+(x.isVerified?'Verified':'Pending')+'</td><td>'+esc(fmtDate(x.createdAt))+'</td></tr>';
   }).join('') : '<tr><td colspan="8"><div class="empty-state"><div class="icon">&#127978;</div><h4>No stores yet</h4><p>Stores signed up through your referral link will appear here.</p></div></td></tr>';
 
+  paintDrivers(d.drivers, st);
   paintTeam(d.team);
   paintFunnel(st);
 
@@ -406,6 +407,23 @@ function paint(d){
 }
 
 
+/* The drivers table had no code behind it: it said "No drivers yet" for
+   ever, right under a tile counting them. Phones arrive already cut to the
+   last 4 digits. undefined = an older server (leave the table as it was);
+   null = the rides service could not be asked just now - say so, never
+   "No drivers". */
+var DRV_STATUS={approved:'Approved',pending:'Pending review',rejected:'Rejected',suspended:'Suspended'};
+function paintDrivers(list, st){
+  var body=$('driversBody'); if(!body||list===undefined) return;
+  if(list===null){
+    body.innerHTML='<tr><td colspan="6"><div class="empty-state"><div class="icon">&#9203;</div><h4>Could not load the drivers just now</h4><p>The rides service did not answer. Open the dashboard again in a minute.</p></div></td></tr>';
+    return;
+  }
+  body.innerHTML=list.length?list.map(function(x){
+    return '<tr><td>'+esc(x.name||'—')+'</td><td>'+esc(x.phone||'—')+'</td><td>'+esc(x.vehicle||'')+
+           '</td><td>'+esc(DRV_STATUS[x.status]||x.status||'')+'</td><td>'+(x.trips||0)+'</td><td>'+esc(fmtDate(x.date))+'</td></tr>';
+  }).join(''):'<tr><td colspan="6"><div class="empty-state"><div class="icon">&#128100;</div><h4>No drivers yet</h4><p>Drivers signed up through your referral link will appear here.</p></div></td></tr>';
+}
 function paintFunnel(st){
   var sec=$('funnelSection'); if(!sec) return;
   var f=st&&st.driverFunnel;
