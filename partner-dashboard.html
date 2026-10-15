@@ -404,6 +404,10 @@ function paint(d){
   var slug=o.slug||'';
   var ls=$('linkStore'); if(ls) ls.textContent='myplopplop.com/merchant/register.html?ref='+encodeURIComponent(slug);
   var ld=$('linkDash');  if(ld) ld.textContent='myplopplop.com/partner-dashboard.html';
+  /* The driver link carries the organisation, so the MsouWout signup preselects
+     it (driver-register.html reads ?partner=). It used to be the bare page,
+     and a driver who did not find the name in the list was credited to nobody. */
+  var lv=$('linkDriver'); if(lv) lv.textContent='msouwout.com/driver-register.html?partner='+encodeURIComponent(slug);
 }
 
 
