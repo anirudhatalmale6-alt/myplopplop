@@ -178,6 +178,39 @@ footer a{color:var(--red);font-weight:600}
     </div>
   </div>
 
+  <!-- DRIVER FUNNEL (15 Oct 2026): Registered -> Approved -> Active, where
+       Active = approved AND at least one legitimate paid ride (Jeffery). Only
+       active drivers count toward targets. -->
+  <div class="table-section" id="funnelSection" style="display:none">
+    <div class="table-head"><h3>&#128663; Drivers: from sign-up to first paid ride</h3></div>
+    <div class="stats" style="margin:0">
+      <div class="stat"><div class="stat-icon">&#128221;</div><div class="stat-val" id="fReg">-</div><div class="stat-label">Registered</div></div>
+      <div class="stat"><div class="stat-icon">&#9989;</div><div class="stat-val" id="fApp">-</div><div class="stat-label">Approved (documents + verification)</div></div>
+      <div class="stat"><div class="stat-icon">&#127942;</div><div class="stat-val" id="fQual">-</div><div class="stat-label">Active (at least 1 paid ride) - counts toward targets</div></div>
+    </div>
+  </div>
+
+  <!-- OUR AJAN (15 Oct 2026) - an organisation's own agents and what they
+       recruited. Shown only when the server sends `team`. Commission figures
+       are EARNED and recorded; nothing is paid from here. -->
+  <div class="table-section" id="teamSection" style="display:none">
+    <div class="table-head">
+      <h3>&#129309; Our Ajan</h3>
+      <button class="copy-btn" id="dlTeam" style="margin-left:auto">&#11015; Download (Excel/CSV)</button>
+    </div>
+    <div class="stats" style="margin:0 0 14px">
+      <div class="stat"><div class="stat-icon">&#129309;</div><div class="stat-val" id="tAgents">0</div><div class="stat-label">Ajan</div></div>
+      <div class="stat"><div class="stat-icon">&#128101;</div><div class="stat-val" id="tRecruits">0</div><div class="stat-label">People recruited</div></div>
+      <div class="stat"><div class="stat-icon">&#128176;</div><div class="stat-val" id="tCommission">0</div><div class="stat-label">Commission generated (HTG)</div><div class="stat-label" id="tPayNote" style="font-size:.7rem;color:#B45309"></div></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Ajan code</th><th>Name</th><th>Status</th><th>Recruited</th><th>Where</th><th>Commission generated</th></tr></thead>
+        <tbody id="teamBody"></tbody>
+      </table>
+    </div>
+  </div>
+
   <!-- STORES TABLE -->
   <div class="table-section">
     <div class="table-head">
@@ -315,11 +348,56 @@ function paint(d){
            '</td><td>'+(x.isVerified?'Verified':'Pending')+'</td><td>'+esc(fmtDate(x.createdAt))+'</td></tr>';
   }).join('') : '<tr><td colspan="8"><div class="empty-state"><div class="icon">&#127978;</div><h4>No stores yet</h4><p>Stores signed up through your referral link will appear here.</p></div></td></tr>';
 
+  paintTeam(d.team);
+  paintFunnel(st);
+
   var slug=o.slug||'';
   var ls=$('linkStore'); if(ls) ls.textContent='myplopplop.com/merchant/register.html?ref='+encodeURIComponent(slug);
   var ld=$('linkDash');  if(ld) ld.textContent='myplopplop.com/partner-dashboard.html';
 }
 
+
+function paintFunnel(st){
+  var sec=$('funnelSection'); if(!sec) return;
+  var f=st&&st.driverFunnel;
+  /* Unreachable rides service, or an older one that does not send these: no
+     section rather than zeros that would be believed. */
+  if(!f||st.driversReachable===false||f.registered==null){sec.style.display='none';return;}
+  sec.style.display='';
+  var show=function(v){return v==null?'-':v;};
+  $('fReg').textContent=show(f.registered); $('fApp').textContent=show(f.approved); $('fQual').textContent=show(f.qualified);
+}
+var PLATFORM_LBL={msouwout:'MsouWout',myplopplop:'MyPlopPlop',tikelakay:'Tikè Lakay','48hoursready':'48HoursReady',prolakay:'ProLakay',utility:'Utility',sol:'Sòl'};
+function fmtHtg(n){return Number(n||0).toLocaleString('en-US',{maximumFractionDigits:2});}
+function paintTeam(t){
+  var sec=$('teamSection'); if(!sec) return;
+  /* No team data (older server, or the lookup failed) = no section, never a
+     row of zeros that looks like "your Ajan recruited nobody". */
+  if(!t||t.error||!t.agents){sec.style.display='none';return;}
+  sec.style.display='';
+  $('tAgents').textContent=t.agents.length;
+  $('tRecruits').textContent=(t.referrals&&t.referrals.total)||0;
+  $('tCommission').textContent=fmtHtg(t.commissions&&t.commissions.total);
+  $('tPayNote').textContent=t.payoutsEnabled?'':'recorded - payouts not active yet';
+  $('teamBody').innerHTML=t.agents.length?t.agents.map(function(a){
+    var where=Object.keys(a.byPlatform||{}).map(function(k){return (PLATFORM_LBL[k]||k)+' '+a.byPlatform[k];}).join(', ');
+    return '<tr><td><code>'+esc(a.code)+'</code></td><td>'+esc(a.name||'')+'</td><td>'+esc(a.status||'')+
+           '</td><td>'+(a.referrals||0)+'</td><td>'+esc(where||'—')+'</td><td>'+fmtHtg(a.commissionGenerated)+' HTG</td></tr>';
+  }).join(''):'<tr><td colspan="6"><div class="empty-state"><div class="icon">&#129309;</div><h4>No Ajan linked yet</h4><p>HaitiBiznis links your certified Ajan to your organisation from the list you send.</p></div></td></tr>';
+}
+function downloadTeam(){
+  var t=ORG&&ORG.team; if(!t||!t.agents||!t.agents.length){alert('Nothing to download yet.');return;}
+  var head=['Ajan code','Name','Status','Recruited','MsouWout','MyPlopPlop','Tike Lakay','Commission generated (HTG)'];
+  var lines=[head.join(',')].concat(t.agents.map(function(a){
+    var b=a.byPlatform||{};
+    return [a.code,a.name||'',a.status||'',a.referrals||0,b.msouwout||0,b.myplopplop||0,b.tikelakay||0,a.commissionGenerated||0].map(csvCell).join(',');
+  }));
+  var name=((ORG.organization&&ORG.organization.slug)||'organization').replace(/[^A-Za-z0-9-]+/g,'-');
+  var blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name+'-ajan.csv';
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);document.body.removeChild(a);},0);
+}
 
 /* A download of what is on the screen. Built here from the data the page
    already has - no second request, and nothing to go stale between the table
@@ -365,6 +443,7 @@ function copyToClipboard(text){
 document.addEventListener('DOMContentLoaded',function(){
   $('gateGo').onclick=openOrg;
   var d=$('dlStores'); if(d) d.onclick=downloadStores;
+  var dt=$('dlTeam'); if(dt) dt.onclick=downloadTeam;
   $('orgCode').addEventListener('keydown',function(e){if(e.key==='Enter')openOrg();});
   /* A name may be pre-filled from the address for convenience. The CODE never
      is - it is the only thing that opens anything. */
