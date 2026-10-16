@@ -698,11 +698,13 @@ function reportIssue() {
     // Load ride data
     async function loadRide() {
         const data = await API.getRide(rideId);
-        if (!data.success || !data.data) {
+        // the API answers { ride }, never { data } - this page always said "not found"
+        var ride = data && (data.ride || data.data);
+        if (!data.success || !ride) {
             document.querySelector('.main').innerHTML = '<div style="text-align:center;padding:60px 20px;"><h3>Ride Not Found</h3><p>We could not find this ride.</p><a href="orders.html" class="btn btn-red" style="margin-top:16px;display:inline-block;">View My Orders</a></div>';
             return;
         }
-        renderRide(data.data);
+        renderRide(ride);
     }
 
     loadRide();

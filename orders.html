@@ -480,6 +480,8 @@
     function renderCard(item) {
         var active = isActive(item);
         var label = statusLabels[item.status] || item.status;
+        if (item._type !== 'ride' && item.status === 'pending' && item.paymentStatus !== 'paid') label = 'Awaiting payment';
+        if (item._type !== 'ride' && item.status === 'cancelled' && (item.paymentStatus === 'paid' || item.refund)) label = 'Cancelled - refund open';
         var progress = getProgress(item);
 
         if (item._type === 'ride') {
@@ -603,9 +605,13 @@
 
         // Load rides
         var ridesData = await API.getMyRides();
-        if (ridesData.success && ridesData.data) {
-            ridesData.data.forEach(function(r) { r._type = 'ride'; });
-            combined = combined.concat(ridesData.data);
+        // the API answers { rides }, never { data } - rides never showed here
+        var rideList = ridesData && (ridesData.rides || ridesData.data);
+        if (ridesData.success && rideList) {
+            // a shop order's delivery is shown on the ORDER (with its code), not twice
+            rideList = rideList.filter(function(r) { return !r.order; });
+            rideList.forEach(function(r) { r._type = 'ride'; });
+            combined = combined.concat(rideList);
         }
 
         // Load store orders

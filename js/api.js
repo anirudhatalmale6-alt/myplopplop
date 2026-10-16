@@ -298,6 +298,12 @@ const API = (() => {
         return await request('POST', '/api/payments/order/verify', { orderId });
     }
 
+    // One payment for a basket that spans several shops: the server groups the
+    // orders under ONE reference and returns the total IT will accept (16 Oct 2026).
+    async function groupBasket(orderIds) {
+        return await request('POST', '/api/orders/basket', { orderIds });
+    }
+
     async function getMyOrders(page = 1, limit = 20) {
         return await request('GET', '/api/orders/my-orders?page=' + page + '&limit=' + limit);
     }
@@ -412,7 +418,8 @@ const API = (() => {
     }
 
     return {
-        BASE_URL, getToken, setToken, getUser, setUser, isLoggedIn, logout, toast,
+        BASE_URL, request, getToken, setToken, getUser, setUser, isLoggedIn, logout, toast,
+        groupBasket,
         register, login, getMe,
         driverOnboard, driverProfile, driverGoOnline, driverGoOffline, driverUpdateLocation, driverStats,
         createRide, getMyRides, getAvailableRides, getRide, acceptRide, updateRideStatus, cancelRide, rateRide,

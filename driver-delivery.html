@@ -102,14 +102,22 @@ function login(){
 function goOnline(){
   api('PUT','/api/drivers/online',{ isOnline:true }).catch(function(){});
   el('onlineDot').textContent = 'Online';
-  if (navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(function(p){
-      api('PUT','/api/drivers/location',{ latitude:p.coords.latitude, longitude:p.coords.longitude }).catch(function(){});
-    }, function(){}, { enableHighAccuracy:true, timeout:10000 });
-  }
+  sendLocation();
+  if (beat) clearInterval(beat);
+  beat = setInterval(sendLocation, 60000);
 }
 
 function money(n){ return (n||0).toLocaleString() + ' HTG'; }
+function esc(v){ return String(v == null ? '' : v).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+/* 16 Oct 2026: a fresh position every minute while online - the dispatcher
+   only offers jobs to drivers whose position is under 15 minutes old. */
+var beat = null;
+function sendLocation(){
+  if (!navigator.geolocation || !token) return;
+  navigator.geolocation.getCurrentPosition(function(p){
+    api('PUT','/api/drivers/location',{ latitude:p.coords.latitude, longitude:p.coords.longitude }).catch(function(){});
+  }, function(){}, { enableHighAccuracy:true, timeout:15000, maximumAge:30000 });
+}
 
 function render(data){
   var offer = data.offer, active = data.active;
@@ -124,8 +132,8 @@ function render(data){
         '<div class="big">' + money(offer.fare && offer.fare.driverEarning) + '</div>' +
         '<p class="muted">You earn this for the delivery</p>' +
         '<div class="count" id="cd">Accept within ' + secs + 's</div>' +
-        '<div class="row"><span class="k">Pick up</span><span class="v">' + (offer.pickup.address||'Store') + '</span></div>' +
-        '<div class="row"><span class="k">Deliver to</span><span class="v">' + (offer.dropoff.address||'Customer') + '</span></div>' +
+        '<div class="row"><span class="k">Pick up</span><span class="v">' + esc(offer.pickup.address||'Store') + '</span></div>' +
+        '<div class="row"><span class="k">Deliver to</span><span class="v">' + esc(offer.dropoff.address||'Customer') + '</span></div>' +
         '<div class="row"><span class="k">Distance</span><span class="v">' + (offer.distanceKm||0) + ' km</span></div>' +
         '<button class="btn btn-accept" onclick="accept(\'' + offer._id + '\')">Accept delivery</button>' +
         '<button class="btn btn-decline" onclick="decline(\'' + offer._id + '\')">Pass to another driver</button>' +
@@ -135,34 +143,43 @@ function render(data){
   }
 
   if (active){
-    var next = active.status === 'accepted' ? 'picking_up'
-             : active.status === 'picking_up' ? 'in_progress' : 'delivered';
-    var label = active.status === 'accepted' ? 'I have arrived at the store'
-              : active.status === 'picking_up' ? 'I picked up the order'
-              : 'Complete delivery';
-    var pinBox = (next === 'delivered')
-      ? '<p class="muted" style="margin:10px 0 6px">Ask the customer for their 4-digit code:</p>' +
-        '<input class="pin" id="pinIn" maxlength="4" inputmode="numeric" placeholder="••••">'
+    /* 16 Oct 2026: the shop confirms the pickup by typing the driver's PICKUP
+       code; the driver confirms the delivery with the CUSTOMER's code. */
+    var st = active.status;
+    var step = '';
+    if (st === 'accepted') {
+      step = '<button class="btn btn-blue" style="margin-top:12px" onclick="advance(\'' + active._id + '\',\'picking_up\')">I have arrived at the store</button>';
+    } else if (st === 'picking_up') {
+      step = '<p class="muted" style="margin:6px 0 0">The shop types this code to hand you the order. This screen moves on by itself.</p>';
+    } else if (st === 'in_progress') {
+      step = '<p class="muted" style="margin:10px 0 6px">At the door, ask the customer for THEIR 4-digit code:</p>' +
+        '<input class="pin" id="pinIn" maxlength="4" inputmode="numeric" placeholder="••••" autocomplete="off">' +
+        '<button class="btn btn-blue" style="margin-top:12px" onclick="advance(\'' + active._id + '\',\'delivered\')">Complete delivery</button>';
+    }
+    var codeBox = (active.pickupCode && (st === 'accepted' || st === 'picking_up'))
+      ? '<div style="margin:12px 0 4px;padding:14px;border:2px dashed #00209F;border-radius:14px;text-align:center">' +
+          '<div class="muted" style="font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:12px">Your pickup code — show it at the shop</div>' +
+          '<div style="font-size:40px;font-weight:800;letter-spacing:.3em;padding-left:.3em">' + esc(active.pickupCode) + '</div>' +
+        '</div>'
       : '';
+    var drop = (st === 'accepted' || st === 'picking_up')
+      ? '<button class="btn btn-decline" style="margin-top:10px" onclick="dropJob(\'' + active._id + '\')">I cannot do this delivery</button>'
+      : '';
+    var dest = (st === 'accepted' || st === 'picking_up') ? active.pickup : active.dropoff;
+    var dc = dest && dest.coordinates && dest.coordinates.coordinates;
     c.innerHTML =
       '<div class="card">' +
-        '<span class="badge">DELIVERY IN PROGRESS</span>' +
-        '<div class="row"><span class="k">Pick up</span><span class="v">' + (active.pickup.address||'Store') + '</span></div>' +
-        '<div class="row"><span class="k">Deliver to</span><span class="v">' + (active.dropoff.address||'Customer') + '</span></div>' +
-        '<div class="row"><span class="k">Customer</span><span class="v">' + ((active.customer&&active.customer.name)||'Customer') + '</span></div>' +
+        '<span class="badge">' + (st === 'in_progress' ? 'ON THE WAY TO THE CUSTOMER' : 'GO TO THE SHOP') + '</span>' +
+        '<div class="row"><span class="k">Pick up</span><span class="v">' + esc(active.pickup.address||'Store') + '</span></div>' +
+        '<div class="row"><span class="k">Deliver to</span><span class="v">' + esc(active.dropoff.address||'Customer') + '</span></div>' +
+        '<div class="row"><span class="k">Customer</span><span class="v">' + esc((active.customer&&active.customer.name)||'Customer') + '</span></div>' +
         '<div class="row"><span class="k">You earn</span><span class="v">' + money(active.fare&&active.fare.driverEarning) + '</span></div>' +
-        pinBox +
-        '<button class="btn btn-blue" style="margin-top:12px" onclick="advance(\'' + active._id + '\',\'' + next + '\')">' + label + '</button>' +
+        codeBox + step + drop +
         '<div class="err" id="stepErr"></div>' +
-        '<a class="map" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=' +
-          (active.status==='accepted' || active.status==='picking_up'
-            ? (active.pickup.coordinates.coordinates[1]+','+active.pickup.coordinates.coordinates[0])
-            : (active.dropoff.coordinates.coordinates[1]+','+active.dropoff.coordinates.coordinates[0])) +
-        '">🗺️ Open route in Maps</a>' +
+        (dc ? '<a class="map" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + Number(dc[1]) + ',' + Number(dc[0]) + '">🗺️ Open route in Maps</a>' : '') +
       '</div>';
     return;
   }
-
   c.innerHTML =
     '<div class="card empty">' +
       '<div class="ico">🛵</div>' +
@@ -185,11 +202,20 @@ function startCountdown(expiry){
 function accept(id){
   api('PUT','/api/rides/'+id+'/accept').then(function(d){
     if (!d.success) alert(d.message || 'Could not accept');
+    else sendLocation();
     refresh();
   });
 }
 function decline(id){
   api('PUT','/api/rides/'+id+'/decline').then(function(){ refresh(); });
+}
+function dropJob(id){
+  var why = prompt('Why can you not do it? (the customer and the shop are told)');
+  if (why === null) return;
+  api('PUT','/api/rides/'+id+'/status',{ status:'cancelled', reason: String(why).slice(0,200) }).then(function(d){
+    if (!d.success){ var e = el('stepErr'); if (e) e.textContent = d.message || 'Could not update'; }
+    refresh();
+  });
 }
 function advance(id, next){
   var body = {}; body.status = next;
@@ -204,7 +230,7 @@ function advance(id, next){
     if (next === 'delivered'){
       el('content').innerHTML =
         '<div class="card empty"><div class="ico">✅</div><h2 class="ok">Delivery complete</h2>' +
-        '<p class="muted">Your earnings have been added to your wallet automatically.</p></div>';
+        '<p class="muted">You earned ' + money(d.earned) + '. It is held for 24 hours, then you can withdraw it.</p></div>';
       setTimeout(refresh, 3500);
       return;
     }
@@ -212,9 +238,17 @@ function advance(id, next){
   });
 }
 
+var lastKey = '';
 function refresh(){
   api('GET','/api/rides/my-offer').then(function(d){
-    if (d.success && d.data) render(d.data);
+    if (!(d.success && d.data)) return;
+    // Nothing changed: leave the screen alone, or the 4-second refresh wipes
+    // the customer's code while the driver is typing it.
+    var a = d.data.active, o = d.data.offer;
+    var key = o ? 'o' + o._id : a ? 'a' + a._id + a.status : 'idle';
+    if (key === lastKey && !o) return;
+    lastKey = key;
+    render(d.data);
   }).catch(function(){});
 }
 

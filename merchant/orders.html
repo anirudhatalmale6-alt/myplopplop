@@ -32,6 +32,13 @@
 .mp-order-items { margin: var(--space-sm) 0; padding: var(--space-sm) 0; border-top: 1px solid var(--gray-100); border-bottom: 1px solid var(--gray-100); font-size: var(--text-xs); color: var(--gray-600); }
 .mp-order-items div { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; }
 .mp-order-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: var(--space-sm); }
+/* 16 Oct 2026: payment wait, handover code */
+.mp-wait { margin-top: var(--space-sm); padding: 10px 12px; border-radius: var(--radius-md); background: #FFF7E6; color: #7A4B00; border: 1px solid #F2C46D; font-size: var(--text-xs); font-weight: 600; line-height: 1.4; }
+.mp-info { margin-top: var(--space-sm); padding: 10px 12px; border-radius: var(--radius-md); background: #EEF2FF; color: #00207A; border: 1px solid #C9D3FF; font-size: var(--text-xs); line-height: 1.4; }
+.mp-code-row { display: flex; gap: 8px; width: 100%; align-items: stretch; }
+.mp-code-in { flex: 0 0 116px; width: 116px !important; max-width: 116px; min-width: 0; min-height: 48px; padding: 0 6px; font-size: 22px; font-weight: 800; letter-spacing: .25em; text-align: center; border: 2px solid var(--gray-300); border-radius: var(--radius-md); font-family: var(--font-heading); }
+.mp-code-in:focus { outline: none; border-color: var(--primary-blue); }
+.mp-code-lbl { width: 100%; font-size: var(--text-xs); font-weight: 700; color: var(--gray-600); }
 </style>
 </head>
 <body style="background:var(--bg-light);">
@@ -78,7 +85,17 @@
     pin:     { kr:'Kòd', fr:'Code', en:'PIN', es:'Código' },
     refresh: { kr:'Aktyalize', fr:'Actualiser', en:'Refresh', es:'Actualizar' },
     unpaid:  { kr:'Poko peye', fr:'Non payé', en:'Unpaid', es:'No pagado' },
-    paid:    { kr:'Peye', fr:'Payé', en:'Paid', es:'Pagado' }
+    paid:    { kr:'Peye', fr:'Payé', en:'Paid', es:'Pagado' },
+    waitPay: { kr:'⏳ N ap tann peman kliyan an. PA prepare anyen toutotan li pa make "Peye".', fr:'⏳ En attente du paiement du client. NE préparez rien avant « Payé ».', en:'⏳ Waiting for the customer\'s payment. Do NOT prepare anything until it shows "Paid".', es:'⏳ Esperando el pago del cliente. NO prepare nada hasta que diga "Pagado".' },
+    findDrv: { kr:'🔎 N ap chèche yon chofè pou ou.', fr:'🔎 Nous cherchons un livreur.', en:'🔎 Looking for a driver for you.', es:'🔎 Buscando un repartidor.' },
+    drvCode: { kr:'Mande chofè a kòd ranmasaj li (nan aplikasyon li), tape l la:', fr:'Demandez au livreur son code de retrait (dans son appli) :', en:'Ask the driver for their pickup code (in their app) and type it:', es:'Pida al repartidor su código de retiro (en su app):' },
+    handOver:{ kr:'Bay chofè a kòmand lan', fr:'Remettre au livreur', en:'Hand over to driver', es:'Entregar al repartidor' },
+    cusCode: { kr:'Mande kliyan an kòd li (nan paj kòmand li), tape l la:', fr:'Demandez au client son code (page de sa commande) :', en:'Ask the customer for their code (on their order page) and type it:', es:'Pida al cliente su código (página de su pedido):' },
+    gaveCus: { kr:'Kliyan an pran kòmand lan', fr:'Le client a récupéré', en:'Customer collected it', es:'El cliente lo recogió' },
+    onWay:   { kr:'🏍️ Chofè a pran kòmand lan, l ap livre l.', fr:'🏍️ Le livreur a la commande.', en:'🏍️ The driver has the order and is delivering it.', es:'🏍️ El repartidor lleva el pedido.' },
+    reason:  { kr:'Poukisa ou anile l? (kliyan an ap wè sa)', fr:'Pourquoi annuler ? (le client le verra)', en:'Why are you cancelling? (the customer will see this)', es:'¿Por qué cancela? (el cliente lo verá)' },
+    refund:  { kr:'Kliyan an te peye: yon ranbousman louvri pou administratè a.', fr:'Le client avait payé : un remboursement est ouvert.', en:'The customer had paid: a refund was opened for the admin.', es:'El cliente pagó: se abrió un reembolso.' },
+    code4:   { kr:'Tape 4 chif yo.', fr:'Tapez les 4 chiffres.', en:'Type the 4 digits.', es:'Escriba los 4 dígitos.' }
   };
   function L_(k) { var e = L[k]; return e ? (e[MP.lang()] || e.en) : k; }
 
@@ -160,8 +177,23 @@
     });
     document.querySelectorAll('[data-cancel]').forEach(function (b) {
       b.addEventListener('click', function () {
-        if (!confirm(L_('confirmCancel'))) return;
-        advance(b.dataset.cancel, 'cancelled', b);
+        var why = prompt(L_('reason'));
+        if (why === null) return;
+        why = String(why).trim();
+        if (why.length < 3) { MP.toast(L_('reason'), 'error'); return; }
+        act('/api/orders/' + b.dataset.cancel + '/status', 'PUT', { status: 'cancelled', reason: why }, b);
+      });
+    });
+    document.querySelectorAll('[data-handover]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var c = codeFrom('hc_' + b.dataset.handover); if (!c) return;
+        act('/api/orders/' + b.dataset.handover + '/handover', 'POST', { code: c }, b);
+      });
+    });
+    document.querySelectorAll('[data-collect]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var c = codeFrom('cc_' + b.dataset.collect); if (!c) return;
+        act('/api/orders/' + b.dataset.collect + '/complete-pickup', 'POST', { pin: c }, b);
       });
     });
   }
@@ -169,21 +201,35 @@
   function card(o) {
     var cust = (o.customer && o.customer.name) || '';
     var phone = (o.customer && o.customer.phone) || '';
-    var next = NEXT[o.status];
+    var paid = o.paymentStatus === 'paid';
+    var next = paid ? NEXT[o.status] : null;   // ⛔ nothing moves before the payment is confirmed
     var items = (o.items || []).map(function (it) {
       return '<div><span>' + (it.quantity || 1) + '× ' + MP.esc(it.name || '') + '</span><span>' + MP.money(it.subtotal || 0) + '</span></div>';
     }).join('');
 
-    var actions = '';
+    var actions = '', notes = '';
+    if (!paid && o.status === 'pending') notes += '<div class="mp-wait">' + L_('waitPay') + '</div>';
     if (next) {
       actions += '<button class="mp-btn ' + next.cls + '" style="flex:1;" data-adv="' + o._id + '" data-to="' + next.to + '">' + L_(next.label) + '</button>';
     }
-    if (o.status === 'ready' || o.status === 'picked_up' || o.status === 'delivering') {
-      if (o.deliveryType === 'pickup') {
-        actions += '<button class="mp-btn mp-btn-red" style="flex:1;" data-adv="' + o._id + '" data-to="delivered">' + L_('deliv') + '</button>';
+    if (paid && o.status === 'ready' && o.deliveryType === 'pickup') {
+      // the customer collects: their own code proves it is them
+      actions += '<div class="mp-code-lbl">' + L_('cusCode') + '</div><div class="mp-code-row">' +
+        '<input class="mp-code-in" inputmode="numeric" maxlength="4" autocomplete="off" id="cc_' + o._id + '" aria-label="code">' +
+        '<button class="mp-btn mp-btn-red" style="flex:1;" data-collect="' + o._id + '">' + L_('gaveCus') + '</button></div>';
+    } else if (paid && o.status === 'ready') {
+      if (o.rider) {
+        // the driver's pickup code proves the right driver is at the counter
+        actions += '<div class="mp-code-lbl">' + L_('drvCode') + '</div><div class="mp-code-row">' +
+          '<input class="mp-code-in" inputmode="numeric" maxlength="4" autocomplete="off" id="hc_' + o._id + '" aria-label="code">' +
+          '<button class="mp-btn mp-btn-red" style="flex:1;" data-handover="' + o._id + '">' + L_('handOver') + '</button></div>';
+      } else {
+        notes += '<div class="mp-info">' + L_('findDrv') + '</div>';
       }
     }
-    if (['pending', 'confirmed', 'preparing'].indexOf(o.status) !== -1) {
+    if (o.status === 'picked_up' || o.status === 'delivering') notes += '<div class="mp-info">' + L_('onWay') + '</div>';
+    if (o.status === 'cancelled' && (o.paymentStatus === 'paid' || o.refund)) notes += '<div class="mp-info">' + L_('refund') + '</div>';
+    if (['pending', 'confirmed', 'preparing', 'ready'].indexOf(o.status) !== -1 && (paid || o.status === 'pending')) {
       actions += '<button class="mp-btn mp-btn-ghost mp-btn-sm" data-cancel="' + o._id + '">' + L_('cancel') + '</button>';
     }
 
@@ -192,36 +238,56 @@
         '<div><div class="mp-order-num">#' + MP.esc(o.orderNumber || '') + '</div>' +
           '<div class="mp-row-sub">' + MP.esc(cust) + (phone ? ' · ' + MP.esc(phone) : '') + ' · ' + MP.when(o.createdAt) + '</div>' +
           '<div class="mp-row-sub">' + (o.deliveryType === 'pickup' ? L_('pickup') : L_('delivery')) +
-            (o.rider && o.rider.name ? ' · ' + L_('driver') + ': ' + MP.esc(o.rider.name) : '') +
-            (o.deliveryPin ? ' · ' + L_('pin') + ' ' + MP.esc(o.deliveryPin) : '') + '</div>' +
+            (o.rider && o.rider.name ? ' · ' + L_('driver') + ': ' + MP.esc(o.rider.name) : '') + '</div>' +
         '</div>' +
         '<div style="text-align:right;flex-shrink:0;">' +
           '<div class="mp-price">' + MP.money(o.total) + '</div>' +
           '<span class="mp-status ' + MP.esc(o.status) + '">' + MP.esc(o.status) + '</span>' +
-          '<div class="mp-row-sub">' + (o.paymentStatus === 'paid' ? '✅ ' + L_('paid') : '⏳ ' + L_('unpaid')) + '</div>' +
+          '<div class="mp-row-sub">' + (paid ? '✅ ' + L_('paid') : '⏳ ' + L_('unpaid')) + '</div>' +
         '</div>' +
       '</div>' +
       (items ? '<div class="mp-order-items">' + items + '</div>' : '') +
+      notes +
       (actions ? '<div class="mp-order-actions">' + actions + '</div>' : '') +
     '</div>';
   }
 
-  function advance(id, to, btn) {
+  /* the server's own message on a refusal (wrong code, not paid...) - not a generic "failed" */
+  function act(path, method, body, btn) {
     btn.disabled = true;
-    MP.req('PUT', '/api/orders/' + id + '/status', { status: to }).then(function (d) {
-      if (!d || !d.success) throw new Error((d && d.message) || 'failed');
+    return MP.req(method, path, body).then(function (d) {
+      if (!d || !d.success) throw new Error((d && d.message) || MP.t('saveFail'));
       MP.toast(MP.t('saved'), 'success');
       return load();
-    }).catch(function () {
+    }).catch(function (e) {
       btn.disabled = false;
-      MP.toast(MP.t('saveFail'), 'error');
+      MP.toast(e && e.message && e.message !== 'failed' ? e.message : MP.t('saveFail'), 'error');
     });
+  }
+  function codeFrom(id) {
+    var el = document.getElementById(id);
+    var v = el ? String(el.value || '').replace(/\D/g, '') : '';
+    if (v.length !== 4) { MP.toast(L_('code4'), 'error'); if (el) el.focus(); return null; }
+    return v;
+  }
+
+  function advance(id, to, btn) {
+    // an accepted order leaves "New": follow it to "In progress"
+    if (to === 'confirmed' && tab === 'new') tab = 'active';
+    return act('/api/orders/' + id + '/status', 'PUT', { status: to }, btn);
   }
 
   langBar();
   MP.boot('orders', function (data) {
     storeId = data.store._id;
     load();
+    // new paid orders and driver arrivals show up without pressing Refresh -
+    // but never while the shop is typing a code
+    setInterval(function () {
+      var a = document.activeElement;
+      if (document.hidden || (a && a.classList && a.classList.contains('mp-code-in'))) return;
+      load();
+    }, 30000);
   });
 })();
 </script>

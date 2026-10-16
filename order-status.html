@@ -546,6 +546,26 @@
 @media (min-width: 768px) {
     .os-page { padding-bottom: var(--space-xl); }
 }
+/* 16 Oct 2026: the customer's own delivery code */
+.os-code {
+    margin: var(--space-md) var(--content-padding);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: 18px var(--space-md);
+    border: 2px dashed var(--primary-blue);
+    text-align: center;
+}
+.os-code-label { font-size: 13px; font-weight: 700; color: var(--primary-blue); text-transform: uppercase; letter-spacing: .06em; }
+.os-code-digits { font-family: 'Poppins', sans-serif; font-size: 40px; font-weight: 800; letter-spacing: .3em; margin: 6px 0 4px; padding-left: .3em; color: #0B1B3F; }
+.os-code-help { font-size: 13px; line-height: 1.45; color: var(--text-muted); }
+.os-code-warn { margin-top: 8px; font-size: 12.5px; font-weight: 600; color: var(--primary-red); }
+.os-note {
+    margin: var(--space-md) var(--content-padding);
+    padding: 12px 14px; border-radius: var(--radius-lg);
+    background: #FFF7E6; color: #7A4B00; border: 1px solid #F2C46D; font-size: 13.5px; line-height: 1.45;
+}
+/* (this page has no dark theme: keep these light-on-white in both schemes) */
 </style>
 </head>
 <body>
@@ -1030,8 +1050,67 @@ var currentLang = localStorage.getItem('mp_lang') || 'ht';
 var currentOrder = null;
 
 function t(key) {
-    return (i18n[currentLang] && i18n[currentLang][key]) || (i18n.ht[key]) || key;
+    return (i18n[currentLang] && i18n[currentLang][key]) || (i18n.ht[key]) || (T2[currentLang] && T2[currentLang][key]) || (T2.en[key]) || key;
 }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+/* 16 Oct 2026: delivery code, cancel and refund wording */
+var T2 = {
+    ht: {
+        code_label: 'Kòd livrezon ou', code_label_pickup: 'Kòd pou ranmase kòmand lan',
+        code_help: 'Bay chofè a kòd sa a SÈLMAN lè ou gen kòmand lan nan men w.',
+        code_help_pickup: 'Montre kòd sa a nan magazen an lè w ap ranmase kòmand lan.',
+        code_warn: 'Pa janm bay kòd la anvan ou resevwa kòmand lan, ni pa telefòn.',
+        os_status_cancelled: 'Kòmand anile', os_sub_cancelled: 'Kòmand sa a anile.',
+        refund_note: 'Ou te peye kòmand sa a: yon ranbousman louvri. Yon administratè ap verifye l epi voye kòb la sou menm kont lan.',
+        cancel_btn: 'Anile kòmand lan', cancel_ask: 'Ou vle anile kòmand sa a?', cancel_done: 'Kòmand lan anile.',
+        unpaid_note: 'Peman an poko konfime. Si ou te peye, pa peye ankò: n ap verifye l otomatikman.',
+        os_platform_fee: 'Frè sèvis'
+    },
+    fr: {
+        code_label: 'Votre code de livraison', code_label_pickup: 'Code de retrait',
+        code_help: 'Donnez ce code au livreur UNIQUEMENT quand vous avez la commande en main.',
+        code_help_pickup: 'Montrez ce code au magasin quand vous récupérez la commande.',
+        code_warn: 'Ne donnez jamais le code avant d\'avoir reçu la commande, ni par téléphone.',
+        os_status_cancelled: 'Commande annulée', os_sub_cancelled: 'Cette commande a été annulée.',
+        refund_note: 'Vous aviez payé cette commande : un remboursement est ouvert. Un administrateur le vérifie et renvoie l\'argent sur le même compte.',
+        cancel_btn: 'Annuler la commande', cancel_ask: 'Annuler cette commande ?', cancel_done: 'Commande annulée.',
+        unpaid_note: 'Paiement pas encore confirmé. Si vous avez payé, ne payez pas une 2e fois : nous vérifions automatiquement.',
+        os_platform_fee: 'Frais de service'
+    },
+    en: {
+        code_label: 'Your delivery code', code_label_pickup: 'Your pickup code',
+        code_help: 'Give this code to the driver ONLY when the order is in your hands.',
+        code_help_pickup: 'Show this code at the shop when you collect your order.',
+        code_warn: 'Never give the code before you have the order, and never by phone.',
+        os_status_cancelled: 'Order cancelled', os_sub_cancelled: 'This order was cancelled.',
+        refund_note: 'You had paid for this order, so a refund is open. An administrator checks it and sends the money back to the same account.',
+        cancel_btn: 'Cancel order', cancel_ask: 'Cancel this order?', cancel_done: 'Order cancelled.',
+        unpaid_note: 'Payment not confirmed yet. If you paid, do not pay again: we keep checking automatically.',
+        os_platform_fee: 'Service fee'
+    },
+    es: {
+        code_label: 'Tu código de entrega', code_label_pickup: 'Tu código de retiro',
+        code_help: 'Da este código al repartidor SOLO cuando tengas el pedido en la mano.',
+        code_help_pickup: 'Muestra este código en la tienda al recoger tu pedido.',
+        code_warn: 'Nunca des el código antes de recibir el pedido, ni por teléfono.',
+        os_status_cancelled: 'Pedido cancelado', os_sub_cancelled: 'Este pedido fue cancelado.',
+        refund_note: 'Habías pagado este pedido: hay un reembolso abierto. Un administrador lo revisa y devuelve el dinero a la misma cuenta.',
+        cancel_btn: 'Cancelar pedido', cancel_ask: '¿Cancelar este pedido?', cancel_done: 'Pedido cancelado.',
+        unpaid_note: 'Pago aún no confirmado. Si pagaste, no pagues otra vez: seguimos verificando.',
+        os_platform_fee: 'Tarifa de servicio'
+    },
+    pt: {
+        code_label: 'Seu código de entrega', code_label_pickup: 'Seu código de retirada',
+        code_help: 'Dê este código ao entregador SÓ quando o pedido estiver na sua mão.',
+        code_help_pickup: 'Mostre este código na loja ao retirar o pedido.',
+        code_warn: 'Nunca dê o código antes de receber o pedido, nem por telefone.',
+        os_status_cancelled: 'Pedido cancelado', os_sub_cancelled: 'Este pedido foi cancelado.',
+        refund_note: 'Você pagou este pedido: um reembolso foi aberto. Um administrador verifica e devolve o dinheiro para a mesma conta.',
+        cancel_btn: 'Cancelar pedido', cancel_ask: 'Cancelar este pedido?', cancel_done: 'Pedido cancelado.',
+        unpaid_note: 'Pagamento ainda não confirmado. Se você pagou, não pague de novo: seguimos verificando.',
+        os_platform_fee: 'Taxa de serviço'
+    }
+};
 
 function setLang(lang) {
     currentLang = lang;
@@ -1134,6 +1213,24 @@ function renderOrder(order) {
     html += '<span class="os-ref">' + order.referenceId + '</span>';
     html += '</div>';
 
+    // 16 Oct 2026: the customer's delivery code - shown to them and nobody else
+    if (order.isPP && order.deliveryPin && ['delivered', 'cancelled', 'refunded'].indexOf(order.status) < 0) {
+        var pk = order.deliveryType === 'pickup';
+        html += '<div class="os-code" id="osCode">';
+        html += '<div class="os-code-label">' + t(pk ? 'code_label_pickup' : 'code_label') + '</div>';
+        html += '<div class="os-code-digits">' + esc(order.deliveryPin) + '</div>';
+        html += '<div class="os-code-help">' + t(pk ? 'code_help_pickup' : 'code_help') + '</div>';
+        html += '<div class="os-code-warn">' + t('code_warn') + '</div>';
+        html += '</div>';
+    }
+    if (order.isPP && order.status === 'pending_payment') {
+        html += '<div class="os-note">' + t('unpaid_note') + '</div>';
+    }
+    if (order.isPP && order.status === 'cancelled' && order.wasPaid) {
+        html += '<div class="os-note">' + t('refund_note') + '</div>';
+    }
+
+
     // Stepper (only for non-terminal statuses)
     if (!isTerminal) {
         html += '<div class="os-stepper">';
@@ -1192,10 +1289,10 @@ function renderOrder(order) {
     if (order.driver && order.driver.name) {
         html += '<div class="os-driver">';
         html += '<div class="os-driver-avatar">🏍️</div>';
-        html += '<div class="os-driver-info"><div class="os-driver-name">' + order.driver.name + '</div>';
+        html += '<div class="os-driver-info"><div class="os-driver-name">' + esc(order.driver.name) + '</div>';
         html += '<div class="os-driver-meta">' + t('os_driver') + (order.driver.vehicle ? ' - ' + order.driver.vehicle : '') + '</div></div>';
         if (order.driver.phone) {
-            html += '<a href="tel:' + order.driver.phone + '" class="os-driver-call"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>';
+            html += '<a href="tel:' + esc(order.driver.phone) + '" class="os-driver-call"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>';
         }
         html += '</div>';
     }
@@ -1204,13 +1301,13 @@ function renderOrder(order) {
     html += '<div class="os-summary">';
     html += '<div class="os-summary-header"><h4>' + t('os_summary') + '</h4>';
     if (order.store && order.store.name) {
-        html += '<div class="os-summary-store">🏪 ' + t('os_store') + ': ' + order.store.name + '</div>';
+        html += '<div class="os-summary-store">🏪 ' + t('os_store') + ': ' + esc(order.store.name) + '</div>';
     }
     html += '</div>';
     html += '<div class="os-items">';
     if (order.items && order.items.length) {
         order.items.forEach(function(item) {
-            html += '<div class="os-item"><div><div class="os-item-name">' + (item.emoji || '') + ' ' + item.name + '</div>';
+            html += '<div class="os-item"><div><div class="os-item-name">' + (item.emoji || '') + ' ' + esc(item.name) + '</div>';
             html += '<div class="os-item-qty">x' + (item.qty || 1) + '</div></div>';
             html += '<div class="os-item-price">' + formatHTG(item.price * (item.qty || 1)) + '</div></div>';
         });
@@ -1218,7 +1315,12 @@ function renderOrder(order) {
     html += '</div>';
     html += '<div class="os-totals">';
     html += '<div class="os-total-row"><span>' + t('os_subtotal') + '</span><span>' + formatHTG(order.subtotal) + '</span></div>';
-    html += '<div class="os-total-row"><span>' + t('os_platform_fee') + '</span><span>' + formatHTG(order.platformFee) + '</span></div>';
+    if (order.isPP) {
+        // what the CUSTOMER paid: the service fee (the shop's commission is not theirs to see)
+        if (order.serviceFee) html += '<div class="os-total-row"><span>' + T2[T2[currentLang] ? currentLang : 'en'].os_platform_fee + '</span><span>' + formatHTG(order.serviceFee) + '</span></div>';
+    } else {
+        html += '<div class="os-total-row"><span>' + t('os_platform_fee') + '</span><span>' + formatHTG(order.platformFee) + '</span></div>';
+    }
     if (order.deliveryFee) {
         html += '<div class="os-total-row"><span>' + t('os_delivery_fee') + '</span><span>' + formatHTG(order.deliveryFee) + '</span></div>';
     }
@@ -1233,7 +1335,10 @@ function renderOrder(order) {
         html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>';
         html += t('os_status_pending') + '</a>';
     }
-    if (order.status === 'delivered') {
+    if (order.isPP && ['pending_payment', 'paid', 'seller_confirmed'].indexOf(order.status) >= 0) {
+        html += '<button class="os-btn os-btn-dispute" onclick="cancelPPOrder()">' + t('cancel_btn') + '</button>';
+    }
+    if (order.status === 'delivered' && !order.isPP) {
         html += '<button class="os-btn os-btn-confirm" onclick="openPinModal()">';
         html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
         html += t('os_confirm_delivery') + '</button>';
@@ -1364,10 +1469,27 @@ function mapPPOrderToDisplay(order) {
         totalAmount: order.total,
         paymentMethod: order.paymentMethod,
         payoutStatus: order.payoutStatus,
+        isPP: true,
+        deliveryPin: order.deliveryPin,
+        deliveryType: order.deliveryType,
+        serviceFee: order.serviceFee,
+        wasPaid: order.paymentStatus === 'paid' || order.paymentStatus === 'refunded' || !!order.refund,
         driver: order.rider ? { name: order.rider.name, phone: order.rider.phone } : null,
         statusHistory: [],
         autoReleaseAt: order.payoutAvailableAt
     };
+}
+
+async function cancelPPOrder() {
+    if (!currentOrder || !currentOrder._ppOrderId) return;
+    if (!confirm(t('cancel_ask'))) return;
+    var token = localStorage.getItem('pp_token');
+    var res = await fetch(PP_API_URL + '/api/orders/' + currentOrder._ppOrderId + '/status', {
+        method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ status: 'cancelled', reason: 'Customer cancelled from the order page' })
+    }).then(function (r) { return r.json(); }).catch(function () { return {}; });
+    showToast(res.success ? t('cancel_done') : (res.message || 'Error'), res.success ? 'success' : 'error');
+    loadOrder();
 }
 
 async function loadOrder() {

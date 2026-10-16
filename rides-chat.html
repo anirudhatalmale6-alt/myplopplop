@@ -628,7 +628,9 @@ body {
 
     function connectSocket() {
         try {
-            socket = io(API.BASE_URL, { transports: ['websocket', 'polling'] });
+            // 16 Oct 2026: the server lets a socket into a ride's room only if it
+            // knows WHO is asking - the customer or the driver of that ride.
+            socket = io(API.BASE_URL, { transports: ['websocket', 'polling'], auth: { token: API.getToken() } });
 
             socket.on('connect', function() {
                 console.log('Socket connected');

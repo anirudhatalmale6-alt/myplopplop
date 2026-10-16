@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#D21034">
+<meta name="robots" content="noindex">
+<title>Swivi — Admin MyPlopPlop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="shortcut icon" href="../favicon.ico">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/merchant.css">
+<style>
+/* Swivi: what a person must deal with now - deliveries stuck, codes locked,
+   refunds to approve and send. Every button asks for a reason or a reference
+   and the server keeps who/when/why (16 Oct 2026). */
+.ops-sec { margin-bottom: var(--space-lg); }
+.ops-h { display:flex; align-items:center; gap:8px; font-family:var(--font-heading); font-size:var(--text-md); font-weight:700; color:var(--text-dark); margin:0 0 var(--space-sm); }
+.ops-n { min-width:24px; height:24px; padding:0 7px; border-radius:var(--radius-full); background:var(--gray-200); color:var(--gray-600); font-size:12px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; }
+.ops-n.hot { background:var(--primary-red); color:#fff; }
+.ops-card { background:var(--white); border:1px solid var(--gray-200); border-radius:var(--radius-lg); padding:var(--space-sm) var(--space-md); margin-bottom:8px; }
+.ops-top { display:flex; justify-content:space-between; gap:var(--space-sm); align-items:flex-start; }
+.ops-act { display:flex; gap:8px; flex-wrap:wrap; margin-top:var(--space-sm); }
+.ops-empty { font-size:var(--text-xs); color:var(--gray-500); padding:4px 2px 0; }
+.mp-tabs { display:flex; gap:6px; overflow-x:auto; margin-bottom:var(--space-sm); scrollbar-width:none; }
+.mp-tabs::-webkit-scrollbar { display:none; }
+.mp-tab { flex:0 0 auto; padding:8px 14px; border-radius:var(--radius-full); cursor:pointer; border:1px solid var(--gray-300); background:var(--white); color:var(--gray-600); font-family:var(--font-body); font-size:var(--text-xs); font-weight:700; white-space:nowrap; }
+.mp-tab.active { background:var(--primary-red); border-color:var(--primary-red); color:var(--white); }
+.ops-hist { margin-top:6px; font-size:11.5px; color:var(--gray-500); line-height:1.5; }
+.ops-pay { font-size:var(--text-xs); background:#EEF2FF; color:#00207A; border-radius:var(--radius-md); padding:8px 10px; margin-top:6px; line-height:1.45; }
+</style>
+</head>
+<body style="background:var(--bg-light);">
+
+<div class="mp-topbar">
+  <a class="mp-brand" href="../index.html"><img src="../assets/icon-192.png" alt="MyPlopPlop"><span>Admin</span></a>
+</div>
+
+<div class="mp-layout">
+  <aside class="mp-sidebar" id="mpSidebar"></aside>
+  <main class="mp-main">
+    <h1 class="mp-page-title">Swivi livrezon ak ranbousman</h1>
+    <div id="mpBody"></div>
+  </main>
+</div>
+
+<nav class="mp-bottom-nav" id="mpBottomNav"></nav>
+
+<script src="/js/referral.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/admin.js"></script>
+<script>
+(function () {
+  var att = null, refunds = [], rtab = 'pending_approval', busy = false;
+  var RTABS = [['pending_approval', 'Pou apwouve'], ['approved', 'Pou voye'], ['paid', 'Voye'], ['rejected', 'Refize']];
+  var e = ADM.esc, m = ADM.money;
+
+  function ask(q, min) {
+    var v = prompt(q);
+    if (v === null) return null;
+    v = String(v).trim();
+    if (v.length < (min == null ? 1 : min)) { ADM.toast('Twò kout (omwen ' + min + ' karaktè).', 'error'); return null; }
+    return v;
+  }
+  function post(path, body, btn) {
+    if (btn) btn.disabled = true;
+    return API.request('POST', path, body).then(function (d) {
+      if (!d || !d.success) throw new Error((d && d.message) || 'Erè');
+      ADM.toast('Anrejistre ✓', 'success');
+      return load();
+    }).catch(function (x) { if (btn) btn.disabled = false; ADM.toast(x.message || 'Erè', 'error'); });
+  }
+  function sec(title, n, inner, hot) {
+    return '<div class="ops-sec"><div class="ops-h">' + title + ' <span class="ops-n' + (hot && n ? ' hot' : '') + '">' + n + '</span></div>' +
+      (n ? inner : '<div class="ops-empty">Anyen pou kounye a.</div>') + '</div>';
+  }
+  function since(d) { if (!d) return ''; var min = Math.round((Date.now() - new Date(d)) / 60000); return min < 60 ? min + ' min' : Math.round(min / 60) + ' è'; }
+
+  function render() {
+    var a = att || {};
+    var html = '';
+    var np = a.needsDriverPay || [];
+    html += sec('Livrezon san peman chofè', np.length, np.map(function (r) {
+      var o = r.order || {};
+      return '<div class="ops-card"><div class="ops-top"><div><div class="mp-row-name">#' + e(o.orderNumber || '') + '</div>' +
+        '<div class="mp-row-sub">' + e((r.store && r.store.name) || '') + ' · frè livrezon kliyan an peye: ' + m(o.deliveryFee || 0) + '</div>' +
+        '<div class="mp-row-sub">Livrezon gratis machann nan, oswa 2yèm magazen nan yon menm panye.</div></div></div>' +
+        '<div class="ops-act"><button class="mp-btn mp-btn-red mp-btn-sm" data-pay="' + r._id + '">Fikse peman chofè a</button></div></div>';
+    }).join(''), true);
+
+    var wd = a.waitingForDriver || [];
+    html += sec('Pa jwenn chofè (plis pase 10 min)', wd.length, wd.map(function (r) {
+      var o = r.order || {};
+      return '<div class="ops-card"><div class="mp-row-name">#' + e(o.orderNumber || '') + '</div>' +
+        '<div class="mp-row-sub">' + e((r.store && r.store.name) || '') + ' · ap tann depi ' + since(r.searchingSince) + ' · chofè a ap touche ' + m(r.fare && r.fare.driverEarning) + '</div>' +
+        '<div class="mp-row-sub">Kliyan an, machann nan ak administratè yo resevwa yon alèt. Rele yon chofè pou l konekte, oswa anile kòmand lan.</div>' +
+        (o._id ? '<div class="ops-act"><button class="mp-btn mp-btn-ghost mp-btn-sm" data-cancel="' + o._id + '">Anile + ranbouse</button></div>' : '') + '</div>';
+    }).join(''), true);
+
+    var pl = a.pinLocked || [];
+    html += sec('Kòd livrezon bloke (5 erè)', pl.length, pl.map(function (o) {
+      return '<div class="ops-card"><div class="mp-row-name">#' + e(o.orderNumber || '') + '</div>' +
+        '<div class="mp-row-sub">' + e(o.status) + ' · ' + (o.pinAttempts || 0) + ' kòd ki pa bon</div>' +
+        '<div class="mp-row-sub">Verifye ak kliyan an (rele l) anvan ou fini l ak eksepsyon.</div>' +
+        '<div class="ops-act"><button class="mp-btn mp-btn-red mp-btn-sm" data-exc="' + o._id + '">Fini ak eksepsyon</button></div></div>';
+    }).join(''), true);
+
+    var dl = a.delayedDeliveries || [];
+    html += sec('Livrezon ki pran plis pase 2 è', dl.length, dl.map(function (r) {
+      var o = r.order || {}, d = r.driver || {};
+      return '<div class="ops-card"><div class="mp-row-name">#' + e(o.orderNumber || '') + ' · ' + e(r.status) + '</div>' +
+        '<div class="mp-row-sub">🛵 ' + e(d.name || '') + (d.phone ? ' · <a href="tel:' + e(d.phone) + '">' + e(d.phone) + '</a>' : '') + ' · aksepte depi ' + since(r.acceptedAt) + '</div>' +
+        (o._id ? '<div class="ops-act"><button class="mp-btn mp-btn-ghost mp-btn-sm" data-exc="' + o._id + '">Fini ak eksepsyon</button></div>' : '') + '</div>';
+    }).join(''), false);
+
+    var pn = a.paidButNotAccepted || [];
+    html += sec('Peye, men machann nan poko aksepte (30 min)', pn.length, pn.map(function (o) {
+      return '<div class="ops-card"><div class="mp-row-name">#' + e(o.orderNumber || '') + '</div>' +
+        '<div class="mp-row-sub">' + e(o.status) + ' · peye depi ' + since(o.paidAt) + '</div>' +
+        '<div class="ops-act"><button class="mp-btn mp-btn-ghost mp-btn-sm" data-cancel="' + o._id + '">Anile + ranbouse</button></div></div>';
+    }).join(''), false);
+
+    // Refunds
+    html += '<div class="ops-sec"><div class="ops-h">Ranbousman <span class="ops-n' + (a.refundsOpen ? ' hot' : '') + '">' + (a.refundsOpen || 0) + '</span></div>';
+    html += '<div class="mp-tabs">' + RTABS.map(function (t) {
+      return '<button class="mp-tab' + (t[0] === rtab ? ' active' : '') + '" data-rt="' + t[0] + '">' + t[1] + '</button>';
+    }).join('') + '</div>';
+    if (!refunds.length) html += '<div class="ops-empty">Anyen isit la.</div>';
+    html += refunds.map(function (r) {
+      var o = r.order || {}, c = r.customer || {};
+      var act = '';
+      if (r.status === 'pending_approval') act = '<button class="mp-btn mp-btn-red mp-btn-sm" data-ap="' + r._id + '">Apwouve</button><button class="mp-btn mp-btn-ghost mp-btn-sm" data-rj="' + r._id + '">Refize</button>';
+      if (r.status === 'approved') act = '<button class="mp-btn mp-btn-red mp-btn-sm" data-pd="' + r._id + '">Mwen voye kòb la</button>';
+      var hist = (r.history || []).map(function (h) { return ADM.when(h.at) + ' · ' + e(h.action) + (h.byName ? ' · ' + e(h.byName) : '') + (h.note ? ' — ' + e(h.note) : ''); }).join('<br>');
+      return '<div class="ops-card"><div class="ops-top"><div style="min-width:0"><div class="mp-row-name">#' + e(r.orderNumber || o.orderNumber || '') + '</div>' +
+        '<div class="mp-row-sub">' + e(c.name || '') + ' · ' + e(r.reason || '') + '</div></div>' +
+        '<div style="text-align:right;flex-shrink:0"><div class="mp-price">' + m(r.amount) + '</div><span class="mp-status">' + e(r.status) + '</span></div></div>' +
+        (r.status === 'approved' ? '<div class="ops-pay">Voye <b>' + m(r.amount) + '</b> pa <b>' + e(String(r.method || '').toUpperCase()) + '</b> bay <b>' + e(c.phone || '') + '</b>' + (r.paymentRef ? ' (peman orijinal: ' + e(r.paymentRef) + ')' : '') + ', epi tape referans transfè a.</div>' : '') +
+        (r.payoutReference ? '<div class="mp-row-sub">Referans: ' + e(r.payoutReference) + '</div>' : '') +
+        (r.merchantAdjustment || r.driverAdjustment ? '<div class="mp-row-sub">Retire sou machann: ' + m(r.merchantAdjustment) + ' · sou chofè: ' + m(r.driverAdjustment) + '</div>' : '') +
+        (act ? '<div class="ops-act">' + act + '</div>' : '') +
+        (hist ? '<div class="ops-hist">' + hist + '</div>' : '') + '</div>';
+    }).join('');
+    html += '</div>';
+    html += '<button class="mp-btn mp-btn-ghost mp-btn-block" id="rf">Aktyalize</button>';
+
+    document.getElementById('mpBody').innerHTML = html;
+    var on = function (sel, fn) { document.querySelectorAll(sel).forEach(function (b) { b.addEventListener('click', function () { fn(b); }); }); };
+    on('[data-rt]', function (b) { rtab = b.dataset.rt; load(); });
+    on('#rf', function (b) { b.disabled = true; load(); });
+    on('[data-pay]', function (b) {
+      var amt = ask('Konbyen chofè a ap touche (HTG)? HaitiBiznis ap peye l.', 1); if (!amt) return;
+      var why = ask('Poukisa? (ekri rezon an)', 10); if (!why) return;
+      post('/api/admin-ops/rides/' + b.dataset.pay + '/driver-pay', { driverEarning: Number(amt), reason: why }, b);
+    });
+    on('[data-exc]', function (b) {
+      var why = ask('Ekri sa ou verifye (ex: "Rele kliyan an, li resevwa l, telefòn li pèdi"). Sa ap anrejistre ak non w.', 10); if (!why) return;
+      post('/api/orders/' + b.dataset.exc + '/admin-complete', { reason: why }, b);
+    });
+    on('[data-cancel]', function (b) {
+      var why = ask('Poukisa ou anile kòmand lan? (kliyan an ap wè l)', 5); if (!why) return;
+      b.disabled = true;
+      API.request('PUT', '/api/orders/' + b.dataset.cancel + '/status', { status: 'cancelled', reason: why }).then(function (d) {
+        if (!d || !d.success) throw new Error((d && d.message) || 'Erè');
+        ADM.toast('Anile ✓' + (d.refund ? ' — ranbousman louvri' : ''), 'success'); load();
+      }).catch(function (x) { b.disabled = false; ADM.toast(x.message, 'error'); });
+    });
+    on('[data-ap]', function (b) { var n = ask('Nòt (opsyonèl, ex: "verifye ak machann nan")', 0); if (n === null) return; post('/api/admin-ops/refunds/' + b.dataset.ap + '/approve', { note: n }, b); });
+    on('[data-rj]', function (b) { var n = ask('Poukisa ou refize ranbousman an?', 5); if (!n) return; post('/api/admin-ops/refunds/' + b.dataset.rj + '/reject', { reason: n }, b); });
+    on('[data-pd]', function (b) { var n = ask('Referans transfè MonCash/NatCash la:', 4); if (!n) return; post('/api/admin-ops/refunds/' + b.dataset.pd + '/paid', { reference: n }, b); });
+  }
+
+  function load() {
+    if (busy) return Promise.resolve();
+    busy = true;
+    return Promise.all([
+      API.request('GET', '/api/admin-ops/attention'),
+      API.request('GET', '/api/admin-ops/refunds?status=' + encodeURIComponent(rtab))
+    ]).then(function (r) {
+      busy = false;
+      if (!r[0] || !r[0].success) { ADM.fail((r[0] && r[0].message) || 'Pa t ka chaje'); return; }
+      att = r[0].data; refunds = (r[1] && r[1].data) || [];
+      render();
+    }).catch(function (x) { busy = false; ADM.fail(String(x.message || x)); });
+  }
+
+  ADM.boot('operations', function () {
+    load();
+    setInterval(function () { if (!document.hidden) load(); }, 60000);
+  });
+})();
+</script>
+</body>
+</html>

@@ -87,9 +87,9 @@
             '<div style="text-align:right;flex-shrink:0;">' +
               '<div class="mp-price">' + ADM.money(o.total) + '</div>' +
               '<span class="mp-status ' + ADM.esc(o.status) + '">' + ADM.esc(o.status) + '</span>' +
-              '<div class="mp-row-sub">' + (o.paymentStatus === 'paid' ? '✅ peye' : '⏳ poko peye') + '</div>' +
+              '<div class="mp-row-sub">' + (o.paymentStatus === 'paid' ? '✅ peye' : o.paymentStatus === 'refunded' ? '↩️ ranbouse' : '⏳ poko peye') + '</div>' +
             '</div>' +
-          '</div></div>';
+          '</div>' + actionsFor(o) + '</div>';
       }).join('') +
       '<button class="mp-btn mp-btn-ghost mp-btn-block" id="rf">Aktyalize</button>';
     }
@@ -100,6 +100,43 @@
     });
     var rf = document.getElementById('rf');
     if (rf) rf.addEventListener('click', function () { rf.disabled = true; load(); });
+    wire();
+  }
+
+  /* 16 Oct 2026: each one asks for a written reason; the server records who/when/why. */
+  function actionsFor(o) {
+    var b = [];
+    if (o.status === 'delivered' && o.paymentStatus === 'paid') b.push('<button class="mp-btn mp-btn-ghost mp-btn-sm" data-refund="' + o._id + '">Ranbouse (pwoblèm)</button>');
+    if (['ready', 'picked_up', 'delivering'].indexOf(o.status) !== -1 && o.paymentStatus === 'paid') b.push('<button class="mp-btn mp-btn-ghost mp-btn-sm" data-exc="' + o._id + '">Fini ak eksepsyon</button>');
+    if (['pending', 'confirmed', 'preparing', 'ready', 'picked_up', 'delivering'].indexOf(o.status) !== -1) b.push('<button class="mp-btn mp-btn-ghost mp-btn-sm" data-cancel="' + o._id + '">Anile</button>');
+    return b.length ? '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">' + b.join('') + '</div>' : '';
+  }
+  function ask(q, min) {
+    var v = prompt(q); if (v === null) return null; v = String(v).trim();
+    if (v.length < min) { ADM.toast('Twò kout (omwen ' + min + ' karaktè).', 'error'); return null; }
+    return v;
+  }
+  function send(method, path, body, btn, okMsg) {
+    btn.disabled = true;
+    API.request(method, path, body).then(function (d) {
+      if (!d || !d.success) throw new Error((d && d.message) || 'Erè');
+      ADM.toast(okMsg + (d.refund ? ' — ranbousman louvri (gade Swivi)' : ''), 'success'); load();
+    }).catch(function (x) { btn.disabled = false; ADM.toast(x.message || 'Erè', 'error'); });
+  }
+  function wire() {
+    document.querySelectorAll('[data-refund]').forEach(function (b) { b.addEventListener('click', function () {
+      var amt = ask('Konbyen pou ranbouse kliyan an (HTG)?', 1); if (!amt) return;
+      var why = ask('Poukisa? (ex: "yon atik te kase, foto verifye")', 10); if (!why) return;
+      send('POST', '/api/orders/' + b.dataset.refund + '/refund', { amount: Number(amt), reason: why }, b, 'Ranbousman louvri — apwouve l nan Swivi');
+    }); });
+    document.querySelectorAll('[data-exc]').forEach(function (b) { b.addEventListener('click', function () {
+      var why = ask('Ekri sa ou verifye ak kliyan an. Sa ap anrejistre ak non w.', 10); if (!why) return;
+      send('POST', '/api/orders/' + b.dataset.exc + '/admin-complete', { reason: why }, b, 'Fini ✓');
+    }); });
+    document.querySelectorAll('[data-cancel]').forEach(function (b) { b.addEventListener('click', function () {
+      var why = ask('Poukisa ou anile kòmand lan? (kliyan an ap wè l)', 5); if (!why) return;
+      send('PUT', '/api/orders/' + b.dataset.cancel + '/status', { status: 'cancelled', reason: why }, b, 'Anile ✓');
+    }); });
   }
 
   function load() {

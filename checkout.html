@@ -1424,7 +1424,7 @@
         btn.textContent = 'Processing...';
 
         const summary = getFinalSummary();
-        const total = summary ? summary.total : 0;
+        let total = summary ? summary.total : 0;
 
         // An order needs an account: Order.customer is required and POST /api/orders
         // is authenticated, so a shopper without one used to be sent to MonCash with
@@ -1449,7 +1449,25 @@
             return;
         }
 
-        var orderId = apiOrders[0].orderNumber;
+        /* 16 Oct 2026: ONE payment for the whole basket. The server groups every
+           shop's order under one reference and says what it will accept; we
+           charge exactly that. Before, MonCash was asked for the BROWSER's
+           figure under the first shop's number only, so the other shops' orders
+           were never confirmed as paid. */
+        var basket = await API.groupBasket(apiOrders.map(function (o) { return o._id; }));
+        if (!basket || !basket.success || !basket.data) {
+            btn.disabled = false;
+            btn.textContent = 'Place Order';
+            alert('Nou pa t kapab prepare peman an. Pa peye - eseye ankò.\n\nWe could not prepare the payment, so we have not charged you. Please try again.');
+            return;
+        }
+        var orderId = basket.data.paymentRef;
+        var serverTotal = Number(basket.data.total) || 0;
+        if (Math.abs(serverTotal - total) >= 1) {
+            var ok = confirm('Total kòmand lan se ' + MOCK.formatHTG(serverTotal) + ' (pa ' + MOCK.formatHTG(total) + ').\nThe order total is ' + MOCK.formatHTG(serverTotal) + '. Continue?');
+            if (!ok) { btn.disabled = false; btn.textContent = 'Place Order'; return; }
+        }
+        total = serverTotal;
 
         // San Cash is switched off until the wallet can actually be charged.
         // completeOrder() below confirms an order without taking any money, and
@@ -1462,9 +1480,11 @@
             return;
         }
 
-        // Zero-value orders still complete directly - the gateway rejects them.
+        // ⛔ Nothing is confirmed without a payment the server has checked.
         if (total < 20) {
-            completeOrder(orderId, apiOrders[0] ? apiOrders[0]._id : null);
+            btn.disabled = false;
+            btn.textContent = 'Place Order';
+            alert('Minimòm peman an se 20 HTG.\nThe minimum payment is 20 HTG.');
             return;
         }
 
@@ -1555,36 +1575,28 @@
                 localStorage.removeItem('mpp_pending_order');
                 return;
             }
-            // Verify payment.
-            //
-            // This used to check with the gateway here and then just draw the
-            // success screen - the API was never told, so every paid order sat
-            // at "pending" for ever, the shop was never credited when it was
-            // delivered and nothing was ever eligible for payout. The server now
-            // asks the gateway itself (it will not take the browser's word for
-            // it) and marks the order paid.
-            fetch(PAYMENT_API + '/paiement-verify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ client_id: PAYMENT_CLIENT_ID, refference_id: order.orderId })
-            })
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
-                if (data.status === true && data.trans_status === 'ok') {
-                    var done = function () { completeOrder(order.orderId, order.apiOrderId); };
-                    if (order.apiOrderId && typeof API !== 'undefined' && API.confirmOrderPayment) {
-                        API.confirmOrderPayment(order.apiOrderId).then(done).catch(done);
-                    } else {
-                        done();
-                    }
-                } else {
-                    // Payment not yet confirmed - could still be processing
-                    localStorage.removeItem('mpp_pending_order');
-                }
-            })
-            .catch(function() {
+            /* 16 Oct 2026: only the SERVER decides whether this was paid - it asks
+               the gateway itself, for the whole basket. If the answer is not
+               in yet (the gateway can be slow), the order is NOT lost: the
+               server keeps checking on its own for 24 hours, so we say so
+               instead of forgetting it. */
+            if (!order.apiOrderId || typeof API === 'undefined' || !API.confirmOrderPayment) {
                 localStorage.removeItem('mpp_pending_order');
-            });
+                return;
+            }
+            API.confirmOrderPayment(order.apiOrderId).then(function (res) {
+                if (res && res.success && res.paymentStatus === 'paid') {
+                    completeOrder(order.orderId, order.apiOrderId);
+                    return;
+                }
+                localStorage.removeItem('mpp_pending_order');
+                var bar = document.createElement('div');
+                bar.setAttribute('role', 'status');
+                bar.style.cssText = 'margin:12px auto;max-width:640px;padding:14px 16px;border-radius:12px;background:#FFF7E6;color:#7A4B00;border:1px solid #F2C46D;font-weight:600;line-height:1.45';
+                bar.innerHTML = 'Peman pou kòmand #' + String(order.orderId).replace(/[^A-Za-z0-9-]/g, '') + ' poko konfime. Si ou te peye, pa peye ankò: n ap verifye l otomatikman epi w ap wè l nan <a href="orders.html">Kòmand mwen yo</a>.<br><span style="font-weight:400">Your payment is not confirmed yet. If you paid, do not pay again - we keep checking automatically; see <a href="orders.html">My orders</a>.</span>';
+                var host = document.querySelector('.checkout-title') || document.body.firstElementChild;
+                if (host && host.parentNode) host.parentNode.insertBefore(bar, host.nextSibling);
+            }).catch(function () {});
         } catch(e) {
             localStorage.removeItem('mpp_pending_order');
         }
