@@ -77,6 +77,45 @@ var timer = null, poll = null, current = null;
 
 function el(id){ return document.getElementById(id); }
 
+/* 22 Oct 2026: the driver screen was entirely English. Kreyòl by default,
+   French and English from the site's saved language. */
+var DT = {
+  kr: { title:'Chofè — Livrezon', signin:'Konekte kòm chofè', signinSub:'Mete telefòn ou ak PIN ou pou w kòmanse resevwa livrezon.', phone:'Telefòn (egz. 3700 0000)', pin:'PIN', signinBtn:'Konekte',
+        noSignin:'Nou pa t kapab konekte w.', net:'Pa gen entènèt.', online:'An liy', newOffer:'NOUVO LIVREZON', earnThis:'Sa w ap touche pou livrezon an', acceptIn:'Aksepte nan {s}s',
+        pickup:'Pran nan', store:'Boutik', dropoff:'Livre bay', customer:'Kliyan', distance:'Distans', accept:'Aksepte livrezon an', pass:'Kite l pou yon lòt chofè',
+        arrived:'Mwen rive nan boutik la', shopTypes:'Boutik la ap tape kòd sa a pou l ba w kòmand lan. Ekran an ap avanse pou kont li.',
+        askPin:'Devan pòt la, mande kliyan an KÒD 4 chif PA L:', complete:'Fini livrezon an', pickupCode:'Kòd pou w pran kòmand lan — montre l nan boutik la',
+        cannot:'Mwen pa ka fè livrezon sa a', toCustomer:'AN WOUT POU KAY KLIYAN AN', toShop:'ALE NAN BOUTIK LA', youEarn:'Ou touche', maps:'🗺️ Louvri wout la nan Maps',
+        onlineH:'Ou an liy', waiting:'N ap tann yon livrezon. Lè yon boutik toupre make yon kòmand pare, li parèt isit la poukont li.',
+        expired:'Tan an pase — n ap pase l bay yon lòt chofè…', noAccept:'Nou pa t kapab aksepte l', why:'Poukisa ou pa ka fè l? (kliyan an ak boutik la ap konnen)',
+        noUpdate:'Nou pa t kapab mete l ajou', done:'Livrezon an fini', earned:'Ou touche {m}. Li rete an atant 24 èdtan, apre sa ou ka retire l.' },
+  fr: { title:'Chauffeur — Livraisons', signin:'Connexion chauffeur', signinSub:'Entrez votre téléphone et votre PIN pour recevoir des livraisons.', phone:'Téléphone (ex. 3700 0000)', pin:'PIN', signinBtn:'Se connecter',
+        noSignin:'Connexion impossible.', net:'Pas de réseau.', online:'En ligne', newOffer:'NOUVELLE LIVRAISON', earnThis:'Ce que vous gagnez pour cette livraison', acceptIn:'Acceptez dans {s}s',
+        pickup:'Retrait', store:'Boutique', dropoff:'Livrer à', customer:'Client', distance:'Distance', accept:'Accepter la livraison', pass:'Laisser à un autre chauffeur',
+        arrived:'Je suis arrivé à la boutique', shopTypes:'La boutique tape ce code pour vous remettre la commande. L’écran avance tout seul.',
+        askPin:'À la porte, demandez au client SON code à 4 chiffres :', complete:'Terminer la livraison', pickupCode:'Votre code de retrait — montrez-le à la boutique',
+        cannot:'Je ne peux pas faire cette livraison', toCustomer:'EN ROUTE VERS LE CLIENT', toShop:'ALLEZ À LA BOUTIQUE', youEarn:'Vous gagnez', maps:'🗺️ Ouvrir l’itinéraire dans Maps',
+        onlineH:'Vous êtes en ligne', waiting:'En attente d’une livraison. Quand une boutique proche marque une commande prête, elle apparaît ici automatiquement.',
+        expired:'Offre expirée — elle passe au chauffeur suivant…', noAccept:'Impossible d’accepter', why:'Pourquoi ne pouvez-vous pas la faire ? (le client et la boutique sont prévenus)',
+        noUpdate:'Mise à jour impossible', done:'Livraison terminée', earned:'Vous avez gagné {m}. C’est retenu 24 heures, puis vous pouvez le retirer.' },
+  en: { title:'Driver — Deliveries', signin:'Driver sign in', signinSub:'Enter your phone and PIN to start receiving deliveries.', phone:'Phone (e.g. 3700 0000)', pin:'PIN', signinBtn:'Sign in',
+        noSignin:'Could not sign in.', net:'Network error.', online:'Online', newOffer:'NEW DELIVERY OFFER', earnThis:'You earn this for the delivery', acceptIn:'Accept within {s}s',
+        pickup:'Pick up', store:'Store', dropoff:'Deliver to', customer:'Customer', distance:'Distance', accept:'Accept delivery', pass:'Pass to another driver',
+        arrived:'I have arrived at the store', shopTypes:'The shop types this code to hand you the order. This screen moves on by itself.',
+        askPin:'At the door, ask the customer for THEIR 4-digit code:', complete:'Complete delivery', pickupCode:'Your pickup code — show it at the shop',
+        cannot:'I cannot do this delivery', toCustomer:'ON THE WAY TO THE CUSTOMER', toShop:'GO TO THE SHOP', youEarn:'You earn', maps:'🗺️ Open route in Maps',
+        onlineH:'You are online', waiting:'Waiting for a delivery. When a store nearby marks an order ready, it will appear here automatically.',
+        expired:'Offer expired — passing to the next driver…', noAccept:'Could not accept', why:'Why can you not do it? (the customer and the shop are told)',
+        noUpdate:'Could not update', done:'Delivery complete', earned:'You earned {m}. It is held for 24 hours, then you can withdraw it.' }
+};
+function dt(k, v){
+  var l = 'kr'; try { l = localStorage.getItem('myplopplop_lang') || 'kr'; } catch (e) {}
+  if (l === 'ht') l = 'kr';
+  var s = String((DT[l] || DT.en)[k] || DT.en[k] || k);
+  if (v) Object.keys(v).forEach(function(x){ s = s.split('{' + x + '}').join(v[x]); });
+  return s;
+}
+
 function api(method, path, body){
   var opts = { method: method, headers: { 'Content-Type':'application/json' } };
   if (token) opts.headers['Authorization'] = 'Bearer ' + token;
@@ -93,15 +132,15 @@ function login(){
       el('loginCard').style.display='none'; el('main').style.display='block';
       goOnline(); start();
     } else {
-      el('loginErr').textContent = d.message || 'Could not sign in.';
+      el('loginErr').textContent = d.message || dt('noSignin');
     }
-  }).catch(function(){ el('loginErr').textContent = 'Network error.'; });
+  }).catch(function(){ el('loginErr').textContent = dt('net'); });
 }
 
 // Tell the server we're online and share our location so we can be matched.
 function goOnline(){
   api('PUT','/api/drivers/online',{ isOnline:true }).catch(function(){});
-  el('onlineDot').textContent = 'Online';
+  el('onlineDot').textContent = dt('online');
   sendLocation();
   if (beat) clearInterval(beat);
   beat = setInterval(sendLocation, 60000);
@@ -128,15 +167,15 @@ function render(data){
     var secs = Math.max(0, Math.round((new Date(offer.offerExpiresAt) - new Date())/1000));
     c.innerHTML =
       '<div class="card offer">' +
-        '<span class="badge">NEW DELIVERY OFFER</span>' +
+        '<span class="badge">' + dt('newOffer') + '</span>' +
         '<div class="big">' + money(offer.fare && offer.fare.driverEarning) + '</div>' +
-        '<p class="muted">You earn this for the delivery</p>' +
-        '<div class="count" id="cd">Accept within ' + secs + 's</div>' +
-        '<div class="row"><span class="k">Pick up</span><span class="v">' + esc(offer.pickup.address||'Store') + '</span></div>' +
-        '<div class="row"><span class="k">Deliver to</span><span class="v">' + esc(offer.dropoff.address||'Customer') + '</span></div>' +
-        '<div class="row"><span class="k">Distance</span><span class="v">' + (offer.distanceKm||0) + ' km</span></div>' +
-        '<button class="btn btn-accept" onclick="accept(\'' + offer._id + '\')">Accept delivery</button>' +
-        '<button class="btn btn-decline" onclick="decline(\'' + offer._id + '\')">Pass to another driver</button>' +
+        '<p class="muted">' + dt('earnThis') + '</p>' +
+        '<div class="count" id="cd">' + dt('acceptIn', { s: secs }) + '</div>' +
+        '<div class="row"><span class="k">' + dt('pickup') + '</span><span class="v">' + esc(offer.pickup.address||dt('store')) + '</span></div>' +
+        '<div class="row"><span class="k">' + dt('dropoff') + '</span><span class="v">' + esc(offer.dropoff.address||dt('customer')) + '</span></div>' +
+        '<div class="row"><span class="k">' + dt('distance') + '</span><span class="v">' + (offer.distanceKm||0) + ' km</span></div>' +
+        '<button class="btn btn-accept" onclick="accept(\'' + offer._id + '\')">' + dt('accept') + '</button>' +
+        '<button class="btn btn-decline" onclick="decline(\'' + offer._id + '\')">' + dt('pass') + '</button>' +
       '</div>';
     startCountdown(new Date(offer.offerExpiresAt));
     return;
@@ -148,43 +187,43 @@ function render(data){
     var st = active.status;
     var step = '';
     if (st === 'accepted') {
-      step = '<button class="btn btn-blue" style="margin-top:12px" onclick="advance(\'' + active._id + '\',\'picking_up\')">I have arrived at the store</button>';
+      step = '<button class="btn btn-blue" style="margin-top:12px" onclick="advance(\'' + active._id + '\',\'picking_up\')">' + dt('arrived') + '</button>';
     } else if (st === 'picking_up') {
-      step = '<p class="muted" style="margin:6px 0 0">The shop types this code to hand you the order. This screen moves on by itself.</p>';
+      step = '<p class="muted" style="margin:6px 0 0">' + dt('shopTypes') + '</p>';
     } else if (st === 'in_progress') {
-      step = '<p class="muted" style="margin:10px 0 6px">At the door, ask the customer for THEIR 4-digit code:</p>' +
+      step = '<p class="muted" style="margin:10px 0 6px">' + dt('askPin') + '</p>' +
         '<input class="pin" id="pinIn" maxlength="4" inputmode="numeric" placeholder="••••" autocomplete="off">' +
-        '<button class="btn btn-blue" style="margin-top:12px" onclick="advance(\'' + active._id + '\',\'delivered\')">Complete delivery</button>';
+        '<button class="btn btn-blue" style="margin-top:12px" onclick="advance(\'' + active._id + '\',\'delivered\')">' + dt('complete') + '</button>';
     }
     var codeBox = (active.pickupCode && (st === 'accepted' || st === 'picking_up'))
       ? '<div style="margin:12px 0 4px;padding:14px;border:2px dashed #00209F;border-radius:14px;text-align:center">' +
-          '<div class="muted" style="font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:12px">Your pickup code — show it at the shop</div>' +
+          '<div class="muted" style="font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:12px">' + dt('pickupCode') + '</div>' +
           '<div style="font-size:40px;font-weight:800;letter-spacing:.3em;padding-left:.3em">' + esc(active.pickupCode) + '</div>' +
         '</div>'
       : '';
     var drop = (st === 'accepted' || st === 'picking_up')
-      ? '<button class="btn btn-decline" style="margin-top:10px" onclick="dropJob(\'' + active._id + '\')">I cannot do this delivery</button>'
+      ? '<button class="btn btn-decline" style="margin-top:10px" onclick="dropJob(\'' + active._id + '\')">' + dt('cannot') + '</button>'
       : '';
     var dest = (st === 'accepted' || st === 'picking_up') ? active.pickup : active.dropoff;
     var dc = dest && dest.coordinates && dest.coordinates.coordinates;
     c.innerHTML =
       '<div class="card">' +
-        '<span class="badge">' + (st === 'in_progress' ? 'ON THE WAY TO THE CUSTOMER' : 'GO TO THE SHOP') + '</span>' +
-        '<div class="row"><span class="k">Pick up</span><span class="v">' + esc(active.pickup.address||'Store') + '</span></div>' +
-        '<div class="row"><span class="k">Deliver to</span><span class="v">' + esc(active.dropoff.address||'Customer') + '</span></div>' +
-        '<div class="row"><span class="k">Customer</span><span class="v">' + esc((active.customer&&active.customer.name)||'Customer') + '</span></div>' +
-        '<div class="row"><span class="k">You earn</span><span class="v">' + money(active.fare&&active.fare.driverEarning) + '</span></div>' +
+        '<span class="badge">' + (st === 'in_progress' ? dt('toCustomer') : dt('toShop')) + '</span>' +
+        '<div class="row"><span class="k">' + dt('pickup') + '</span><span class="v">' + esc(active.pickup.address||dt('store')) + '</span></div>' +
+        '<div class="row"><span class="k">' + dt('dropoff') + '</span><span class="v">' + esc(active.dropoff.address||dt('customer')) + '</span></div>' +
+        '<div class="row"><span class="k">' + dt('customer') + '</span><span class="v">' + esc((active.customer&&active.customer.name)||dt('customer')) + '</span></div>' +
+        '<div class="row"><span class="k">' + dt('youEarn') + '</span><span class="v">' + money(active.fare&&active.fare.driverEarning) + '</span></div>' +
         codeBox + step + drop +
         '<div class="err" id="stepErr"></div>' +
-        (dc ? '<a class="map" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + Number(dc[1]) + ',' + Number(dc[0]) + '">🗺️ Open route in Maps</a>' : '') +
+        (dc ? '<a class="map" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + Number(dc[1]) + ',' + Number(dc[0]) + '">' + dt('maps') + '</a>' : '') +
       '</div>';
     return;
   }
   c.innerHTML =
     '<div class="card empty">' +
       '<div class="ico">🛵</div>' +
-      '<h2>You are online</h2>' +
-      '<p class="muted">Waiting for a delivery. When a store nearby marks an order ready, it will appear here automatically.</p>' +
+      '<h2>' + dt('onlineH') + '</h2>' +
+      '<p class="muted">' + dt('waiting') + '</p>' +
     '</div>';
   current = null;
 }
@@ -194,14 +233,14 @@ function startCountdown(expiry){
   timer = setInterval(function(){
     var cd = el('cd'); if (!cd) { clearInterval(timer); return; }
     var s = Math.max(0, Math.round((expiry - new Date())/1000));
-    cd.textContent = s > 0 ? 'Accept within ' + s + 's' : 'Offer expired — passing to the next driver…';
+    cd.textContent = s > 0 ? dt('acceptIn', { s: s }) : dt('expired');
     if (s <= 0) clearInterval(timer);
   }, 1000);
 }
 
 function accept(id){
   api('PUT','/api/rides/'+id+'/accept').then(function(d){
-    if (!d.success) alert(d.message || 'Could not accept');
+    if (!d.success) alert(d.message || dt('noAccept'));
     else sendLocation();
     refresh();
   });
@@ -210,10 +249,10 @@ function decline(id){
   api('PUT','/api/rides/'+id+'/decline').then(function(){ refresh(); });
 }
 function dropJob(id){
-  var why = prompt('Why can you not do it? (the customer and the shop are told)');
+  var why = prompt(dt('why'));
   if (why === null) return;
   api('PUT','/api/rides/'+id+'/status',{ status:'cancelled', reason: String(why).slice(0,200) }).then(function(d){
-    if (!d.success){ var e = el('stepErr'); if (e) e.textContent = d.message || 'Could not update'; }
+    if (!d.success){ var e = el('stepErr'); if (e) e.textContent = d.message || dt('noUpdate'); }
     refresh();
   });
 }
@@ -224,13 +263,13 @@ function advance(id, next){
   }
   api('PUT','/api/rides/'+id+'/status', body).then(function(d){
     if (!d.success){
-      var e = el('stepErr'); if (e) e.textContent = d.message || 'Could not update';
+      var e = el('stepErr'); if (e) e.textContent = d.message || dt('noUpdate');
       return;
     }
     if (next === 'delivered'){
       el('content').innerHTML =
-        '<div class="card empty"><div class="ico">✅</div><h2 class="ok">Delivery complete</h2>' +
-        '<p class="muted">You earned ' + money(d.earned) + '. It is held for 24 hours, then you can withdraw it.</p></div>';
+        '<div class="card empty"><div class="ico">✅</div><h2 class="ok">' + dt('done') + '</h2>' +
+        '<p class="muted">' + dt('earned', { m: money(d.earned) }) + '</p></div>';
       setTimeout(refresh, 3500);
       return;
     }
@@ -258,7 +297,12 @@ function start(){
   poll = setInterval(refresh, 4000); // offers arrive automatically
 }
 
-// boot
+// boot — the fixed text first
+document.querySelector('.top h1').textContent = dt('title');
+document.querySelector('#loginCard h2').textContent = dt('signin');
+document.querySelector('#loginCard p.muted').textContent = dt('signinSub');
+el('phone').placeholder = dt('phone'); el('pin').placeholder = dt('pin');
+document.querySelector('#loginCard button').textContent = dt('signinBtn');
 if (token){
   el('main').style.display='block';
   api('GET','/api/rides/my-offer').then(function(d){

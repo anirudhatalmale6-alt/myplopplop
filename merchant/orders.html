@@ -67,6 +67,15 @@
 <script>
 (function () {
   var L = {
+    /* 22 Oct 2026: the status badge printed the raw code ("PICKED_UP"). */
+    st_pending:   { kr:'An atant', fr:'En attente', en:'Pending', es:'Pendiente' },
+    st_confirmed: { kr:'Aksepte', fr:'Acceptée', en:'Accepted', es:'Aceptado' },
+    st_preparing: { kr:'Ap prepare', fr:'En préparation', en:'Preparing', es:'Preparando' },
+    st_ready:     { kr:'Pare', fr:'Prête', en:'Ready', es:'Listo' },
+    st_picked_up: { kr:'Chofè a pran l', fr:'Récupérée', en:'Picked up', es:'Recogido' },
+    st_delivering:{ kr:'An wout', fr:'En livraison', en:'On the way', es:'En camino' },
+    st_delivered: { kr:'Livre', fr:'Livrée', en:'Delivered', es:'Entregado' },
+    st_cancelled: { kr:'Anile', fr:'Annulée', en:'Cancelled', es:'Cancelado' },
     title:   { kr:'Kòmand', fr:'Commandes', en:'Orders', es:'Pedidos' },
     all:     { kr:'Tout', fr:'Toutes', en:'All', es:'Todos' },
     news:    { kr:'Nouvo', fr:'Nouvelles', en:'New', es:'Nuevos' },
@@ -242,7 +251,7 @@
         '</div>' +
         '<div style="text-align:right;flex-shrink:0;">' +
           '<div class="mp-price">' + MP.money(o.total) + '</div>' +
-          '<span class="mp-status ' + MP.esc(o.status) + '">' + MP.esc(o.status) + '</span>' +
+          '<span class="mp-status ' + MP.esc(o.status) + '">' + MP.esc(L['st_' + o.status] ? L_('st_' + o.status) : o.status) + '</span>' +
           '<div class="mp-row-sub">' + (paid ? '✅ ' + L_('paid') : '⏳ ' + L_('unpaid')) + '</div>' +
         '</div>' +
       '</div>' +
