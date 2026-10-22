@@ -571,7 +571,7 @@ html, body { overflow-x: hidden; max-width: 100%; }
 /* 22 Oct 2026: on a phone the language bar was wider than the screen and
    pushed "Merchant Portal / View Storefront" off the left edge, cut in half. */
 @media (max-width: 768px) {
-    .top-bar .tb-store, .top-bar > .flex:first-child { display: none; }
+    .top-bar .tb-store, .top-bar > .flex:first-child { display: none !important; }   /* beats the inline display:flex */
     .top-bar { overflow-x: auto; white-space: nowrap; }
 }
 </style>
