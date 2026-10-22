@@ -708,7 +708,7 @@
 <div class="cart-summary-bar" id="cartSummaryBar">
     <div class="cart-summary-inner">
         <div class="cart-summary-info">
-            <span class="cart-summary-count" id="cartSummaryCount">0 items</span>
+            <span class="cart-summary-count" id="cartSummaryCount"></span>
             <span class="cart-summary-total" id="cartSummaryTotal">0 HTG</span>
         </div>
         <a href="cart.html" class="cart-summary-btn">
@@ -828,6 +828,48 @@ function stockTxt(k, n) {
     var d = STOCK_TXT[l] || STOCK_TXT[l === 'ht' ? 'kr' : 'en'] || STOCK_TXT.kr;
     return String(d[k]).replace('{n}', n);
 }
+/* 22 Oct 2026: the store page was half English on a Kreyòl phone ("+ Add",
+   "Quantity", "Add to Cart", "Open Now"…), and every shop that had not set
+   its own fee said "Free delivery" - while checkout charges the distance
+   price (150 HTG minimum). Delivery is now described as it is charged. */
+var STORE_TXT = {
+    kr: { item: '{n} atik', items: '{n} atik', back: 'Tounen nan magazen yo', open: 'Ouvè kounye a', closed: 'Fèmen', verified: '✓ Verifye', reviews: '{n} avi',
+          deliveryDist: 'Livrezon dapre distans', deliveryFrom: 'Livrezon apati {p}', add: '+ Ajoute', qty: 'Kantite',
+          addCart: 'Mete nan panye — {p}', address: 'Adrès', delivery: 'Livrezon', eta: 'Tan', minutes: '{n} minit',
+          rating: 'Nòt', status: 'Estati', verifiedMerchant: 'Machann verifye' },
+    fr: { item: '{n} article', items: '{n} articles', back: 'Retour aux boutiques', open: 'Ouvert', closed: 'Fermé', verified: '✓ Vérifié', reviews: '{n} avis',
+          deliveryDist: 'Livraison selon la distance', deliveryFrom: 'Livraison à partir de {p}', add: '+ Ajouter', qty: 'Quantité',
+          addCart: 'Ajouter au panier — {p}', address: 'Adresse', delivery: 'Livraison', eta: 'Délai', minutes: '{n} minutes',
+          rating: 'Note', status: 'Statut', verifiedMerchant: 'Marchand vérifié' },
+    en: { item: '{n} item', items: '{n} items', back: 'Back to Stores', open: 'Open Now', closed: 'Closed', verified: '✓ Verified', reviews: '{n} reviews',
+          deliveryDist: 'Delivery priced by distance', deliveryFrom: 'Delivery from {p}', add: '+ Add', qty: 'Quantity',
+          addCart: 'Add to Cart — {p}', address: 'Address', delivery: 'Delivery', eta: 'ETA', minutes: '{n} minutes',
+          rating: 'Rating', status: 'Status', verifiedMerchant: 'Verified Merchant' },
+    es: { item: '{n} artículo', items: '{n} artículos', back: 'Volver a las tiendas', open: 'Abierto', closed: 'Cerrado', verified: '✓ Verificado', reviews: '{n} reseñas',
+          deliveryDist: 'Entrega según la distancia', deliveryFrom: 'Entrega desde {p}', add: '+ Añadir', qty: 'Cantidad',
+          addCart: 'Añadir al carrito — {p}', address: 'Dirección', delivery: 'Entrega', eta: 'Tiempo', minutes: '{n} minutos',
+          rating: 'Calificación', status: 'Estado', verifiedMerchant: 'Comerciante verificado' },
+    pt: { item: '{n} item', items: '{n} itens', back: 'Voltar às lojas', open: 'Aberto', closed: 'Fechado', verified: '✓ Verificado', reviews: '{n} avaliações',
+          deliveryDist: 'Entrega conforme a distância', deliveryFrom: 'Entrega a partir de {p}', add: '+ Adicionar', qty: 'Quantidade',
+          addCart: 'Adicionar ao carrinho — {p}', address: 'Endereço', delivery: 'Entrega', eta: 'Prazo', minutes: '{n} minutos',
+          rating: 'Avaliação', status: 'Status', verifiedMerchant: 'Comerciante verificado' }
+};
+function sl(k, v) {
+    var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || 'kr';
+    var d = STORE_TXT[l] || STORE_TXT[l === 'ht' ? 'kr' : 'en'] || STORE_TXT.kr;
+    var s = String(d[k] || STORE_TXT.en[k] || k);
+    if (v) Object.keys(v).forEach(function(x){ s = s.split('{' + x + '}').join(v[x]); });
+    return s;
+}
+/* The category list carries nameKr / nameFr / nameEs beside the English name. */
+function catName(c) {
+    var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || 'kr';
+    return (l === 'kr' || l === 'ht' ? c.nameKr : l === 'fr' ? c.nameFr : l === 'es' ? c.nameEs : '') || c.name;
+}
+function deliveryLabel(fee) {
+    return fee > 0 ? sl('deliveryFrom', { p: MOCK.formatHTG(fee) }) : sl('deliveryDist');
+}
+
 function isSoldOut(p) {
     return !p || p.inStock === false || (typeof p.stockQuantity === 'number' && p.stockQuantity === 0);
 }
@@ -913,7 +955,7 @@ function updateCartUI() {
     var totalEl = document.getElementById('cartSummaryTotal');
     if (bar && countEl && totalEl) {
         if (totals.count > 0) {
-            countEl.textContent = totals.count + ' item' + (totals.count !== 1 ? 's' : '');
+            countEl.textContent = sl(totals.count === 1 ? 'item' : 'items', { n: totals.count });
             totalEl.textContent = MOCK.formatHTG(totals.total);
             bar.classList.add('show');
         } else {
@@ -1212,7 +1254,7 @@ if (isCustomStore) {
 } else {
     bannerHTML += '  <a href="shop.html" class="store-back">';
     bannerHTML += '    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>';
-    bannerHTML += '    Back to Stores';
+    bannerHTML += '    ' + sl('back');
     bannerHTML += '  </a>';
 }
 bannerHTML += '  <div class="store-banner-row">';
@@ -1228,23 +1270,23 @@ if (isCustomStore && store.slogan) {
 }
 bannerHTML += '      <div class="store-banner-badges">';
 if (category) {
-    bannerHTML += '        <span class="store-cat-badge" style="background:rgba(255,255,255,0.2)">' + category.icon + ' ' + category.name + '</span>';
+    bannerHTML += '        <span class="store-cat-badge" style="background:rgba(255,255,255,0.2)">' + category.icon + ' ' + catName(category) + '</span>';
 }
 if (store.open) {
-    bannerHTML += '        <span class="store-status-open"><span style="display:inline-block;width:6px;height:6px;background:#6EE7B7;border-radius:50%;"></span> Open Now</span>';
+    bannerHTML += '        <span class="store-status-open"><span style="display:inline-block;width:6px;height:6px;background:#6EE7B7;border-radius:50%;"></span> ' + sl('open') + '</span>';
 } else {
-    bannerHTML += '        <span class="store-status-closed"><span style="display:inline-block;width:6px;height:6px;background:#FCA5A5;border-radius:50%;"></span> Closed</span>';
+    bannerHTML += '        <span class="store-status-closed"><span style="display:inline-block;width:6px;height:6px;background:#FCA5A5;border-radius:50%;"></span> ' + sl('closed') + '</span>';
 }
 if (store.verified) {
-    bannerHTML += '        <span class="store-verified-badge">✓ Verified</span>';
+    bannerHTML += '        <span class="store-verified-badge">' + sl('verified') + '</span>';
 }
 bannerHTML += '      </div>';
 bannerHTML += '      <div class="store-banner-meta">';
 if (!isCustomStore) {
-    bannerHTML += '        <span class="meta-item">⭐ ' + store.rating + ' <span style="opacity:0.7">(' + store.reviews + ' reviews)</span></span>';
+    bannerHTML += '        <span class="meta-item">⭐ ' + store.rating + ' <span style="opacity:0.7">(' + sl('reviews', { n: store.reviews }) + ')</span></span>';
 }
-bannerHTML += '        <span class="meta-item">🕐 ' + (isCustomStore ? store.openTime + ' - ' + store.closeTime : store.eta + ' min') + '</span>';
-bannerHTML += '        <span class="meta-item">🛵 ' + (store.deliveryFee === 0 ? 'Free delivery' : MOCK.formatHTG(store.deliveryFee) + ' delivery') + '</span>';
+bannerHTML += '        <span class="meta-item">🕐 ' + (isCustomStore ? store.openTime + ' - ' + store.closeTime : sl('minutes', { n: store.eta })) + '</span>';
+bannerHTML += '        <span class="meta-item">🛵 ' + deliveryLabel(store.deliveryFee) + '</span>';
 bannerHTML += '      </div>';
 if (store.address) {
     bannerHTML += '      <div class="store-banner-address">📍 ' + store.address + '</div>';
@@ -1300,7 +1342,7 @@ function renderProducts() {
                 html += '      <span class="stock-badge out">' + stockTxt('out') + '</span>';
             } else {
                 if (stockLimit(p) <= 5) html += '      <span class="stock-badge low">' + stockTxt('left', p.stockQuantity) + '</span>';
-                html += '      <button class="product-add-btn" onclick="event.stopPropagation(); addToCart(\'' + store.id + '\', getProduct(\'' + p.id + '\'), 1)">+ Add</button>';
+                html += '      <button class="product-add-btn" onclick="event.stopPropagation(); addToCart(\'' + store.id + '\', getProduct(\'' + p.id + '\'), 1)">' + sl('add') + '</button>';
             }
             html += '    </div>';
             html += '  </div>';
@@ -1333,29 +1375,29 @@ function renderAbout() {
     html += '  <h4>Details</h4>';
     html += '  <div class="about-row">';
     html += '    <span class="about-row-icon">📍</span>';
-    html += '    <span class="about-row-label">Address</span>';
+    html += '    <span class="about-row-label">' + sl('address') + '</span>';
     html += '    <span class="about-row-value">' + store.address + '</span>';
     html += '  </div>';
     html += '  <div class="about-row">';
     html += '    <span class="about-row-icon">🛵</span>';
-    html += '    <span class="about-row-label">Delivery</span>';
-    html += '    <span class="about-row-value">' + (store.deliveryFee === 0 ? 'Free delivery' : MOCK.formatHTG(store.deliveryFee)) + '</span>';
+    html += '    <span class="about-row-label">' + sl('delivery') + '</span>';
+    html += '    <span class="about-row-value">' + deliveryLabel(store.deliveryFee) + '</span>';
     html += '  </div>';
     html += '  <div class="about-row">';
     html += '    <span class="about-row-icon">🕐</span>';
-    html += '    <span class="about-row-label">ETA</span>';
-    html += '    <span class="about-row-value">' + store.eta + ' minutes</span>';
+    html += '    <span class="about-row-label">' + sl('eta') + '</span>';
+    html += '    <span class="about-row-value">' + sl('minutes', { n: store.eta }) + '</span>';
     html += '  </div>';
     html += '  <div class="about-row">';
     html += '    <span class="about-row-icon">⭐</span>';
-    html += '    <span class="about-row-label">Rating</span>';
-    html += '    <span class="about-row-value">' + store.rating + ' / 5 (' + store.reviews + ' reviews)</span>';
+    html += '    <span class="about-row-label">' + sl('rating') + '</span>';
+    html += '    <span class="about-row-value">' + store.rating + ' / 5 (' + sl('reviews', { n: store.reviews }) + ')</span>';
     html += '  </div>';
     if (store.verified) {
         html += '  <div class="about-row">';
         html += '    <span class="about-row-icon">✓</span>';
-        html += '    <span class="about-row-label">Status</span>';
-        html += '    <span class="about-row-value" style="color:var(--primary-blue);font-weight:600;">Verified Merchant</span>';
+        html += '    <span class="about-row-label">' + sl('status') + '</span>';
+        html += '    <span class="about-row-value" style="color:var(--primary-blue);font-weight:600;">' + sl('verifiedMerchant') + '</span>';
         html += '  </div>';
     }
     html += '</div>';
@@ -1519,7 +1561,7 @@ function renderModalContent() {
 
     // Quantity selector
     html += '<div class="product-modal-qty">';
-    html += '  <label>Quantity</label>';
+    html += '  <label>' + sl('qty') + '</label>';
     html += '  <div class="qty-control">';
     html += '    <button class="qty-btn" onclick="changeModalQty(-1)">−</button>';
     html += '    <span class="qty-value" id="modalQtyValue">' + modalQty + '</span>';
@@ -1527,11 +1569,8 @@ function renderModalContent() {
     html += '  </div>';
     html += '</div>';
 
-    // Add-ons placeholder
-    html += '<div class="addons-section">';
-    html += '  <div class="addons-title">Add-ons & Extras</div>';
-    html += '  <div class="addon-placeholder">Add-on options coming soon</div>';
-    html += '</div>';
+    /* 22 Oct 2026: an "Add-ons & Extras — coming soon" box sat here and
+       advertised something that does not exist. Removed. */
 
     // Subtotal + Add to Cart
     var subtotal = modalProduct.price * modalQty;
@@ -1541,7 +1580,7 @@ function renderModalContent() {
         html += '</button>';
     } else {
         html += '<button class="btn btn-red btn-full btn-lg" onclick="addToCartFromModal()" id="modalAddBtn">';
-        html += '  Add to Cart — ' + MOCK.formatHTG(subtotal);
+        html += '  ' + sl('addCart', { p: MOCK.formatHTG(subtotal) });
         html += '</button>';
     }
 
@@ -1553,7 +1592,7 @@ function changeModalQty(delta) {
     modalQty = Math.min(Math.max(1, modalQty + delta), Math.max(1, stockLimit(modalProduct)));
     document.getElementById('modalQtyValue').textContent = modalQty;
     var subtotal = modalProduct.price * modalQty;
-    document.getElementById('modalAddBtn').textContent = 'Add to Cart — ' + MOCK.formatHTG(subtotal);
+    document.getElementById('modalAddBtn').textContent = sl('addCart', { p: MOCK.formatHTG(subtotal) });
 }
 
 function addToCartFromModal() {
@@ -1573,6 +1612,10 @@ window.openProductModal = openProductModal;
 window.closeProductModal = closeProductModal;
 window.addToCartFromModal = addToCartFromModal;
 window.renderModalContent = renderModalContent;
+/* 22 Oct 2026: the product window's − / + buttons call this, but it was
+   never exposed - every tap threw "changeModalQty is not defined", so a
+   customer could only add one at a time. */
+window.changeModalQty = changeModalQty;
 
 // ===== INIT CART UI =====
 window.CART = getCart();

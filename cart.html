@@ -481,7 +481,7 @@
                             <span class="summary-value" style="color:var(--success);" id="summaryDiscount">-0 HTG</span>
                         </div>
                         <div class="summary-row total">
-                            <span class="summary-label">Total</span>
+                            <span class="summary-label" data-cart-total>Total</span>
                             <span class="summary-value" id="summaryTotal">0 HTG</span>
                         </div>
                         <a href="checkout.html" class="btn btn-red btn-full btn-lg desktop-only-checkout" style="margin-top:var(--space-md); border-radius:var(--radius-xl);" id="desktopCheckoutBtn">
@@ -498,7 +498,7 @@
 <!-- Fixed Bottom Bar (mobile) -->
 <div class="cart-bottom-bar" id="cartBottomBar" style="display:none;">
     <div class="cart-bottom-total">
-        <span class="label">Total</span>
+        <span class="label" data-cart-total>Total</span>
         <span class="amount" id="bottomTotal">0 HTG</span>
     </div>
     <a href="checkout.html" class="btn btn-red btn-lg btn-round" id="mobileCheckoutBtn">Proceed to Checkout</a>
@@ -568,6 +568,17 @@
 
 <script src="js/mock-data.js"></script>
 <script>
+/* 22 Oct 2026: "2 items", "Line total" and "Total" stayed English on a
+   Kreyòl phone. */
+var CART_TXT = { kr: ['{n} atik', '{n} atik', 'Total liy: {p}', 'Total'], fr: ['{n} article', '{n} articles', 'Total ligne : {p}', 'Total'],
+                 en: ['{n} item', '{n} items', 'Line total: {p}', 'Total'], es: ['{n} artículo', '{n} artículos', 'Total: {p}', 'Total'],
+                 pt: ['{n} item', '{n} itens', 'Total do item: {p}', 'Total'] };
+function cartTxt(k, v) {
+    var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || 'kr'; if (l === 'ht') l = 'kr';
+    var row = CART_TXT[l] || CART_TXT.en, s = row[{ one: 0, many: 1, line: 2, total: 3 }[k]];
+    return s.replace('{n}', v).replace('{p}', v);
+}
+
 (function() {
     const CART_KEY = 'myplopplop_cart';
     let promoApplied = false;
@@ -690,7 +701,7 @@
         contentEl.style.display = 'block';
         bottomBar.style.display = 'flex';
 
-        document.getElementById('cartCountText').textContent = totalItems + ' item' + (totalItems !== 1 ? 's' : '');
+        document.getElementById('cartCountText').textContent = cartTxt(totalItems === 1 ? 'one' : 'many', totalItems);
 
         const groups = groupByStore(cart);
         const container = document.getElementById('cartItemsContainer');
@@ -723,7 +734,7 @@
                         <div class="cart-item-details">
                             <div class="cart-item-name">${item.name}</div>
                             <div class="cart-item-price">${MOCK.formatHTG(item.price)}</div>
-                            <div class="cart-item-total">Line total: ${MOCK.formatHTG(lineTotal)}</div>
+                            <div class="cart-item-total">${cartTxt('line', MOCK.formatHTG(lineTotal))}</div>
                         </div>
                         <div class="cart-item-actions">
                             <button class="remove-btn" onclick="window.cartRemove('${item.productId}')" title="Remove">

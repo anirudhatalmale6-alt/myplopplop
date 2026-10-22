@@ -828,7 +828,7 @@
             <!-- Billing note -->
             <div class="form-section" style="padding:var(--space-md); display:flex; align-items:center; gap:var(--space-sm); background:var(--info-light); border:1px solid rgba(59,130,246,0.2);">
                 <span style="font-size:20px;">🔒</span>
-                <p style="font-size:var(--text-xs); color:var(--gray-700); margin:0;">Your payment information is encrypted and secure. We never store your full card details.</p>
+                <p style="font-size:var(--text-xs); color:var(--gray-700); margin:0;">Your payment is made on the MonCash or NatCash page. We never see your PIN.</p>
             </div>
         </div>
 
@@ -928,7 +928,7 @@
             <h2>Order Confirmed!</h2>
             <p>Your order has been placed successfully. The merchant is preparing your items.</p>
             <div class="order-id" id="successOrderId">ORD-2026-004</div>
-            <p>You'll receive SMS updates at your phone number. Track your delivery in real-time.</p>
+            <p>You'll get a notification on your phone at each step. Follow your order in My Orders.</p>
             <div class="success-actions">
                 <a href="tracking.html" class="btn btn-red btn-lg btn-full btn-round">Track Order</a>
                 <a href="index.html" class="btn btn-white btn-lg btn-full btn-round">Back to Home</a>
@@ -1009,6 +1009,108 @@
 <script src="js/mock-data.js"></script>
 <script>
 (function() {
+    /* 22 Oct 2026: checkout was mostly English on a Kreyòl phone. Fixed text
+       (CK_STATIC, matched exactly, English kept as the key) is translated
+       when the page opens and again on a language switch; text written by
+       this script goes through ck(). */
+    var CK_LANGS = ['kr', 'fr', 'es', 'pt'];
+    var CK_STATIC = {
+        'Payment': ['Peman', 'Paiement', 'Pago', 'Pagamento'],
+        'Review': ['Verifye', 'Vérifier', 'Revisar', 'Revisar'],
+        'Delivery Details': ['Detay livrezon', 'Détails de livraison', 'Datos de entrega', 'Dados da entrega'],
+        'Recipient Name': ['Non moun k ap resevwa a', 'Nom du destinataire', 'Nombre de quien recibe', 'Nome de quem recebe'],
+        'Share your exact location': ['Pataje kote ou ye egzakteman', 'Partagez votre position exacte', 'Comparte tu ubicación exacta', 'Compartilhe sua localização exata'],
+        'Required — this is how your driver finds you and how we calculate your delivery price.': ['Obligatwa — se konsa chofè a jwenn ou, epi se sa ki kalkile pri livrezon an.', 'Obligatoire — c’est ainsi que le livreur vous trouve et que nous calculons le prix de la livraison.', 'Obligatorio: así te encuentra el repartidor y así calculamos el precio de la entrega.', 'Obrigatório — é assim que o entregador encontra você e calculamos o preço da entrega.'],
+        'Use my current location': ['Sèvi ak kote m ye kounye a', 'Utiliser ma position actuelle', 'Usar mi ubicación actual', 'Usar minha localização atual'],
+        'Delivery Instructions (optional)': ['Enstriksyon pou chofè a (si ou vle)', 'Instructions de livraison (facultatif)', 'Instrucciones de entrega (opcional)', 'Instruções de entrega (opcional)'],
+        'Blue gate next to the mango tree. Ring the bell twice.': ['Pòtay ble bò pye mango a. Sonnen de fwa.', 'Portail bleu à côté du manguier. Sonnez deux fois.', 'Portón azul junto al mango. Toca el timbre dos veces.', 'Portão azul ao lado da mangueira. Toque a campainha duas vezes.'],
+        'Delivery Timing': ['Lè livrezon', 'Heure de livraison', 'Hora de entrega', 'Horário da entrega'],
+        'ASAP': ['Pi vit posib', 'Au plus vite', 'Lo antes posible', 'O quanto antes'],
+        'Schedule': ['Pwograme', 'Programmer', 'Programar', 'Agendar'],
+        'Pick a time': ['Chwazi yon lè', 'Choisir une heure', 'Elige una hora', 'Escolha um horário'],
+        'Date': ['Dat', 'Date', 'Fecha', 'Data'],
+        'Time': ['Lè', 'Heure', 'Hora', 'Hora'],
+        'Payment Method': ['Metòd peman', 'Moyen de paiement', 'Método de pago', 'Forma de pagamento'],
+        'Pay with your Digicel MonCash': ['Peye ak MonCash Digicel ou', 'Payer avec votre MonCash Digicel', 'Paga con tu MonCash de Digicel', 'Pague com seu MonCash Digicel'],
+        'Pay with your Natcom NatCash': ['Peye ak NatCash Natcom ou', 'Payer avec votre NatCash Natcom', 'Paga con tu NatCash de Natcom', 'Pague com seu NatCash Natcom'],
+        'Your payment is made on the MonCash or NatCash page. We never see your PIN.': ['Ou peye sou paj MonCash oswa NatCash la. Nou pa janm wè PIN ou.', 'Vous payez sur la page MonCash ou NatCash. Nous ne voyons jamais votre code PIN.', 'Pagas en la página de MonCash o NatCash. Nunca vemos tu PIN.', 'Você paga na página do MonCash ou NatCash. Nunca vemos o seu PIN.'],
+        'Edit': ['Modifye', 'Modifier', 'Editar', 'Editar'],
+        'Recipient': ['Moun k ap resevwa', 'Destinataire', 'Quien recibe', 'Quem recebe'],
+        'Phone': ['Telefòn', 'Téléphone', 'Teléfono', 'Telefone'],
+        'Delivery Time': ['Lè livrezon', 'Heure de livraison', 'Hora de entrega', 'Horário da entrega'],
+        'Order Items': ['Pwodwi yo', 'Articles', 'Artículos', 'Itens'],
+        'Order Confirmed!': ['Kòmand lan konfime!', 'Commande confirmée !', '¡Pedido confirmado!', 'Pedido confirmado!'],
+        'Your order has been placed successfully. The merchant is preparing your items.': ['Kòmand ou pase. Machann nan ap prepare pwodwi ou yo.', 'Votre commande est passée. Le marchand prépare vos articles.', 'Tu pedido está hecho. El comerciante está preparando tus artículos.', 'Seu pedido foi feito. O comerciante está preparando seus itens.'],
+        "You'll get a notification on your phone at each step. Follow your order in My Orders.": ['W ap resevwa yon notifikasyon sou telefòn ou nan chak etap. Swiv kòmand ou nan « Kòmand mwen yo ».', 'Vous recevrez une notification sur votre téléphone à chaque étape. Suivez votre commande dans « Mes commandes ».', 'Recibirás una notificación en tu teléfono en cada paso. Sigue tu pedido en «Mis pedidos».', 'Você receberá uma notificação no celular a cada etapa. Acompanhe seu pedido em «Meus pedidos».'],
+        'Track Order': ['Swiv kòmand lan', 'Suivre la commande', 'Seguir el pedido', 'Acompanhar pedido'],
+        'Back to Home': ['Retounen nan akèy', 'Retour à l’accueil', 'Volver al inicio', 'Voltar ao início'],
+        'Continue': ['Kontinye', 'Continuer', 'Continuar', 'Continuar'],
+        'Back': ['Retounen', 'Retour', 'Atrás', 'Voltar']
+    };
+    var CK_PH = {
+        'Full name': ['Non konplè', 'Nom complet', 'Nombre completo', 'Nome completo'],
+        'Street address, neighborhood, city': ['Ri, katye, vil', 'Rue, quartier, ville', 'Calle, barrio, ciudad', 'Rua, bairro, cidade'],
+        'Gate code, landmark, special instructions...': ['Pòtay, yon bagay pou rekonèt kote a, lòt enstriksyon…', 'Code du portail, repère, instructions…', 'Código de portón, referencia, instrucciones…', 'Código do portão, ponto de referência, instruções…']
+    };
+    var CK = {
+        noGeo: ['Telefòn ou pa ka pataje kote ou ye.', 'Votre téléphone ne peut pas partager votre position.', 'Your phone/browser does not support location sharing.', 'Tu teléfono no puede compartir tu ubicación.', 'Seu celular não consegue compartilhar a localização.'],
+        getting: ['N ap chèche kote ou ye…', 'Recherche de votre position…', 'Getting your location…', 'Buscando tu ubicación…', 'Buscando sua localização…'],
+        shared: ['✓ Kote ou ye pataje — chofè a ap ka jwenn ou.', '✓ Position partagée — le livreur pourra vous trouver.', '✓ Location shared — your driver can find you.', '✓ Ubicación compartida: el repartidor te encontrará.', '✓ Localização compartilhada — o entregador vai encontrar você.'],
+        update: ['Mete kote m ye ajou', 'Mettre à jour ma position', 'Update my location', 'Actualizar mi ubicación', 'Atualizar minha localização'],
+        denied: ['Ou pa bay pèmisyon pou kote ou ye. Tanpri pèmèt li pou chofè a ka jwenn ou.', 'Autorisation de position refusée. Autorisez-la pour que le livreur vous trouve.', 'Location permission denied. Please allow location so the driver can find you.', 'Permiso de ubicación denegado. Permítelo para que el repartidor te encuentre.', 'Permissão de localização negada. Permita para o entregador encontrar você.'],
+        failed: ['Nou pa t ka jwenn kote ou ye. Eseye ankò.', 'Impossible d’obtenir votre position. Réessayez.', 'Could not get your location. Please try again.', 'No pudimos obtener tu ubicación. Inténtalo de nuevo.', 'Não conseguimos obter sua localização. Tente de novo.'],
+        calc: ['N ap kalkile pri livrezon an…', 'Calcul du prix de livraison…', 'Calculating delivery price…', 'Calculando el precio de la entrega…', 'Calculando o preço da entrega…'],
+        distance: ['Distans', 'Distance', 'Distance', 'Distancia', 'Distância'],
+        price: ['Pri livrezon', 'Prix de livraison', 'Delivery price', 'Precio de la entrega', 'Preço da entrega'],
+        noQuote: ['Nou pa t ka kalkile pri a kounye a — n ap itilize pri livrezon nòmal la.', 'Prix indisponible pour le moment — le tarif standard sera utilisé.', 'Could not calculate the price right now — a standard delivery fee will be used.', 'No pudimos calcular el precio ahora: se usará la tarifa estándar.', 'Não foi possível calcular o preço agora — será usada a taxa padrão.'],
+        confirm: ['Konfime kòmand lan', 'Confirmer la commande', 'Confirm Order', 'Confirmar pedido', 'Confirmar pedido'],
+        cont: ['Kontinye', 'Continuer', 'Continue', 'Continuar', 'Continuar'],
+        scheduled: ['Pwograme: {d} a {t}', 'Programmé : {d} à {t}', 'Scheduled: {d} at {t}', 'Programado: {d} a las {t}', 'Agendado: {d} às {t}'],
+        asap: ['Pi vit posib (25-45 min)', 'Au plus vite (25-45 min)', 'ASAP (25-45 min)', 'Lo antes posible (25-45 min)', 'O quanto antes (25-45 min)'],
+        processing: ['N ap trete…', 'Traitement…', 'Processing...', 'Procesando…', 'Processando…'],
+        place: ['Pase kòmand lan', 'Passer la commande', 'Place Order', 'Hacer el pedido', 'Fazer o pedido'],
+        fill: ['Tanpri ranpli tout enfòmasyon livrezon ki obligatwa yo.', 'Veuillez remplir tous les champs de livraison obligatoires.', 'Please fill in all required delivery fields.', 'Completa todos los datos de entrega obligatorios.', 'Preencha todos os dados de entrega obrigatórios.'],
+        needGps: ['Tanpri peze « Sèvi ak kote m ye kounye a » pou chofè a ka jwenn ou epi pou nou kalkile pri livrezon an.', 'Touchez « Utiliser ma position actuelle » pour que le livreur vous trouve et que nous calculions le prix.', 'Please tap "Use my current location" so your driver can find you and we can calculate your delivery price.', 'Toca «Usar mi ubicación actual» para que el repartidor te encuentre y calculemos el precio.', 'Toque em «Usar minha localização atual» para o entregador encontrar você e calcularmos o preço.']
+    };
+    var CK_ORDER = ['kr', 'fr', 'en', 'es', 'pt'];
+    function ckLang() {
+        var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || 'kr';
+        return l === 'ht' ? 'kr' : (CK_ORDER.indexOf(l) >= 0 ? l : 'en');
+    }
+    function ck(k, v) {
+        var row = CK[k]; if (!row) return k;
+        var s = row[CK_ORDER.indexOf(ckLang())] || row[2];
+        if (v) Object.keys(v).forEach(function(x){ s = s.split('{' + x + '}').join(v[x]); });
+        return s;
+    }
+    var ckNodes = null;
+    function ckStatic() {
+        var l = ckLang(), i = CK_LANGS.indexOf(l);
+        var root = document.body;   // the Back / Continue bar sits outside <main>
+        if (!ckNodes) {
+            ckNodes = [];
+            var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), n;
+            while ((n = w.nextNode())) {
+                if (n.parentElement && n.parentElement.closest('script,style,footer,.top-bar')) continue;
+                var raw = n.nodeValue, t = raw.trim();
+                var lead = (t.match(/^[^A-Za-z]*/) || [''])[0], body = t.slice(lead.length);
+                if (CK_STATIC[t]) ckNodes.push({ n: n, raw: raw, en: t });
+                else if (lead && CK_STATIC[body]) ckNodes.push({ n: n, raw: raw, en: body });
+            }
+            root.querySelectorAll('[placeholder]').forEach(function(el){
+                if (CK_PH[el.getAttribute('placeholder')]) el.setAttribute('data-ck-ph', el.getAttribute('placeholder'));
+            });
+        }
+        ckNodes.forEach(function(x){
+            var to = i < 0 ? x.en : (CK_STATIC[x.en][i] || x.en);
+            x.n.nodeValue = x.raw.replace(x.en, to);
+        });
+        root.querySelectorAll('[data-ck-ph]').forEach(function(el){
+            var en = el.getAttribute('data-ck-ph');
+            el.setAttribute('placeholder', i < 0 ? en : (CK_PH[en][i] || en));
+        });
+    }
+
     const CART_KEY = 'myplopplop_cart';
     let currentStep = 1;
     let selectedPayment = 'moncash';
@@ -1045,27 +1147,27 @@
         var status = document.getElementById('gpsStatus');
         if (!navigator.geolocation) {
             status.className = 'gps-status err';
-            status.textContent = 'Your phone/browser does not support location sharing.';
+            status.textContent = ck('noGeo');
             return;
         }
         btn.disabled = true;
         status.className = 'gps-status';
-        status.textContent = 'Getting your location…';
+        status.textContent = ck('getting');
 
         navigator.geolocation.getCurrentPosition(function(pos) {
             customerLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
             document.getElementById('gpsBox').classList.add('located');
             status.className = 'gps-status ok';
-            status.textContent = '✓ Location shared — your driver can find you.';
-            btn.textContent = 'Update my location';
+            status.textContent = ck('shared');
+            btn.textContent = ck('update');
             btn.disabled = false;
             fetchDeliveryQuote();
         }, function(err) {
             btn.disabled = false;
             status.className = 'gps-status err';
             status.textContent = err.code === 1
-                ? 'Location permission denied. Please allow location so the driver can find you.'
-                : 'Could not get your location. Please try again.';
+                ? ck('denied')
+                : ck('failed');
         }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
     };
 
@@ -1075,7 +1177,7 @@
         var pickup = getPickupPoint();
         var box = document.getElementById('gpsQuote');
         box.style.display = 'block';
-        box.innerHTML = '<div class="row"><span>Calculating delivery price…</span></div>';
+        box.innerHTML = '<div class="row"><span>' + ck('calc') + '</span></div>';
 
         fetch(MPP_API + '/api/rides/quote', {
             method: 'POST',
@@ -1087,13 +1189,13 @@
             if (!d.success || !d.data) throw new Error('no quote');
             liveQuote = d.data;
             box.innerHTML =
-                '<div class="row"><span>Distance</span><span>' + d.data.distanceKm + ' km</span></div>' +
-                '<div class="row"><span>Delivery price</span><span>' + d.data.deliveryFee.toLocaleString() + ' HTG</span></div>';
+                '<div class="row"><span>' + ck('distance') + '</span><span>' + d.data.distanceKm + ' km</span></div>' +
+                '<div class="row"><span>' + ck('price') + '</span><span>' + d.data.deliveryFee.toLocaleString() + ' HTG</span></div>';
             // refresh any visible totals with the new distance-based fee
             if (typeof populateReview === 'function' && currentStep === 3) populateReview();
         })
         .catch(function(){
-            box.innerHTML = '<div class="row"><span>Could not calculate the price right now — a standard delivery fee will be used.</span></div>';
+            box.innerHTML = '<div class="row"><span>' + ck('noQuote') + '</span></div>';
         });
     }
 
@@ -1196,9 +1298,9 @@
         // Continue button text
         const btn = document.getElementById('continueBtn');
         if (currentStep === 3) {
-            btn.textContent = 'Confirm Order';
+            btn.textContent = ck('confirm');
         } else {
-            btn.textContent = 'Continue';
+            btn.textContent = ck('cont');
         }
     }
 
@@ -1215,12 +1317,12 @@
             const phone = document.getElementById('recipientPhone').value.trim();
             const addr = document.getElementById('deliveryAddress').value.trim();
             if (!name || !phone || !addr) {
-                alert('Please fill in all required delivery fields.');
+                alert(ck('fill'));
                 return;
             }
             // GPS is required: the driver needs it to find the customer and it sets the price
             if (!customerLocation) {
-                alert('Please tap "Use my current location" so your driver can find you and we can calculate your delivery price.');
+                alert(ck('needGps'));
                 document.getElementById('gpsBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
             }
@@ -1259,9 +1361,9 @@
         if (isScheduled) {
             const date = document.getElementById('scheduleDate').value;
             const time = document.getElementById('scheduleTime').value;
-            document.getElementById('reviewTiming').textContent = 'Scheduled: ' + date + ' at ' + time;
+            document.getElementById('reviewTiming').textContent = ck('scheduled', { d: date, t: time });
         } else {
-            document.getElementById('reviewTiming').textContent = 'ASAP (25-45 min)';
+            document.getElementById('reviewTiming').textContent = ck('asap');
         }
 
         // Payment
@@ -1421,7 +1523,7 @@
     async function confirmOrder() {
         const btn = document.getElementById('continueBtn');
         btn.disabled = true;
-        btn.textContent = 'Processing...';
+        btn.textContent = ck('processing');
 
         const summary = getFinalSummary();
         let total = summary ? summary.total : 0;
@@ -1433,7 +1535,7 @@
         // localStorage and survives the trip.
         if (typeof API === 'undefined' || !API.isLoggedIn()) {
             btn.disabled = false;
-            btn.textContent = 'Place Order';
+            btn.textContent = ck('place');
             alert('Konekte pou nou ka voye kòmand ou bay machann nan.\n\nPlease log in so we can send your order to the shop.');
             window.location.href = 'login.html?redirect=checkout.html';
             return;
@@ -1444,7 +1546,7 @@
         // Never take money for an order the server does not have.
         if (!apiOrders.length) {
             btn.disabled = false;
-            btn.textContent = 'Place Order';
+            btn.textContent = ck('place');
             alert('Nou pa t kapab anrejistre kòmand ou. Pa peye - eseye ankò.\n\nWe could not save your order, so we have not charged you. Please try again.');
             return;
         }
@@ -1457,7 +1559,7 @@
         var basket = await API.groupBasket(apiOrders.map(function (o) { return o._id; }));
         if (!basket || !basket.success || !basket.data) {
             btn.disabled = false;
-            btn.textContent = 'Place Order';
+            btn.textContent = ck('place');
             alert('Nou pa t kapab prepare peman an. Pa peye - eseye ankò.\n\nWe could not prepare the payment, so we have not charged you. Please try again.');
             return;
         }
@@ -1465,7 +1567,7 @@
         var serverTotal = Number(basket.data.total) || 0;
         if (Math.abs(serverTotal - total) >= 1) {
             var ok = confirm('Total kòmand lan se ' + MOCK.formatHTG(serverTotal) + ' (pa ' + MOCK.formatHTG(total) + ').\nThe order total is ' + MOCK.formatHTG(serverTotal) + '. Continue?');
-            if (!ok) { btn.disabled = false; btn.textContent = 'Place Order'; return; }
+            if (!ok) { btn.disabled = false; btn.textContent = ck('place'); return; }
         }
         total = serverTotal;
 
@@ -1475,7 +1577,7 @@
         // so choosing it meant the goods went out unpaid.
         if (selectedPayment === 'san_cash') {
             btn.disabled = false;
-            btn.textContent = 'Place Order';
+            btn.textContent = ck('place');
             alert('San Cash Wallet is not available for shop orders yet. Please pay with MonCash, NatCash or a card.');
             return;
         }
@@ -1483,7 +1585,7 @@
         // ⛔ Nothing is confirmed without a payment the server has checked.
         if (total < 20) {
             btn.disabled = false;
-            btn.textContent = 'Place Order';
+            btn.textContent = ck('place');
             alert('Minimòm peman an se 20 HTG.\nThe minimum payment is 20 HTG.');
             return;
         }
@@ -1533,14 +1635,14 @@
                 window.location.href = data.url;
             } else {
                 btn.disabled = false;
-                btn.textContent = 'Place Order';
+                btn.textContent = ck('place');
                 alert('Payment error: ' + (data.error || 'Please try again'));
             }
         })
         .catch(function(err) {
             console.error('Payment error:', err);
             btn.disabled = false;
-            btn.textContent = 'Place Order';
+            btn.textContent = ck('place');
             alert('Payment service is temporarily unavailable. Please try again.');
         });
     }
@@ -1612,6 +1714,15 @@
     // Init
     updateBadges();
     updateStepUI();
+
+    /* Translate the fixed text now (i18n.js has already run its own pass),
+       and again whenever the language is switched on this page. */
+    function ckApply(){ try { ckStatic(); var b = document.getElementById('continueBtn'); if (b && currentStep < 3) b.textContent = ck('cont'); } catch (e) {} }
+    ckApply();
+    if (window.MyPlopPlopI18n && typeof window.switchLang === 'function') {
+        var ckSwitch = window.switchLang;
+        window.switchLang = window.MyPlopPlopI18n.switchLang = function(l){ ckSwitch(l); ckApply(); };
+    }
 })();
 </script>
 
