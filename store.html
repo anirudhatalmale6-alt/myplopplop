@@ -833,23 +833,23 @@ function stockTxt(k, n) {
    its own fee said "Free delivery" - while checkout charges the distance
    price (150 HTG minimum). Delivery is now described as it is charged. */
 var STORE_TXT = {
-    kr: { item: '{n} atik', items: '{n} atik', back: 'Tounen nan magazen yo', open: 'Ouvè kounye a', closed: 'Fèmen', verified: '✓ Verifye', reviews: '{n} avi',
+    kr: { added: '{name} ajoute nan panye a', item: '{n} atik', items: '{n} atik', back: 'Tounen nan magazen yo', open: 'Ouvè kounye a', closed: 'Fèmen', verified: '✓ Verifye', reviews: '{n} avi',
           deliveryDist: 'Livrezon dapre distans', deliveryFrom: 'Livrezon apati {p}', add: '+ Ajoute', qty: 'Kantite',
           addCart: 'Mete nan panye — {p}', address: 'Adrès', delivery: 'Livrezon', eta: 'Tan', minutes: '{n} minit',
           rating: 'Nòt', status: 'Estati', verifiedMerchant: 'Machann verifye' },
-    fr: { item: '{n} article', items: '{n} articles', back: 'Retour aux boutiques', open: 'Ouvert', closed: 'Fermé', verified: '✓ Vérifié', reviews: '{n} avis',
+    fr: { added: '{name} ajouté au panier', item: '{n} article', items: '{n} articles', back: 'Retour aux boutiques', open: 'Ouvert', closed: 'Fermé', verified: '✓ Vérifié', reviews: '{n} avis',
           deliveryDist: 'Livraison selon la distance', deliveryFrom: 'Livraison à partir de {p}', add: '+ Ajouter', qty: 'Quantité',
           addCart: 'Ajouter au panier — {p}', address: 'Adresse', delivery: 'Livraison', eta: 'Délai', minutes: '{n} minutes',
           rating: 'Note', status: 'Statut', verifiedMerchant: 'Marchand vérifié' },
-    en: { item: '{n} item', items: '{n} items', back: 'Back to Stores', open: 'Open Now', closed: 'Closed', verified: '✓ Verified', reviews: '{n} reviews',
+    en: { added: 'Added {name} to cart', item: '{n} item', items: '{n} items', back: 'Back to Stores', open: 'Open Now', closed: 'Closed', verified: '✓ Verified', reviews: '{n} reviews',
           deliveryDist: 'Delivery priced by distance', deliveryFrom: 'Delivery from {p}', add: '+ Add', qty: 'Quantity',
           addCart: 'Add to Cart — {p}', address: 'Address', delivery: 'Delivery', eta: 'ETA', minutes: '{n} minutes',
           rating: 'Rating', status: 'Status', verifiedMerchant: 'Verified Merchant' },
-    es: { item: '{n} artículo', items: '{n} artículos', back: 'Volver a las tiendas', open: 'Abierto', closed: 'Cerrado', verified: '✓ Verificado', reviews: '{n} reseñas',
+    es: { added: '{name} añadido al carrito', item: '{n} artículo', items: '{n} artículos', back: 'Volver a las tiendas', open: 'Abierto', closed: 'Cerrado', verified: '✓ Verificado', reviews: '{n} reseñas',
           deliveryDist: 'Entrega según la distancia', deliveryFrom: 'Entrega desde {p}', add: '+ Añadir', qty: 'Cantidad',
           addCart: 'Añadir al carrito — {p}', address: 'Dirección', delivery: 'Entrega', eta: 'Tiempo', minutes: '{n} minutos',
           rating: 'Calificación', status: 'Estado', verifiedMerchant: 'Comerciante verificado' },
-    pt: { item: '{n} item', items: '{n} itens', back: 'Voltar às lojas', open: 'Aberto', closed: 'Fechado', verified: '✓ Verificado', reviews: '{n} avaliações',
+    pt: { added: '{name} adicionado ao carrinho', item: '{n} item', items: '{n} itens', back: 'Voltar às lojas', open: 'Aberto', closed: 'Fechado', verified: '✓ Verificado', reviews: '{n} avaliações',
           deliveryDist: 'Entrega conforme a distância', deliveryFrom: 'Entrega a partir de {p}', add: '+ Adicionar', qty: 'Quantidade',
           addCart: 'Adicionar ao carrinho — {p}', address: 'Endereço', delivery: 'Entrega', eta: 'Prazo', minutes: '{n} minutos',
           rating: 'Avaliação', status: 'Status', verifiedMerchant: 'Comerciante verificado' }
@@ -910,7 +910,7 @@ function addToCart(storeId, product, qty) {
         });
     }
     saveCart(cart);
-    showToast('Added ' + product.name + ' to cart');
+    showToast(sl('added', { name: product.name }));
 }
 
 function getCartForStore(storeId) {
