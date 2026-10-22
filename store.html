@@ -824,7 +824,7 @@ var STOCK_TXT = {
     en: { out: 'Sold out', outLong: 'Sold out — not available right now', left: '{n} left', toastOut: 'This product is sold out', toastMax: 'Only {n} left' }
 };
 function stockTxt(k, n) {
-    var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || 'kr';
+    var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || (function(){ try { return localStorage.getItem('myplopplop_lang'); } catch (e) { return null; } })() || 'kr';
     var d = STOCK_TXT[l] || STOCK_TXT[l === 'ht' ? 'kr' : 'en'] || STOCK_TXT.kr;
     return String(d[k]).replace('{n}', n);
 }
@@ -855,7 +855,7 @@ var STORE_TXT = {
           rating: 'Avaliação', status: 'Status', verifiedMerchant: 'Comerciante verificado' }
 };
 function sl(k, v) {
-    var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || 'kr';
+    var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || (function(){ try { return localStorage.getItem('myplopplop_lang'); } catch (e) { return null; } })() || 'kr';
     var d = STORE_TXT[l] || STORE_TXT[l === 'ht' ? 'kr' : 'en'] || STORE_TXT.kr;
     var s = String(d[k] || STORE_TXT.en[k] || k);
     if (v) Object.keys(v).forEach(function(x){ s = s.split('{' + x + '}').join(v[x]); });
@@ -863,7 +863,7 @@ function sl(k, v) {
 }
 /* The category list carries nameKr / nameFr / nameEs beside the English name. */
 function catName(c) {
-    var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || 'kr';
+    var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || (function(){ try { return localStorage.getItem('myplopplop_lang'); } catch (e) { return null; } })() || 'kr';
     return (l === 'kr' || l === 'ht' ? c.nameKr : l === 'fr' ? c.nameFr : l === 'es' ? c.nameEs : '') || c.name;
 }
 function deliveryLabel(fee) {

@@ -1070,11 +1070,13 @@
         processing: ['N ap trete…', 'Traitement…', 'Processing...', 'Procesando…', 'Processando…'],
         place: ['Pase kòmand lan', 'Passer la commande', 'Place Order', 'Hacer el pedido', 'Fazer o pedido'],
         fill: ['Tanpri ranpli tout enfòmasyon livrezon ki obligatwa yo.', 'Veuillez remplir tous les champs de livraison obligatoires.', 'Please fill in all required delivery fields.', 'Completa todos los datos de entrega obligatorios.', 'Preencha todos os dados de entrega obrigatórios.'],
+        payErr: ['Peman an pa t kapab kòmanse. Pa peye ankò - eseye ankò.', 'Le paiement n’a pas pu démarrer. Réessayez.', 'Payment error: please try again.', 'El pago no pudo iniciarse. Inténtalo de nuevo.', 'O pagamento não pôde começar. Tente de novo.'],
+        payDown: ['Sèvis peman an pa disponib pou kounye a. Eseye ankò nan yon ti moman.', 'Le service de paiement est indisponible pour le moment. Réessayez.', 'Payment service is temporarily unavailable. Please try again.', 'El servicio de pago no está disponible ahora. Inténtalo de nuevo.', 'O serviço de pagamento está indisponível agora. Tente de novo.'],
         needGps: ['Tanpri peze « Sèvi ak kote m ye kounye a » pou chofè a ka jwenn ou epi pou nou kalkile pri livrezon an.', 'Touchez « Utiliser ma position actuelle » pour que le livreur vous trouve et que nous calculions le prix.', 'Please tap "Use my current location" so your driver can find you and we can calculate your delivery price.', 'Toca «Usar mi ubicación actual» para que el repartidor te encuentre y calculemos el precio.', 'Toque em «Usar minha localização atual» para o entregador encontrar você e calcularmos o preço.']
     };
     var CK_ORDER = ['kr', 'fr', 'en', 'es', 'pt'];
     function ckLang() {
-        var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || 'kr';
+        var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || (function(){ try { return localStorage.getItem('myplopplop_lang'); } catch (e) { return null; } })() || 'kr';
         return l === 'ht' ? 'kr' : (CK_ORDER.indexOf(l) >= 0 ? l : 'en');
     }
     function ck(k, v) {
@@ -1636,14 +1638,14 @@
             } else {
                 btn.disabled = false;
                 btn.textContent = ck('place');
-                alert('Payment error: ' + (data.error || 'Please try again'));
+                alert(ck('payErr') + (data.error ? ' (' + data.error + ')' : ''));
             }
         })
         .catch(function(err) {
             console.error('Payment error:', err);
             btn.disabled = false;
             btn.textContent = ck('place');
-            alert('Payment service is temporarily unavailable. Please try again.');
+            alert(ck('payDown'));
         });
     }
 

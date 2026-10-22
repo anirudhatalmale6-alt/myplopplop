@@ -570,12 +570,18 @@
 <script>
 /* 22 Oct 2026: "2 items", "Line total" and "Total" stayed English on a
    Kreyòl phone. */
-var CART_TXT = { kr: ['{n} atik', '{n} atik', 'Total liy: {p}', 'Total'], fr: ['{n} article', '{n} articles', 'Total ligne : {p}', 'Total'],
-                 en: ['{n} item', '{n} items', 'Line total: {p}', 'Total'], es: ['{n} artículo', '{n} artículos', 'Total: {p}', 'Total'],
-                 pt: ['{n} item', '{n} itens', 'Total do item: {p}', 'Total'] };
+/* The cart also added a flat 100 HTG "delivery" (a demo-data default) to the
+   total, while checkout charges the distance price - 150 HTG at least. The
+   cart now says the delivery is priced at payment and leaves it out of its
+   total, saying so. */
+var CART_TXT = { kr: ['{n} atik', '{n} atik', 'Total liy: {p}', 'Total', 'Livrezon dapre distans', 'Kalkile nan peman', 'Total (san livrezon)'],
+                 fr: ['{n} article', '{n} articles', 'Total ligne : {p}', 'Total', 'Livraison selon la distance', 'Calculée au paiement', 'Total (hors livraison)'],
+                 en: ['{n} item', '{n} items', 'Line total: {p}', 'Total', 'Delivery priced by distance', 'Calculated at payment', 'Total (before delivery)'],
+                 es: ['{n} artículo', '{n} artículos', 'Total: {p}', 'Total', 'Entrega según la distancia', 'Se calcula al pagar', 'Total (sin entrega)'],
+                 pt: ['{n} item', '{n} itens', 'Total do item: {p}', 'Total', 'Entrega conforme a distância', 'Calculada no pagamento', 'Total (sem entrega)'] };
 function cartTxt(k, v) {
-    var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || 'kr'; if (l === 'ht') l = 'kr';
-    var row = CART_TXT[l] || CART_TXT.en, s = row[{ one: 0, many: 1, line: 2, total: 3 }[k]];
+    var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || (function(){ try { return localStorage.getItem('myplopplop_lang'); } catch (e) { return null; } })() || 'kr'; if (l === 'ht') l = 'kr';
+    var row = CART_TXT[l] || CART_TXT.en, s = row[{ one: 0, many: 1, line: 2, total: 3, del: 4, delAtPay: 5, totalNoDel: 6 }[k]];
     return s.replace('{n}', v).replace('{p}', v);
 }
 
@@ -720,7 +726,7 @@ function cartTxt(k, v) {
                     <div class="store-group-header">
                         <div class="store-group-icon">${storeIcon}</div>
                         <span class="store-group-name">${group.storeName}</span>
-                        <span class="store-group-delivery">${deliveryFee === 0 ? '<span class="free-tag">Free delivery</span>' : MOCK.formatHTG(deliveryFee) + ' delivery'}</span>
+                        <span class="store-group-delivery">${cartTxt('del')}</span>
                     </div>
             `;
 
@@ -770,10 +776,12 @@ function cartTxt(k, v) {
 
         // Update summary
         document.getElementById('summarySubtotal').textContent = MOCK.formatHTG(subtotal);
-        document.getElementById('summaryDelivery').textContent = totalDeliveryFee === 0 ? '<span class="free-tag">Free</span>' : MOCK.formatHTG(totalDeliveryFee);
+        document.getElementById('summaryDelivery').textContent = cartTxt('delAtPay');
         document.getElementById('summaryService').textContent = MOCK.formatHTG(serviceFee);
-        document.getElementById('summaryTotal').textContent = MOCK.formatHTG(total);
-        document.getElementById('bottomTotal').textContent = MOCK.formatHTG(total);
+        var shown = total - totalDeliveryFee;   // delivery is priced at checkout, from the address
+        document.getElementById('summaryTotal').textContent = MOCK.formatHTG(shown);
+        document.getElementById('bottomTotal').textContent = MOCK.formatHTG(shown);
+        document.querySelectorAll('[data-cart-total]').forEach(function (el) { el.textContent = cartTxt('totalNoDel'); });
 
         // Store summary for checkout
         localStorage.setItem('myplopplop_order_summary', JSON.stringify({
