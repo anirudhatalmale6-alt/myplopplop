@@ -170,6 +170,9 @@
     transition: box-shadow var(--transition-fast);
 }
 .inv-item:hover { box-shadow: var(--shadow-sm); }
+/* 22 Oct 2026: the photo imported with the CSV, so the merchant sees it landed. */
+.inv-thumb { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: #F1F5F9; }
+.inv-thumb.ph { display: grid; place-items: center; font-size: 20px; }
 .inv-check {
     width: 20px;
     height: 20px;
@@ -565,16 +568,22 @@
 .search-row select { flex: 1 1 0; min-width: 0; width: auto; }
 .filters-bar { min-width: 0; max-width: 100%; }
 html, body { overflow-x: hidden; max-width: 100%; }
+/* 22 Oct 2026: on a phone the language bar was wider than the screen and
+   pushed "Merchant Portal / View Storefront" off the left edge, cut in half. */
+@media (max-width: 768px) {
+    .top-bar .tb-store, .top-bar > .flex:first-child { display: none; }
+    .top-bar { overflow-x: auto; white-space: nowrap; }
+}
 </style>
 </head>
 <body>
 
 <div class="top-bar">
-    <div style="display:flex;align-items:center;gap:var(--space-sm);">
+    <div class="flex" style="display:flex;align-items:center;gap:var(--space-sm);">
         <span>Merchant Portal</span>
     </div>
-    <div style="display:flex;align-items:center;gap:var(--space-md);">
-        <a href="../index.html">View Storefront</a>
+    <div class="flex" style="display:flex;align-items:center;gap:var(--space-md);">
+        <a href="../index.html" class="tb-store">View Storefront</a>
         <a href="#" data-lang="ht" class="active" onclick="setLang('ht')">🇭🇹 Kreyòl</a>
         <a href="#" data-lang="fr" onclick="setLang('fr')">🇫🇷 Français</a>
         <a href="#" data-lang="en" onclick="setLang('en')">🇬🇧 English</a>
@@ -825,11 +834,11 @@ html, body { overflow-x: hidden; max-width: 100%; }
 <nav class="merchant-nav">
     <a href="dashboard.html" class="merchant-nav-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        <span>Dashboard</span>
+        <span data-i18n="nav_dashboard">Dashboard</span>
     </a>
     <a href="orders.html" class="merchant-nav-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        <span>Orders</span>
+        <span data-i18n="nav_orders">Orders</span>
     </a>
     <a href="inventory.html" class="merchant-nav-item active">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
@@ -837,11 +846,11 @@ html, body { overflow-x: hidden; max-width: 100%; }
     </a>
     <a href="products.html" class="merchant-nav-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        <span>Products</span>
+        <span data-i18n="nav_products">Products</span>
     </a>
     <a href="settings.html" class="merchant-nav-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09"/></svg>
-        <span>Settings</span>
+        <span data-i18n="nav_settings">Settings</span>
     </a>
 </nav>
 
@@ -858,7 +867,7 @@ let currentLang = localStorage.getItem('pp_lang') || 'ht';
 const T = {
     ht: {
         page_title: 'Envantè',
-        nav_inventory: 'Envantè',
+        nav_inventory: 'Envantè', err_cmp: 'Ansyen pri a pa bon, li pa konte: «{v}»', row_n: 'Ranje {n}', err_name: 'Non an obligatwa', err_price: 'Pri a pa bon: «{v}» (ekri chif sèlman, egzanp 120)', err_qty: 'Kantite a pa bon: «{v}»', err_img: 'Lyen foto a pa bon, pwodwi a anrejistre san foto: {v}', nav_dashboard: 'Tablo', nav_orders: 'Kòmand', nav_products: 'Pwodwi', nav_settings: 'Paramèt',
         btn_upload: 'Upload CSV/XLSX',
         btn_odoo: 'Konekte Odoo',
         btn_export: 'Export',
@@ -915,7 +924,7 @@ const T = {
     },
     fr: {
         page_title: 'Inventaire',
-        nav_inventory: 'Inventaire',
+        nav_inventory: 'Inventaire', err_cmp: 'Ancien prix invalide, ignoré : « {v} »', row_n: 'Ligne {n}', err_name: 'Le nom est obligatoire', err_price: 'Prix invalide : « {v} » (chiffres seulement, ex. 120)', err_qty: 'Quantité invalide : « {v} »', err_img: 'Lien photo invalide, produit enregistré sans photo : {v}', nav_dashboard: 'Tableau', nav_orders: 'Commandes', nav_products: 'Produits', nav_settings: 'Paramètres',
         btn_upload: 'Upload CSV/XLSX',
         btn_odoo: 'Connecter Odoo',
         btn_export: 'Exporter',
@@ -972,7 +981,7 @@ const T = {
     },
     pt: {
         page_title: 'Estoque',
-        nav_inventory: 'Estoque',
+        nav_inventory: 'Estoque', err_cmp: 'Preço antigo inválido, ignorado: «{v}»', row_n: 'Linha {n}', err_name: 'O nome é obrigatório', err_price: 'Preço inválido: «{v}» (só números, ex. 120)', err_qty: 'Quantidade inválida: «{v}»', err_img: 'Link da foto inválido, produto salvo sem foto: {v}', nav_dashboard: 'Painel', nav_orders: 'Pedidos', nav_products: 'Produtos', nav_settings: 'Configurações',
         btn_upload: 'Enviar CSV/XLSX',
         btn_odoo: 'Conectar o Odoo',
         btn_export: 'Exportar',
@@ -1029,7 +1038,7 @@ const T = {
     },
     en: {
         page_title: 'Inventory',
-        nav_inventory: 'Inventory',
+        nav_inventory: 'Inventory', err_cmp: 'Old price not valid, ignored: "{v}"', row_n: 'Row {n}', err_name: 'Name is required', err_price: 'Invalid price: "{v}" (numbers only, e.g. 120)', err_qty: 'Invalid quantity: "{v}"', err_img: 'Photo link not valid, product saved without a photo: {v}', nav_dashboard: 'Dashboard', nav_orders: 'Orders', nav_products: 'Products', nav_settings: 'Settings',
         btn_upload: 'Upload CSV/XLSX',
         btn_odoo: 'Connect Odoo',
         btn_export: 'Export',
@@ -1086,7 +1095,7 @@ const T = {
     },
     es: {
         page_title: 'Inventario',
-        nav_inventory: 'Inventario',
+        nav_inventory: 'Inventario', err_cmp: 'Precio anterior inválido, ignorado: «{v}»', row_n: 'Fila {n}', err_name: 'El nombre es obligatorio', err_price: 'Precio inválido: «{v}» (solo números, ej. 120)', err_qty: 'Cantidad inválida: «{v}»', err_img: 'Enlace de foto inválido, producto guardado sin foto: {v}', nav_dashboard: 'Panel', nav_orders: 'Pedidos', nav_products: 'Productos', nav_settings: 'Ajustes',
         btn_upload: 'Subir CSV/XLSX',
         btn_odoo: 'Conectar Odoo',
         btn_export: 'Exportar',
@@ -1161,6 +1170,20 @@ function setLang(lang) {
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
         el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
     });
+}
+
+/* 22 Oct 2026: the server explains a bad row in English ("Invalid price:
+   120 goud"). Say it in the merchant's language; anything unknown is shown
+   as the server wrote it. */
+function uploadErr(m) {
+    m = String(m || '');
+    let x;
+    if (m === 'Name is required') return t('err_name');
+    if ((x = m.match(/^Invalid price: (.*)$/))) return t('err_price', { v: x[1] });
+    if ((x = m.match(/^Invalid stockQuantity: (.*)$/))) return t('err_qty', { v: x[1] });
+    if ((x = m.match(/^Image link not valid \(product saved without it\): (.*)$/))) return t('err_img', { v: x[1] });
+    if ((x = m.match(/^Invalid comparePrice \(ignored\): (.*)$/))) return t('err_cmp', { v: x[1] });
+    return m;
 }
 
 function getToken() { return localStorage.getItem('pp_token'); }
@@ -1308,6 +1331,7 @@ async function loadProducts() {
 
         return `<div class="inv-item" data-id="${p._id}">
             <input type="checkbox" class="inv-check" data-pid="${p._id}" onchange="onCheckChange()">
+            ${p.images && p.images[0] ? '<img class="inv-thumb" src="' + esc(p.images[0]).replace(/"/g, '&quot;') + '" alt="" loading="lazy">' : '<div class="inv-thumb ph">📦</div>'}
             <div class="inv-info">
                 <div class="inv-name">${esc(p.name)}</div>
                 <div class="inv-meta">
@@ -1492,7 +1516,7 @@ async function doUpload() {
             html += '<div class="result-line"><span class="result-dot red"></span> ' +
                 t('errors') + ': <strong>' + data.errors.length + '</strong></div>';
             html += '<div class="error-list">';
-            data.errors.forEach(e => { html += '<div>Row ' + e.row + ': ' + esc(e.message) + '</div>'; });
+            data.errors.forEach(e => { html += '<div>' + esc(t('row_n', { n: e.row })) + ': ' + esc(uploadErr(e.message)) + '</div>'; });
             html += '</div>';
         }
         results.innerHTML = html;
