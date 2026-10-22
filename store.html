@@ -203,6 +203,11 @@
     cursor: pointer;
     transition: all var(--transition-fast);
 }
+.product-card.sold-out { opacity: .62; }
+.product-card.sold-out .product-price { text-decoration: line-through; }
+.stock-badge { display:inline-block; font-size:.72rem; font-weight:700; padding:4px 10px; border-radius:999px; white-space:nowrap; }
+.stock-badge.out { background:#FDE2E4; color:#B3122B; }
+.stock-badge.low { background:#FFF3D6; color:#8A5A00; margin-right:6px; }
 .product-card:hover {
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
@@ -810,12 +815,40 @@ function saveCart(cart) {
     updateCartUI();
 }
 
+/* 22 Oct 2026: an out-of-stock product used to look exactly like one in
+   stock - the customer only found out at checkout ("only 0 left"). The shop
+   now says so on the card and in the product window, and refuses it here too. */
+var STOCK_TXT = {
+    kr: { out: 'Epuize', outLong: 'Epuize — pa disponib kounye a', left: 'Rès {n}', toastOut: 'Pwodwi sa a epuize', toastMax: 'Sèlman {n} ki rete' },
+    fr: { out: 'Épuisé', outLong: 'Épuisé — indisponible pour le moment', left: 'Reste {n}', toastOut: 'Ce produit est épuisé', toastMax: 'Il n\'en reste que {n}' },
+    en: { out: 'Sold out', outLong: 'Sold out — not available right now', left: '{n} left', toastOut: 'This product is sold out', toastMax: 'Only {n} left' }
+};
+function stockTxt(k, n) {
+    var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || 'kr';
+    var d = STOCK_TXT[l] || STOCK_TXT[l === 'ht' ? 'kr' : 'en'] || STOCK_TXT.kr;
+    return String(d[k]).replace('{n}', n);
+}
+function isSoldOut(p) {
+    return !p || p.inStock === false || (typeof p.stockQuantity === 'number' && p.stockQuantity === 0);
+}
+/* stockQuantity -1 (or missing) means the shop does not count this product. */
+function stockLimit(p) {
+    return (p && typeof p.stockQuantity === 'number' && p.stockQuantity >= 0) ? p.stockQuantity : Infinity;
+}
+
 function addToCart(storeId, product, qty) {
+    if (qty > 0 && isSoldOut(product)) { showToast(stockTxt('toastOut')); return; }
     var cart = getCart();
     var existing = cart.find(function(item) {
         return item.storeId === storeId && item.productId === product.id;
     });
     if (existing) {
+        if (qty > 0 && existing.qty + qty > stockLimit(product)) {
+            existing.qty = stockLimit(product);
+            saveCart(cart);
+            showToast(stockTxt('toastMax', stockLimit(product)));
+            return;
+        }
         existing.qty += qty;
         if (existing.qty <= 0) {
             cart = cart.filter(function(item) {
@@ -823,6 +856,7 @@ function addToCart(storeId, product, qty) {
             });
         }
     } else if (qty > 0) {
+        if (qty > stockLimit(product)) { qty = stockLimit(product); showToast(stockTxt('toastMax', qty)); }
         cart.push({
             storeId: storeId,
             storeName: store ? store.name : '',
@@ -1250,7 +1284,8 @@ function renderProducts() {
         html += '<h3 class="product-category-title">' + catName + '</h3>';
         html += '<div class="product-list">';
         groups[catName].forEach(function(p) {
-            html += '<div class="product-card" onclick="openProductModal(\'' + p.id + '\')">';
+            var soldOut = isSoldOut(p);
+            html += '<div class="product-card' + (soldOut ? ' sold-out' : '') + '" onclick="openProductModal(\'' + p.id + '\')">';
             if (p.image) {
                 html += '  <div class="product-img-placeholder" style="padding:0;overflow:hidden;"><img src="' + p.image + '" alt="' + p.name + '" style="width:100%;height:100%;object-fit:cover;"></div>';
             } else {
@@ -1261,7 +1296,12 @@ function renderProducts() {
             html += '    <div class="product-desc">' + p.description + '</div>';
             html += '    <div class="product-bottom">';
             html += '      <span class="product-price">' + MOCK.formatHTG(p.price) + '</span>';
-            html += '      <button class="product-add-btn" onclick="event.stopPropagation(); addToCart(\'' + store.id + '\', getProduct(\'' + p.id + '\'), 1)">+ Add</button>';
+            if (soldOut) {
+                html += '      <span class="stock-badge out">' + stockTxt('out') + '</span>';
+            } else {
+                if (stockLimit(p) <= 5) html += '      <span class="stock-badge low">' + stockTxt('left', p.stockQuantity) + '</span>';
+                html += '      <button class="product-add-btn" onclick="event.stopPropagation(); addToCart(\'' + store.id + '\', getProduct(\'' + p.id + '\'), 1)">+ Add</button>';
+            }
             html += '    </div>';
             html += '  </div>';
             html += '</div>';
@@ -1495,15 +1535,22 @@ function renderModalContent() {
 
     // Subtotal + Add to Cart
     var subtotal = modalProduct.price * modalQty;
-    html += '<button class="btn btn-red btn-full btn-lg" onclick="addToCartFromModal()" id="modalAddBtn">';
-    html += '  Add to Cart — ' + MOCK.formatHTG(subtotal);
-    html += '</button>';
+    if (isSoldOut(modalProduct)) {
+        html += '<button class="btn btn-full btn-lg" disabled id="modalAddBtn" style="background:#E5E7EB;color:#6B7280;cursor:not-allowed">';
+        html += '  ' + stockTxt('outLong');
+        html += '</button>';
+    } else {
+        html += '<button class="btn btn-red btn-full btn-lg" onclick="addToCartFromModal()" id="modalAddBtn">';
+        html += '  Add to Cart — ' + MOCK.formatHTG(subtotal);
+        html += '</button>';
+    }
 
     mc.innerHTML = html;
 }
 
 function changeModalQty(delta) {
-    modalQty = Math.max(1, modalQty + delta);
+    if (isSoldOut(modalProduct)) return;
+    modalQty = Math.min(Math.max(1, modalQty + delta), Math.max(1, stockLimit(modalProduct)));
     document.getElementById('modalQtyValue').textContent = modalQty;
     var subtotal = modalProduct.price * modalQty;
     document.getElementById('modalAddBtn').textContent = 'Add to Cart — ' + MOCK.formatHTG(subtotal);

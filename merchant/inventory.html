@@ -766,8 +766,9 @@ html, body { overflow-x: hidden; max-width: 100%; }
         </div>
 
         <div class="template-preview">
-            name, price, category, description, stockQuantity, unit, comparePrice, inStock
+            name, price, category, description, stockQuantity, unit, comparePrice, inStock, sku, image
         </div>
+        <p data-i18n="upload_img_hint" style="font-size:var(--text-sm);color:var(--gray-600,#555);margin:-4px 0 var(--space-sm);">image = lyen foto pwodwi a (https://…/foto.jpg). Kite l vid pou kenbe foto ki deja la.</p>
 
         <div style="display:flex;gap:var(--space-sm);margin-bottom:var(--space-md);">
             <a href="#" onclick="downloadTemplate();return false;" style="font-size:var(--text-sm);color:var(--primary-blue);font-weight:600;" data-i18n="upload_download_tmpl">Telechaje Template</a>
@@ -881,6 +882,7 @@ const T = {
         select_all: 'Chwazi Tout',
         upload_title: 'Upload Envantè',
         upload_drag: 'Trennen fichye CSV oswa XLSX la isit la',
+        upload_img_hint: 'image = lyen foto pwodwi a (https://…/foto.jpg). Kite l vid pou kenbe foto ki deja la.',
         upload_download_tmpl: 'Telechaje Template',
         btn_cancel: 'Anile',
         btn_upload_go: 'Upload',
@@ -937,6 +939,7 @@ const T = {
         select_all: 'Tout Sélectionner',
         upload_title: 'Upload Inventaire',
         upload_drag: 'Glissez un fichier CSV ou XLSX ici',
+        upload_img_hint: 'image = lien de la photo du produit (https://…/photo.jpg). Laissez vide pour garder la photo actuelle.',
         upload_download_tmpl: 'Télécharger le Modèle',
         btn_cancel: 'Annuler',
         btn_upload_go: 'Upload',
@@ -993,6 +996,7 @@ const T = {
         select_all: 'Selecionar tudo',
         upload_title: 'Enviar estoque',
         upload_drag: 'Arraste um arquivo CSV ou XLSX aqui',
+        upload_img_hint: 'image = link da foto do produto (https://…/foto.jpg). Deixe vazio para manter a foto atual.',
         upload_download_tmpl: 'Baixar modelo',
         btn_cancel: 'Cancelar',
         btn_upload_go: 'Enviar',
@@ -1049,6 +1053,7 @@ const T = {
         select_all: 'Select All',
         upload_title: 'Upload Inventory',
         upload_drag: 'Drag a CSV or XLSX file here',
+        upload_img_hint: 'image = link to the product photo (https://…/photo.jpg). Leave it empty to keep the current photo.',
         upload_download_tmpl: 'Download Template',
         btn_cancel: 'Cancel',
         btn_upload_go: 'Upload',
@@ -1105,6 +1110,7 @@ const T = {
         select_all: 'Seleccionar Todo',
         upload_title: 'Subir Inventario',
         upload_drag: 'Arrastra un archivo CSV o XLSX aquí',
+        upload_img_hint: 'image = enlace de la foto del producto (https://…/foto.jpg). Déjalo vacío para mantener la foto actual.',
         upload_download_tmpl: 'Descargar Plantilla',
         btn_cancel: 'Cancelar',
         btn_upload_go: 'Subir',
