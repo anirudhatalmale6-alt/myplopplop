@@ -66,6 +66,7 @@ a.map{display:block;text-align:center;margin-top:10px;color:var(--blue);font-wei
 
   <!-- MAIN -->
   <div id="main" style="display:none;">
+    <div class="card" id="acct" style="display:none"></div>
     <div id="content"></div>
   </div>
 </div>
@@ -108,6 +109,48 @@ var DT = {
         expired:'Offer expired — passing to the next driver…', noAccept:'Could not accept', why:'Why can you not do it? (the customer and the shop are told)',
         noUpdate:'Could not update', done:'Delivery complete', earned:'You earned {m}. It is held for 24 hours, then you can withdraw it.' }
 };
+/* 23 Oct 2026: the screen said "An liy" to ANY account that signed in - a
+   customer account, a driver still waiting for approval, a ride-only driver -
+   because the online call's answer was thrown away. None of those can ever
+   receive a delivery. The account is now checked and the truth shown, with
+   the phone's GPS, which the dispatcher also needs. */
+Object.assign(DT.kr, { accOk:'✅ Chofè livrezon MyPlopPlop apwouve', accPending:'⏳ Kont chofè w la poko apwouve (eta: {s}). Ou p ap resevwa livrezon toutotan yon administratè pa apwouve l.',
+  accNone:'❌ Kont sa a pa yon kont chofè livrezon MyPlopPlop, kidonk li p ap janm resevwa livrezon. Yon kont MsouWout (msouwout.com) pa konte isit la.', accReg:'Enskri kòm chofè livrezon',
+  accNoDel:'❌ Kont chofè w la apwouve, men pa pou livrezon.', accOff:'Pa an liy', gpsOk:'📍 GPS: pozisyon w voye a {t}', gpsWait:'📍 GPS: n ap chèche pozisyon w…',
+  gpsOff:'📍 GPS fèmen oswa refize: louvri lokalizasyon telefòn nan epi otorize sit sa a, san sa ou p ap resevwa livrezon.', accCheck:'Nou pa t kapab verifye kont ou. Tcheke entènèt la.' });
+Object.assign(DT.fr, { accOk:'✅ Chauffeur-livreur MyPlopPlop approuvé', accPending:'⏳ Votre compte chauffeur n’est pas encore approuvé (état : {s}). Vous ne recevrez pas de livraison tant qu’un administrateur ne l’a pas approuvé.',
+  accNone:'❌ Ce compte n’est pas un compte de livreur MyPlopPlop : il ne recevra jamais de livraison. Un compte MsouWout (msouwout.com) ne compte pas ici.', accReg:'S’inscrire comme livreur',
+  accNoDel:'❌ Votre compte chauffeur est approuvé, mais pas pour les livraisons.', accOff:'Hors ligne', gpsOk:'📍 GPS : position envoyée à {t}', gpsWait:'📍 GPS : recherche de votre position…',
+  gpsOff:'📍 GPS désactivé ou refusé : activez la localisation et autorisez ce site, sinon vous ne recevrez pas de livraison.', accCheck:'Impossible de vérifier votre compte. Vérifiez internet.' });
+Object.assign(DT.en, { accOk:'✅ Approved MyPlopPlop delivery driver', accPending:'⏳ Your driver account is not approved yet (status: {s}). You will not receive deliveries until an administrator approves it.',
+  accNone:'❌ This is not a MyPlopPlop delivery-driver account, so it will never receive deliveries. A MsouWout account (msouwout.com) does not count here.', accReg:'Register as a delivery driver',
+  accNoDel:'❌ Your driver account is approved, but not for deliveries.', accOff:'Offline', gpsOk:'📍 GPS: position sent at {t}', gpsWait:'📍 GPS: looking for your position…',
+  gpsOff:'📍 GPS off or refused: turn on location and allow this site, or you will not receive deliveries.', accCheck:'Could not check your account. Check the internet.' });
+var acctState = { acc: '', msg: '', gps: 'wait', at: '' };
+function paintAcct(){
+  var a = el('acct'); if (!a || !acctState.acc) return;
+  var good = acctState.acc === 'ok';
+  var gps = acctState.gps === 'ok' ? dt('gpsOk', { t: acctState.at }) : acctState.gps === 'off' ? dt('gpsOff') : dt('gpsWait');
+  a.style.display = 'block';
+  a.style.border = '2px solid ' + (good && acctState.gps === 'ok' ? 'var(--green)' : good ? 'var(--amber)' : 'var(--red)');
+  a.innerHTML = '<div style="font-weight:700;font-size:14.5px;line-height:1.45" id="accLine">' + esc(acctState.msg) + '</div>' +
+    (acctState.acc === 'none' ? '<a class="map" href="delivery-driver-register.html">' + dt('accReg') + ' →</a>' : '') +
+    (good ? '<div class="muted" id="gpsLine" style="margin-top:6px;' + (acctState.gps === 'off' ? 'color:var(--red);font-weight:600' : '') + '">' + esc(gps) + '</div>' : '');
+  el('onlineDot').textContent = good ? dt('online') : dt('accOff');
+  /* the idle card below says "Ou an liy" - never under an account that cannot receive work */
+  el('content').style.display = /^(none|pending|nodel)$/.test(acctState.acc) ? 'none' : '';
+}
+function checkAccount(){
+  return api('GET','/api/drivers/profile').then(function(d){
+    var p = d && d.profile;
+    if (!(d && d.success && p)) { acctState.acc = 'none'; acctState.msg = dt('accNone'); }
+    else if (p.status !== 'approved') { acctState.acc = 'pending'; acctState.msg = dt('accPending', { s: p.status || '?' }); }
+    else if ((p.services || []).indexOf('delivery') < 0) { acctState.acc = 'nodel'; acctState.msg = dt('accNoDel'); }
+    else { acctState.acc = 'ok'; acctState.msg = dt('accOk'); }
+    paintAcct();
+  }).catch(function(){ acctState.acc = 'err'; acctState.msg = dt('accCheck'); paintAcct(); });
+}
+
 function dt(k, v){
   var l = 'kr'; try { l = localStorage.getItem('myplopplop_lang') || 'kr'; } catch (e) {}
   if (l === 'ht') l = 'kr';
@@ -140,7 +183,8 @@ function login(){
 // Tell the server we're online and share our location so we can be matched.
 function goOnline(){
   api('PUT','/api/drivers/online',{ isOnline:true }).catch(function(){});
-  el('onlineDot').textContent = dt('online');
+  el('onlineDot').textContent = '…';
+  checkAccount();
   sendLocation();
   if (beat) clearInterval(beat);
   beat = setInterval(sendLocation, 60000);
@@ -152,10 +196,13 @@ function esc(v){ return String(v == null ? '' : v).replace(/[&<>"']/g, function(
    only offers jobs to drivers whose position is under 15 minutes old. */
 var beat = null;
 function sendLocation(){
-  if (!navigator.geolocation || !token) return;
+  if (!token) return;
+  if (!navigator.geolocation) { acctState.gps = 'off'; paintAcct(); return; }
   navigator.geolocation.getCurrentPosition(function(p){
-    api('PUT','/api/drivers/location',{ latitude:p.coords.latitude, longitude:p.coords.longitude }).catch(function(){});
-  }, function(){}, { enableHighAccuracy:true, timeout:15000, maximumAge:30000 });
+    api('PUT','/api/drivers/location',{ latitude:p.coords.latitude, longitude:p.coords.longitude }).then(function(d){
+      if (d && d.success) { var n = new Date(); acctState.gps = 'ok'; acctState.at = ('0' + n.getHours()).slice(-2) + ':' + ('0' + n.getMinutes()).slice(-2); paintAcct(); }
+    }).catch(function(){});
+  }, function(){ acctState.gps = 'off'; paintAcct(); }, { enableHighAccuracy:true, timeout:15000, maximumAge:30000 });
 }
 
 function render(data){
