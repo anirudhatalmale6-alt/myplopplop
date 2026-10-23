@@ -149,8 +149,13 @@ input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 
       <span>💰</span><span>Ajan LajanMaker <b id="agentCode"></b> ap resevwa kredi pou enskripsyon w.</span>
     </div>
 
+    <div class="note" id="meBox" style="display:none">
+      <b id="meTitle"></b>
+      <p>Enskripsyon livrè a ap ajoute sou kont sa a. Ou kenbe kont ou jan l ye a (administratè, boutik, kliyan). Pwofil livrè a rete AN ATANT jiskaske yon administratè apwouve l.</p>
+    </div>
+
     <form id="regForm" autocomplete="on">
-      <div class="card">
+      <div class="card" id="accountCard">
         <h2>Kont ou</h2>
         <p class="sub">Nou bezwen non w, telefòn ou ak yon kòd 4 chif.</p>
 
@@ -266,6 +271,27 @@ input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 
     document.getElementById('agentBox').classList.add('on');
   }
 
+  /* 23 Oct 2026: somebody who ALREADY has a MyPlopPlop account (customer, shop
+     owner, administrator) was stuck: this page always created a new account
+     first, got "already registered", and told them to sign in and come back -
+     but coming back did exactly the same thing again. Now:
+       - signed in already  -> the account part is skipped, the delivery
+         profile is added to THAT account;
+       - not signed in, the number exists -> the PIN they typed is tried as
+         that account's PIN; if it is right, the profile is added to it.
+     The server keeps the account's own role (admin stays admin). */
+  var me = null;
+  if (typeof API !== 'undefined' && API.isLoggedIn && API.isLoggedIn()) {   // API is a top-level const: not on window
+    API.getMe().then(function (d) {
+      if (!(d && d.success && d.user)) return;
+      me = d.user;
+      document.getElementById('meTitle').textContent = 'Ou konekte kòm ' + (me.name || '') + ' (' + (me.phone || '') + ')';
+      document.getElementById('meBox').style.display = 'block';
+      document.getElementById('accountCard').style.display = 'none';
+      ['name', 'phone', 'pin', 'pin2'].forEach(function (id) { document.getElementById(id).required = false; });
+    }).catch(function () {});
+  }
+
   function fail(msg) {
     err.textContent = msg;
     err.classList.add('on');
@@ -286,24 +312,31 @@ input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 
     var plate = document.getElementById('plate').value.trim();
     var lic = document.getElementById('lic').value.trim();
 
-    if (!/^\d{4}$/.test(pin)) return fail('Kòd la dwe gen egzakteman 4 chif.');
-    if (pin !== pin2) return fail('De kòd yo pa menm.');
-    if (phone.replace(/\D/g, '').length < 8) return fail('Antre yon nimewo telefòn valab.');
+    if (!me) {
+      if (!/^\d{4}$/.test(pin)) return fail('Kòd la dwe gen egzakteman 4 chif.');
+      if (pin !== pin2) return fail('De kòd yo pa menm.');
+      if (phone.replace(/\D/g, '').length < 8) return fail('Antre yon nimewo telefòn valab.');
+    }
     if (!plate || !lic) return fail('Nou bezwen nimewo plak la ak nimewo lisans lan.');
 
     btn.disabled = true;
     btn.textContent = 'N ap voye…';
 
     // 1) the account. API.register attaches the LajanMaker agent code itself.
-    var reg = await API.register(name, phone, pin, 'driver',
-                                 localStorage.getItem('pp_lang') || 'ht');
-    if (!reg.success) {
-      // Somebody who already has a MyPlopPlop account should log in rather than
-      // be told, unhelpfully, that they already exist.
-      if ((reg.message || '').toLowerCase().indexOf('already registered') !== -1) {
-        return fail('Nimewo sa a gen yon kont deja. Konekte, epi retounen sou paj sa a.');
+    //    Skipped when already signed in: the profile goes on THAT account.
+    if (!me) {
+      var reg = await API.register(name, phone, pin, 'driver',
+                                   localStorage.getItem('pp_lang') || 'ht');
+      if (!reg.success) {
+        if ((reg.message || '').toLowerCase().indexOf('already registered') === -1) {
+          return fail(reg.message || 'Nou pa t ka kreye kont lan. Eseye ankò.');
+        }
+        // The number has an account: the PIN typed may be that account's PIN.
+        var lg = await API.login(phone, pin);
+        if (!(lg && lg.success)) {
+          return fail('Nimewo sa a gen yon kont MyPlopPlop deja. Mete KÒD kont sa a nan de kaz kòd yo (pa yon nouvo kòd), oswa konekte sou paj "Konekte" a epi retounen isit la.');
+        }
       }
-      return fail(reg.message || 'Nou pa t ka kreye kont lan. Eseye ankò.');
     }
 
     // 2) the driver profile - DELIVERY only, which is what puts them in the
@@ -323,6 +356,9 @@ input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 
     if (agent) fd.append('koutyeCode', agent);
 
     var prof = await API.driverOnboard(fd);
+    if (!prof.success && /already exists/i.test(prof.message || '')) {
+      return fail('Kont sa a gen yon pwofil livrè deja. Ale sou myplopplop.com/driver-delivery.html pou w wè si li apwouve.');
+    }
     if (!prof.success) {
       return fail(prof.message || 'Kont ou kreye, men enskripsyon livrè a pa pase. Konekte epi eseye ankò.');
     }

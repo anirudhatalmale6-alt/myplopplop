@@ -361,7 +361,7 @@
                 <div class="input-group">
                     <label data-i18n="auth.pin">PIN / Password</label>
                     <div class="pin-wrap">
-                        <input type="password" class="input" placeholder="Enter your PIN" maxlength="20" required>
+                        <input type="password" class="input" id="loginPin" placeholder="Enter your PIN" maxlength="20" required>
                         <button type="button" class="pin-toggle" onclick="togglePin(this)" aria-label="Show PIN">👁️</button>
                     </div>
                 </div>
@@ -554,7 +554,9 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const btn = e.target.querySelector('button[type="submit"]');
     const prefix = e.target.querySelector('.phone-prefix').value;
     const phone = prefix + e.target.querySelector('input[type="tel"]').value.replace(/\s/g, '');
-    const password = e.target.querySelector('input[type="password"]').value;
+    // By id: the 👁️ button turns this field into type="text", and a lookup by
+    // type then found nothing - the button silently did nothing (23 Oct 2026).
+    const password = document.getElementById('loginPin').value;
 
     btn.textContent = 'Logging in...';
     btn.disabled = true;
