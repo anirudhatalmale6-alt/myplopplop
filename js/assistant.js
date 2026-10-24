@@ -168,11 +168,28 @@
   ].join('');
 
   /* Pages with a bottom nav bar would hide the bubble behind it. */
+  /* 24 Oct 2026: the home page's bar is nav.mp-bottom, which this list did not
+     know - the bubble sat on top of "Kont", the only way to sign in on a phone
+     (Jeffery: "There are no Sign in button"). Measured, not guessed. */
   function bubbleOffset() {
-    var nav = document.querySelector('.bottom-nav, .mp-bottom-nav, .rider-bottom-nav');
+    var nav = document.querySelector('.bottom-nav, .mp-bottom-nav, .rider-bottom-nav, nav.mp-bottom');
     if (!nav) return 20;
-    var visible = nav.offsetParent !== null && window.getComputedStyle(nav).display !== 'none';
-    return visible ? 82 : 20;
+    /* offsetParent is ALWAYS null for a position:fixed bar, so that test said
+       "hidden" for every fixed bottom bar and the bubble went on top of it */
+    var r = nav.getBoundingClientRect();
+    var visible = window.getComputedStyle(nav).display !== 'none' && r.height > 0 && r.bottom > 0;
+    if (!visible) return 20;
+    var h = Math.round(r.height) || 62;
+    var off = Math.max(82, h + 14);
+    /* the WhatsApp and Share buttons already stand in that corner above the
+       bar: go above the highest of them instead of on top of one */
+    document.querySelectorAll('.mp-wa-container, .mw-share-fab').forEach(function (f) {
+      var fr = f.getBoundingClientRect();
+      if (fr.width && window.getComputedStyle(f).display !== 'none' && fr.left > window.innerWidth / 2) {
+        off = Math.max(off, Math.round(window.innerHeight - fr.top) + 10);
+      }
+    });
+    return off;
   }
 
   /* ── build ─────────────────────────────────────────────────────────────── */
@@ -233,9 +250,17 @@
   }
 
   function position() {
-    var off = bubbleOffset();
-    bubble.style.bottom = off + 'px';
-    panel.style.bottom = (off + 66) + 'px';
+    /* the bottom bar is often drawn AFTER this runs - place again once the
+       page has settled, and whenever the screen turns */
+    function place() {
+      var off = bubbleOffset();
+      bubble.style.bottom = off + 'px';
+      panel.style.bottom = (off + 66) + 'px';
+    }
+    place();
+    window.addEventListener('load', place);
+    window.addEventListener('resize', place);
+    setTimeout(place, 800); setTimeout(place, 2500);
   }
 
   /* ── rendering ─────────────────────────────────────────────────────────── */
