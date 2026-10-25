@@ -42,6 +42,7 @@
 <script src="/js/referral.js"></script>
     <script src="/js/api.js"></script>
 <script src="/js/admin.js"></script>
+<script src="/js/mwlink.js"></script>
 <script>
 (function () {
   var cache = {}, tab = 'pending';
@@ -97,6 +98,7 @@
                 (d.driverType === 'ride' ? '🚗 Pasaje (MsouWout)'
                   : d.driverType === 'both' ? '📦🚗 Livrezon + Pasaje'
                   : '📦 Livrezon (MyPlopPlop)') + '</b></div>' +
+              MWLINK.block(d) +
               '<div class="mp-row-sub">' + (d.totalRides || 0) + ' kous · ⭐ ' +
                 (Number(d.rating) || 0).toFixed(1) + ' · ' + ADM.money(d.totalEarnings || 0) + '</div>' +
             '</div>' +

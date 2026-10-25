@@ -126,15 +126,39 @@ Object.assign(DT.en, { accOk:'✅ Approved MyPlopPlop delivery driver', accPendi
   accNone:'❌ This is not a MyPlopPlop delivery-driver account, so it will never receive deliveries. A MsouWout account (msouwout.com) does not count here.', accReg:'Register as a delivery driver',
   accNoDel:'❌ Your driver account is approved, but not for deliveries.', accOff:'Offline', gpsOk:'📍 GPS: position sent at {t}', gpsWait:'📍 GPS: looking for your position…',
   gpsOff:'📍 GPS off or refused: turn on location and allow this site, or you will not receive deliveries.', accCheck:'Could not check your account. Check the internet.' });
-var acctState = { acc: '', msg: '', gps: 'wait', at: '' };
+Object.assign(DT.kr, { mwAsk:'Ou se chofè MsouWout deja? Pa bezwen ranpli okenn fòm: mete PIN MsouWout ou a.', mwPin:'PIN MsouWout ou', mwBtn:'🔗 Konekte kont MsouWout mwen',
+  mwWait:'N ap verifye ak MsouWout… (sa ka pran 1 minit)', mwLinked:'🔗 Kont MsouWout ou konekte — pwofil livrezon ou kreye AN ATANT. Yon administratè dwe apwouve l.', mwOk:'🔗 Konekte ak MsouWout' });
+Object.assign(DT.fr, { mwAsk:'Déjà chauffeur MsouWout ? Aucun formulaire : entrez votre PIN MsouWout.', mwPin:'Votre PIN MsouWout', mwBtn:'🔗 Relier mon compte MsouWout',
+  mwWait:'Vérification avec MsouWout… (jusqu’à 1 minute)', mwLinked:'🔗 Compte MsouWout relié — profil livreur créé EN ATTENTE. Un administrateur doit l’approuver.', mwOk:'🔗 Relié à MsouWout' });
+Object.assign(DT.en, { mwAsk:'Already a MsouWout driver? No form: enter your MsouWout PIN.', mwPin:'Your MsouWout PIN', mwBtn:'🔗 Link my MsouWout account',
+  mwWait:'Checking with MsouWout… (can take a minute)', mwLinked:'🔗 MsouWout account linked — delivery profile created PENDING. An administrator must approve it.', mwOk:'🔗 Linked to MsouWout' });
+var acctState = { acc: '', msg: '', gps: 'wait', at: '', mw: false };
+/* 24 Oct 2026 - ONE DRIVER: a MsouWout driver links instead of registering. */
+function linkMsouwout(){
+  var pin = (el('mwPin') && el('mwPin').value || '').trim(), out = el('mwMsg');
+  if (!pin) { out.textContent = dt('mwPin'); return; }
+  el('mwGo').disabled = true; out.style.color = 'var(--muted)'; out.textContent = dt('mwWait');
+  api('POST','/api/drivers/link-msouwout',{ pin: pin }).then(function(d){
+    el('mwGo').disabled = false;
+    if (d && d.success) { out.style.color = 'var(--green)'; out.textContent = dt('mwLinked'); checkAccount(); }
+    else { out.style.color = 'var(--red)'; out.textContent = (d && d.message) || dt('accCheck'); }
+  }).catch(function(){ el('mwGo').disabled = false; out.style.color = 'var(--red)'; out.textContent = dt('net'); });
+}
 function paintAcct(){
   var a = el('acct'); if (!a || !acctState.acc) return;
+  /* the once-a-minute GPS repaint must not wipe a MsouWout PIN being typed */
+  if (acctState.acc === 'none' && a.getAttribute('data-st') === 'none' && el('mwPin')) return;
+  a.setAttribute('data-st', acctState.acc);
   var good = acctState.acc === 'ok';
   var gps = acctState.gps === 'ok' ? dt('gpsOk', { t: acctState.at }) : acctState.gps === 'off' ? dt('gpsOff') : dt('gpsWait');
   a.style.display = 'block';
   a.style.border = '2px solid ' + (good && acctState.gps === 'ok' ? 'var(--green)' : good ? 'var(--amber)' : 'var(--red)');
   a.innerHTML = '<div style="font-weight:700;font-size:14.5px;line-height:1.45" id="accLine">' + esc(acctState.msg) + '</div>' +
-    (acctState.acc === 'none' ? '<a class="map" href="delivery-driver-register.html">' + dt('accReg') + ' →</a>' : '') +
+    (acctState.acc === 'none' ? '<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line)"><p class="muted" style="margin-bottom:8px">' + dt('mwAsk') + '</p>' +
+        '<input class="pin" id="mwPin" type="password" inputmode="numeric" maxlength="8" placeholder="' + dt('mwPin') + '" autocomplete="off" style="letter-spacing:4px;font-size:18px">' +
+        '<button class="btn btn-blue" id="mwGo" onclick="linkMsouwout()">' + dt('mwBtn') + '</button><div class="muted" id="mwMsg" style="margin-top:8px;font-weight:600"></div></div>' +
+        '<a class="map" href="delivery-driver-register.html">' + dt('accReg') + ' →</a>' : '') +
+    (acctState.mw ? '<div class="muted" style="margin-top:6px;font-weight:600;color:var(--blue)">' + dt('mwOk') + '</div>' : '') +
     (good ? '<div class="muted" id="gpsLine" style="margin-top:6px;' + (acctState.gps === 'off' ? 'color:var(--red);font-weight:600' : '') + '">' + esc(gps) + '</div>' : '');
   el('onlineDot').textContent = good ? dt('online') : dt('accOff');
   /* the idle card below says "Ou an liy" - never under an account that cannot receive work */
@@ -143,6 +167,7 @@ function paintAcct(){
 function checkAccount(){
   return api('GET','/api/drivers/profile').then(function(d){
     var p = d && d.profile;
+    acctState.mw = !!(p && p.msouwout && p.msouwout.driverId);
     if (!(d && d.success && p)) { acctState.acc = 'none'; acctState.msg = dt('accNone'); }
     else if (p.status !== 'approved') { acctState.acc = 'pending'; acctState.msg = dt('accPending', { s: p.status || '?' }); }
     else if ((p.services || []).indexOf('delivery') < 0) { acctState.acc = 'nodel'; acctState.msg = dt('accNoDel'); }

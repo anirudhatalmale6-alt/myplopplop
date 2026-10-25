@@ -508,6 +508,7 @@
 
 <script src="/js/referral.js"></script>
     <script src="/js/api.js"></script>
+<script src="/js/mwlink.js"></script>
 <script>
 // Check admin login
 if (!API.isLoggedIn()) {
@@ -623,7 +624,7 @@ async function loadPendingDrivers() {
                     '<div style="font-size:var(--text-xs);color:var(--text-muted);">' + phone + ' | ' + vehicle + '</div>' +
                     '<div style="font-size:var(--text-xs);color:var(--text-muted);">Services: ' + services + '</div>' +
                 '</div>' +
-            '</div>';
+            '</div>' + MWLINK.block(d);
 
         // Document thumbnails
         if (d.documents) {
