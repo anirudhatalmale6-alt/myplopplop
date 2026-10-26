@@ -295,6 +295,21 @@ input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 
       document.getElementById('meBox').style.display = 'block';
       document.getElementById('accountCard').style.display = 'none';
       ['name', 'phone', 'pin', 'pin2'].forEach(function (id) { document.getElementById(id).required = false; });
+      /* 26 Oct 2026: Jeffery came back here to see whether he was approved -
+         this page never said. An account that already HAS a driver profile is
+         shown its status and sent to the driver page instead of a form. */
+      return API.driverProfile().then(function (r) {
+        var p = r && r.success && r.profile;
+        if (!p) return;
+        var ok = p.status === 'approved';
+        var box = document.getElementById('meBox');
+        box.innerHTML = '<b>' + (ok ? '✅ Ou se chofè livrezon MyPlopPlop APWOUVE' : p.status === 'pending'
+            ? '⏳ Ou deja enskri kòm chofè livrezon — n ap tann apwobasyon' : '⚠️ Pwofil chofè w la: ' + String(p.status)) + '</b>' +
+          (p.msouwout && p.msouwout.driverId ? '<p>🔗 Konekte ak MsouWout</p>' : '') +
+          '<p style="margin-top:10px"><a href="driver-delivery.html" style="display:inline-block;background:#00209F;color:#fff;font-weight:800;' +
+          'padding:12px 18px;border-radius:12px;text-decoration:none">🛵 Ale sou paj chofè mwen</a></p>';
+        document.getElementById('regForm').style.display = 'none';
+      });
     }).catch(function () {});
   }
 
