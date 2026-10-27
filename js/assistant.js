@@ -6,6 +6,17 @@
  *
  * It never answers from the browser. Every reply comes from /api/assistant/chat,
  * where the wording is grounded and a human handoff can be triggered. */
+/* The "back to MsouWout" bar rides along with this file because every
+ * shopping page already loads it. See js/msw-return.js. */
+(function () {
+  try {
+    var r = document.createElement('script');
+    r.src = '/js/msw-return.js?v=1';
+    r.defer = true;
+    (document.head || document.documentElement).appendChild(r);
+  } catch (e) {}
+})();
+
 (function () {
   'use strict';
 
