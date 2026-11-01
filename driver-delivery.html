@@ -81,7 +81,7 @@ function el(id){ return document.getElementById(id); }
 /* 22 Oct 2026: the driver screen was entirely English. Kreyòl by default,
    French and English from the site's saved language. */
 var DT = {
-  kr: { title:'Chofè — Livrezon', signin:'Konekte kòm chofè', signinSub:'Mete telefòn ou ak PIN ou pou w kòmanse resevwa livrezon.', phone:'Telefòn (egz. 3700 0000)', pin:'PIN', signinBtn:'Konekte',
+  kr: { title:'Chofè — Livrezon', signin:'Konekte kòm chofè', signinSub:'Mete telefòn ou ak PIN ou pou w kòmanse resevwa livrezon. Chofè MsouWout apwouve: menm telefòn + PIN MsouWout ou.', phone:'Telefòn (egz. 3700 0000)', pin:'PIN', signinBtn:'Konekte',
         noSignin:'Nou pa t kapab konekte w.', net:'Pa gen entènèt.', online:'An liy', newOffer:'NOUVO LIVREZON', earnThis:'Sa w ap touche pou livrezon an', acceptIn:'Aksepte nan {s}s',
         pickup:'Pran nan', store:'Boutik', dropoff:'Livre bay', customer:'Kliyan', distance:'Distans', accept:'Aksepte livrezon an', pass:'Kite l pou yon lòt chofè',
         arrived:'Mwen rive nan boutik la', shopTypes:'Boutik la ap tape kòd sa a pou l ba w kòmand lan. Ekran an ap avanse pou kont li.',
@@ -90,7 +90,7 @@ var DT = {
         onlineH:'Ou an liy', waiting:'N ap tann yon livrezon. Lè yon boutik toupre make yon kòmand pare, li parèt isit la poukont li.',
         expired:'Tan an pase — n ap pase l bay yon lòt chofè…', noAccept:'Nou pa t kapab aksepte l', why:'Poukisa ou pa ka fè l? (kliyan an ak boutik la ap konnen)',
         noUpdate:'Nou pa t kapab mete l ajou', done:'Livrezon an fini', earned:'Ou touche {m}. Li rete an atant 24 èdtan, apre sa ou ka retire l.' },
-  fr: { title:'Chauffeur — Livraisons', signin:'Connexion chauffeur', signinSub:'Entrez votre téléphone et votre PIN pour recevoir des livraisons.', phone:'Téléphone (ex. 3700 0000)', pin:'PIN', signinBtn:'Se connecter',
+  fr: { title:'Chauffeur — Livraisons', signin:'Connexion chauffeur', signinSub:'Entrez votre téléphone et votre PIN pour recevoir des livraisons. Chauffeur MsouWout approuvé : même téléphone + PIN MsouWout.', phone:'Téléphone (ex. 3700 0000)', pin:'PIN', signinBtn:'Se connecter',
         noSignin:'Connexion impossible.', net:'Pas de réseau.', online:'En ligne', newOffer:'NOUVELLE LIVRAISON', earnThis:'Ce que vous gagnez pour cette livraison', acceptIn:'Acceptez dans {s}s',
         pickup:'Retrait', store:'Boutique', dropoff:'Livrer à', customer:'Client', distance:'Distance', accept:'Accepter la livraison', pass:'Laisser à un autre chauffeur',
         arrived:'Je suis arrivé à la boutique', shopTypes:'La boutique tape ce code pour vous remettre la commande. L’écran avance tout seul.',
@@ -99,7 +99,7 @@ var DT = {
         onlineH:'Vous êtes en ligne', waiting:'En attente d’une livraison. Quand une boutique proche marque une commande prête, elle apparaît ici automatiquement.',
         expired:'Offre expirée — elle passe au chauffeur suivant…', noAccept:'Impossible d’accepter', why:'Pourquoi ne pouvez-vous pas la faire ? (le client et la boutique sont prévenus)',
         noUpdate:'Mise à jour impossible', done:'Livraison terminée', earned:'Vous avez gagné {m}. C’est retenu 24 heures, puis vous pouvez le retirer.' },
-  en: { title:'Driver — Deliveries', signin:'Driver sign in', signinSub:'Enter your phone and PIN to start receiving deliveries.', phone:'Phone (e.g. 3700 0000)', pin:'PIN', signinBtn:'Sign in',
+  en: { title:'Driver — Deliveries', signin:'Driver sign in', signinSub:'Enter your phone and PIN to start receiving deliveries. Approved MsouWout driver: same phone + MsouWout PIN.', phone:'Phone (e.g. 3700 0000)', pin:'PIN', signinBtn:'Sign in',
         noSignin:'Could not sign in.', net:'Network error.', online:'Online', newOffer:'NEW DELIVERY OFFER', earnThis:'You earn this for the delivery', acceptIn:'Accept within {s}s',
         pickup:'Pick up', store:'Store', dropoff:'Deliver to', customer:'Customer', distance:'Distance', accept:'Accept delivery', pass:'Pass to another driver',
         arrived:'I have arrived at the store', shopTypes:'The shop types this code to hand you the order. This screen moves on by itself.',
@@ -127,11 +127,11 @@ Object.assign(DT.en, { accOk:'✅ Approved MyPlopPlop delivery driver', accPendi
   accNoDel:'❌ Your driver account is approved, but not for deliveries.', accOff:'Offline', gpsOk:'📍 GPS: position sent at {t}', gpsWait:'📍 GPS: looking for your position…',
   gpsOff:'📍 GPS off or refused: turn on location and allow this site, or you will not receive deliveries.', accCheck:'Could not check your account. Check the internet.' });
 Object.assign(DT.kr, { mwAsk:'Ou se chofè MsouWout deja? Pa bezwen ranpli okenn fòm: mete PIN MsouWout ou a.', mwPin:'PIN MsouWout ou', mwBtn:'🔗 Konekte kont MsouWout mwen',
-  mwWait:'N ap verifye ak MsouWout… (sa ka pran 1 minit)', mwLinked:'🔗 Kont MsouWout ou konekte — pwofil livrezon ou kreye AN ATANT. Yon administratè dwe apwouve l.', mwOk:'🔗 Konekte ak MsouWout' });
+  mwWait:'N ap verifye ak MsouWout… (sa ka pran 1 minit)', mwLinked:'🔗 Kont MsouWout ou konekte — pwofil livrezon ou kreye AN ATANT. Yon administratè dwe apwouve l.', mwOk:'🔗 Konekte ak MsouWout', mwLinkedOk:'✅ Kont MsouWout ou konekte — ou APWOUVE pou livrezon (menm verifikasyon ak MsouWout).' });
 Object.assign(DT.fr, { mwAsk:'Déjà chauffeur MsouWout ? Aucun formulaire : entrez votre PIN MsouWout.', mwPin:'Votre PIN MsouWout', mwBtn:'🔗 Relier mon compte MsouWout',
-  mwWait:'Vérification avec MsouWout… (jusqu’à 1 minute)', mwLinked:'🔗 Compte MsouWout relié — profil livreur créé EN ATTENTE. Un administrateur doit l’approuver.', mwOk:'🔗 Relié à MsouWout' });
+  mwWait:'Vérification avec MsouWout… (jusqu’à 1 minute)', mwLinked:'🔗 Compte MsouWout relié — profil livreur créé EN ATTENTE. Un administrateur doit l’approuver.', mwOk:'🔗 Relié à MsouWout', mwLinkedOk:'✅ Compte MsouWout relié — vous êtes APPROUVÉ pour les livraisons (même vérification que MsouWout).' });
 Object.assign(DT.en, { mwAsk:'Already a MsouWout driver? No form: enter your MsouWout PIN.', mwPin:'Your MsouWout PIN', mwBtn:'🔗 Link my MsouWout account',
-  mwWait:'Checking with MsouWout… (can take a minute)', mwLinked:'🔗 MsouWout account linked — delivery profile created PENDING. An administrator must approve it.', mwOk:'🔗 Linked to MsouWout' });
+  mwWait:'Checking with MsouWout… (can take a minute)', mwLinked:'🔗 MsouWout account linked — delivery profile created PENDING. An administrator must approve it.', mwOk:'🔗 Linked to MsouWout', mwLinkedOk:'✅ MsouWout account linked — you are APPROVED for deliveries (same verification as MsouWout).' });
 var acctState = { acc: '', msg: '', gps: 'wait', at: '', mw: false };
 /* 24 Oct 2026 - ONE DRIVER: a MsouWout driver links instead of registering. */
 function linkMsouwout(){
@@ -140,7 +140,7 @@ function linkMsouwout(){
   el('mwGo').disabled = true; out.style.color = 'var(--muted)'; out.textContent = dt('mwWait');
   api('POST','/api/drivers/link-msouwout',{ pin: pin }).then(function(d){
     el('mwGo').disabled = false;
-    if (d && d.success) { out.style.color = 'var(--green)'; out.textContent = dt('mwLinked'); checkAccount(); }
+    if (d && d.success) { out.style.color = 'var(--green)'; out.textContent = dt(d.profile && d.profile.status === 'approved' ? 'mwLinkedOk' : 'mwLinked'); checkAccount(); }
     else { out.style.color = 'var(--red)'; out.textContent = (d && d.message) || dt('accCheck'); }
   }).catch(function(){ el('mwGo').disabled = false; out.style.color = 'var(--red)'; out.textContent = dt('net'); });
 }
@@ -193,7 +193,7 @@ function api(method, path, body){
 
 function login(){
   var phone = el('phone').value.trim(), pin = el('pin').value.trim();
-  el('loginErr').textContent = '';
+  el('loginErr').textContent = '⏳ …';   /* a first MsouWout sign-in asks MsouWout: can take a minute */
   api('POST','/api/auth/login',{ phone: phone, pin: pin }).then(function(d){
     if (d.success && d.token){
       token = d.token; localStorage.setItem('pp_token', token);

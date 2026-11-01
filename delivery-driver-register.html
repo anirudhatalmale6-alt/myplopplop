@@ -135,12 +135,15 @@ input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 
 <div class="wrap">
 
   <section id="formSide">
-    <div class="note">
-      <b>Se pa menm bagay ak MsouWout</b>
-      <p>Paj sa a se pou moun ki vle <b>livre komann boutik</b> pou MyPlopPlop.
-      Si se moun ou vle transpòte, se
-      <a href="driver-onboarding.html">Chofè MsouWout</a> ou bezwen — se de bagay separe,
-      ak de apwobasyon separe.</p>
+    <!-- 1 Nov 2026, Jeffery: "one registration and one verification process for MsouWout
+         rides and MyPlopPlop deliveries". New drivers register ONCE, on the MsouWout form
+         (Livrezon pre-selected, the Ajan's code carried over). Once approved there, they
+         sign in on the delivery driver page with the same phone + MsouWout PIN. -->
+    <div class="note" id="oneBox" style="border-color:#D21034">
+      <b>🛵 Yon sèl enskripsyon pou kous AK livrezon</b>
+      <p>Chofè livrezon MyPlopPlop yo enskri sou fòm MsouWout la (foto, lisans, machin). Yon sèl verifikasyon:
+      lè MsouWout apwouve w, ou ka livre pou MyPlopPlop tou, ak menm nimewo telefòn + PIN MsouWout ou.</p>
+      <p style="margin-top:12px"><a id="oneGo" href="https://msouwout.com/driver-register.html?svc=delivery" style="display:inline-block;background:#D21034;color:#fff;font-weight:800;padding:13px 18px;border-radius:12px;text-decoration:none">📝 Enskri kounye a</a></p>
     </div>
 
     <div class="msg err" id="err"></div>
@@ -150,17 +153,16 @@ input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 
     </div>
 
     <div class="note" style="border-color:#00209F">
-      <b>🔗 Ou se chofè MsouWout deja?</b>
-      <p>Pa ranpli fòm sa a. Konekte sou <a href="driver-delivery.html">paj chofè livrezon an</a> ak kont MyPlopPlop ou, epi peze
-      "Konekte kont MsouWout mwen": nou pran pwofil MsouWout ou (foto, lisans, machin) — pa gen 2yèm enskripsyon.</p>
+      <b>🔗 Ou se chofè MsouWout APWOUVE deja?</b>
+      <p>Pa enskri ankò. Konekte sou <a href="driver-delivery.html">paj chofè livrezon an</a> ak nimewo telefòn ou + PIN MsouWout ou.</p>
     </div>
 
     <div class="note" id="meBox" style="display:none">
       <b id="meTitle"></b>
-      <p>Enskripsyon livrè a ap ajoute sou kont sa a. Ou kenbe kont ou jan l ye a (administratè, boutik, kliyan). Pwofil livrè a rete AN ATANT jiskaske yon administratè apwouve l.</p>
+      <p>Pou livre: si ou se chofè MsouWout APWOUVE, ale sou <a href="driver-delivery.html">paj chofè livrezon an</a> epi peze "Konekte kont MsouWout mwen" (PIN MsouWout ou). Si ou poko enskri, peze "Enskri kounye a" anwo a. Ou kenbe kont ou jan l ye a.</p>
     </div>
 
-    <form id="regForm" autocomplete="on">
+    <form id="regForm" autocomplete="on" style="display:none">
       <div class="card" id="accountCard">
         <h2>Kont ou</h2>
         <p class="sub">Nou bezwen non w, telefòn ou ak yon kòd 4 chif.</p>
@@ -272,6 +274,7 @@ input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 
   // Show the agent whose link brought them here, so both sides can see the
   // credit was picked up rather than hoping it was.
   var agent = (window.Referral && window.Referral.code()) || '';
+  if (agent) document.getElementById('oneGo').href += '&agent=' + encodeURIComponent(agent);
   if (agent) {
     document.getElementById('agentCode').textContent = agent;
     document.getElementById('agentBox').classList.add('on');
