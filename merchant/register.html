@@ -220,6 +220,18 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:1
         <textarea id="storeDesc" data-i18n-placeholder="ph_desc" placeholder="Dekri sa ou vann oswa sèvis ou ofri..."></textarea>
       </div>
 
+      <!-- 4 Nov 2026 (Jeffery): every new store is verified by HaitiBiznis before it goes public -->
+      <div class="field">
+        <label><span data-i18n="lbl_front">Foto devan magazen an</span><span class="req">*</span></label>
+        <input type="file" id="docFront" accept="image/*">
+        <div class="field-hint" data-i18n="hint_front">Devan biznis la, ak ensey la si genyen.</div>
+      </div>
+      <div class="field">
+        <label><span data-i18n="lbl_ownerid">Pyès idantite pwopriyetè a</span><span class="req">*</span></label>
+        <input type="file" id="docOwnerId" accept="image/*">
+        <div class="field-hint" data-i18n="hint_ownerid">CIN, NIF, paspò oswa lisans. PRIVE: se sèlman ekip verifikasyon an ki wè l, li pa janm parèt sou magazen ou.</div>
+      </div>
+
       <div class="field">
         <label data-i18n="lbl_referral">Patnè Referans</label>
         <select id="referralPartner">
@@ -244,9 +256,10 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:1
   <!-- Success message -->
   <div class="success-msg" id="successMsg">
     <div class="success-icon">✅</div>
-    <h2 data-i18n="suc_title">Magazen Ou Kreye!</h2>
-    <p id="sucDesc" data-i18n="suc_desc">Magazen ou kreye vre e li aktif kounye a. Pou konekte: nimewo telefòn ou ak kòd 4 chif la.</p>
-    <a id="storeLink" href="#" class="success-wa" style="background:var(--blue);box-shadow:0 4px 16px rgba(0,32,159,.3)">🏪 <span data-i18n="suc_view">Wè Magazen Ou</span></a>
+    <h2 data-i18n="suc_title">Demann ou anrejistre!</h2>
+    <p id="sucDesc" data-i18n="suc_desc">⏳ Magazen ou an atant verifikasyon.</p>
+    <p id="sucMissing" style="display:none;color:#A30F27;font-weight:700"></p>
+    <a id="storeLink" href="dashboard.html" class="success-wa" style="background:var(--blue);box-shadow:0 4px 16px rgba(0,32,159,.3)">📋 <span data-i18n="suc_view">Tablo machann mwen</span></a>
     <a id="addProducts" href="../store-designer.html" class="success-wa" style="background:var(--red);box-shadow:0 4px 16px rgba(210,16,52,.3);margin-top:10px">➕ <span data-i18n="suc_products">Ajoute Pwodwi Ou</span></a>
     <a id="waLink" href="#" target="_blank" class="success-home" style="color:#128C3E">💬 <span data-i18n="suc_wa">Kontakte Nou sou WhatsApp</span></a>
     <a href="../index.html" class="success-home" data-i18n="suc_home">&larr; Retounen sou MyPlopPlop</a>
@@ -307,7 +320,7 @@ const T = {
     err_phone:'Antre nimewo telefòn ou (8 chif).',err_pin:'Kòd sekrè a dwe gen 4 chif.',
     err_exists:'Nimewo sa a gen yon kont deja, men kòd la pa bon.',err_login_link:'Konekte',
     err_offline:'Sèvè a pa reponn. Tanpri eseye ankò nan yon minit.',err_generic:'Nou pa t kapab kreye magazen an: ',
-    suc_title:'Magazen Ou Kreye!',suc_desc:'Magazen ou kreye vre e li aktif kounye a. Pou konekte pita: nimewo telefòn ou ak kòd 4 chif la.',suc_view:'Wè Magazen Ou',suc_products:'Ajoute Pwodwi Ou',suc_wa:'Voye enfo a sou WhatsApp',suc_home:'← Retounen sou MyPlopPlop',
+    lbl_front:'Foto devan magazen an',hint_front:'Devan biznis la, ak ensey la si genyen.',lbl_ownerid:'Pyès idantite pwopriyetè a',hint_ownerid:'CIN, NIF, paspò oswa lisans. PRIVE: se sèlman ekip verifikasyon an ki wè l, li pa janm parèt sou magazen ou.',err_docs:'Tanpri ajoute foto devan magazen an ak pyès idantite pwopriyetè a.',btn_docs:'Ap voye foto yo...',miss_docs:'Foto sa yo poko rive: {list}. Konekte sou Tablo machann ou pou voye yo pita (pa bezwen rekòmanse).',suc_title:'Demann ou anrejistre!',suc_desc:'⏳ Magazen ou an atant verifikasyon HaitiBiznis. Ou ka deja ajoute pwodwi; magazen an ap parèt piblik epi resevwa kòmand lè l apwouve. Pou konekte pita: nimewo telefòn ou ak kòd 4 chif la.',suc_view:'Tablo machann mwen',suc_products:'Ajoute Pwodwi Ou',suc_wa:'Voye enfo a sou WhatsApp',suc_home:'← Retounen sou MyPlopPlop',
     nav_home:'Akèy',nav_search:'Chèche',nav_cart:'Panye',nav_orders:'Kòmand',nav_account:'Kont'
   },
   pt: {
@@ -325,7 +338,7 @@ const T = {
     err_phone:'Digite o seu número de telefone (8 dígitos).',err_pin:'O código secreto precisa ter 4 dígitos.',
     err_exists:'Este número já tem uma conta, mas o código não confere.',err_login_link:'Entrar',
     err_offline:'O servidor não respondeu. Tente de novo em um minuto.',err_generic:'Não foi possível criar a loja: ',
-    suc_title:'Sua loja foi criada!',suc_desc:'A sua loja foi realmente criada e já está no ar. Para entrar depois: o seu número e o seu código de 4 dígitos.',suc_view:'Ver a sua loja',suc_products:'Adicionar seus produtos',suc_wa:'Enviar os dados no WhatsApp',suc_home:'← Voltar ao MyPlopPlop',
+    lbl_front:'Foto da frente da loja',hint_front:'A frente do negócio, com a placa se houver.',lbl_ownerid:'Documento de identidade do dono',hint_ownerid:'RG, NIF, passaporte ou carteira. PRIVADO: só a equipe de verificação vê, nunca aparece na loja.',err_docs:'Adicione a foto da frente da loja e o documento do dono.',btn_docs:'Enviando as fotos...',miss_docs:'Estas fotos ainda não chegaram: {list}. Entre no seu painel para enviá-las depois (sem recomeçar).',suc_title:'Pedido registrado!',suc_desc:'⏳ Sua loja aguarda a verificação da HaitiBiznis. Você já pode adicionar produtos; a loja fica pública e recebe pedidos quando for aprovada. Para entrar depois: seu número e seu código de 4 dígitos.',suc_view:'Meu painel',suc_products:'Adicionar seus produtos',suc_wa:'Enviar os dados no WhatsApp',suc_home:'← Voltar ao MyPlopPlop',
     nav_home:'Início',nav_search:'Buscar',nav_cart:'Carrinho',nav_orders:'Pedidos',nav_account:'Conta'
   },
   en: {
@@ -343,7 +356,7 @@ const T = {
     err_phone:'Enter your phone number (8 digits).',err_pin:'The secret code must be 4 digits.',
     err_exists:'This number already has an account, but the code does not match.',err_login_link:'Log in',
     err_offline:'The server did not answer. Please try again in a minute.',err_generic:'We could not create the store: ',
-    suc_title:'Your Store is Created!',suc_desc:'Your store really is created and it is live now. To log in later: your phone number and your 4-digit code.',suc_view:'View Your Store',suc_products:'Add Your Products',suc_wa:'Send the details on WhatsApp',suc_home:'← Back to MyPlopPlop',
+    lbl_front:'Photo of the storefront',hint_front:'The front of the business, with the sign if there is one.',lbl_ownerid:'Owner\'s ID document',hint_ownerid:'National ID, NIF, passport or licence. PRIVATE: only the verification team sees it, never shown on your store.',err_docs:'Please add the storefront photo and the owner\'s ID.',btn_docs:'Sending the photos...',miss_docs:'These photos did not arrive yet: {list}. Log in to your merchant dashboard to send them later (no need to start again).',suc_title:'Application received!',suc_desc:'⏳ Your store is waiting for HaitiBiznis verification. You can already add products; the store becomes public and receives orders once approved. To log in later: your phone number and your 4-digit code.',suc_view:'My merchant dashboard',suc_products:'Add Your Products',suc_wa:'Send the details on WhatsApp',suc_home:'← Back to MyPlopPlop',
     nav_home:'Home',nav_search:'Search',nav_cart:'Cart',nav_orders:'Orders',nav_account:'Account'
   },
   fr: {
@@ -361,7 +374,7 @@ const T = {
     err_phone:'Entrez votre numéro de téléphone (8 chiffres).',err_pin:'Le code secret doit contenir 4 chiffres.',
     err_exists:'Ce numéro a déjà un compte, mais le code ne correspond pas.',err_login_link:'Se connecter',
     err_offline:'Le serveur ne répond pas. Réessayez dans une minute.',err_generic:'Nous n\'avons pas pu créer la boutique : ',
-    suc_title:'Votre Boutique est Créée!',suc_desc:'Votre boutique est réellement créée et elle est en ligne. Pour vous connecter plus tard : votre numéro et votre code à 4 chiffres.',suc_view:'Voir Votre Boutique',suc_products:'Ajouter Vos Produits',suc_wa:'Envoyer les infos sur WhatsApp',suc_home:'← Retour à MyPlopPlop',
+    lbl_front:'Photo de la devanture',hint_front:'La devanture du commerce, avec l\'enseigne s\'il y en a une.',lbl_ownerid:'Pièce d\'identité du propriétaire',hint_ownerid:'CIN, NIF, passeport ou permis. PRIVÉ : seule l\'équipe de vérification la voit, jamais sur votre boutique.',err_docs:'Ajoutez la photo de la devanture et la pièce d\'identité du propriétaire.',btn_docs:'Envoi des photos...',miss_docs:'Ces photos ne sont pas encore arrivées : {list}. Connectez-vous à votre tableau marchand pour les envoyer plus tard (sans recommencer).',suc_title:'Demande enregistrée !',suc_desc:'⏳ Votre boutique attend la vérification de HaitiBiznis. Vous pouvez déjà ajouter des produits ; la boutique devient publique et reçoit des commandes une fois approuvée. Pour vous connecter plus tard : votre numéro et votre code à 4 chiffres.',suc_view:'Mon tableau marchand',suc_products:'Ajouter Vos Produits',suc_wa:'Envoyer les infos sur WhatsApp',suc_home:'← Retour à MyPlopPlop',
     nav_home:'Accueil',nav_search:'Recherche',nav_cart:'Panier',nav_orders:'Commandes',nav_account:'Compte'
   },
   es: {
@@ -379,7 +392,7 @@ const T = {
     err_phone:'Escribe tu número de teléfono (8 dígitos).',err_pin:'El código secreto debe tener 4 dígitos.',
     err_exists:'Este número ya tiene una cuenta, pero el código no coincide.',err_login_link:'Entrar',
     err_offline:'El servidor no responde. Intenta de nuevo en un minuto.',err_generic:'No pudimos crear la tienda: ',
-    suc_title:'Tu Tienda Está Creada!',suc_desc:'Tu tienda está realmente creada y ya está activa. Para entrar más tarde: tu número y tu código de 4 dígitos.',suc_view:'Ver Tu Tienda',suc_products:'Agregar Tus Productos',suc_wa:'Enviar los datos por WhatsApp',suc_home:'← Volver a MyPlopPlop',
+    lbl_front:'Foto del frente de la tienda',hint_front:'El frente del negocio, con el letrero si hay.',lbl_ownerid:'Documento de identidad del dueño',hint_ownerid:'Cédula, NIF, pasaporte o licencia. PRIVADO: solo lo ve el equipo de verificación, nunca aparece en tu tienda.',err_docs:'Agrega la foto del frente de la tienda y el documento del dueño.',btn_docs:'Enviando las fotos...',miss_docs:'Estas fotos aún no llegaron: {list}. Entra a tu panel de comerciante para enviarlas después (sin empezar de nuevo).',suc_title:'¡Solicitud registrada!',suc_desc:'⏳ Tu tienda espera la verificación de HaitiBiznis. Ya puedes agregar productos; la tienda será pública y recibirá pedidos cuando sea aprobada. Para entrar después: tu número y tu código de 4 dígitos.',suc_view:'Mi panel de comerciante',suc_products:'Agregar Tus Productos',suc_wa:'Enviar los datos por WhatsApp',suc_home:'← Volver a MyPlopPlop',
     nav_home:'Inicio',nav_search:'Buscar',nav_cart:'Carrito',nav_orders:'Pedidos',nav_account:'Cuenta'
   }
 };
@@ -458,6 +471,8 @@ function handleSubmit(e) {
 
   if (phoneDigits.length < 8) { showErr(t.err_phone); return false; }
   if (!/^\d{4}$/.test(pin)) { showErr(t.err_pin); return false; }
+  var fFront = document.getElementById('docFront').files[0], fOwner = document.getElementById('docOwnerId').files[0];
+  if (!fFront || !fOwner) { showErr(t.err_docs); return false; }
 
   /* Built exactly the way login.html builds it, so the number she registers
      with is the number that logs her back in. */
@@ -543,12 +558,18 @@ function handleSubmit(e) {
       localStorage.setItem('pp_token', authToken);
       localStorage.setItem('pp_user', JSON.stringify({ name: owner, phone: phone, role: 'merchant' }));
     } catch (err) {}
-
-    document.getElementById('storeLink').href = '../store.html?id=' + d.data._id;
-    document.getElementById('waLink').href = waUrl;
-    document.getElementById('formCard').style.display = 'none';
-    document.getElementById('successMsg').classList.add('show');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    /* 4 Nov 2026: the store waits for verification - send its 2 photos (each retried); anything that does not
+       arrive is NAMED and can be sent later from the merchant dashboard, never silently lost */
+    setBusy(t.btn_docs, true);
+    return uploadDocs(d.data._id, authToken, [['storefront', fFront], ['owner_id', fOwner]]).then(function(failed) {
+      var L = { storefront: t.lbl_front, owner_id: t.lbl_ownerid };
+      if (failed.length) { var m = document.getElementById('sucMissing'); m.textContent = t.miss_docs.replace('{list}', failed.map(function(x){ return L[x]; }).join(', ')); m.style.display = 'block'; }
+      try { localStorage.removeItem(DRAFT); } catch (err) {}
+      document.getElementById('waLink').href = waUrl;
+      document.getElementById('formCard').style.display = 'none';
+      document.getElementById('successMsg').classList.add('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   })
   .catch(function(err) {
     setBusy(t.btn_submit, false);
@@ -561,6 +582,42 @@ function handleSubmit(e) {
 
   return false;
 }
+
+function shrinkPhoto(file) {
+  return new Promise(function(res) {
+    var u = URL.createObjectURL(file), im = new Image();
+    im.onload = function() { var k = Math.min(1, 1600 / Math.max(im.width, im.height)), c = document.createElement('canvas');
+      c.width = Math.round(im.width * k); c.height = Math.round(im.height * k); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(u); res(c.toDataURL('image/jpeg', 0.85)); };
+    im.onerror = function() { URL.revokeObjectURL(u); res(null); };
+    im.src = u;
+  });
+}
+function uploadDocs(storeId, token, list) {
+  var failed = [];
+  return list.reduce(function(chain, pair) {
+    return chain.then(function() {
+      return shrinkPhoto(pair[1]).then(function(url) {
+        if (!url) { failed.push(pair[0]); return; }
+        var tryOnce = function(n) {
+          return fetchWithTimeout(API_BASE + '/api/stores/' + storeId + '/verification-docs', {
+            method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ type: pair[0], image_data: url })
+          }, 60000).then(function(r) { if (r.status !== 201 && r.status !== 409) throw new Error('doc ' + r.status); })   /* 409 = store not waiting: nothing to add */
+            .catch(function(e) { if (n > 1) return new Promise(function(r) { setTimeout(r, 2500); }).then(function() { return tryOnce(n - 1); }); failed.push(pair[0]); });
+        };
+        return tryOnce(3);
+      });
+    });
+  }, Promise.resolve()).then(function() { return failed; });
+}
+/* the form is kept on this phone while it is filled (not the code, not the photos) - an interruption loses nothing */
+var DRAFT = 'mpp_reg_draft', DRAFT_IDS = ['storeName', 'storeCategory', 'ownerName', 'phone', 'whatsapp', 'location', 'storeDesc', 'referralPartner'];
+try { var dr = JSON.parse(localStorage.getItem(DRAFT) || 'null'); if (dr) DRAFT_IDS.forEach(function(id) { var el = document.getElementById(id); if (el && dr[id]) el.value = dr[id]; }); } catch (e) {}
+document.getElementById('registerForm').addEventListener('input', function() {
+  var d = {}; DRAFT_IDS.forEach(function(id) { var el = document.getElementById(id); if (el) d[id] = el.value; });
+  try { localStorage.setItem(DRAFT, JSON.stringify(d)); } catch (e) {}
+});
 
 setLang(currentLang);
 

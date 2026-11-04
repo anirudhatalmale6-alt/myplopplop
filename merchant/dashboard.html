@@ -148,6 +148,51 @@
     html += '</div>';
 
     document.getElementById('mpBody').innerHTML = html;
+    verifyCard();
+  }
+
+  /* 4 Nov 2026 (Jeffery): every new store is verified by HaitiBiznis before it is public. The merchant sees where
+     his application stands and sends a missing / redo photo HERE - no need to register again. */
+  var V = {
+    wait:  { kr:'⏳ Magazen ou an atant verifikasyon HaitiBiznis. Ou ka ajoute pwodwi; li ap parèt piblik epi resevwa kòmand lè l apwouve.', fr:'⏳ Votre boutique attend la vérification de HaitiBiznis. Vous pouvez ajouter des produits ; elle sera publique et recevra des commandes une fois approuvée.', en:'⏳ Your store is waiting for HaitiBiznis verification. You can add products; it becomes public and receives orders once approved.', es:'⏳ Tu tienda espera la verificación de HaitiBiznis. Puedes agregar productos; será pública y recibirá pedidos cuando sea aprobada.' },
+    fix:   { kr:'🔧 HaitiBiznis mande korije:', fr:'🔧 HaitiBiznis demande de corriger :', en:'🔧 HaitiBiznis asks you to correct:', es:'🔧 HaitiBiznis pide corregir:' },
+    rej:   { kr:'⛔ Demann lan pa t aksepte:', fr:'⛔ La demande n’a pas été acceptée :', en:'⛔ The application was not accepted:', es:'⛔ La solicitud no fue aceptada:' },
+    front: { kr:'Foto devan magazen an', fr:'Photo de la devanture', en:'Storefront photo', es:'Foto del frente' },
+    owner: { kr:'Pyès idantite pwopriyetè a (prive)', fr:'Pièce d’identité du propriétaire (privée)', en:"Owner's ID (private)", es:'Documento del dueño (privado)' },
+    info:  { kr:'Enfòmasyon magazen an', fr:'Les informations de la boutique', en:'The store information', es:'La información de la tienda' },
+    have:  { kr:'✅ Resevwa', fr:'✅ Reçue', en:'✅ Received', es:'✅ Recibida' },
+    miss:  { kr:'⚠️ Manke', fr:'⚠️ Manquante', en:'⚠️ Missing', es:'⚠️ Falta' },
+    send:  { kr:'📷 Voye foto a', fr:'📷 Envoyer la photo', en:'📷 Send the photo', es:'📷 Enviar la foto' },
+    ok:    { kr:'Foto a rive. Mèsi!', fr:'Photo reçue. Merci !', en:'Photo received. Thank you!', es:'Foto recibida. ¡Gracias!' },
+    off:   { kr:'Foto a pa rive (koneksyon). Eseye ankò.', fr:'La photo n’est pas arrivée (connexion). Réessayez.', en:'The photo did not arrive (connection). Try again.', es:'La foto no llegó (conexión). Intenta de nuevo.' }
+  };
+  function V_(k) { var e = V[k]; return e ? (e[MP.lang()] || e.en) : k; }
+  function verifyCard() {
+    MP.req('GET', '/api/stores/my/verification').then(function (v) {
+      if (!v || !v.success || v.state === 'approved') return;
+      var body = document.getElementById('mpBody'); if (!body) return;
+      var waiting = v.state === 'pending' || v.state === 'fix';
+      var rows = [['storefront', V_('front')], ['owner_id', V_('owner')]].map(function (r) {
+        var has = (v.docs || []).indexOf(r[0]) >= 0, redo = (v.fix || []).indexOf(r[0]) >= 0;
+        return '<div class="mp-row"><div class="mp-row-main"><div class="mp-row-name">' + r[1] + '</div><div class="mp-row-sub">' + (redo ? '🔧' : has ? V_('have') : V_('miss')) + '</div></div>' +
+          (waiting && (!has || redo) ? '<label class="mp-btn mp-btn-blue mp-btn-sm" style="cursor:pointer">' + V_('send') + '<input type="file" accept="image/*" data-vt="' + r[0] + '" style="display:none"></label>' : '') + '</div>';
+      }).join('');
+      var head = v.state === 'rejected' ? V_('rej') + ' ' + MP.esc(v.reason || '') : v.state === 'fix' ? V_('fix') + ' ' + (v.fix || []).map(function (x) { return x === 'storefront' ? V_('front') : x === 'owner_id' ? V_('owner') : V_('info'); }).join(', ') + (v.note ? ' — “' + MP.esc(v.note) + '”' : '') : V_('wait');
+      var card = document.createElement('div'); card.className = 'mp-card'; card.id = 'mpVerify';
+      card.style.border = '2px solid ' + (v.state === 'rejected' ? '#F2A7A7' : '#F3B36B');
+      card.innerHTML = '<div class="mp-card-title" style="white-space:normal;line-height:1.4">' + head + '</div>' + rows;
+      var old = document.getElementById('mpVerify'); if (old) old.remove();
+      body.insertBefore(card, body.firstChild);
+      card.querySelectorAll('input[data-vt]').forEach(function (inp) {
+        inp.addEventListener('change', function () {
+          var f = inp.files && inp.files[0]; if (!f) return;
+          MP.compressImage(f, 1600, 1500000).then(function (url) {
+            return MP.req('POST', '/api/stores/' + v.storeId + '/verification-docs', { type: inp.getAttribute('data-vt'), image_data: url });
+          }).then(function (d) { if (!d || !d.success) throw new Error('send'); MP.toast(V_('ok'), 'success'); verifyCard(); })
+            .catch(function () { MP.toast(V_('off'), 'error'); });
+        });
+      });
+    }).catch(function () {});
   }
 
   langBar();
