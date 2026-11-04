@@ -83,6 +83,10 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:1
 .err-box a{color:var(--red-dark);font-weight:800}
 
 /* Submit */
+.field label.pat-opt{margin:0}
+.pat-opt{display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid #d6dbe6;border-radius:12px;font-weight:700;cursor:pointer;background:#fff}
+.field .pat-opt input{width:22px!important;height:22px;min-height:0;padding:0;margin:0;flex:none;border:0;box-shadow:none;-webkit-appearance:auto;appearance:auto;accent-color:#00209F}
+.pat-opt:has(input:checked){border-color:#00209F;background:#EEF4FF}
 .submit-btn{width:100%;padding:16px;border-radius:14px;background:var(--red);color:#fff;font-family:var(--heading);font-size:1rem;font-weight:800;border:none;cursor:pointer;transition:all .25s;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(210,16,52,.3);margin-top:20px}
 .submit-btn:hover{background:var(--red-dark);transform:translateY(-2px);box-shadow:0 8px 24px rgba(210,16,52,.4)}
 .submit-btn:active{transform:translateY(0)}
@@ -232,6 +236,34 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:1
         <div class="field-hint" data-i18n="hint_ownerid">CIN, NIF, paspò oswa lisans. PRIVE: se sèlman ekip verifikasyon an ki wè l, li pa janm parèt sou magazen ou.</div>
       </div>
 
+      <!-- 4 Nov 2026 (Jeffery, PATENTE): informal businesses are welcome; a business without one is never shown as registered -->
+      <div class="field" id="patField">
+        <label><span data-i18n="pat_q">Èske biznis ou gen Patente?</span><span class="req">*</span></label>
+        <div style="display:flex;gap:10px">
+          <label class="pat-opt"><input type="radio" name="patHas" value="yes"> <span data-i18n="pat_yes">✅ Wi</span></label>
+          <label class="pat-opt"><input type="radio" name="patHas" value="no"> <span data-i18n="pat_no">❌ Non</span></label>
+        </div>
+        <div id="patYesBox" style="display:none;margin-top:10px">
+          <label data-i18n="pat_num">Nimewo Patente a (si l genyen)</label>
+          <input type="text" id="patNum" maxlength="30" inputmode="numeric">
+          <label style="margin-top:8px" data-i18n="pat_fy">Ane fiskal ki ekri sou Patente a ("Exercice Fiscal")</label>
+          <select id="patFy"></select>
+          <label style="margin-top:8px" data-i18n="pat_photo">Foto Patente a</label>
+          <input type="file" id="docPatente" accept="image/*">
+          <div class="field-hint" data-i18n="pat_photo_hint">Yon foto KLÈ, kote nou ka li non an, nimewo a ak ane fiskal la. PRIVE.</div>
+        </div>
+        <div id="patNoBox" style="display:none;margin-top:10px;padding:12px;border-radius:12px;background:#EEF4FF;border:1.5px solid #9DB8F0">
+          <div style="font-weight:700;line-height:1.45" data-i18n="pat_no_box">📋 Ou poko gen Patente? HaitiBiznis ka ede w formalize biznis ou.</div>
+          <label class="pat-opt" style="margin-top:8px"><input type="checkbox" id="patAssist"> <span data-i18n="pat_assist">Mwen bezwen asistans</span></label>
+        </div>
+        <div id="patPharmaBox" style="display:none;margin-top:10px">
+          <div class="field-hint" style="color:#9a3412;font-weight:700" data-i18n="pat_pharma">💊 Famasi: Patente + otorizasyon MSPP obligatwa anvan magazen an ka louvri.</div>
+          <label style="margin-top:6px" data-i18n="pat_mspp">Otorizasyon MSPP</label>
+          <input type="file" id="docMspp" accept="image/*">
+        </div>
+        <div class="field-hint" data-i18n="pat_note">Biznis san Patente ka enskri tou. Machann nan responsab pwòp Patente li.</div>
+      </div>
+
       <div class="field">
         <label data-i18n="lbl_referral">Patnè Referans</label>
         <select id="referralPartner">
@@ -321,6 +353,7 @@ const T = {
     err_exists:'Nimewo sa a gen yon kont deja, men kòd la pa bon.',err_login_link:'Konekte',
     err_offline:'Sèvè a pa reponn. Tanpri eseye ankò nan yon minit.',err_generic:'Nou pa t kapab kreye magazen an: ',
     lbl_front:'Foto devan magazen an',hint_front:'Devan biznis la, ak ensey la si genyen.',lbl_ownerid:'Pyès idantite pwopriyetè a',hint_ownerid:'CIN, NIF, paspò oswa lisans. PRIVE: se sèlman ekip verifikasyon an ki wè l, li pa janm parèt sou magazen ou.',err_docs:'Tanpri ajoute foto devan magazen an ak pyès idantite pwopriyetè a.',btn_docs:'Ap voye foto yo...',miss_docs:'Foto sa yo poko rive: {list}. Konekte sou Tablo machann ou pou voye yo pita (pa bezwen rekòmanse).',suc_title:'Demann ou anrejistre!',suc_desc:'⏳ Magazen ou an atant verifikasyon HaitiBiznis. Ou ka deja ajoute pwodwi; magazen an ap parèt piblik epi resevwa kòmand lè l apwouve. Pou konekte pita: nimewo telefòn ou ak kòd 4 chif la.',suc_view:'Tablo machann mwen',suc_products:'Ajoute Pwodwi Ou',suc_wa:'Voye enfo a sou WhatsApp',suc_home:'← Retounen sou MyPlopPlop',
+    pat_q:'Èske biznis ou gen Patente?',pat_yes:'✅ Wi',pat_no:'❌ Non',pat_num:'Nimewo Patente a (si l genyen)',pat_fy:'Ane fiskal ki ekri sou Patente a ("Exercice Fiscal")',pat_unk:'Mwen pa konnen',pat_photo:'Foto Patente a',pat_photo_hint:'Yon foto KLÈ, kote nou ka li non an, nimewo a ak ane fiskal la. PRIVE.',pat_no_box:'📋 Ou poko gen Patente? HaitiBiznis ka ede w formalize biznis ou.',pat_assist:'Mwen bezwen asistans',pat_pharma:'💊 Famasi: Patente + otorizasyon MSPP obligatwa anvan magazen an ka louvri.',pat_mspp:'Otorizasyon MSPP',pat_note:'Biznis san Patente ka enskri tou. Machann nan responsab pwòp Patente li.',err_pat:'Reponn kesyon an: Èske biznis ou gen Patente?',
     nav_home:'Akèy',nav_search:'Chèche',nav_cart:'Panye',nav_orders:'Kòmand',nav_account:'Kont'
   },
   pt: {
@@ -339,6 +372,7 @@ const T = {
     err_exists:'Este número já tem uma conta, mas o código não confere.',err_login_link:'Entrar',
     err_offline:'O servidor não respondeu. Tente de novo em um minuto.',err_generic:'Não foi possível criar a loja: ',
     lbl_front:'Foto da frente da loja',hint_front:'A frente do negócio, com a placa se houver.',lbl_ownerid:'Documento de identidade do dono',hint_ownerid:'RG, NIF, passaporte ou carteira. PRIVADO: só a equipe de verificação vê, nunca aparece na loja.',err_docs:'Adicione a foto da frente da loja e o documento do dono.',btn_docs:'Enviando as fotos...',miss_docs:'Estas fotos ainda não chegaram: {list}. Entre no seu painel para enviá-las depois (sem recomeçar).',suc_title:'Pedido registrado!',suc_desc:'⏳ Sua loja aguarda a verificação da HaitiBiznis. Você já pode adicionar produtos; a loja fica pública e recebe pedidos quando for aprovada. Para entrar depois: seu número e seu código de 4 dígitos.',suc_view:'Meu painel',suc_products:'Adicionar seus produtos',suc_wa:'Enviar os dados no WhatsApp',suc_home:'← Voltar ao MyPlopPlop',
+    pat_q:'Seu negócio tem Patente?',pat_yes:'✅ Sim',pat_no:'❌ Não',pat_num:'Número da Patente (se tiver)',pat_fy:'Ano fiscal escrito na Patente ("Exercice Fiscal")',pat_unk:'Não sei',pat_photo:'Foto da Patente',pat_photo_hint:'Uma foto NÍTIDA, onde se leia o nome, o número e o ano fiscal. PRIVADA.',pat_no_box:'📋 Ainda sem Patente? A HaitiBiznis pode ajudar a formalizar seu negócio.',pat_assist:'Preciso de assistência',pat_pharma:'💊 Farmácia: Patente + autorização do MSPP obrigatórias para a loja abrir.',pat_mspp:'Autorização MSPP',pat_note:'Negócios sem Patente também podem se cadastrar. O comerciante é responsável pela própria Patente.',err_pat:'Responda: seu negócio tem Patente?',
     nav_home:'Início',nav_search:'Buscar',nav_cart:'Carrinho',nav_orders:'Pedidos',nav_account:'Conta'
   },
   en: {
@@ -357,6 +391,7 @@ const T = {
     err_exists:'This number already has an account, but the code does not match.',err_login_link:'Log in',
     err_offline:'The server did not answer. Please try again in a minute.',err_generic:'We could not create the store: ',
     lbl_front:'Photo of the storefront',hint_front:'The front of the business, with the sign if there is one.',lbl_ownerid:'Owner\'s ID document',hint_ownerid:'National ID, NIF, passport or licence. PRIVATE: only the verification team sees it, never shown on your store.',err_docs:'Please add the storefront photo and the owner\'s ID.',btn_docs:'Sending the photos...',miss_docs:'These photos did not arrive yet: {list}. Log in to your merchant dashboard to send them later (no need to start again).',suc_title:'Application received!',suc_desc:'⏳ Your store is waiting for HaitiBiznis verification. You can already add products; the store becomes public and receives orders once approved. To log in later: your phone number and your 4-digit code.',suc_view:'My merchant dashboard',suc_products:'Add Your Products',suc_wa:'Send the details on WhatsApp',suc_home:'← Back to MyPlopPlop',
+    pat_q:'Does your business have a Patente?',pat_yes:'✅ Yes',pat_no:'❌ No',pat_num:'Patente number (if any)',pat_fy:'Fiscal year written on the Patente ("Exercice Fiscal")',pat_unk:'I don’t know',pat_photo:'Photo of the Patente',pat_photo_hint:'A CLEAR photo where the name, number and fiscal year can be read. PRIVATE.',pat_no_box:'📋 No Patente yet? HaitiBiznis can help you formalize your business.',pat_assist:'I need assistance',pat_pharma:'💊 Pharmacy: Patente + MSPP authorisation required before the store can open.',pat_mspp:'MSPP authorisation',pat_note:'Businesses without a Patente can register too. The merchant remains responsible for their own Patente.',err_pat:'Please answer: does your business have a Patente?',
     nav_home:'Home',nav_search:'Search',nav_cart:'Cart',nav_orders:'Orders',nav_account:'Account'
   },
   fr: {
@@ -375,6 +410,7 @@ const T = {
     err_exists:'Ce numéro a déjà un compte, mais le code ne correspond pas.',err_login_link:'Se connecter',
     err_offline:'Le serveur ne répond pas. Réessayez dans une minute.',err_generic:'Nous n\'avons pas pu créer la boutique : ',
     lbl_front:'Photo de la devanture',hint_front:'La devanture du commerce, avec l\'enseigne s\'il y en a une.',lbl_ownerid:'Pièce d\'identité du propriétaire',hint_ownerid:'CIN, NIF, passeport ou permis. PRIVÉ : seule l\'équipe de vérification la voit, jamais sur votre boutique.',err_docs:'Ajoutez la photo de la devanture et la pièce d\'identité du propriétaire.',btn_docs:'Envoi des photos...',miss_docs:'Ces photos ne sont pas encore arrivées : {list}. Connectez-vous à votre tableau marchand pour les envoyer plus tard (sans recommencer).',suc_title:'Demande enregistrée !',suc_desc:'⏳ Votre boutique attend la vérification de HaitiBiznis. Vous pouvez déjà ajouter des produits ; la boutique devient publique et reçoit des commandes une fois approuvée. Pour vous connecter plus tard : votre numéro et votre code à 4 chiffres.',suc_view:'Mon tableau marchand',suc_products:'Ajouter Vos Produits',suc_wa:'Envoyer les infos sur WhatsApp',suc_home:'← Retour à MyPlopPlop',
+    pat_q:'Votre entreprise a-t-elle une Patente ?',pat_yes:'✅ Oui',pat_no:'❌ Non',pat_num:'Numéro de Patente (si disponible)',pat_fy:'Exercice fiscal écrit sur la Patente',pat_unk:'Je ne sais pas',pat_photo:'Photo de la Patente',pat_photo_hint:'Une photo NETTE où l’on peut lire le nom, le numéro et l’exercice. PRIVÉE.',pat_no_box:'📋 Pas encore de Patente ? HaitiBiznis peut vous aider à formaliser votre entreprise.',pat_assist:'J’ai besoin d’assistance',pat_pharma:'💊 Pharmacie : Patente + autorisation du MSPP obligatoires avant l’ouverture.',pat_mspp:'Autorisation MSPP',pat_note:'Les entreprises sans Patente peuvent aussi s’inscrire. Le commerçant reste responsable de sa Patente.',err_pat:'Répondez : votre entreprise a-t-elle une Patente ?',
     nav_home:'Accueil',nav_search:'Recherche',nav_cart:'Panier',nav_orders:'Commandes',nav_account:'Compte'
   },
   es: {
@@ -393,6 +429,7 @@ const T = {
     err_exists:'Este número ya tiene una cuenta, pero el código no coincide.',err_login_link:'Entrar',
     err_offline:'El servidor no responde. Intenta de nuevo en un minuto.',err_generic:'No pudimos crear la tienda: ',
     lbl_front:'Foto del frente de la tienda',hint_front:'El frente del negocio, con el letrero si hay.',lbl_ownerid:'Documento de identidad del dueño',hint_ownerid:'Cédula, NIF, pasaporte o licencia. PRIVADO: solo lo ve el equipo de verificación, nunca aparece en tu tienda.',err_docs:'Agrega la foto del frente de la tienda y el documento del dueño.',btn_docs:'Enviando las fotos...',miss_docs:'Estas fotos aún no llegaron: {list}. Entra a tu panel de comerciante para enviarlas después (sin empezar de nuevo).',suc_title:'¡Solicitud registrada!',suc_desc:'⏳ Tu tienda espera la verificación de HaitiBiznis. Ya puedes agregar productos; la tienda será pública y recibirá pedidos cuando sea aprobada. Para entrar después: tu número y tu código de 4 dígitos.',suc_view:'Mi panel de comerciante',suc_products:'Agregar Tus Productos',suc_wa:'Enviar los datos por WhatsApp',suc_home:'← Volver a MyPlopPlop',
+    pat_q:'¿Su negocio tiene Patente?',pat_yes:'✅ Sí',pat_no:'❌ No',pat_num:'Número de Patente (si lo tiene)',pat_fy:'Año fiscal escrito en la Patente ("Exercice Fiscal")',pat_unk:'No sé',pat_photo:'Foto de la Patente',pat_photo_hint:'Una foto CLARA donde se lea el nombre, el número y el año fiscal. PRIVADA.',pat_no_box:'📋 ¿Aún sin Patente? HaitiBiznis puede ayudarle a formalizar su negocio.',pat_assist:'Necesito asistencia',pat_pharma:'💊 Farmacia: Patente + autorización del MSPP obligatorias antes de abrir la tienda.',pat_mspp:'Autorización MSPP',pat_note:'Los negocios sin Patente también pueden inscribirse. El comerciante es responsable de su propia Patente.',err_pat:'Responda: ¿su negocio tiene Patente?',
     nav_home:'Inicio',nav_search:'Buscar',nav_cart:'Carrito',nav_orders:'Pedidos',nav_account:'Cuenta'
   }
 };
@@ -473,6 +510,12 @@ function handleSubmit(e) {
   if (!/^\d{4}$/.test(pin)) { showErr(t.err_pin); return false; }
   var fFront = document.getElementById('docFront').files[0], fOwner = document.getElementById('docOwnerId').files[0];
   if (!fFront || !fOwner) { showErr(t.err_docs); return false; }
+  var patR = document.querySelector('input[name="patHas"]:checked'), patHas = patR ? patR.value : '';
+  if (!patHas) { showErr(t.err_pat); document.getElementById('patField').scrollIntoView({ block: 'center' }); return false; }
+  var isPharm = (CAT_MAP[cat] || '') === 'pharmacy';
+  var fPat = patHas === 'yes' ? document.getElementById('docPatente').files[0] : null, fMspp = isPharm ? document.getElementById('docMspp').files[0] : null;
+  var patBody = { has: patHas, number: patHas === 'yes' ? document.getElementById('patNum').value.trim() : '', fy: patHas === 'yes' ? (parseInt(document.getElementById('patFy').value, 10) || '') : '' };
+  var patAssist = patHas === 'no' && document.getElementById('patAssist').checked;
 
   /* Built exactly the way login.html builds it, so the number she registers
      with is the number that logs her back in. */
@@ -561,8 +604,20 @@ function handleSubmit(e) {
     /* 4 Nov 2026: the store waits for verification - send its 2 photos (each retried); anything that does not
        arrive is NAMED and can be sent later from the merchant dashboard, never silently lost */
     setBusy(t.btn_docs, true);
-    return uploadDocs(d.data._id, authToken, [['storefront', fFront], ['owner_id', fOwner]]).then(function(failed) {
-      var L = { storefront: t.lbl_front, owner_id: t.lbl_ownerid };
+    var docList = [['storefront', fFront], ['owner_id', fOwner]];
+    if (fPat) docList.push(['patente', fPat]);
+    if (fMspp) docList.push(['mspp', fMspp]);
+    /* the Patente answer (and "Mwen bezwen asistans") - retried like the photos; can be answered later on the dashboard */
+    return postRetry('/api/stores/my/patente', patBody, authToken).then(function(okPat) {
+      return (patAssist ? postRetry('/api/stores/my/patente-assist', {}, authToken) : Promise.resolve(true)).then(function() { return uploadDocs(d.data._id, authToken, docList); })
+        .then(function(failed) {
+          if (!okPat) failed.push('patente_answer');
+          if (patHas === 'yes' && !fPat) failed.push('patente');
+          if (isPharm && !fMspp) failed.push('mspp');
+          return failed.filter(function(x, i, a) { return a.indexOf(x) === i; });
+        });
+    }).then(function(failed) {
+      var L = { storefront: t.lbl_front, owner_id: t.lbl_ownerid, patente: t.pat_photo, mspp: t.pat_mspp, patente_answer: t.pat_q };
       if (failed.length) { var m = document.getElementById('sucMissing'); m.textContent = t.miss_docs.replace('{list}', failed.map(function(x){ return L[x]; }).join(', ')); m.style.display = 'block'; }
       try { localStorage.removeItem(DRAFT); } catch (err) {}
       document.getElementById('waLink').href = waUrl;
@@ -583,6 +638,29 @@ function handleSubmit(e) {
   return false;
 }
 
+function postRetry(path, body, token) {
+  var once = function(n) {
+    return fetchWithTimeout(API_BASE + path, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify(body) }, 60000)
+      .then(function(r) { if (!r.ok) throw new Error('p ' + r.status); return true; })
+      .catch(function() { if (n > 1) return new Promise(function(r) { setTimeout(r, 2500); }).then(function() { return once(n - 1); }); return false; });
+  };
+  return once(3);
+}
+/* the Patente question: Wi → number, fiscal year (a Patente has no expiry date: it is for ONE fiscal year, 1 Oct - 30 Sep)
+   and its photo; Non → the formalization offer; a pharmacy also needs the MSPP authorisation */
+(function patWire() {
+  var d = new Date(), c = d.getMonth() >= 9 ? d.getFullYear() : d.getFullYear() - 1, sel = document.getElementById('patFy');
+  sel.innerHTML = '<option value=""></option>' + [c, c - 1, c - 2].map(function(y) { return '<option value="' + y + '">' + y + ' - ' + (y + 1) + '</option>'; }).join('') + '<option value="0" data-i18n="pat_unk">Mwen pa konnen</option>';
+  function sync() {
+    var r = document.querySelector('input[name="patHas"]:checked'), h = r ? r.value : '';
+    document.getElementById('patYesBox').style.display = h === 'yes' ? '' : 'none';
+    document.getElementById('patNoBox').style.display = h === 'no' ? '' : 'none';
+    document.getElementById('patPharmaBox').style.display = (CAT_MAP[document.getElementById('storeCategory').value] || '') === 'pharmacy' ? '' : 'none';
+  }
+  document.querySelectorAll('input[name="patHas"]').forEach(function(x) { x.addEventListener('change', sync); });
+  document.getElementById('storeCategory').addEventListener('change', sync);
+  window.patSync = sync;
+})();
 function shrinkPhoto(file) {
   return new Promise(function(res) {
     var u = URL.createObjectURL(file), im = new Image();
@@ -612,12 +690,17 @@ function uploadDocs(storeId, token, list) {
   }, Promise.resolve()).then(function() { return failed; });
 }
 /* the form is kept on this phone while it is filled (not the code, not the photos) - an interruption loses nothing */
-var DRAFT = 'mpp_reg_draft', DRAFT_IDS = ['storeName', 'storeCategory', 'ownerName', 'phone', 'whatsapp', 'location', 'storeDesc', 'referralPartner'];
-try { var dr = JSON.parse(localStorage.getItem(DRAFT) || 'null'); if (dr) DRAFT_IDS.forEach(function(id) { var el = document.getElementById(id); if (el && dr[id]) el.value = dr[id]; }); } catch (e) {}
-document.getElementById('registerForm').addEventListener('input', function() {
+var DRAFT = 'mpp_reg_draft', DRAFT_IDS = ['storeName', 'storeCategory', 'ownerName', 'phone', 'whatsapp', 'location', 'storeDesc', 'referralPartner', 'patNum', 'patFy'];
+try { var dr = JSON.parse(localStorage.getItem(DRAFT) || 'null'); if (dr) { DRAFT_IDS.forEach(function(id) { var el = document.getElementById(id); if (el && dr[id]) el.value = dr[id]; });
+  if (dr.patHas) { var rr = document.querySelector('input[name="patHas"][value="' + dr.patHas + '"]'); if (rr) rr.checked = true; }
+  if (dr.patAssist) document.getElementById('patAssist').checked = true; window.patSync(); } } catch (e) {}
+function draftSave() {
   var d = {}; DRAFT_IDS.forEach(function(id) { var el = document.getElementById(id); if (el) d[id] = el.value; });
+  var r = document.querySelector('input[name="patHas"]:checked'); d.patHas = r ? r.value : ''; d.patAssist = document.getElementById('patAssist').checked;
   try { localStorage.setItem(DRAFT, JSON.stringify(d)); } catch (e) {}
-});
+}
+document.getElementById('registerForm').addEventListener('input', draftSave);
+document.getElementById('registerForm').addEventListener('change', draftSave);
 
 setLang(currentLang);
 

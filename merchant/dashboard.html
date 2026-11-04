@@ -167,8 +167,96 @@
     off:   { kr:'Foto a pa rive (koneksyon). Eseye ankò.', fr:'La photo n’est pas arrivée (connexion). Réessayez.', en:'The photo did not arrive (connection). Try again.', es:'La foto no llegó (conexión). Intenta de nuevo.' }
   };
   function V_(k) { var e = V[k]; return e ? (e[MP.lang()] || e.en) : k; }
+  /* 4 Nov 2026 (Jeffery, PATENTE): the merchant answers / adds his Patente here, any time - 🟡 → 🟢 when Jennifer verifies it */
+  var P = {
+    title: { kr:'📋 Patente', fr:'📋 Patente', en:'📋 Patente', es:'📋 Patente' },
+    q:     { kr:'Èske biznis ou gen Patente?', fr:'Votre entreprise a-t-elle une Patente ?', en:'Does your business have a Patente?', es:'¿Su negocio tiene Patente?' },
+    yes:   { kr:'✅ Wi', fr:'✅ Oui', en:'✅ Yes', es:'✅ Sí' },
+    no:    { kr:'❌ Non', fr:'❌ Non', en:'❌ No', es:'❌ No' },
+    green: { kr:'🟢 Biznis Verifye — Ak Patente', fr:'🟢 Entreprise vérifiée — avec Patente', en:'🟢 Verified Business — with Patente', es:'🟢 Negocio verificado — con Patente' },
+    yellow:{ kr:'🟡 Ti Biznis Verifye — San Patente', fr:'🟡 Petite entreprise vérifiée — sans Patente', en:'🟡 Verified Small Business — no Patente', es:'🟡 Pequeño negocio verificado — sin Patente' },
+    nobox: { kr:'📋 Ou poko gen Patente? HaitiBiznis ka ede w formalize biznis ou.', fr:'📋 Pas encore de Patente ? HaitiBiznis peut vous aider à formaliser votre entreprise.', en:'📋 No Patente yet? HaitiBiznis can help you formalize your business.', es:'📋 ¿Aún sin Patente? HaitiBiznis puede ayudarle a formalizar su negocio.' },
+    assist:{ kr:'Mwen bezwen asistans', fr:'J’ai besoin d’assistance', en:'I need assistance', es:'Necesito asistencia' },
+    asked: { kr:'✓ Demann asistans lan rive. HaitiBiznis ap kontakte w.', fr:'✓ Demande reçue. HaitiBiznis va vous contacter.', en:'✓ Request received. HaitiBiznis will contact you.', es:'✓ Solicitud recibida. HaitiBiznis le contactará.' },
+    nowhave:{ kr:'Kounye a mwen gen yon Patente', fr:'J’ai maintenant une Patente', en:'I now have a Patente', es:'Ahora tengo una Patente' },
+    num:   { kr:'Nimewo Patente (si l genyen)', fr:'Numéro de Patente (si disponible)', en:'Patente number (if any)', es:'Número de Patente (si lo tiene)' },
+    fy:    { kr:'Ane fiskal ki sou Patente a', fr:'Exercice fiscal sur la Patente', en:'Fiscal year on the Patente', es:'Año fiscal en la Patente' },
+    unk:   { kr:'Mwen pa konnen', fr:'Je ne sais pas', en:'I don’t know', es:'No sé' },
+    save:  { kr:'Anrejistre', fr:'Enregistrer', en:'Save', es:'Guardar' },
+    photo: { kr:'Foto Patente a', fr:'Photo de la Patente', en:'Patente photo', es:'Foto de la Patente' },
+    mspp:  { kr:'Otorizasyon MSPP (famasi)', fr:'Autorisation MSPP (pharmacie)', en:'MSPP authorisation (pharmacy)', es:'Autorización MSPP (farmacia)' },
+    pend:  { kr:'📄 HaitiBiznis ap verifye Patente ou.', fr:'📄 HaitiBiznis vérifie votre Patente.', en:'📄 HaitiBiznis is checking your Patente.', es:'📄 HaitiBiznis está verificando su Patente.' },
+    pfix:  { kr:'🔧 Korije Patente a:', fr:'🔧 Corrigez la Patente :', en:'🔧 Please correct the Patente:', es:'🔧 Corrija la Patente:' },
+    grace: { kr:'⏳ Renouvle Patente ou pou ane fiskal sa a anvan 31 janvye, epi voye nouvo foto a.', fr:'⏳ Renouvelez votre Patente pour cet exercice avant le 31 janvier, puis envoyez la nouvelle photo.', en:'⏳ Renew your Patente for this fiscal year before 31 January, then send the new photo.', es:'⏳ Renueve su Patente para este año fiscal antes del 31 de enero y envíe la nueva foto.' },
+    stale: { kr:'⌛ Patente sa a pa ajou. Voye Patente ane fiskal sa a.', fr:'⌛ Cette Patente n’est plus à jour. Envoyez celle de cet exercice.', en:'⌛ This Patente is out of date. Send this fiscal year’s Patente.', es:'⌛ Esta Patente no está al día. Envíe la de este año fiscal.' },
+    pharma:{ kr:'💊 Famasi: Patente + otorizasyon MSPP obligatwa pou magazen an ka louvri.', fr:'💊 Pharmacie : Patente + autorisation MSPP obligatoires pour ouvrir la boutique.', en:'💊 Pharmacy: Patente + MSPP authorisation required for the store to open.', es:'💊 Farmacia: Patente + autorización MSPP obligatorias para abrir la tienda.' },
+    note:  { kr:'Machann nan responsab pwòp Patente li.', fr:'Le commerçant reste responsable de sa Patente.', en:'The merchant remains responsible for their own Patente.', es:'El comerciante es responsable de su propia Patente.' }
+  };
+  function P_(k) { var e = P[k]; return e ? (e[MP.lang()] || e.en) : k; }
+  function patenteCard(v) {
+    var body = document.getElementById('mpBody'); if (!body || v.state === 'rejected') return;
+    var p = v.patente || {}, have = v.docs || [], open = v._open, html = '';
+    var pharm = (v.licence || []).indexOf('mspp') >= 0;
+    if (v.state === 'approved' && v.trust) html += '<div style="font-weight:800;margin-bottom:6px">' + P_(v.trust === 'patente' && (p.fresh === 'current' || p.fresh === 'grace') ? 'green' : 'yellow') + '</div>';
+    if (!p.has && !open) {
+      html += '<div style="font-weight:700;margin-bottom:8px">' + P_('q') + '</div><div style="display:flex;gap:8px"><button class="mp-btn mp-btn-blue mp-btn-sm" data-pa="yes">' + P_('yes') + '</button><button class="mp-btn mp-btn-sm" data-pa="no">' + P_('no') + '</button></div>';
+    } else if (p.has === 'no' && !open) {
+      html += '<div style="padding:10px 12px;border-radius:12px;background:#EEF4FF;font-weight:700;line-height:1.45">' + P_('nobox') +
+        (v.assist ? '<div style="color:#0b6b37;margin-top:6px">' + P_('asked') + '</div>' : '<div style="margin-top:8px"><button class="mp-btn mp-btn-blue mp-btn-sm" data-pa="assist">' + P_('assist') + '</button></div>') + '</div>' +
+        '<div style="margin-top:8px"><button class="mp-btn mp-btn-sm" data-pa="open">' + P_('nowhave') + '</button></div>';
+    } else {
+      var fys = (v.fiscalYears || []).map(function (y) { return '<option value="' + y + '"' + (p.fy === y ? ' selected' : '') + '>' + y + ' - ' + (y + 1) + '</option>'; }).join('');
+      if (p.fy && (v.fiscalYears || []).indexOf(p.fy) < 0) fys += '<option value="' + p.fy + '" selected>' + p.fy + ' - ' + (p.fy + 1) + '</option>';
+      var line = p.state === 'fix' ? P_('pfix') + ' ' + MP.esc(p.note || '') : p.state === 'pending' ? P_('pend') : '';
+      if (p.state === 'verified' && p.fresh === 'grace') line = P_('grace');
+      if (p.has === 'yes' && p.fresh === 'expired') line = P_('stale');
+      if (line) html += '<div style="font-weight:700;margin-bottom:8px;line-height:1.45">' + line + '</div>';
+      html += '<label class="mp-label" style="display:block;font-weight:700;font-size:.85rem">' + P_('num') + '</label><input class="mp-input" id="pNum" maxlength="30" value="' + MP.esc(p.number || '') + '" style="width:100%;margin-bottom:8px">' +
+        '<label class="mp-label" style="display:block;font-weight:700;font-size:.85rem">' + P_('fy') + '</label><select class="mp-select" id="pFy" style="width:100%;margin-bottom:8px"><option value="">' + P_('unk') + '</option>' + fys + '</select>' +
+        '<button class="mp-btn mp-btn-blue mp-btn-sm" data-pa="save">' + P_('save') + '</button>';
+      html += docRow('patente', P_('photo'), have, p.state === 'fix' || p.fresh === 'expired' || p.state === 'none');
+    }
+    if (pharm) html += '<div style="font-weight:700;color:#9a3412;margin-top:10px">' + P_('pharma') + '</div>' + docRow('mspp', P_('mspp'), have, false);
+    html += '<div class="mp-row-sub" style="margin-top:8px">' + P_('note') + '</div>';
+    var card = document.createElement('div'); card.className = 'mp-card'; card.id = 'mpPatente'; card.style.border = '2px solid #9DB8F0';
+    card.innerHTML = '<div class="mp-card-title">' + P_('title') + '</div>' + html;
+    var old = document.getElementById('mpPatente'); if (old) old.remove();
+    var vc = document.getElementById('mpVerify');
+    if (vc && vc.nextSibling) body.insertBefore(card, vc.nextSibling); else if (vc) body.appendChild(card); else body.insertBefore(card, body.firstChild);
+    function again() { verifyCard(); }
+    function post(path, b) { return MP.req('POST', path, b).then(function (d) { if (!d || !d.success) throw new Error('x'); return d; }); }
+    card.querySelectorAll('[data-pa]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var a = btn.getAttribute('data-pa');
+        if (a === 'open') { v._open = true; return patenteCard(v); }
+        var call = a === 'yes' ? (v._open = true, Promise.resolve(patenteCard(v)))
+          : a === 'no' ? post('/api/stores/my/patente', { has: 'no' }).then(again)
+          : a === 'assist' ? post('/api/stores/my/patente-assist', {}).then(again)
+          : post('/api/stores/my/patente', { has: 'yes', number: (document.getElementById('pNum') || {}).value || '', fy: (document.getElementById('pFy') || {}).value || '' }).then(function () { MP.toast('✓', 'success'); again(); });
+        call.catch(function () { MP.toast(V_('off'), 'error'); });
+      });
+    });
+    wireDocs(card, v);
+  }
+  function docRow(type, label, have, redo) {
+    var has = have.indexOf(type) >= 0;
+    return '<div class="mp-row"><div class="mp-row-main"><div class="mp-row-name">' + label + '</div><div class="mp-row-sub">' + (has && !redo ? V_('have') : has ? '🔧' : V_('miss')) + '</div></div>' +
+      '<label class="mp-btn mp-btn-blue mp-btn-sm" style="cursor:pointer">' + V_('send') + '<input type="file" accept="image/*" data-vt="' + type + '" style="display:none"></label></div>';
+  }
+  function wireDocs(card, v) {
+    card.querySelectorAll('input[data-vt]').forEach(function (inp) {
+      inp.addEventListener('change', function () {
+        var f = inp.files && inp.files[0]; if (!f) return;
+        MP.compressImage(f, 1600, 1500000).then(function (url) {
+          return MP.req('POST', '/api/stores/' + v.storeId + '/verification-docs', { type: inp.getAttribute('data-vt'), image_data: url });
+        }).then(function (d) { if (!d || !d.success) throw new Error('send'); MP.toast(V_('ok'), 'success'); verifyCard(); })
+          .catch(function () { MP.toast(V_('off'), 'error'); });
+      });
+    });
+  }
   function verifyCard() {
     MP.req('GET', '/api/stores/my/verification').then(function (v) {
+      if (v && v.success) patenteCard(v);
       if (!v || !v.success || v.state === 'approved') return;
       var body = document.getElementById('mpBody'); if (!body) return;
       var waiting = v.state === 'pending' || v.state === 'fix';
@@ -177,21 +265,14 @@
         return '<div class="mp-row"><div class="mp-row-main"><div class="mp-row-name">' + r[1] + '</div><div class="mp-row-sub">' + (redo ? '🔧' : has ? V_('have') : V_('miss')) + '</div></div>' +
           (waiting && (!has || redo) ? '<label class="mp-btn mp-btn-blue mp-btn-sm" style="cursor:pointer">' + V_('send') + '<input type="file" accept="image/*" data-vt="' + r[0] + '" style="display:none"></label>' : '') + '</div>';
       }).join('');
-      var head = v.state === 'rejected' ? V_('rej') + ' ' + MP.esc(v.reason || '') : v.state === 'fix' ? V_('fix') + ' ' + (v.fix || []).map(function (x) { return x === 'storefront' ? V_('front') : x === 'owner_id' ? V_('owner') : V_('info'); }).join(', ') + (v.note ? ' — “' + MP.esc(v.note) + '”' : '') : V_('wait');
+      var head = v.state === 'rejected' ? V_('rej') + ' ' + MP.esc(v.reason || '') : v.state === 'fix' ? V_('fix') + ' ' + (v.fix || []).map(function (x) { return x === 'storefront' ? V_('front') : x === 'owner_id' ? V_('owner') : x === 'patente' ? P_('photo') : x === 'mspp' ? P_('mspp') : V_('info'); }).join(', ') + (v.note ? ' — “' + MP.esc(v.note) + '”' : '') : V_('wait');
       var card = document.createElement('div'); card.className = 'mp-card'; card.id = 'mpVerify';
       card.style.border = '2px solid ' + (v.state === 'rejected' ? '#F2A7A7' : '#F3B36B');
       card.innerHTML = '<div class="mp-card-title" style="white-space:normal;line-height:1.4">' + head + '</div>' + rows;
       var old = document.getElementById('mpVerify'); if (old) old.remove();
       body.insertBefore(card, body.firstChild);
-      card.querySelectorAll('input[data-vt]').forEach(function (inp) {
-        inp.addEventListener('change', function () {
-          var f = inp.files && inp.files[0]; if (!f) return;
-          MP.compressImage(f, 1600, 1500000).then(function (url) {
-            return MP.req('POST', '/api/stores/' + v.storeId + '/verification-docs', { type: inp.getAttribute('data-vt'), image_data: url });
-          }).then(function (d) { if (!d || !d.success) throw new Error('send'); MP.toast(V_('ok'), 'success'); verifyCard(); })
-            .catch(function () { MP.toast(V_('off'), 'error'); });
-        });
-      });
+      wireDocs(card, v);
+      patenteCard(v);
     }).catch(function () {});
   }
 

@@ -854,6 +854,27 @@ var STORE_TXT = {
           addCart: 'Adicionar ao carrinho — {p}', address: 'Endereço', delivery: 'Entrega', eta: 'Prazo', minutes: '{n} minutos',
           rating: 'Avaliação', status: 'Status', verifiedMerchant: 'Comerciante verificado' }
 };
+/* 4 Nov 2026 (Jeffery, PATENTE): the badge HaitiBiznis gives after verification. 🟢 only while the Patente's fiscal
+   year is current (or in its renewal window, Oct-Jan); otherwise 🟡 - identity verified, never "legally registered". */
+var TRUST_T = {
+    kr: { green: '🟢 Biznis Verifye — Ak Patente', yellow: '🟡 Ti Biznis Verifye — San Patente', gNote: 'HaitiBiznis verifye idantite machann nan ak Patente l ({fy}).', yNote: 'HaitiBiznis verifye idantite machann nan. Biznis la pa gen Patente verifye.' },
+    fr: { green: '🟢 Entreprise vérifiée — avec Patente', yellow: '🟡 Petite entreprise vérifiée — sans Patente', gNote: 'HaitiBiznis a vérifié l’identité du commerçant et sa Patente ({fy}).', yNote: 'HaitiBiznis a vérifié l’identité du commerçant. L’entreprise n’a pas de Patente vérifiée.' },
+    en: { green: '🟢 Verified Business — with Patente', yellow: '🟡 Verified Small Business — no Patente', gNote: 'HaitiBiznis verified the merchant’s identity and Patente ({fy}).', yNote: 'HaitiBiznis verified the merchant’s identity. The business has no verified Patente.' },
+    es: { green: '🟢 Negocio verificado — con Patente', yellow: '🟡 Pequeño negocio verificado — sin Patente', gNote: 'HaitiBiznis verificó la identidad del comerciante y su Patente ({fy}).', yNote: 'HaitiBiznis verificó la identidad del comerciante. El negocio no tiene Patente verificada.' },
+    pt: { green: '🟢 Negócio verificado — com Patente', yellow: '🟡 Pequeno negócio verificado — sem Patente', gNote: 'A HaitiBiznis verificou a identidade do comerciante e a Patente ({fy}).', yNote: 'A HaitiBiznis verificou a identidade do comerciante. O negócio não tem Patente verificada.' }
+};
+function trustLevel(t) {
+    if (!t || !t.level) return null;
+    if (t.level !== 'patente' || !t.fy) return { kind: 'yellow' };
+    var d = new Date(), m = d.getMonth(), cur = m >= 9 ? d.getFullYear() : d.getFullYear() - 1, fy = Number(t.fy);
+    var ok = fy === cur || (fy === cur - 1 && (m >= 9 || m === 0));
+    return ok ? { kind: 'green', fy: fy + '-' + (fy + 1) } : { kind: 'yellow' };
+}
+function tl(k, tr) {
+    var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || (function(){ try { return localStorage.getItem('myplopplop_lang'); } catch (e) { return null; } })() || 'kr';
+    var T = TRUST_T[l === 'ht' ? 'kr' : l] || TRUST_T.kr;
+    return String(T[k] || '').replace('{fy}', tr && tr.fy ? tr.fy : '');
+}
 function sl(k, v) {
     var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || (function(){ try { return localStorage.getItem('myplopplop_lang'); } catch (e) { return null; } })() || 'kr';
     var d = STORE_TXT[l] || STORE_TXT[l === 'ht' ? 'kr' : 'en'] || STORE_TXT.kr;
@@ -1082,6 +1103,7 @@ function buildStoreFromAPI(s, products) {
         deliveryFee: s.deliveryOptions ? (s.deliveryOptions.deliveryFee || 0) : 0,
         open: true,
         verified: s.isVerified || false,
+        trust: trustLevel(s.trust),
         products: prods,
         logo: s.logo || null,
         fromAPI: true
@@ -1277,7 +1299,9 @@ if (store.open) {
 } else {
     bannerHTML += '        <span class="store-status-closed"><span style="display:inline-block;width:6px;height:6px;background:#FCA5A5;border-radius:50%;"></span> ' + sl('closed') + '</span>';
 }
-if (store.verified) {
+if (store.trust) {
+    bannerHTML += '        <span class="store-verified-badge" title="' + tl(store.trust.kind === 'green' ? 'gNote' : 'yNote', store.trust).replace(/"/g, '&quot;') + '">' + tl(store.trust.kind) + '</span>';
+} else if (store.verified) {
     bannerHTML += '        <span class="store-verified-badge">' + sl('verified') + '</span>';
 }
 bannerHTML += '      </div>';
@@ -1393,7 +1417,13 @@ function renderAbout() {
     html += '    <span class="about-row-label">' + sl('rating') + '</span>';
     html += '    <span class="about-row-value">' + store.rating + ' / 5 (' + sl('reviews', { n: store.reviews }) + ')</span>';
     html += '  </div>';
-    if (store.verified) {
+    if (store.trust) {
+        html += '  <div class="about-row">';
+        html += '    <span class="about-row-icon">' + (store.trust.kind === 'green' ? '🟢' : '🟡') + '</span>';
+        html += '    <span class="about-row-label">' + sl('status') + '</span>';
+        html += '    <span class="about-row-value" style="font-weight:600;">' + tl(store.trust.kind).replace(/^\S+ /, '') + '<br><small style="font-weight:400;opacity:.8">' + tl(store.trust.kind === 'green' ? 'gNote' : 'yNote', store.trust) + '</small></span>';
+        html += '  </div>';
+    } else if (store.verified) {
         html += '  <div class="about-row">';
         html += '    <span class="about-row-icon">✓</span>';
         html += '    <span class="about-row-label">' + sl('status') + '</span>';
