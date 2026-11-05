@@ -287,7 +287,17 @@ input:focus,textarea:focus{outline:0;border-color:var(--blue)}
           el(k + 'Gps').disabled = false;
           q.value = t('gpsHere'); okEl.classList.add('show');
           set({ address: t('gpsHere') + ' ' + pos.coords.latitude.toFixed(5) + ', ' + pos.coords.longitude.toFixed(5), lat: pos.coords.latitude, lng: pos.coords.longitude });
-        }, function () { el(k + 'Gps').disabled = false; alert(t('gpsNo')); }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
+        }, function (e) {
+          /* 5 Nov 2026 ("works reliably"): indoors the GPS chip often times out - ask once more for the phone's
+             network position (Wi-Fi / cell, quick) before giving up. A refusal (code 1) is not asked again. */
+          if (e && e.code !== 1) {
+            return navigator.geolocation.getCurrentPosition(function (pos) {
+              el(k + 'Gps').disabled = false; q.value = t('gpsHere'); okEl.classList.add('show');
+              set({ address: t('gpsHere') + ' ' + pos.coords.latitude.toFixed(5) + ', ' + pos.coords.longitude.toFixed(5), lat: pos.coords.latitude, lng: pos.coords.longitude });
+            }, function () { el(k + 'Gps').disabled = false; alert(t('gpsNo')); }, { enableHighAccuracy: false, timeout: 12000, maximumAge: 300000 });
+          }
+          el(k + 'Gps').disabled = false; alert(t('gpsNo'));
+        }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
       };
     }
 
@@ -323,7 +333,8 @@ input:focus,textarea:focus{outline:0;border-color:var(--blue)}
       if (!pick) return (err.textContent = t('eqNoFrom'));
       if (!drop) return (err.textContent = t('eqNoTo'));
       if (!el('rn').value.trim()) return (err.textContent = t('eqNoName'));
-      if (rp.length < 8) return (err.textContent = t('eqNoPhone'));
+      /* 5 Nov 2026 (Jeffery: "Recipient name and phone are validated"): a Haiti number = 8 digits, or 509 + 8 */
+      if (!(rp.length === 8 || (rp.length === 11 && rp.indexOf('509') === 0))) { el('rp').focus(); return (err.textContent = t('eqNoPhone')); }
       var btn = el('go'); btn.disabled = true; btn.textContent = t('working');
       api('POST', '/api/rides/parcel', {
         pickup: { address: pick.address, lat: pick.lat, lng: pick.lng, notes: el('fromN').value },
