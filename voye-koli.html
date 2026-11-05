@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Voye yon koli | MyPlopPlop</title>
+<meta name="description" content="Voye yon koli bay yon moun an Ayiti: foto, kote, pri, peye, yon chofè pote l.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<style>
+/* 27 Oct 2026 - "VOYE YON KOLI". Jeffery: "Upload or take a photo of the
+   package. Enter pickup location and destination. Enter recipient's phone
+   number. See the delivery price and pay. Get connected to an available
+   MsouWout driver. Track the package until delivery is confirmed."
+   This page only collects and shows. The price, the payment check and the
+   dispatch are the server's (routes/rides.js /parcel, services/parcel.js). */
+:root{--red:#D21034;--blue:#00209F;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;--bg:#f4f6fa;--white:#fff;--green:#0f9d55;--amber:#b45309}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:40px}
+.top{background:var(--blue);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:20}
+.top a{color:#fff;text-decoration:none;font-size:22px;line-height:1}
+.top h1{font-family:Poppins;font-size:17px;font-weight:700}
+.wrap{max-width:520px;margin:0 auto;padding:16px}
+.card{background:var(--white);border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(16,24,40,.08);margin-bottom:14px}
+h2{font-family:Poppins;font-size:15px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.muted{color:var(--muted);font-size:13px;line-height:1.5}
+label{display:block;font-size:12.5px;font-weight:700;color:#374151;margin:10px 0 5px}
+input,textarea{width:100%;padding:13px 14px;border:2px solid var(--line);border-radius:12px;font:500 15px Inter,sans-serif;background:#fff;color:var(--ink)}
+input:focus,textarea:focus{outline:0;border-color:var(--blue)}
+.photo{border:2px dashed var(--line);border-radius:14px;min-height:150px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;cursor:pointer;color:var(--muted);font-weight:700;text-align:center;overflow:hidden;position:relative;background:#fafbfc}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.photo .ic{font-size:34px}
+.gps{display:inline-flex;align-items:center;gap:6px;margin-top:8px;background:#E9F7EE;color:var(--green);border:1px solid #bfe5cb;border-radius:999px;padding:7px 12px;font:700 13px Inter,sans-serif;cursor:pointer}
+.place{position:relative}
+.sugg{position:absolute;left:0;right:0;top:100%;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 24px rgba(0,0,0,.12);z-index:15;overflow:hidden;display:none}
+.sugg.show{display:block}
+.sugg button{display:block;width:100%;text-align:left;padding:11px 13px;border:0;background:#fff;border-bottom:1px solid #f1f2f4;font:500 14px Inter,sans-serif;cursor:pointer;color:var(--ink)}
+.sugg button small{display:block;color:var(--muted);font-size:12px}
+.picked{margin-top:6px;font-size:12.5px;color:var(--green);font-weight:700;display:none}
+.picked.show{display:block}
+.price{display:flex;justify-content:space-between;align-items:center}
+.price b{font-family:Poppins;font-size:24px}
+.methods{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.m{border:2px solid var(--line);border-radius:12px;padding:12px 6px;text-align:center;font:700 13px Inter,sans-serif;background:#fff;cursor:pointer;color:var(--ink)}
+.m.on{border-color:var(--blue);background:#EEF1FB;color:var(--blue)}
+.m[hidden]{display:none}
+.btn{display:block;width:100%;padding:16px;border:0;border-radius:14px;font:700 16px Inter,sans-serif;cursor:pointer;text-align:center;text-decoration:none}
+.btn-red{background:var(--red);color:#fff}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-green{background:#25D366;color:#fff}
+.btn-line{background:#fff;color:var(--ink);border:2px solid var(--line)}
+.btn[disabled]{opacity:.5;cursor:default}
+.err{color:var(--red);font-size:13.5px;font-weight:600;margin-top:10px;min-height:1px}
+.code{font-family:Poppins;font-size:42px;font-weight:800;letter-spacing:.3em;text-align:center;padding:6px 0 0 .3em}
+.box{border:2px dashed var(--blue);border-radius:14px;padding:14px;margin:10px 0}
+.steps{list-style:none;margin:6px 0}
+.steps li{display:flex;gap:10px;align-items:center;padding:7px 0;color:var(--muted);font-weight:600;font-size:14px}
+.steps li .d{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex:0 0 22px;display:grid;place-items:center;font-size:12px}
+.steps li.done{color:var(--ink)} .steps li.done .d{background:var(--green);border-color:var(--green);color:#fff}
+.steps li.now{color:var(--blue)} .steps li.now .d{border-color:var(--blue);background:#EEF1FB}
+.spin{width:18px;height:18px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--blue);animation:sp 1s linear infinite;display:inline-block;vertical-align:middle}
+@keyframes sp{to{transform:rotate(360deg)}}
+.row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid #f1f2f4;font-size:14px}
+.row span:first-child{color:var(--muted)} .row span:last-child{font-weight:600;text-align:right}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="top"><a href="index.html" aria-label="Retounen">‹</a><h1 id="tTitle">📤 Voye yon koli</h1></div>
+<div class="wrap" id="app"><div class="card"><span class="spin"></span></div></div>
+
+<script>window.MW_PLACES_BASE = 'https://msouwout.com/';</script>
+<script src="https://msouwout.com/js/haiti-places.js?v=4"></script>
+<script>
+(function () {
+  'use strict';
+  var API = 'https://myplopplop-api.onrender.com';
+  var lang = 'kr';
+  try { lang = localStorage.getItem('myplopplop_lang') || 'kr'; } catch (e) {}
+  var T = {
+    kr: { title: '📤 Voye yon koli', needLogin: 'Konekte pou voye yon koli', needLoginSub: 'Ou bezwen yon kont MyPlopPlop (telefòn + PIN). Se konsa nou konnen kiyès ki peye a.', login: 'Konekte', create: 'Kreye yon kont (30 segonn)',
+      photo: 'Foto koli a', photoTap: 'Tape la pou pran yon foto', photoChange: 'Chanje foto a', what: 'Kisa ki ladan l? (opsyonèl)', whatPh: 'Egz: yon ti bwat, dokiman, rad…',
+      from: 'Kote chofè a dwe pran l?', to: 'Kote pou l ale?', search: 'Chèche yon kote (egz: Delimart Delmas)', gps: '📍 Sèvi ak pozisyon mwen', gpsHere: 'Pozisyon mwen (GPS)', gpsNo: 'Nou pa jwenn pozisyon ou. Chèche kote a pito.', landmark: 'Repè pou chofè a (opsyonèl)', landmarkPh: 'Egz: pòt ble, devan famasi a',
+      onMap: '✓ Kote a jwenn sou kat la', who: 'Moun k ap resevwa l', rname: 'Non li', rphone: 'Telefòn li', rphonePh: 'Egz: 3712 3456',
+      price: 'Pri livrezon an', priceWait: 'Chwazi de kote yo pou wè pri a', pay: 'Peye', payBtn: 'Peye {p} epi rele yon chofè', card: 'Kat', working: 'Yon ti moman…',
+      eqNoPhoto: 'Pran yon foto koli a.', eqNoFrom: 'Chwazi kote chofè a dwe pran koli a nan lis la (oswa GPS).', eqNoTo: 'Chwazi kote koli a dwe ale nan lis la.', eqNoName: 'Mete non moun k ap resevwa a.', eqNoPhone: 'Mete telefòn moun k ap resevwa a (8 chif).',
+      net: 'Pa gen koneksyon. Eseye ankò.', st_awaiting_payment: 'N ap tann peman an', st_requested: 'Peye ✅ — n ap chèche yon chofè', st_accepted: 'Yon chofè ap vin pran koli a', st_picking_up: 'Chofè a rive kote pou l pran l', st_in_progress: 'Koli a an wout', st_delivered: 'Koli a livre ✅', st_cancelled: 'Koli sa a anile',
+      waitPay: 'N ap tann konfimasyon peman an…', payAgain: 'Peye ankò', cancel: 'Anile koli a', cancelSure: 'Anile koli sa a?', forRecipient: 'Pou {n}', codeIs: 'Kòd livrezon an', codeNote: 'Se {n} ki pou bay chofè a kòd sa a lè l resevwa koli a. Ou menm, pa ba li l.', sendWa: '📲 Voye kòd la + lyen an bay {n} sou WhatsApp', copy: 'Kopye mesaj la', copied: 'Kopye ✓', track: 'Lyen pou swiv koli a',
+      aNewH: 'Voye yon koli an 2 minit', aOldH: 'Mete PIN ou', aSub: 'Yon sèl fwa: non w, telefòn ou ak yon PIN 4 chif. Se konsa nou konnen kiyès ki peye a.', aName: 'Non w', aPhone: 'Telefòn ou', aPinNew: 'Chwazi yon PIN 4 chif', aPin: 'PIN ou',
+      aGo: 'Kontinye', aHave: 'Mwen gen yon kont MyPlopPlop deja', aNone: 'Mwen pa gen kont', aForgot: 'Mwen bliye PIN mwen', aNeedName: 'Mete non w.', aNeedPhone: 'Mete telefòn ou (8 chif).', aNeedPin: 'PIN nan se 4 chif.',
+      aExists: 'Nimewo sa a gen yon kont deja: mete PIN li.', aBad: 'Telefòn oswa PIN pa bon.',
+      waMsg: 'Bonjou {n}! {s} voye yon koli pou ou ak MyPlopPlop.\nSwiv li la: {l}\nKÒD LIVREZON OU: {c}\nBay chofè a kòd sa a SÈLMAN lè w gen koli a nan men w.', driver: 'Chofè', call: 'Rele', s1: 'Peye', s2: 'Chofè jwenn', s3: 'Chofè a pran koli a', s4: 'Livre', newOne: 'Voye yon lòt koli', help: '💬 Bezwen èd?', amount: 'Montan', from2: 'Pran nan', to2: 'Livre bay' },
+    fr: { title: '📤 Envoyer un colis', needLogin: 'Connectez-vous pour envoyer un colis', needLoginSub: 'Il faut un compte MyPlopPlop (téléphone + PIN), pour savoir qui a payé.', login: 'Se connecter', create: 'Créer un compte (30 secondes)',
+      photo: 'Photo du colis', photoTap: 'Touchez ici pour prendre une photo', photoChange: 'Changer la photo', what: 'Que contient-il ? (facultatif)', whatPh: 'Ex : une petite boîte, des documents…',
+      from: 'Où le chauffeur le récupère ?', to: 'Où doit-il aller ?', search: 'Chercher un lieu (ex : Delimart Delmas)', gps: '📍 Utiliser ma position', gpsHere: 'Ma position (GPS)', gpsNo: 'Position introuvable. Cherchez le lieu.', landmark: 'Repère pour le chauffeur (facultatif)', landmarkPh: 'Ex : porte bleue, devant la pharmacie',
+      onMap: '✓ Lieu trouvé sur la carte', who: 'Destinataire', rname: 'Son nom', rphone: 'Son téléphone', rphonePh: 'Ex : 3712 3456',
+      price: 'Prix de la livraison', priceWait: 'Choisissez les deux lieux pour voir le prix', pay: 'Payer', payBtn: 'Payer {p} et appeler un chauffeur', card: 'Carte', working: 'Un instant…',
+      eqNoPhoto: 'Prenez une photo du colis.', eqNoFrom: 'Choisissez le lieu de retrait dans la liste (ou GPS).', eqNoTo: 'Choisissez la destination dans la liste.', eqNoName: 'Indiquez le nom du destinataire.', eqNoPhone: 'Indiquez le téléphone du destinataire (8 chiffres).',
+      net: 'Pas de connexion. Réessayez.', st_awaiting_payment: 'En attente du paiement', st_requested: 'Payé ✅ — recherche d’un chauffeur', st_accepted: 'Un chauffeur vient chercher le colis', st_picking_up: 'Le chauffeur est au point de retrait', st_in_progress: 'Le colis est en route', st_delivered: 'Colis livré ✅', st_cancelled: 'Ce colis est annulé',
+      waitPay: 'En attente de la confirmation du paiement…', payAgain: 'Payer à nouveau', cancel: 'Annuler le colis', cancelSure: 'Annuler ce colis ?', forRecipient: 'Pour {n}', codeIs: 'Code de livraison', codeNote: 'C’est {n} qui donne ce code au chauffeur en recevant le colis. Vous, ne le lui donnez pas.', sendWa: '📲 Envoyer le code + le lien à {n} sur WhatsApp', copy: 'Copier le message', copied: 'Copié ✓', track: 'Lien de suivi',
+      aNewH: 'Envoyer un colis en 2 minutes', aOldH: 'Entrez votre PIN', aSub: 'Une seule fois : votre nom, votre téléphone et un PIN à 4 chiffres, pour savoir qui a payé.', aName: 'Votre nom', aPhone: 'Votre téléphone', aPinNew: 'Choisissez un PIN à 4 chiffres', aPin: 'Votre PIN',
+      aGo: 'Continuer', aHave: 'J’ai déjà un compte MyPlopPlop', aNone: 'Je n’ai pas de compte', aForgot: 'J’ai oublié mon PIN', aNeedName: 'Indiquez votre nom.', aNeedPhone: 'Indiquez votre téléphone (8 chiffres).', aNeedPin: 'Le PIN a 4 chiffres.',
+      aExists: 'Ce numéro a déjà un compte : entrez son PIN.', aBad: 'Téléphone ou PIN incorrect.',
+      waMsg: 'Bonjour {n} ! {s} vous envoie un colis avec MyPlopPlop.\nSuivez-le ici : {l}\nVOTRE CODE DE LIVRAISON : {c}\nDonnez ce code au chauffeur SEULEMENT quand vous avez le colis en main.', driver: 'Chauffeur', call: 'Appeler', s1: 'Payé', s2: 'Chauffeur trouvé', s3: 'Colis récupéré', s4: 'Livré', newOne: 'Envoyer un autre colis', help: '💬 Besoin d’aide ?', amount: 'Montant', from2: 'Retrait', to2: 'Livrer à' },
+    en: { title: '📤 Send a package', needLogin: 'Sign in to send a package', needLoginSub: 'You need a MyPlopPlop account (phone + PIN), so we know who paid.', login: 'Sign in', create: 'Create an account (30 seconds)',
+      photo: 'Photo of the package', photoTap: 'Tap here to take a photo', photoChange: 'Change the photo', what: 'What is inside? (optional)', whatPh: 'E.g. a small box, documents…',
+      from: 'Where does the driver pick it up?', to: 'Where does it go?', search: 'Search a place (e.g. Delimart Delmas)', gps: '📍 Use my location', gpsHere: 'My location (GPS)', gpsNo: 'Could not find your location. Search the place instead.', landmark: 'Landmark for the driver (optional)', landmarkPh: 'E.g. blue gate, in front of the pharmacy',
+      onMap: '✓ Place found on the map', who: 'Recipient', rname: 'Their name', rphone: 'Their phone', rphonePh: 'E.g. 3712 3456',
+      price: 'Delivery price', priceWait: 'Choose both places to see the price', pay: 'Pay', payBtn: 'Pay {p} and call a driver', card: 'Card', working: 'One moment…',
+      eqNoPhoto: 'Take a photo of the package.', eqNoFrom: 'Choose the pickup place from the list (or GPS).', eqNoTo: 'Choose the destination from the list.', eqNoName: 'Enter the recipient’s name.', eqNoPhone: 'Enter the recipient’s phone (8 digits).',
+      net: 'No connection. Try again.', st_awaiting_payment: 'Waiting for payment', st_requested: 'Paid ✅ — looking for a driver', st_accepted: 'A driver is coming for the package', st_picking_up: 'The driver is at the pickup', st_in_progress: 'The package is on its way', st_delivered: 'Package delivered ✅', st_cancelled: 'This package is cancelled',
+      waitPay: 'Waiting for the payment to be confirmed…', payAgain: 'Pay again', cancel: 'Cancel the package', cancelSure: 'Cancel this package?', forRecipient: 'For {n}', codeIs: 'Delivery code', codeNote: '{n} gives this code to the driver when they receive the package. Do not give it to the driver yourself.', sendWa: '📲 Send the code + link to {n} on WhatsApp', copy: 'Copy the message', copied: 'Copied ✓', track: 'Tracking link',
+      aNewH: 'Send a package in 2 minutes', aOldH: 'Enter your PIN', aSub: 'Just once: your name, your phone and a 4-digit PIN, so we know who paid.', aName: 'Your name', aPhone: 'Your phone', aPinNew: 'Choose a 4-digit PIN', aPin: 'Your PIN',
+      aGo: 'Continue', aHave: 'I already have a MyPlopPlop account', aNone: 'I don’t have an account', aForgot: 'I forgot my PIN', aNeedName: 'Enter your name.', aNeedPhone: 'Enter your phone (8 digits).', aNeedPin: 'The PIN is 4 digits.',
+      aExists: 'This number already has an account: enter its PIN.', aBad: 'Wrong phone or PIN.',
+      waMsg: 'Hello {n}! {s} is sending you a package with MyPlopPlop.\nTrack it here: {l}\nYOUR DELIVERY CODE: {c}\nGive this code to the driver ONLY when the package is in your hands.', driver: 'Driver', call: 'Call', s1: 'Paid', s2: 'Driver found', s3: 'Package picked up', s4: 'Delivered', newOne: 'Send another package', help: '💬 Need help?', amount: 'Amount', from2: 'Pick up at', to2: 'Deliver to' }
+  };
+  T.es = T.en;
+  /* 5 Nov 2026 (Jeffery: "payment can happen before the delivery request reaches drivers, provided the
+     customer understands this and there is a reliable refund process if no driver accepts") */
+  Object.assign(T.kr, { payFirst: 'Ou peye anvan nou chèche chofè a. Si pa gen chofè ki pran koli a nan 30 minit, nou anile l epi nou remèt ou tout lajan an.',
+    searchNote: 'Si pa gen chofè ki pran l nan 30 minit, nou anile l epi nou remèt ou tout lajan an. Ou ka anile l tou, toutotan pa gen chofè ki pran l.',
+    cancelPaid: 'Anile epi mande ranbousman', refundOwed: '💸 N ap remèt ou {m}. Ekip la ap voye l sou MonCash/NatCash (oswa sou kat ou), epi w ap resevwa yon mesaj lè sa fèt.',
+    refundDone: '✅ Nou remèt ou {m}. Referans: {r}', whyNoDriver: 'Pa gen chofè ki te ka pran koli a.' });
+  Object.assign(T.fr, { payFirst: 'Vous payez avant que nous cherchions un chauffeur. Si aucun chauffeur ne prend le colis en 30 minutes, nous l’annulons et vous remboursons entièrement.',
+    searchNote: 'Si aucun chauffeur ne le prend en 30 minutes, nous l’annulons et vous remboursons entièrement. Vous pouvez aussi l’annuler tant qu’aucun chauffeur ne l’a pris.',
+    cancelPaid: 'Annuler et demander le remboursement', refundOwed: '💸 Nous vous remboursons {m}. L’équipe l’envoie sur MonCash/NatCash (ou sur votre carte), et vous recevrez un message une fois fait.',
+    refundDone: '✅ Remboursé : {m}. Référence : {r}', whyNoDriver: 'Aucun chauffeur n’a pu prendre le colis.' });
+  Object.assign(T.en, { payFirst: 'You pay before we look for a driver. If no driver takes the package within 30 minutes, we cancel it and refund you in full.',
+    searchNote: 'If no driver takes it within 30 minutes, we cancel it and refund you in full. You can also cancel it as long as no driver has taken it.',
+    cancelPaid: 'Cancel and ask for a refund', refundOwed: '💸 We are refunding you {m}. The team sends it to your MonCash/NatCash (or your card), and you will get a message when it is done.',
+    refundDone: '✅ Refunded: {m}. Reference: {r}', whyNoDriver: 'No driver could take the package.' });
+  function t(k, v) { var s = (T[lang] || T.kr)[k] || T.kr[k] || k; if (v) Object.keys(v).forEach(function (x) { s = s.split('{' + x + '}').join(v[x]); }); return s; }
+  function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function el(id) { return document.getElementById(id); }
+  function token() { try { return localStorage.getItem('pp_token'); } catch (e) { return null; } }
+  function user() { try { return JSON.parse(localStorage.getItem('pp_user') || 'null'); } catch (e) { return null; } }
+  function api(method, path, body) {
+    var h = { 'Content-Type': 'application/json' }; var tk = token(); if (tk) h.Authorization = 'Bearer ' + tk;
+    return fetch(API + path, { method: method, headers: h, body: body ? JSON.stringify(body) : undefined })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { d._status = r.status; return d; }); });
+  }
+  function money(n) { return (Number(n) || 0).toLocaleString('en-US') + ' HTG'; }
+  el('tTitle').textContent = t('title');
+  var app = el('app');
+  var params = new URLSearchParams(location.search);
+  var rideId = params.get('ride');
+
+  /* Jeffery, 27 Oct: "without unnecessary registration steps. If a
+     MyPlopPlop account is required, make registration seamless within
+     MsouWout." So the account is made HERE, in one card, and she stays on
+     this page: name + phone + a 4-digit PIN. A number that already has an
+     account just asks for its PIN. */
+  if (!token()) return authView();
+  if (rideId) return statusView(rideId);
+  formView();
+
+  function authView(mode, note) {
+    mode = mode || 'new';
+    var isNew = mode === 'new';
+    app.innerHTML = '<div class="card"><div style="font-size:40px;text-align:center">📦</div>' +
+      '<h2 style="justify-content:center;text-align:center">' + t(isNew ? 'aNewH' : 'aOldH') + '</h2>' +
+      '<p class="muted" style="text-align:center;margin-bottom:6px">' + t('aSub') + '</p>' +
+      (note ? '<p class="muted" style="color:#b45309;font-weight:700;text-align:center">' + esc(note) + '</p>' : '') +
+      (isNew ? '<label for="aN">' + t('aName') + '</label><input id="aN" maxlength="60" autocomplete="name">' : '') +
+      '<label for="aP">' + t('aPhone') + '</label><input id="aP" type="tel" inputmode="tel" maxlength="16" placeholder="3712 3456" autocomplete="tel">' +
+      '<label for="aK">' + t(isNew ? 'aPinNew' : 'aPin') + '</label><input id="aK" type="password" inputmode="numeric" maxlength="6" placeholder="••••" autocomplete="' + (isNew ? 'new-password' : 'current-password') + '">' +
+      '<button class="btn btn-red" id="aGo" style="margin-top:14px">' + t('aGo') + '</button><div class="err" id="aErr"></div>' +
+      '<button class="btn btn-line" id="aSw" style="margin-top:12px">' + t(isNew ? 'aHave' : 'aNone') + '</button>' +
+      (isNew ? '' : '<a class="muted" style="display:block;text-align:center;margin-top:12px" href="https://wa.me/50946859702?text=' + encodeURIComponent('Mwen bliye PIN MyPlopPlop mwen') + '" target="_blank" rel="noopener">' + t('aForgot') + '</a>') +
+      '</div>';
+    el('aSw').onclick = function () { authView(isNew ? 'old' : 'new'); };
+    el('aGo').onclick = function () {
+      var err = el('aErr'); err.textContent = '';
+      var ph = el('aP').value.replace(/\D/g, ''), pin = el('aK').value.trim(), nm = isNew ? el('aN').value.trim() : '';
+      if (isNew && !nm) return (err.textContent = t('aNeedName'));
+      if (ph.length < 8) return (err.textContent = t('aNeedPhone'));
+      if (!/^\d{4,6}$/.test(pin)) return (err.textContent = t('aNeedPin'));
+      var phone = ph.length === 8 ? '+509' + ph : '+' + ph;
+      var b = el('aGo'); b.disabled = true; b.textContent = t('working');
+      var req = isNew ? api('POST', '/api/auth/register', { name: nm, phone: phone, pin: pin, role: 'customer' })
+                      : api('POST', '/api/auth/login', { phone: phone, pin: pin });
+      req.then(function (d) {
+        if (d && d.token) {
+          try { localStorage.setItem('pp_token', d.token); localStorage.setItem('pp_user', JSON.stringify(d.user || {})); } catch (e) {}
+          location.reload(); return;
+        }
+        b.disabled = false; b.textContent = t('aGo');
+        if (isNew && /already registered/i.test((d && d.message) || '')) return authView('old', t('aExists'));
+        err.textContent = isNew ? ((d && d.message) || t('net')) : t('aBad');
+      }).catch(function () { b.disabled = false; b.textContent = t('aGo'); err.textContent = t('net'); });
+    };
+  }
+
+  /* ═══ THE FORM ═════════════════════════════════════════════════════════ */
+  function formView() {
+    var photo = '', pick = null, drop = null, method = 'moncash', cardOn = false;
+    app.innerHTML =
+      '<div class="card"><h2>📷 ' + t('photo') + '</h2>' +
+        '<label class="photo" id="ph"><span class="ic">📷</span><span id="phTxt">' + t('photoTap') + '</span>' +
+        '<input type="file" id="phIn" accept="image/*" capture="environment" hidden></label>' +
+        '<label for="desc">' + t('what') + '</label><input id="desc" maxlength="120" placeholder="' + esc(t('whatPh')) + '"></div>' +
+      place('from', '🟢', t('from')) + place('to', '🔴', t('to')) +
+      '<div class="card"><h2>👤 ' + t('who') + '</h2>' +
+        '<label for="rn">' + t('rname') + '</label><input id="rn" maxlength="60" autocomplete="off">' +
+        '<label for="rp">' + t('rphone') + '</label><input id="rp" type="tel" inputmode="tel" maxlength="16" placeholder="' + esc(t('rphonePh')) + '"></div>' +
+      '<div class="card"><div class="price"><span class="muted" style="font-weight:700">' + t('price') + '</span><b id="price">—</b></div>' +
+        '<p class="muted" id="priceNote">' + t('priceWait') + '</p>' +
+        '<label>' + t('pay') + '</label><div class="methods">' +
+          '<button class="m on" data-m="moncash">MonCash</button><button class="m" data-m="natcash">NatCash</button><button class="m" data-m="card" hidden id="mCard">💳 ' + t('card') + '</button></div>' +
+        '<button class="btn btn-red" id="go" style="margin-top:16px">' + t('payBtn', { p: '' }) + '</button><p class="muted" style="margin-top:10px;font-size:.86rem">' + esc(t('payFirst')) + '</p><div class="err" id="err"></div></div>';
+
+    function place(k, dot, title) {
+      return '<div class="card"><h2>' + dot + ' ' + title + '</h2><div class="place"><input id="' + k + 'Q" autocomplete="off" placeholder="' + esc(t('search')) + '"><div class="sugg" id="' + k + 'S"></div></div>' +
+        '<div class="picked" id="' + k + 'Ok">' + t('onMap') + '</div>' +
+        '<button class="gps" type="button" id="' + k + 'Gps">' + t('gps') + '</button>' +
+        '<label for="' + k + 'N">' + t('landmark') + '</label><input id="' + k + 'N" maxlength="120" placeholder="' + esc(t('landmarkPh')) + '"></div>';
+    }
+
+    api('GET', '/api/payments/parcel/methods').then(function (d) { if (d && d.card) { cardOn = true; el('mCard').hidden = false; } });
+    document.querySelectorAll('.m').forEach(function (b) {
+      b.onclick = function () { method = b.getAttribute('data-m'); document.querySelectorAll('.m').forEach(function (x) { x.classList.toggle('on', x === b); }); };
+    });
+
+    /* The photo is shrunk ON THE PHONE (≤1000 px, JPEG) so a 4 MB camera
+       picture does not have to cross a weak 4G link - the server refuses
+       anything over ~500 KB anyway. */
+    el('phIn').onchange = function (e) {
+      var f = e.target.files && e.target.files[0]; if (!f) return;
+      var fr = new FileReader();
+      fr.onload = function () {
+        var im = new Image();
+        im.onload = function () {
+          var s = Math.min(1, 1000 / Math.max(im.width, im.height)), cv = document.createElement('canvas');
+          cv.width = Math.round(im.width * s); cv.height = Math.round(im.height * s);
+          cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height);
+          var q = 0.75, out = cv.toDataURL('image/jpeg', q);
+          while (out.length > 450 * 1024 && q > 0.3) { q -= 0.1; out = cv.toDataURL('image/jpeg', q); }
+          photo = out;
+          var box = el('ph'), old = box.querySelector('img'); if (old) old.remove();
+          var img = new Image(); img.src = out; img.alt = ''; box.appendChild(img);
+          el('phTxt').textContent = t('photoChange');
+        };
+        im.src = fr.result;
+      };
+      fr.readAsDataURL(f);
+    };
+
+    // an old "take a photo" must not stay on screen once she has taken it
+    app.addEventListener('input', function () { el('err').textContent = ''; });
+    app.addEventListener('change', function () { el('err').textContent = ''; });
+    wirePlace('from', function (p) { pick = p; quote(); });
+    wirePlace('to', function (p) { drop = p; quote(); });
+
+    function wirePlace(k, set) {
+      var q = el(k + 'Q'), box = el(k + 'S'), okEl = el(k + 'Ok'), timer = null, last = [];
+      q.addEventListener('input', function () {
+        set(null); okEl.classList.remove('show');
+        clearTimeout(timer); var text = q.value.trim();
+        if (text.length < 2) { box.classList.remove('show'); return; }
+        timer = setTimeout(function () { find(text).then(show); }, 250);
+      });
+      function show(list) {
+        last = list;
+        if (!list.length) { box.classList.remove('show'); return; }
+        box.innerHTML = list.map(function (r, i) {
+          var nm = r.name || String(r.display_name || '').split(',')[0];
+          return '<button type="button" data-i="' + i + '">' + esc(nm) + '<small>' + esc(r.display_name || '') + '</small></button>';
+        }).join('');
+        box.classList.add('show');
+      }
+      box.addEventListener('click', function (ev) {
+        var b = ev.target.closest('button'); if (!b) return;
+        var r = last[+b.getAttribute('data-i')];
+        var parts = String(r.display_name || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+        var head = r.name || parts[0] || '';
+        q.value = [head].concat(parts.filter(function (x) { return x !== head; }).slice(0, 2)).join(', ');
+        box.classList.remove('show'); okEl.classList.add('show');
+        set({ address: q.value.slice(0, 190), lat: +r.lat, lng: +r.lon });
+      });
+      document.addEventListener('click', function (ev) { if (!ev.target.closest('.place')) box.classList.remove('show'); });
+      el(k + 'Gps').onclick = function () {
+        if (!navigator.geolocation) { alert(t('gpsNo')); return; }
+        el(k + 'Gps').disabled = true;
+        navigator.geolocation.getCurrentPosition(function (pos) {
+          el(k + 'Gps').disabled = false;
+          q.value = t('gpsHere'); okEl.classList.add('show');
+          set({ address: t('gpsHere') + ' ' + pos.coords.latitude.toFixed(5) + ', ' + pos.coords.longitude.toFixed(5), lat: pos.coords.latitude, lng: pos.coords.longitude });
+        }, function () { el(k + 'Gps').disabled = false; alert(t('gpsNo')); }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
+      };
+    }
+
+    /* Our own Haiti list first (the MsouWout one - Delimart, Eagle, every
+       branch), OpenStreetMap only when it has nothing. */
+    function find(text) {
+      var local = (window.MW_PLACES ? MW_PLACES.search(text, { limit: 6 }) : Promise.resolve([])).catch(function () { return []; });
+      return local.then(function (list) {
+        if (list && list.length) return list;
+        return fetch('https://nominatim.openstreetmap.org/search?format=json&countrycodes=ht&limit=5&q=' + encodeURIComponent(text), { headers: { 'Accept-Language': 'fr' } })
+          .then(function (r) { return r.json(); }).then(function (a) { return (a || []).map(function (x) { return { display_name: x.display_name, lat: x.lat, lon: x.lon, name: x.name || '' }; }); })
+          .catch(function () { return []; });
+      });
+    }
+
+    var quoted = 0;
+    function quote() {
+      el('price').textContent = '—'; el('go').textContent = t('payBtn', { p: '' });
+      if (!pick || !drop) { el('priceNote').textContent = t('priceWait'); return; }
+      var mine = ++quoted;
+      api('POST', '/api/rides/quote', { type: 'delivery', pickup: { lat: pick.lat, lng: pick.lng }, dropoff: { lat: drop.lat, lng: drop.lng } }).then(function (d) {
+        if (mine !== quoted || !d || !d.success) return;
+        el('price').textContent = money(d.data.deliveryFee);
+        el('priceNote').textContent = d.data.distanceKm + ' km';
+        el('go').textContent = t('payBtn', { p: money(d.data.deliveryFee) });
+      }).catch(function () {});
+    }
+
+    el('go').onclick = function () {
+      var err = el('err'); err.textContent = '';
+      var rp = el('rp').value.replace(/\D/g, '');
+      if (!photo) return (err.textContent = t('eqNoPhoto'));
+      if (!pick) return (err.textContent = t('eqNoFrom'));
+      if (!drop) return (err.textContent = t('eqNoTo'));
+      if (!el('rn').value.trim()) return (err.textContent = t('eqNoName'));
+      if (rp.length < 8) return (err.textContent = t('eqNoPhone'));
+      var btn = el('go'); btn.disabled = true; btn.textContent = t('working');
+      api('POST', '/api/rides/parcel', {
+        pickup: { address: pick.address, lat: pick.lat, lng: pick.lng, notes: el('fromN').value },
+        dropoff: { address: drop.address, lat: drop.lat, lng: drop.lng, notes: el('toN').value },
+        recipient: { name: el('rn').value.trim(), phone: rp }, photo: photo, description: el('desc').value, paymentMethod: method
+      }).then(function (d) {
+        if (!d.success) throw new Error(d.message || t('net'));
+        try { localStorage.setItem('mpp_koli_last', d.ride._id); } catch (e) {}
+        return startPay(d.ride._id, method);
+      }).catch(function (e) { btn.disabled = false; quote(); err.textContent = e.message || t('net'); });
+    };
+  }
+
+  function startPay(id, m) {
+    return api('POST', '/api/payments/parcel/start', { rideId: id, method: m }).then(function (d) {
+      if (!d.success || !d.paymentUrl) {
+        // the parcel exists; the payment did not start - land on its page, where "Pay again" is
+        if (d.code === 'not_payable') { location.href = 'voye-koli.html?ride=' + id; return; }
+        throw new Error(d.message || t('net'));
+      }
+      location.href = d.paymentUrl;
+    });
+  }
+
+  /* ═══ AFTER PAYING: the parcel's own page ════════════════════════════════ */
+  function statusView(id) {
+    var polls = 0, timer = null, chosen = 'moncash';
+    function load() {
+      api('GET', '/api/payments/parcel/' + encodeURIComponent(id) + '/check').then(function (d) {
+        if (!d.success) { app.innerHTML = '<div class="card"><p class="err">' + esc(d.message || t('net')) + '</p><a class="btn btn-blue" href="voye-koli.html" style="margin-top:12px">' + t('newOne') + '</a></div>'; return; }
+        draw(d.ride);
+        polls++;
+        var st = d.ride.status, wait = st === 'awaiting_payment' ? (polls < 40 ? 4000 : 15000) : (st === 'delivered' || st === 'cancelled' ? 0 : 15000);
+        clearTimeout(timer); if (wait) timer = setTimeout(load, wait);
+      }).catch(function () { clearTimeout(timer); timer = setTimeout(load, 8000); });
+    }
+    function draw(r) {
+      var st = r.status, rec = r.recipient || {}, me = user() || {};
+      var link = 'https://myplopplop.com/koli.html?t=' + r.trackToken;
+      var steps = [['s1', ['requested', 'accepted', 'picking_up', 'in_progress', 'delivered']], ['s2', ['accepted', 'picking_up', 'in_progress', 'delivered']], ['s3', ['in_progress', 'delivered']], ['s4', ['delivered']]];
+      var html = '<div class="card"><h2>' + (st === 'awaiting_payment' ? '<span class="spin"></span> ' : '📦 ') + esc(t('st_' + st)) + '</h2>';
+      if (st !== 'awaiting_payment' && st !== 'cancelled') {
+        html += '<ul class="steps">' + steps.map(function (s, i) {
+          var done = s[1].indexOf(st) !== -1, now = !done && (i === 0 || steps[i - 1][1].indexOf(st) !== -1);
+          return '<li class="' + (done ? 'done' : now ? 'now' : '') + '"><span class="d">' + (done ? '✓' : i + 1) + '</span>' + esc(t(s[0])) + '</li>';
+        }).join('') + '</ul>';
+      }
+      if (r.driver && r.driver.name && ['accepted', 'picking_up', 'in_progress'].indexOf(st) !== -1) {
+        html += '<div class="row"><span>' + t('driver') + '</span><span>' + esc(r.driver.name) + (r.driver.phone ? ' · <a href="tel:' + esc(r.driver.phone) + '">' + t('call') + '</a>' : '') + '</span></div>';
+      }
+      html += '<div class="row"><span>' + t('from2') + '</span><span>' + esc(r.pickup && r.pickup.address) + '</span></div>' +
+        '<div class="row"><span>' + t('to2') + '</span><span>' + esc(rec.name) + ' · ' + esc(r.dropoff && r.dropoff.address) + '</span></div>' +
+        '<div class="row" style="border:0"><span>' + t('amount') + '</span><span>' + money(r.fare && r.fare.total) + '</span></div>';
+      if (st === 'requested' && !r.driver) {
+        html += '<p class="muted" style="margin:10px 0 8px">' + esc(t('searchNote')) + '</p>' +
+          '<button class="btn btn-line" id="cxlPaid">' + esc(t('cancelPaid')) + '</button><div class="err" id="err"></div>';
+      }
+      if (st === 'cancelled' && r.refund && r.refund.status) {
+        html += (r.refund.reason === 'no_driver' ? '<p class="muted" style="margin:10px 0 4px">' + esc(t('whyNoDriver')) + '</p>' : '') +
+          '<div class="box" style="margin-top:10px;font-weight:700">' + esc(r.refund.status === 'refunded'
+            ? t('refundDone', { m: money(r.refund.amount), r: r.refund.reference || '' }) : t('refundOwed', { m: money(r.refund.amount) })) + '</div>';
+      }
+      if (st === 'awaiting_payment') {
+        html += '<p class="muted" style="margin:8px 0 12px">' + t('waitPay') + '</p>' +
+          '<div class="methods"><button class="m on" data-m="moncash">MonCash</button><button class="m" data-m="natcash">NatCash</button><button class="m" data-m="card" id="mCard2" hidden>💳 ' + t('card') + '</button></div>' +
+          '<button class="btn btn-blue" id="again" style="margin-top:12px">' + t('payAgain') + '</button>' +
+          '<button class="btn btn-line" id="cxl" style="margin-top:10px">' + t('cancel') + '</button><div class="err" id="err"></div>';
+      }
+      html += '</div>';
+      if (r.paymentStatus === 'paid' && st !== 'cancelled' && r.pin) {
+        var msg = t('waMsg', { n: String(rec.name || '').split(' ')[0], s: (me.name || '').split(' ')[0] || 'MyPlopPlop', l: link, c: r.pin });
+        var wa = 'https://wa.me/' + String(rec.phone || '').replace(/\D/g, '') + '?text=' + encodeURIComponent(msg);
+        html += '<div class="card"><h2>📲 ' + esc(t('forRecipient', { n: rec.name || '' })) + '</h2>' +
+          '<div class="box"><div class="muted" style="text-align:center;font-weight:700">' + t('codeIs') + '</div><div class="code">' + esc(r.pin) + '</div></div>' +
+          '<p class="muted" style="margin-bottom:12px">' + esc(t('codeNote', { n: String(rec.name || '').split(' ')[0] })) + '</p>' +
+          '<a class="btn btn-green" href="' + esc(wa) + '" target="_blank" rel="noopener">' + esc(t('sendWa', { n: String(rec.name || '').split(' ')[0] })) + '</a>' +
+          '<button class="btn btn-line" id="cp" style="margin-top:10px">' + t('copy') + '</button>' +
+          '<p class="muted" style="margin-top:12px">' + t('track') + ': <a href="' + esc(link) + '">' + esc(link) + '</a></p></div>';
+        window.__kmsg = msg;
+      }
+      html += '<a class="btn btn-line" href="https://wa.me/50946859702?text=' + encodeURIComponent('Bonjou, kesyon sou koli ' + String(r._id).slice(-6)) + '" target="_blank" rel="noopener" style="margin-bottom:10px">' + t('help') + '</a>';
+      if (st === 'delivered' || st === 'cancelled') html += '<a class="btn btn-blue" href="voye-koli.html">' + t('newOne') + '</a>';
+      app.innerHTML = html;
+
+      if (el('cp')) el('cp').onclick = function () {
+        var b = el('cp'); (navigator.clipboard ? navigator.clipboard.writeText(window.__kmsg) : Promise.reject()).then(function () { b.textContent = t('copied'); }).catch(function () { prompt('', window.__kmsg); });
+      };
+      if (el('cxlPaid')) el('cxlPaid').onclick = function () {
+        var b = el('cxlPaid');
+        if (!b.getAttribute('data-sure')) { b.setAttribute('data-sure', '1'); b.textContent = t('cancelSure') + ' ✔'; b.style.borderColor = '#D21034'; b.style.color = '#D21034'; return; }
+        b.disabled = true;
+        api('PUT', '/api/rides/' + encodeURIComponent(id) + '/cancel', { reason: 'sender' }).then(function (d) {
+          if (!d.success) { el('err').textContent = d.message || t('net'); b.disabled = false; }
+          load();
+        });
+      };
+      if (el('again')) {
+        api('GET', '/api/payments/parcel/methods').then(function (d) { if (d && d.card && el('mCard2')) el('mCard2').hidden = false; });
+        document.querySelectorAll('.m').forEach(function (b) {
+          b.onclick = function () { chosen = b.getAttribute('data-m'); document.querySelectorAll('.m').forEach(function (x) { x.classList.toggle('on', x === b); }); };
+        });
+        el('again').onclick = function () {
+          el('again').disabled = true; el('err').textContent = '';
+          startPay(id, chosen).catch(function (e) { el('again').disabled = false; el('err').textContent = e.message || t('net'); });
+        };
+        /* Two taps, not window.confirm(): a WebView can stop drawing JS
+           dialogs and confirm() then returns false silently (Jennifer, 9 Oct,
+           on MsouWout: "Chak m peze anile l pa anile"). */
+        el('cxl').onclick = function () {
+          var b = el('cxl');
+          if (!b.getAttribute('data-sure')) { b.setAttribute('data-sure', '1'); b.textContent = t('cancelSure') + ' ✔'; b.style.borderColor = '#D21034'; b.style.color = '#D21034'; return; }
+          b.disabled = true;
+          api('PUT', '/api/rides/' + encodeURIComponent(id) + '/cancel', { reason: 'sender' }).then(function (d) {
+            if (!d.success) { el('err').textContent = d.message || t('net'); }
+            load();
+          });
+        };
+      }
+    }
+    load();
+  }
+})();
+</script>
+<script src="/js/msw-return.js?v=1" defer></script>
+</body>
+</html>

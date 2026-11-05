@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Swiv koli ou | MyPlopPlop</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<style>
+/* 27 Oct 2026 - the RECIPIENT's page for "Voye yon koli". Opened from the
+   WhatsApp message the sender forwards; no account, no sign-in. It shows only
+   what GET /api/rides/track/:token returns: status, first names, places, and
+   where the driver is - never a phone number, the code or the photo. */
+:root{--red:#D21034;--blue:#00209F;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;--bg:#f4f6fa;--white:#fff;--green:#0f9d55}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:40px}
+.top{background:var(--blue);color:#fff;padding:14px 16px;position:sticky;top:0;z-index:10}
+.top h1{font-family:Poppins;font-size:17px;font-weight:700}
+.wrap{max-width:520px;margin:0 auto;padding:16px}
+.card{background:var(--white);border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(16,24,40,.08);margin-bottom:14px}
+h2{font-family:Poppins;font-size:17px;margin-bottom:6px}
+.muted{color:var(--muted);font-size:13.5px;line-height:1.5}
+.steps{list-style:none;margin:10px 0 4px}
+.steps li{display:flex;gap:10px;align-items:center;padding:8px 0;color:var(--muted);font-weight:600;font-size:14.5px}
+.steps li .d{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);flex:0 0 24px;display:grid;place-items:center;font-size:12px}
+.steps li.done{color:var(--ink)} .steps li.done .d{background:var(--green);border-color:var(--green);color:#fff}
+.steps li.now{color:var(--blue)} .steps li.now .d{border-color:var(--blue);background:#EEF1FB}
+.row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #f1f2f4;font-size:14px}
+.row span:first-child{color:var(--muted)} .row span:last-child{font-weight:600;text-align:right}
+.btn{display:block;width:100%;padding:14px;border-radius:13px;font:700 15px Inter,sans-serif;text-align:center;text-decoration:none;margin-top:10px}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-line{background:#fff;color:var(--ink);border:2px solid var(--line)}
+.note{background:#FFF8E1;border:1px solid #F2D27A;border-radius:12px;padding:12px;font-size:13.5px;line-height:1.5;color:#5a4300}
+.spin{width:18px;height:18px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--blue);animation:sp 1s linear infinite;display:inline-block;vertical-align:middle}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="top"><h1 id="tt">📦 Swiv koli ou</h1></div>
+<div class="wrap" id="app"><div class="card"><span class="spin"></span></div></div>
+<script>
+(function () {
+  'use strict';
+  var API = 'https://myplopplop-api.onrender.com';
+  var lang = 'kr';
+  try { lang = localStorage.getItem('myplopplop_lang') || (/^fr/i.test(navigator.language) ? 'fr' : 'kr'); } catch (e) {}
+  var T = {
+    kr: { title: '📦 Swiv koli ou', from: '{s} voye yon koli pou ou', fromX: 'Yon moun voye yon koli pou ou', pickup: 'Soti', dropoff: 'Pou', what: 'Kisa', driver: 'Chofè', map: '🗺️ Kote chofè a ye kounye a',
+      s1: 'Peye', s2: 'Yon chofè pran travay la', s3: 'Chofè a gen koli a, l ap vini', s4: 'Livre ✅',
+      st_awaiting_payment: 'Moun ki voye l la poko peye', st_requested: 'N ap chèche yon chofè', st_accepted: 'Yon chofè ap al pran koli a', st_picking_up: 'Chofè a ap pran koli a', st_in_progress: 'Koli a an wout pou vin jwenn ou', st_delivered: 'Ou resevwa koli a ✅', st_cancelled: 'Livrezon sa a anile',
+      codeNote: '🔒 Kòd 4 chif ou a nan mesaj WhatsApp ou te resevwa a. Bay chofè a li SÈLMAN lè koli a nan men w.', gone: 'Lyen sa a pa bon.', net: 'Pa gen koneksyon. N ap eseye ankò…', help: '💬 Bezwen èd?', updated: 'Mete ajou' },
+    fr: { title: '📦 Suivre votre colis', from: '{s} vous envoie un colis', fromX: 'Quelqu’un vous envoie un colis', pickup: 'De', dropoff: 'Pour', what: 'Contenu', driver: 'Chauffeur', map: '🗺️ Où est le chauffeur',
+      s1: 'Payé', s2: 'Un chauffeur a pris la course', s3: 'Le chauffeur a le colis, il arrive', s4: 'Livré ✅',
+      st_awaiting_payment: 'L’expéditeur n’a pas encore payé', st_requested: 'Recherche d’un chauffeur', st_accepted: 'Un chauffeur va chercher le colis', st_picking_up: 'Le chauffeur récupère le colis', st_in_progress: 'Le colis est en route vers vous', st_delivered: 'Colis reçu ✅', st_cancelled: 'Cette livraison est annulée',
+      codeNote: '🔒 Votre code à 4 chiffres est dans le message WhatsApp reçu. Donnez-le au chauffeur SEULEMENT quand le colis est entre vos mains.', gone: 'Ce lien n’est pas valide.', net: 'Pas de connexion. Nouvel essai…', help: '💬 Besoin d’aide ?', updated: 'Mis à jour' },
+    en: { title: '📦 Track your package', from: '{s} is sending you a package', fromX: 'Someone is sending you a package', pickup: 'From', dropoff: 'To', what: 'Contents', driver: 'Driver', map: '🗺️ Where the driver is',
+      s1: 'Paid', s2: 'A driver took the job', s3: 'The driver has it, on the way', s4: 'Delivered ✅',
+      st_awaiting_payment: 'The sender has not paid yet', st_requested: 'Looking for a driver', st_accepted: 'A driver is going to pick it up', st_picking_up: 'The driver is picking it up', st_in_progress: 'Your package is on its way', st_delivered: 'You received the package ✅', st_cancelled: 'This delivery was cancelled',
+      codeNote: '🔒 Your 4-digit code is in the WhatsApp message you received. Give it to the driver ONLY when the package is in your hands.', gone: 'This link is not valid.', net: 'No connection. Trying again…', help: '💬 Need help?', updated: 'Updated' }
+  };
+  T.es = T.en;
+  function t(k, v) { var s = (T[lang] || T.kr)[k] || T.kr[k] || k; if (v) Object.keys(v).forEach(function (x) { s = s.split('{' + x + '}').join(v[x]); }); return s; }
+  function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  var app = document.getElementById('app');
+  document.getElementById('tt').textContent = t('title');
+  var tok = new URLSearchParams(location.search).get('t') || '';
+  if (!/^[a-f0-9]{32}$/.test(tok)) { app.innerHTML = '<div class="card"><h2>' + t('gone') + '</h2></div>'; return; }
+  var timer = null;
+  function load() {
+    fetch(API + '/api/rides/track/' + tok).then(function (r) { return r.json().then(function (d) { d._s = r.status; return d; }); }).then(function (d) {
+      if (d._s === 404) { app.innerHTML = '<div class="card"><h2>' + t('gone') + '</h2></div>'; return; }
+      if (!d.success) throw 0;
+      draw(d.parcel);
+      clearTimeout(timer);
+      if (['delivered', 'cancelled'].indexOf(d.parcel.status) === -1) timer = setTimeout(load, 15000);
+    }).catch(function () {
+      if (!app.querySelector('.steps')) app.innerHTML = '<div class="card"><p class="muted">' + t('net') + '</p></div>';
+      clearTimeout(timer); timer = setTimeout(load, 10000);
+    });
+  }
+  function draw(p) {
+    var st = p.status;
+    var steps = [['s1', ['requested', 'accepted', 'picking_up', 'in_progress', 'delivered']], ['s2', ['accepted', 'picking_up', 'in_progress', 'delivered']], ['s3', ['in_progress', 'delivered']], ['s4', ['delivered']]];
+    var html = '<div class="card"><p class="muted" style="font-weight:700">' + esc(p.sender ? t('from', { s: p.sender }) : t('fromX')) + '</p>' +
+      '<h2>' + esc(t('st_' + st)) + '</h2>';
+    if (st !== 'awaiting_payment' && st !== 'cancelled') {
+      html += '<ul class="steps">' + steps.map(function (s, i) {
+        var done = s[1].indexOf(st) !== -1, now = !done && (i === 0 || steps[i - 1][1].indexOf(st) !== -1);
+        return '<li class="' + (done ? 'done' : now ? 'now' : '') + '"><span class="d">' + (done ? '✓' : i + 1) + '</span>' + esc(t(s[0])) + '</li>';
+      }).join('') + '</ul>';
+    }
+    if (p.driver) html += '<div class="row"><span>' + t('driver') + '</span><span>' + esc(p.driver) + '</span></div>';
+    html += '<div class="row"><span>' + t('pickup') + '</span><span>' + esc(p.pickup) + '</span></div>' +
+      '<div class="row"><span>' + t('dropoff') + '</span><span>' + esc(p.recipient ? p.recipient + ' · ' : '') + esc(p.dropoff) + '</span></div>' +
+      (p.description ? '<div class="row"><span>' + t('what') + '</span><span>' + esc(p.description) + '</span></div>' : '');
+    if (p.driverLocation) html += '<a class="btn btn-blue" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + Number(p.driverLocation.lat) + ',' + Number(p.driverLocation.lng) + '">' + t('map') + '</a>';
+    html += '</div>';
+    if (st !== 'delivered' && st !== 'cancelled') html += '<div class="note">' + esc(t('codeNote')) + '</div>';
+    html += '<a class="btn btn-line" target="_blank" rel="noopener" href="https://wa.me/50946859702?text=' + encodeURIComponent('Bonjou, kesyon sou yon koli MyPlopPlop') + '">' + t('help') + '</a>';
+    app.innerHTML = html;
+  }
+  load();
+})();
+</script>
+</body>
+</html>

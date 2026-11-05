@@ -1177,6 +1177,10 @@
 
     // ===== RIDE TYPE SELECTION =====
     window.selectRideType = function(card) {
+        /* 27 Oct 2026: "Livrezon" here used to book a passenger RIDE - the
+           request below always sent type 'ride'. A package now has its own
+           flow, paid before any driver is called: Voye yon koli. */
+        if (card.dataset.type === 'delivery') { window.location.href = 'voye-koli.html' + (location.search.indexOf('from=msouwout') !== -1 ? '?from=msouwout' : ''); return; }
         document.querySelectorAll('.ride-type-card').forEach(c => c.classList.remove('selected'));
         card.classList.add('selected');
         selectedType = card.dataset.type;

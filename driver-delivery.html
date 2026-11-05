@@ -132,6 +132,20 @@ Object.assign(DT.fr, { mwAsk:'Déjà chauffeur MsouWout ? Aucun formulaire : ent
   mwWait:'Vérification avec MsouWout… (jusqu’à 1 minute)', mwLinked:'🔗 Compte MsouWout relié — profil livreur créé EN ATTENTE. Un administrateur doit l’approuver.', mwOk:'🔗 Relié à MsouWout', mwLinkedOk:'✅ Compte MsouWout relié — vous êtes APPROUVÉ pour les livraisons (même vérification que MsouWout).' });
 Object.assign(DT.en, { mwAsk:'Already a MsouWout driver? No form: enter your MsouWout PIN.', mwPin:'Your MsouWout PIN', mwBtn:'🔗 Link my MsouWout account',
   mwWait:'Checking with MsouWout… (can take a minute)', mwLinked:'🔗 MsouWout account linked — delivery profile created PENDING. An administrator must approve it.', mwOk:'🔗 Linked to MsouWout', mwLinkedOk:'✅ MsouWout account linked — you are APPROVED for deliveries (same verification as MsouWout).' });
+/* 27 Oct 2026 - VOYE YON KOLI: a package from one person to another. No
+   shop and no pickup code: the driver says when they are at the sender and
+   when they have it; the RECIPIENT's code finishes it. */
+Object.assign(DT.kr, { kBadge:'📦 KOLI', kWhat:'Koli', kSender:'Moun k ap voye l', kRecip:'Moun k ap resevwa l', kCall:'Rele', kGoPick:'ALE PRAN KOLI A', kToRecip:'AN WOUT POU MOUN K AP RESEVWA A',
+  kArrived:'Mwen rive kote pou m pran koli a', kHave:'Mwen gen koli a nan men m', kAskPin:'Devan moun k ap resevwa a, mande l KÒD 4 chif PA L:', kCheck:'Gade koli a: se li menm ki sou foto a?' });
+Object.assign(DT.fr, { kBadge:'📦 COLIS', kWhat:'Colis', kSender:'Expéditeur', kRecip:'Destinataire', kCall:'Appeler', kGoPick:'ALLEZ CHERCHER LE COLIS', kToRecip:'EN ROUTE VERS LE DESTINATAIRE',
+  kArrived:'Je suis au point de retrait', kHave:'J’ai le colis en main', kAskPin:'Devant le destinataire, demandez-lui SON code à 4 chiffres :', kCheck:'Vérifiez le colis : est-ce celui de la photo ?' });
+Object.assign(DT.en, { kBadge:'📦 PACKAGE', kWhat:'Package', kSender:'Sender', kRecip:'Recipient', kCall:'Call', kGoPick:'GO PICK UP THE PACKAGE', kToRecip:'ON THE WAY TO THE RECIPIENT',
+  kArrived:'I am at the pickup', kHave:'I have the package', kAskPin:'With the recipient, ask for THEIR 4-digit code:', kCheck:'Check the package: is it the one in the photo?' });
+function telLink(ph){ var n = String(ph||'').replace(/[^\d+]/g,''); return n ? ' · <a href="tel:' + esc(n) + '">' + dt('kCall') + '</a>' : ''; }
+function parcelPhoto(r){
+  var ph = r.parcel && r.parcel.photo;
+  return (ph && /^data:image\/(jpeg|png|webp);base64,/.test(ph)) ? '<img src="' + ph + '" alt="" style="width:100%;max-height:220px;object-fit:cover;border-radius:12px;margin:10px 0 4px;border:1px solid var(--line)">' : '';
+}
 var acctState = { acc: '', msg: '', gps: 'wait', at: '', mw: false };
 /* 24 Oct 2026 - ONE DRIVER: a MsouWout driver links instead of registering. */
 function linkMsouwout(){
@@ -237,19 +251,56 @@ function render(data){
   if (offer){
     if (current !== String(offer._id)) { current = String(offer._id); }
     var secs = Math.max(0, Math.round((new Date(offer.offerExpiresAt) - new Date())/1000));
+    var kO = offer.source === 'parcel';
     c.innerHTML =
       '<div class="card offer">' +
-        '<span class="badge">' + dt('newOffer') + '</span>' +
+        '<span class="badge">' + (kO ? dt('kBadge') + ' · ' : '') + dt('newOffer') + '</span>' +
+        (kO ? parcelPhoto(offer) : '') +
         '<div class="big">' + money(offer.fare && offer.fare.driverEarning) + '</div>' +
         '<p class="muted">' + dt('earnThis') + '</p>' +
         '<div class="count" id="cd">' + dt('acceptIn', { s: secs }) + '</div>' +
         '<div class="row"><span class="k">' + dt('pickup') + '</span><span class="v">' + esc(offer.pickup.address||dt('store')) + '</span></div>' +
         '<div class="row"><span class="k">' + dt('dropoff') + '</span><span class="v">' + esc(offer.dropoff.address||dt('customer')) + '</span></div>' +
+        (kO && offer.parcel && offer.parcel.description ? '<div class="row"><span class="k">' + dt('kWhat') + '</span><span class="v">' + esc(offer.parcel.description) + '</span></div>' : '') +
         '<div class="row"><span class="k">' + dt('distance') + '</span><span class="v">' + (offer.distanceKm||0) + ' km</span></div>' +
         '<button class="btn btn-accept" onclick="accept(\'' + offer._id + '\')">' + dt('accept') + '</button>' +
         '<button class="btn btn-decline" onclick="decline(\'' + offer._id + '\')">' + dt('pass') + '</button>' +
       '</div>';
     startCountdown(new Date(offer.offerExpiresAt));
+    return;
+  }
+
+  if (active && active.source === 'parcel'){
+    var ks = active.status, kstep = '', rc = active.recipient || {}, snd = active.customer || {};
+    if (ks === 'accepted') {
+      kstep = '<button class="btn btn-blue" style="margin-top:12px" onclick="advance(\'' + active._id + '\',\'picking_up\')">' + dt('kArrived') + '</button>';
+    } else if (ks === 'picking_up') {
+      kstep = '<p class="muted" style="margin:10px 0 0">' + dt('kCheck') + '</p>' +
+        '<button class="btn btn-blue" style="margin-top:10px" onclick="advance(\'' + active._id + '\',\'in_progress\')">' + dt('kHave') + '</button>';
+    } else if (ks === 'in_progress') {
+      kstep = '<p class="muted" style="margin:10px 0 6px">' + dt('kAskPin') + '</p>' +
+        '<input class="pin" id="pinIn" maxlength="4" inputmode="numeric" placeholder="••••" autocomplete="off">' +
+        '<button class="btn btn-blue" style="margin-top:12px" onclick="advance(\'' + active._id + '\',\'delivered\')">' + dt('complete') + '</button>';
+    }
+    var kdrop = (ks === 'accepted' || ks === 'picking_up')
+      ? '<button class="btn btn-decline" style="margin-top:10px" onclick="dropJob(\'' + active._id + '\')">' + dt('cannot') + '</button>' : '';
+    var kdest = ks === 'in_progress' ? active.dropoff : active.pickup;
+    var kdc = kdest && kdest.coordinates && kdest.coordinates.coordinates;
+    var notes = kdest && kdest.notes ? '<p class="muted" style="margin-top:6px">📍 ' + esc(kdest.notes) + '</p>' : '';
+    c.innerHTML =
+      '<div class="card">' +
+        '<span class="badge">' + dt('kBadge') + ' · ' + (ks === 'in_progress' ? dt('kToRecip') : dt('kGoPick')) + '</span>' +
+        parcelPhoto(active) +
+        '<div class="row"><span class="k">' + dt('pickup') + '</span><span class="v">' + esc(active.pickup.address) + '</span></div>' +
+        '<div class="row"><span class="k">' + dt('kSender') + '</span><span class="v">' + esc(snd.name || '') + telLink(snd.phone) + '</span></div>' +
+        '<div class="row"><span class="k">' + dt('dropoff') + '</span><span class="v">' + esc(active.dropoff.address) + '</span></div>' +
+        '<div class="row"><span class="k">' + dt('kRecip') + '</span><span class="v">' + esc(rc.name || '') + telLink(rc.phone) + '</span></div>' +
+        (active.parcel && active.parcel.description ? '<div class="row"><span class="k">' + dt('kWhat') + '</span><span class="v">' + esc(active.parcel.description) + '</span></div>' : '') +
+        '<div class="row"><span class="k">' + dt('youEarn') + '</span><span class="v">' + money(active.fare&&active.fare.driverEarning) + '</span></div>' +
+        notes + kstep + kdrop +
+        '<div class="err" id="stepErr"></div>' +
+        (kdc ? '<a class="map" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + Number(kdc[1]) + ',' + Number(kdc[0]) + '">' + dt('maps') + '</a>' : '') +
+      '</div>';
     return;
   }
 
@@ -339,20 +390,24 @@ function advance(id, next){
       return;
     }
     if (next === 'delivered'){
+      /* 27 Oct 2026: the 4-second refresh redrew "You are online" over this
+         at once, so the driver never saw what they had earned. Hold it. */
+      holdDoneUntil = Date.now() + 6000;
       el('content').innerHTML =
         '<div class="card empty"><div class="ico">✅</div><h2 class="ok">' + dt('done') + '</h2>' +
         '<p class="muted">' + dt('earned', { m: money(d.earned) }) + '</p></div>';
-      setTimeout(refresh, 3500);
+      setTimeout(refresh, 6100);
       return;
     }
     refresh();
   });
 }
 
-var lastKey = '';
+var lastKey = '', holdDoneUntil = 0;
 function refresh(){
   api('GET','/api/rides/my-offer').then(function(d){
     if (!(d.success && d.data)) return;
+    if (Date.now() < holdDoneUntil && !d.data.offer) return;
     // Nothing changed: leave the screen alone, or the 4-second refresh wipes
     // the customer's code while the driver is typing it.
     var a = d.data.active, o = d.data.offer;
