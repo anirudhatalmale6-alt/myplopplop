@@ -1437,8 +1437,19 @@
        for the exact amount, a webhook that confirms it, and the order marked
        PAID with the Stripe reference recorded. Until then this link takes $1
        and credits nobody. Set to true ONLY when that is built. */
-    const MPP_CARD_ENABLED = false;
+    /* 8 Nov 2026: the real integration exists (server-created Stripe session for the
+       basket's exact amount, confirmed by the server with Stripe before "paid").
+       The card option shows only when the server says Stripe is configured. */
+    var MPP_CARD_ENABLED = false;
     (function hideCardUntilStripeIsReal(){
+      fetch('https://myplopplop-api.onrender.com/api/payments/order/methods', { cache: 'no-store' })
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          if (!j || !j.card) return;
+          MPP_CARD_ENABLED = true;
+          var el = document.getElementById('payCreditCard');
+          if (el) { el.style.display = ''; el.setAttribute('onclick', 'selectPayment(this)'); }
+        }).catch(function () {});
       function apply(){
         var el = document.getElementById('payCreditCard');
         if (!el) return;
@@ -1625,14 +1636,31 @@
             return;
         }
         if (selectedPayment === 'credit_card') {
+            /* 8 Nov 2026: the SERVER creates the Stripe session for the basket it holds,
+               for its own total - the page sends only which order. */
+            var tok = '';
+            try { tok = localStorage.getItem('pp_token') || ''; } catch (e) {}
+            var cs = null;
+            try {
+                var rr = await fetch('https://myplopplop-api.onrender.com/api/payments/order/card/start', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tok },
+                    body: JSON.stringify({ orderId: apiOrders[0]._id }) });
+                cs = await rr.json();
+            } catch (e) { cs = null; }
+            if (!cs || !cs.success || !cs.paymentUrl) {
+                btn.disabled = false;
+                btn.textContent = ck('place');
+                alert((cs && cs.message) || 'Peman kat la pa t ka kòmanse. Pa gen kòb ki soti. Eseye ankò oswa chwazi MonCash / NatCash.');
+                return;
+            }
             localStorage.setItem('mpp_pending_order', JSON.stringify({
                 orderId: orderId,
                 apiOrderId: apiOrders[0] ? apiOrders[0]._id : null,
                 amount: total,
-                method: 'stripe',
+                method: 'card',
                 timestamp: Date.now()
             }));
-            window.location.href = STRIPE_PAYMENT_LINK;
+            window.location.href = cs.paymentUrl;
             return;
         }
 
@@ -1709,6 +1737,16 @@
                in yet (the gateway can be slow), the order is NOT lost: the
                server keeps checking on its own for 24 hours, so we say so
                instead of forgetting it. */
+            /* 8 Nov 2026: back from Stripe with "cancel": nothing was charged */
+            if (order.method === 'card' && /[?&]card=0\b/.test(location.search)) {
+                localStorage.removeItem('mpp_pending_order');
+                var cb = document.createElement('div'); cb.setAttribute('role', 'status');
+                cb.style.cssText = 'margin:12px auto;max-width:640px;padding:14px 16px;border-radius:12px;background:#FFF7E6;color:#7A4B00;border:1px solid #F2C46D;font-weight:600;line-height:1.45';
+                cb.innerHTML = 'Ou anile peman kat la: pa gen kòb ki soti, kòmand lan pa peye. Ou ka eseye ankò oswa chwazi MonCash / NatCash.<br><span style="font-weight:400">You cancelled the card payment: nothing was charged.</span>';
+                var h0 = document.querySelector('.checkout-title') || document.body.firstElementChild;
+                if (h0 && h0.parentNode) h0.parentNode.insertBefore(cb, h0.nextSibling);
+                return;
+            }
             if (!order.apiOrderId || typeof API === 'undefined' || !API.confirmOrderPayment) {
                 localStorage.removeItem('mpp_pending_order');
                 return;
