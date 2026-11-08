@@ -473,7 +473,7 @@
                             <span class="summary-value" id="summaryDelivery">0 HTG</span>
                         </div>
                         <div class="summary-row">
-                            <span class="summary-label">Service Fee (5%)</span>
+                            <span class="summary-label" data-fee-label>Service Fee (5%)</span>
                             <span class="summary-value" id="summaryService">0 HTG</span>
                         </div>
                         <div class="summary-row" id="promoDiscountRow" style="display:none;">
@@ -566,6 +566,8 @@
     </a>
 </nav>
 
+<!-- before the page script: renderCart() below uses MPPFees on first paint -->
+<script src="/js/fees.js"></script>
 <script src="js/mock-data.js"></script>
 <script>
 /* 22 Oct 2026: "2 items", "Line total" and "Total" stayed English on a
@@ -761,7 +763,8 @@ function cartTxt(k, v) {
         });
 
         // Calculate fees
-        const serviceFee = Math.round(subtotal * 0.05);
+        // The server's fee (js/fees.js), not a number of our own.
+        const serviceFee = MPPFees.fee(subtotal);
         let total = subtotal + totalDeliveryFee + serviceFee;
 
         // Apply promo discount (10% off subtotal)
@@ -825,6 +828,7 @@ function cartTxt(k, v) {
 
     // Initialize
     // seedDemoCart(); // disabled for production
+    MPPFees.onChange(function () { renderCart(); });   // the server's fee arrived and differs
     renderCart();
 })();
 </script>

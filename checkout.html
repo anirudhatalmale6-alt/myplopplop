@@ -610,6 +610,7 @@
 <script src="/js/referral.js"></script>
     <script src="/js/api.js"></script>
 <script src="/js/i18n.js"></script>
+<script src="/js/fees.js"></script>
 </head>
 <body>
 
@@ -908,7 +909,7 @@
                     <span class="value" id="reviewDelivery">0 HTG</span>
                 </div>
                 <div class="review-summary-row">
-                    <span class="label">Service Fee (5%)</span>
+                    <span class="label" data-fee-label>Service Fee (5%)</span>
                     <span class="value" id="reviewService">0 HTG</span>
                 </div>
                 <div class="review-summary-row" id="reviewPromoRow" style="display:none;">
@@ -1229,9 +1230,15 @@
     // total is recomputed so the review screen and the payment agree.
     function getFinalSummary() {
         var summary = getOrderSummary() || calculateSummary(getCart());
+        if (summary) {   /* the server's fee (js/fees.js), even when the cart saved the summary under an older fee */
+            var sf = MPPFees.fee(summary.subtotal || 0);
+            summary = Object.assign({}, summary, { serviceFee: sf,
+                total: (summary.subtotal || 0) + (summary.deliveryFee || 0) + sf - (summary.promoDiscount || 0) });
+        }
         if (liveQuote && typeof liveQuote.deliveryFee === 'number' && summary) {
             var subtotal = summary.subtotal || 0;
-            var serviceFee = summary.serviceFee || 0;
+            /* the server's fee (js/fees.js): a summary saved by the cart before the fee changed must not show an old one */
+            var serviceFee = MPPFees.fee(subtotal);
             var promo = summary.promoDiscount || 0;
             summary = Object.assign({}, summary, {
                 deliveryFee: liveQuote.deliveryFee,
@@ -1259,7 +1266,7 @@
                 deliveryFee += store ? store.deliveryFee : 100;
             });
         }
-        const serviceFee = Math.round(subtotal * 0.05);
+        const serviceFee = MPPFees.fee(subtotal);   // the server's fee, js/fees.js
         return { subtotal, deliveryFee, serviceFee, promoDiscount: 0, total: subtotal + deliveryFee + serviceFee };
     }
 
