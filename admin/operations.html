@@ -70,6 +70,9 @@
     if (btn) btn.disabled = true;
     return API.request('POST', path, body).then(function (d) {
       if (!d || !d.success) throw new Error((d && d.message) || 'Erè');
+      /* 8 Nov 2026: a CARD refund is sent back to the card by Stripe when approved; if Stripe refused, say so */
+      if (d.stripe && d.stripe.ok === false) { alert('⚠️ ' + (d.stripe.error || 'Stripe pa t voye ranbousman an.')); }
+      else if (d.data && d.data.method === 'card' && d.data.status === 'paid') { ADM.toast('✓ Stripe remèt kòb la sou kat la (' + (d.data.payoutReference || '') + ')', 'success'); return load(); }
       ADM.toast('Anrejistre ✓', 'success');
       return load();
     }).catch(function (x) { if (btn) btn.disabled = false; ADM.toast(x.message || 'Erè', 'error'); });
