@@ -541,7 +541,10 @@ function handleSubmit(e) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         name: owner, phone: phone, pin: pin, role: 'merchant',
-        language: LANG_MAP[currentLang] || 'fr'
+        language: LANG_MAP[currentLang] || 'fr',
+        /* 16 Nov 2026: the Ajan who sent her here (?ref=KB-… kept by js/referral.js) - the server credits him;
+           this form used to drop it, so no Ajan was ever credited for a shop signed up by link */
+        koutyeCode: (window.Referral && window.Referral.code()) || undefined
       })
     }, 60000).then(function(r) { return r.json(); });
   })
@@ -572,7 +575,8 @@ function handleSubmit(e) {
       phone: waPhone,
       address: { street: loc },
       deliveryOptions: { delivery: true, selfPickup: true },
-      referralPartner: referral || undefined
+      referralPartner: referral || undefined,
+      koutyeCode: (window.Referral && window.Referral.code()) || undefined
     };
     /* Sending the form twice must not leave her with two half-empty stores. */
     return fetchWithTimeout(API_BASE + '/api/stores/merchant/my-store', {
