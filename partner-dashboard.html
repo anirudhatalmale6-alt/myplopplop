@@ -376,7 +376,7 @@ function paint(d){
   var o=d.organization||{}, st=d.stats||{};
   $('partnerName').textContent=o.name||'';
   $('partnerFull').textContent=o.fullName||'';
-  if(o.logo){$('partnerLogo').src=o.logo;}else{$('partnerLogo').style.display='none';}
+  if(o.logo){$('partnerLogo').src=o.logo;}else if(window.PD_BRAND){$('partnerLogo').src=window.PD_BRAND.logo;}else{$('partnerLogo').style.display='none';}
   if(o.color){$('partnerLogo').style.borderColor=o.color;}
   document.title=(o.name||'Partner')+' - Partner Dashboard | MyPlopPlop';
 
@@ -403,7 +403,7 @@ function paint(d){
 
   var slug=o.slug||'';
   var ls=$('linkStore'); if(ls) ls.textContent='myplopplop.com/merchant/register.html?ref='+encodeURIComponent(slug);
-  var ld=$('linkDash');  if(ld) ld.textContent='myplopplop.com/partner-dashboard.html';
+  var ld=$('linkDash');  if(ld) ld.textContent=window.PD_BRAND?window.PD_BRAND.home:'myplopplop.com/partner-dashboard.html';
   /* The driver link carries the organisation, so the MsouWout signup preselects
      it (driver-register.html reads ?partner=). It used to be the bare page,
      and a driver who did not find the name in the list was credited to nobody. */
@@ -584,6 +584,23 @@ document.addEventListener('DOMContentLoaded',function(){
      is - it is the only thing that opens anything. */
   var p=new URLSearchParams(location.search).get('partner');
   if(p) $('orgSlug').value=p;
+  /* 23 Nov 2026 (Jeffery: "YES to msouwout.starflexone.com, using StarFlex's official logo and its existing separated
+     dashboard"): ?brand=starflex shows THIS same dashboard under StarFlex's name, with the organization fixed - their
+     subdomain frames it. Only names listed here are honoured; the access code is still asked for, every time. */
+  var BRANDS={starflex:{slug:'STARFLEX',name:'StarFlex',logo:'assets/starflex-logo.png',home:'msouwout.starflexone.com'}};
+  var br=BRANDS[(new URLSearchParams(location.search).get('brand')||'').toLowerCase()];
+  if(br){
+    window.PD_BRAND=br;
+    var nl=document.querySelector('.nav-left');
+    if(nl) nl.innerHTML='<img src="'+br.logo+'" alt="'+br.name+'" style="width:auto;height:30px;border-radius:6px;background:#fff;padding:2px 5px;object-fit:contain"><span style="white-space:nowrap">MsouWout</span>';
+    var pl=$('partnerLogo'); if(pl){ pl.style.cssText='width:auto;height:56px;max-width:160px;border-radius:12px;object-fit:contain;background:#fff;padding:4px 6px'; }
+    $('orgSlug').value=br.slug; $('orgSlug').style.display='none';
+    var lb=$('orgSlug').previousElementSibling; if(lb&&lb.tagName==='LABEL') lb.style.display='none';
+    var gh=document.querySelector('#gate h2'); if(gh) gh.textContent=br.name+' — Partner Dashboard';
+    var gp=document.querySelector('#gate p'); if(gp) gp.textContent='Enter the access code HaitiBiznis gave '+br.name+'.';
+    document.title=br.name+' · MsouWout - Partner Dashboard';
+    $('orgCode').focus();
+  }
 });
 </script>
 <script src="js/qrcode.js"></script>
