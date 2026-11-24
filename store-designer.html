@@ -1405,6 +1405,9 @@ body {
               <option value="wholesale" data-i18n="cat.wholesale">📦 Wholesale</option>
               <option value="bakery" data-i18n="cat.bakery">🥖 Bakery</option>
               <option value="other" data-i18n="cat.other">🏬 Other</option>
+              <option value="svc_salon">✂️ Salon / Barbye / Spa (randevou)</option>
+              <option value="svc_clinic">🩺 Klinik / Sante (randevou)</option>
+              <option value="svc_other">📅 Lòt sèvis: konsiltan, fòmasyon (randevou)</option>
             </select>
           </div>
         </div>
@@ -2458,7 +2461,7 @@ function loadPublishedStore() {
     .then(function(d) {
       if (!d || !d.success || !d.data || !d.data.store) return;
       var s = d.data.store;
-      var revCat = { restaurant:'restaurant', supermarket:'supermarket', pharmacy:'pharmacy', hardware:'hardware', wholesale:'wholesale', bakery:'bakery', retail:'other', other:'other' };
+      var revCat = { restaurant:'restaurant', supermarket:'supermarket', pharmacy:'pharmacy', hardware:'hardware', wholesale:'wholesale', bakery:'bakery', retail:'other', other:'other', beauty:'svc_salon', health:'svc_clinic', services:'svc_other' };
       document.getElementById('storeName').value = s.name || '';       state.name = s.name || '';
       document.getElementById('storeDesc').value = s.description || ''; state.desc = s.description || '';
       document.getElementById('storeCategory').value = revCat[s.category] || 'other';
@@ -2602,7 +2605,7 @@ function publishStore() {
     return;
   }
   /* Keep in step with MPP_CAT in the LajanMaker POS - both write the same store. */
-  var catMap = { restaurant:'restaurant', supermarket:'supermarket', pharmacy:'pharmacy', hardware:'hardware', clothing:'retail', electronics:'retail', beauty:'retail', homegoods:'retail', wholesale:'wholesale', bakery:'bakery', other:'other' };
+  var catMap = { restaurant:'restaurant', supermarket:'supermarket', pharmacy:'pharmacy', hardware:'hardware', clothing:'retail', electronics:'retail', beauty:'retail', homegoods:'retail', wholesale:'wholesale', bakery:'bakery', other:'other', svc_salon:'beauty', svc_clinic:'health', svc_other:'services' };
 
   // The logo is already downscaled by shrinkImage() on upload, so it fits.
   var logoVal = state.logo || '';

@@ -6,7 +6,9 @@ const CATEGORIES = [
     { id: 'hardware', name: 'Hardware Stores', nameKr: 'Kenkayri', nameFr: 'Quincailleries', nameEs: 'Ferreterías', icon: '🔧', color: '#F59E0B', count: 8 },
     { id: 'pharmacies', name: 'Pharmacies', nameKr: 'Famasi', nameFr: 'Pharmacies', nameEs: 'Farmacias', icon: '💊', color: '#3B82F6', count: 15 },
     { id: 'wholesale', name: 'Wholesale', nameKr: 'Angwo', nameFr: 'Grossistes', nameEs: 'Mayoristas', icon: '📦', color: '#8B5CF6', count: 6 },
-    { id: 'retail', name: 'Retail', nameKr: 'Detay', nameFr: 'Détaillants', nameEs: 'Minoristas', icon: '🏬', color: '#EC4899', count: 18 }
+    { id: 'retail', name: 'Retail', nameKr: 'Detay', nameFr: 'Détaillants', nameEs: 'Minoristas', icon: '🏬', color: '#EC4899', count: 18 },
+    /* 24 Nov 2026: barbers, salons, spas, clinics, consultants - "Pran Randevou" */
+    { id: 'services', name: 'Services & Appointments', nameKr: 'Sèvis & Randevou', nameFr: 'Services & Rendez-vous', nameEs: 'Servicios y citas', icon: '📅', color: '#0EA5E9', count: 0 }
 ];
 
 const STORES = [

@@ -475,7 +475,7 @@ let apiLoaded = false;
         .then(function(data) {
             if (data.success && data.data && data.data.length > 0) {
                 apiStores = data.data.map(function(s) {
-                    var catMap = { restaurant:'restaurants', supermarket:'supermarkets', hardware:'hardware', pharmacy:'pharmacies', wholesale:'wholesale', retail:'retail', bakery:'restaurants', other:'retail' };
+                    var catMap = { restaurant:'restaurants', supermarket:'supermarkets', hardware:'hardware', pharmacy:'pharmacies', wholesale:'wholesale', retail:'retail', bakery:'restaurants', other:'retail', beauty:'services', health:'services', services:'services' };
                     return {
                         id: s._id || s.slug,
                         slug: s.slug,

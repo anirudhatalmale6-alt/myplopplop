@@ -719,6 +719,24 @@
 </div>
 
 <!-- PRODUCT DETAIL MODAL -->
+
+<style>
+/* 24 Nov 2026: service shops - "Pran Randevou" (Tikè Lakay appointments) */
+.book-btn{margin-top:12px;background:#fff;color:#00209F;border:0;border-radius:12px;padding:12px 18px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+#bookOverlay{position:fixed;inset:0;background:rgba(10,14,26,.55);display:none;align-items:flex-end;justify-content:center;z-index:3000}
+#bookOverlay.show{display:flex}
+#bookSheet{background:#fff;width:100%;max-width:560px;max-height:86vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px 16px 26px}
+#bookSheet h3{margin:0 0 12px;font-size:1.1rem}
+.bk-day{border:1px solid #E5E7EB;border-radius:14px;padding:12px;margin:10px 0}
+.bk-day b{display:block;margin-bottom:8px}
+.bk-times{display:flex;flex-wrap:wrap;gap:8px}
+.bk-t{border:1.5px solid #00209F;color:#00209F;background:#F5F7FF;border-radius:10px;padding:8px 10px;font-weight:700;font-size:.9rem;text-decoration:none;line-height:1.25}
+.bk-t small{display:block;font-weight:600;color:#475569;font-size:.75rem}
+.bk-x{float:right;border:0;background:#F1F5F9;border-radius:50%;width:34px;height:34px;font-size:1.1rem;cursor:pointer}
+.bk-msg{color:#475569;font-size:.95rem;margin:10px 0}
+.bk-call{display:inline-block;margin-top:8px;background:#25D366;color:#fff;border-radius:10px;padding:10px 14px;font-weight:800;text-decoration:none}
+</style>
+<div id="bookOverlay" onclick="if(event.target===this)closeBooking()"><div id="bookSheet"></div></div>
 <div class="modal-overlay" id="productModal">
     <div class="modal">
         <div class="modal-handle"></div>
@@ -836,23 +854,28 @@ var STORE_TXT = {
     kr: { added: '{name} ajoute nan panye a', item: '{n} atik', items: '{n} atik', back: 'Tounen nan magazen yo', open: 'Ouvè kounye a', closed: 'Fèmen', verified: '✓ Verifye', reviews: '{n} avi',
           deliveryDist: 'Livrezon dapre distans', deliveryFrom: 'Livrezon apati {p}', add: '+ Ajoute', qty: 'Kantite',
           addCart: 'Mete nan panye — {p}', address: 'Adrès', delivery: 'Livrezon', eta: 'Tan', minutes: '{n} minit',
-          rating: 'Nòt', status: 'Estati', verifiedMerchant: 'Machann verifye' },
+          rating: 'Nòt', status: 'Estati', verifiedMerchant: 'Machann verifye',
+          book: '📅 Pran Randevou', byAppt: '📅 Sou randevou', bookTitle: 'Chwazi yon jou ak yon lè', noDays: 'Pa gen randevou disponib kounye a.', callBiz: 'Rele oswa ekri biznis la', loadingB: 'N ap chaje...', freeOnSite: 'Gratis — peye sou plas', spots: '{n} plas', loadFail: 'Paj randevou yo pa ka chaje. Eseye ankò.', servicesH: 'Sèvis' },
     fr: { added: '{name} ajouté au panier', item: '{n} article', items: '{n} articles', back: 'Retour aux boutiques', open: 'Ouvert', closed: 'Fermé', verified: '✓ Vérifié', reviews: '{n} avis',
           deliveryDist: 'Livraison selon la distance', deliveryFrom: 'Livraison à partir de {p}', add: '+ Ajouter', qty: 'Quantité',
           addCart: 'Ajouter au panier — {p}', address: 'Adresse', delivery: 'Livraison', eta: 'Délai', minutes: '{n} minutes',
-          rating: 'Note', status: 'Statut', verifiedMerchant: 'Marchand vérifié' },
+          rating: 'Note', status: 'Statut', verifiedMerchant: 'Marchand vérifié',
+          book: '📅 Prendre rendez-vous', byAppt: '📅 Sur rendez-vous', bookTitle: 'Choisissez un jour et une heure', noDays: 'Aucun rendez-vous disponible pour le moment.', callBiz: 'Appelez ou écrivez à l’entreprise', loadingB: 'Chargement...', freeOnSite: 'Gratuit — payer sur place', spots: '{n} place(s)', loadFail: 'Impossible de charger les rendez-vous. Réessayez.', servicesH: 'Services' },
     en: { added: 'Added {name} to cart', item: '{n} item', items: '{n} items', back: 'Back to Stores', open: 'Open Now', closed: 'Closed', verified: '✓ Verified', reviews: '{n} reviews',
           deliveryDist: 'Delivery priced by distance', deliveryFrom: 'Delivery from {p}', add: '+ Add', qty: 'Quantity',
           addCart: 'Add to Cart — {p}', address: 'Address', delivery: 'Delivery', eta: 'ETA', minutes: '{n} minutes',
-          rating: 'Rating', status: 'Status', verifiedMerchant: 'Verified Merchant' },
+          rating: 'Rating', status: 'Status', verifiedMerchant: 'Verified Merchant',
+          book: '📅 Book an appointment', byAppt: '📅 By appointment', bookTitle: 'Choose a day and a time', noDays: 'No appointments available right now.', callBiz: 'Call or message the business', loadingB: 'Loading...', freeOnSite: 'Free — pay on site', spots: '{n} spot(s)', loadFail: 'Appointments could not load. Try again.', servicesH: 'Services' },
     es: { added: '{name} añadido al carrito', item: '{n} artículo', items: '{n} artículos', back: 'Volver a las tiendas', open: 'Abierto', closed: 'Cerrado', verified: '✓ Verificado', reviews: '{n} reseñas',
           deliveryDist: 'Entrega según la distancia', deliveryFrom: 'Entrega desde {p}', add: '+ Añadir', qty: 'Cantidad',
           addCart: 'Añadir al carrito — {p}', address: 'Dirección', delivery: 'Entrega', eta: 'Tiempo', minutes: '{n} minutos',
-          rating: 'Calificación', status: 'Estado', verifiedMerchant: 'Comerciante verificado' },
+          rating: 'Calificación', status: 'Estado', verifiedMerchant: 'Comerciante verificado',
+          book: '📅 Reservar cita', byAppt: '📅 Con cita', bookTitle: 'Elige un día y una hora', noDays: 'No hay citas disponibles por ahora.', callBiz: 'Llama o escribe al negocio', loadingB: 'Cargando...', freeOnSite: 'Gratis — paga en el lugar', spots: '{n} lugar(es)', loadFail: 'No se pudieron cargar las citas. Inténtalo de nuevo.', servicesH: 'Servicios' },
     pt: { added: '{name} adicionado ao carrinho', item: '{n} item', items: '{n} itens', back: 'Voltar às lojas', open: 'Aberto', closed: 'Fechado', verified: '✓ Verificado', reviews: '{n} avaliações',
           deliveryDist: 'Entrega conforme a distância', deliveryFrom: 'Entrega a partir de {p}', add: '+ Adicionar', qty: 'Quantidade',
           addCart: 'Adicionar ao carrinho — {p}', address: 'Endereço', delivery: 'Entrega', eta: 'Prazo', minutes: '{n} minutos',
-          rating: 'Avaliação', status: 'Status', verifiedMerchant: 'Comerciante verificado' }
+          rating: 'Avaliação', status: 'Status', verifiedMerchant: 'Comerciante verificado',
+          book: '📅 Marcar horário', byAppt: '📅 Com hora marcada', bookTitle: 'Escolha um dia e um horário', noDays: 'Nenhum horário disponível agora.', callBiz: 'Ligue ou escreva para o negócio', loadingB: 'Carregando...', freeOnSite: 'Grátis — pague no local', spots: '{n} vaga(s)', loadFail: 'Não foi possível carregar os horários. Tente de novo.', servicesH: 'Serviços' }
 };
 /* 4 Nov 2026 (Jeffery, PATENTE): the badge HaitiBiznis gives after verification. 🟢 only while the Patente's fiscal
    year is current (or in its renewal window, Oct-Jan); otherwise 🟡 - identity verified, never "legally registered". */
@@ -1088,8 +1111,10 @@ function buildStoreFromAPI(s, products) {
             stockQuantity: p.stockQuantity
         };
     });
-    var catMap = { restaurant:'restaurants', supermarket:'supermarkets', hardware:'hardware', pharmacy:'pharmacies', wholesale:'wholesale', retail:'retail', bakery:'restaurants', other:'retail' };
+    var catMap = { restaurant:'restaurants', supermarket:'supermarkets', hardware:'hardware', pharmacy:'pharmacies', wholesale:'wholesale', retail:'retail', bakery:'restaurants', other:'retail', beauty:'services', health:'services', services:'services' };
     return {
+        /* 24 Nov 2026: barber / salon / spa / clinic / consultant = SERVICE shop: "Pran Randevou" (Tikè Lakay), no cart, no delivery */
+        service: ['beauty', 'health', 'services'].indexOf(s.category) >= 0,
         id: s._id,
         slug: s.slug,
         name: s.name,
@@ -1223,6 +1248,7 @@ if (store && !apiStoreLoading) {
 function doRenderStorePage() {
 // ===== CATEGORY-BASED THEME =====
 var CATEGORY_THEMES = {
+    'services':     { gradient: 'linear-gradient(135deg, #0EA5E9 0%, #0B3D91 60%, #38BDF8 100%)', accent: '#0EA5E9', iconBg: '#F0F9FF', label: 'Services' },
     'restaurants':  { gradient: 'linear-gradient(135deg, #D21034 0%, #8B0000 60%, #FF6347 100%)', accent: '#D21034', iconBg: '#FFF5F5', label: 'Restaurant' },
     'supermarkets': { gradient: 'linear-gradient(135deg, #059669 0%, #064E3B 60%, #34D399 100%)', accent: '#10B981', iconBg: '#ECFDF5', label: 'Supermarket' },
     'hardware':     { gradient: 'linear-gradient(135deg, #D97706 0%, #78350F 60%, #FBBF24 100%)', accent: '#F59E0B', iconBg: '#FFFBEB', label: 'Hardware' },
@@ -1309,11 +1335,14 @@ bannerHTML += '      <div class="store-banner-meta">';
 if (!isCustomStore) {
     bannerHTML += '        <span class="meta-item">⭐ ' + store.rating + ' <span style="opacity:0.7">(' + sl('reviews', { n: store.reviews }) + ')</span></span>';
 }
-bannerHTML += '        <span class="meta-item">🕐 ' + (isCustomStore ? store.openTime + ' - ' + store.closeTime : sl('minutes', { n: store.eta })) + '</span>';
-bannerHTML += '        <span class="meta-item">🛵 ' + deliveryLabel(store.deliveryFee) + '</span>';
+if (!store.service || isCustomStore) bannerHTML += '        <span class="meta-item">🕐 ' + (isCustomStore ? store.openTime + ' - ' + store.closeTime : sl('minutes', { n: store.eta })) + '</span>';
+bannerHTML += store.service ? '        <span class="meta-item">' + sl('byAppt') + '</span>' : '        <span class="meta-item">🛵 ' + deliveryLabel(store.deliveryFee) + '</span>';
 bannerHTML += '      </div>';
 if (store.address) {
     bannerHTML += '      <div class="store-banner-address">📍 ' + store.address + '</div>';
+}
+if (store.service) {
+    bannerHTML += '      <button type="button" class="book-btn" id="bookTop" onclick="openBooking()">' + sl('book') + '</button>';
 }
 bannerHTML += '    </div>';
 bannerHTML += '  </div>';
@@ -1366,7 +1395,9 @@ function renderProducts() {
                 html += '      <span class="stock-badge out">' + stockTxt('out') + '</span>';
             } else {
                 if (stockLimit(p) <= 5) html += '      <span class="stock-badge low">' + stockTxt('left', p.stockQuantity) + '</span>';
-                html += '      <button class="product-add-btn" onclick="event.stopPropagation(); addToCart(\'' + store.id + '\', getProduct(\'' + p.id + '\'), 1)">' + sl('add') + '</button>';
+                html += store.service
+                    ? '      <button class="product-add-btn" onclick="event.stopPropagation(); openBooking()">' + sl('book') + '</button>'
+                    : '      <button class="product-add-btn" onclick="event.stopPropagation(); addToCart(\'' + store.id + '\', getProduct(\'' + p.id + '\'), 1)">' + sl('add') + '</button>';
             }
             html += '    </div>';
             html += '  </div>';
@@ -1402,11 +1433,13 @@ function renderAbout() {
     html += '    <span class="about-row-label">' + sl('address') + '</span>';
     html += '    <span class="about-row-value">' + store.address + '</span>';
     html += '  </div>';
+    if (!store.service) {
     html += '  <div class="about-row">';
     html += '    <span class="about-row-icon">🛵</span>';
     html += '    <span class="about-row-label">' + sl('delivery') + '</span>';
     html += '    <span class="about-row-value">' + deliveryLabel(store.deliveryFee) + '</span>';
     html += '  </div>';
+    }
     html += '  <div class="about-row">';
     html += '    <span class="about-row-icon">🕐</span>';
     html += '    <span class="about-row-label">' + sl('eta') + '</span>';
@@ -1609,9 +1642,13 @@ function renderModalContent() {
         html += '  ' + stockTxt('outLong');
         html += '</button>';
     } else {
+        if (store && store.service) {
+            html += '<button class="btn btn-red btn-full btn-lg" onclick="closeProductModal(); openBooking()" id="modalAddBtn">' + sl('book') + '</button>';
+        } else {
         html += '<button class="btn btn-red btn-full btn-lg" onclick="addToCartFromModal()" id="modalAddBtn">';
         html += '  ' + sl('addCart', { p: MOCK.formatHTG(subtotal) });
         html += '</button>';
+        }
     }
 
     mc.innerHTML = html;
@@ -1659,6 +1696,62 @@ updateCartUI();
 <script>
 if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js");}
 if(window.MyPlopPlopI18n){window.MyPlopPlopI18n.applyTranslations();}
+
+/* ═══ 24 Nov 2026: "Pran Randevou" - the shop's upcoming appointment days from Tikè Lakay (pages attached to this
+   shop with its booking code). A time opens the Tikè Lakay page, where the client picks it and pays. ═══ */
+var HB_API = 'https://haitibiznis-api.onrender.com';
+function bkEsc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function bkDay(d) {
+    try {
+        var l = (window.MyPlopPlopI18n && MyPlopPlopI18n.getLang()) || (function(){ try { return localStorage.getItem('myplopplop_lang'); } catch (e) { return null; } })() || 'kr';
+        if (l === 'kr' || l === 'ht') {   /* the browser has no Kreyòl calendar - it would print French */
+            var x = new Date(d + 'T12:00:00');
+            return ['Dimanch', 'Lendi', 'Madi', 'Mèkredi', 'Jedi', 'Vandredi', 'Samdi'][x.getDay()] + ' ' + x.getDate() + ' ' +
+                ['janvye', 'fevriye', 'mas', 'avril', 'me', 'jen', 'jiyè', 'out', 'septanm', 'oktòb', 'novanm', 'desanm'][x.getMonth()];
+        }
+        var loc = { kr: 'fr-HT', ht: 'fr-HT', fr: 'fr-FR', en: 'en-US', es: 'es-ES', pt: 'pt-BR' }[l] || 'fr-FR';
+        var dt = new Date(d + 'T12:00:00');
+        var s = dt.toLocaleDateString(loc, { weekday: 'long', day: 'numeric', month: 'long' });
+        return s.charAt(0).toUpperCase() + s.slice(1);
+    } catch (e) { return d; }
+}
+function bkContact() {
+    var ph = String((store && store.phone) || '').replace(/[^0-9]/g, '');
+    if (!ph) return '';
+    if (ph.length === 8) ph = '509' + ph;
+    return '<div class="bk-msg">' + bkEsc(sl('callBiz')) + '</div><a class="bk-call" href="https://wa.me/' + ph + '" target="_blank" rel="noopener">💬 WhatsApp</a>' +
+        ' <a class="bk-call" style="background:#00209F" href="tel:+' + ph + '">📞 ' + bkEsc(store.phone) + '</a>';
+}
+function openBooking() {
+    var sh = document.getElementById('bookSheet');
+    document.getElementById('bookOverlay').classList.add('show');
+    sh.innerHTML = '<button class="bk-x" onclick="closeBooking()">✕</button><h3>' + bkEsc(sl('bookTitle')) + '</h3><div class="bk-msg">' + bkEsc(sl('loadingB')) + '</div>';
+    var slug = store && store.slug;
+    if (!slug) { sh.innerHTML += bkContact(); return; }
+    fetch(HB_API + '/api/events/by-store/' + encodeURIComponent(slug)).then(function (r) { return r.json(); }).then(function (d) {
+        var days = (d && d.days) || [];
+        var html = '<button class="bk-x" onclick="closeBooking()">✕</button><h3>' + bkEsc(sl('bookTitle')) + '</h3>';
+        var any = false;
+        days.forEach(function (day) {
+            var times = day.times.filter(function (t) { return t.left === null || t.left > 0; });
+            if (!times.length) return;
+            any = true;
+            html += '<div class="bk-day"><b>' + bkEsc(bkDay(day.date)) + '</b><div class="bk-times">';
+            times.forEach(function (t) {
+                var price = t.price > 0 ? MOCK.formatHTG(t.price) : sl('freeOnSite');
+                html += '<a class="bk-t" href="https://tikelakay.com/event.html?id=' + encodeURIComponent(day._id) + '">' + bkEsc(t.name) +
+                    '<small>' + bkEsc(price) + (t.left !== null && t.left > 1 ? ' · ' + bkEsc(sl('spots', { n: t.left })) : '') + '</small></a>';
+            });
+            html += '</div></div>';
+        });
+        if (!any) html += '<div class="bk-msg">' + bkEsc(sl('noDays')) + '</div>' + bkContact();
+        sh.innerHTML = html;
+    }).catch(function () {
+        sh.innerHTML = '<button class="bk-x" onclick="closeBooking()">✕</button><h3>' + bkEsc(sl('bookTitle')) + '</h3><div class="bk-msg">' + bkEsc(sl('loadFail')) + '</div>' + bkContact();
+    });
+}
+function closeBooking() { document.getElementById('bookOverlay').classList.remove('show'); }
+window.openBooking = openBooking; window.closeBooking = closeBooking;
 </script>
 <script src="js/assistant.js" defer></script>
   <script src="js/share.js" defer></script>
